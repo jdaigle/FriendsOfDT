@@ -1,0 +1,138 @@
+# Clearwave Ignores
+
+*.orig
+*.sou
+*.user
+_ReSharper.*/
+*.userprefs
+*.pidb
+**/test-results/**
+test-results/
+.DS_Store
+bin/
+Bin/
+obj/
+*.suo
+*.MDF
+*.ldf
+*.log.txt
+*.log.txt*
+*.svclog
+*- Backup.rdl
+*.rdl.data
+output/
+
+ProviderPortal/ProviderPortal_Web/Config/authentication.config
+ProviderPortal/ProviderPortal_Web/Config/clearwave.config
+ProviderPortal/ProviderPortal_Web/Config/connectionStrings.config
+ProviderPortalMVC/Clearwave.ProviderPortal.Web/Config/clearwave.config
+ProviderPortalMVC/Clearwave.ProviderPortal.Web/Config/connectionStrings.config
+ProviderPortalMVC/Clearwave.ProviderPortal.Web/Config/authentication.config
+ProviderPortalMVC/Clearwave.ProviderPortal.Web/Static/cached/*
+Kiosk/KioskMVC/Clearwave.Kiosks.Web/Config/clearwave.config
+Integration/IntegrationWebServices/Config/clearwave.config
+Kiosk/KioskBrowser/Config/clearwave.config
+ProviderPortalMVC/Clearwave.ProviderPortal.Web/StartupLog.txt
+*.eprj
+*.onetoc2
+Technology/nStep-bin/rerun.dat
+
+StartupLog.txt
+
+Integration/IntegrationWebServices.csproj_deploy/Debug/*
+Integration/IntegrationWebServices.csproj_deploy/Release/*
+
+ProviderPortal/ProviderPortal_Web.csproj_deploy/Release/*
+ProviderPortal/ProviderPortal_Web.csproj_deploy/Source/*
+ProviderPortal/ProviderPortal_Web.csproj_deploy/Debug/*
+
+ClearwaveAdmin/Clearwave.Admin.Web.csproj_deploy/Release/*
+ClearwaveAdmin/Clearwave.Admin.Web.csproj_deploy/Debug/*
+ClearwaveAdmin/Clearwave.Admin.Web.csproj_deploy/Source/*
+ClearwaveAdmin/Clearwave.Admin.Web/Config/*.config
+
+ProviderPortalMVC/Clearwave.ProviderPortal.Web/Static/Cached
+ProviderPortalMVC/Clearwave.ProviderPortal.Web/Static/cached
+AdminTool/Clearwave.AdminTool.Web/Static/Cached
+AdminTool/Clearwave.AdminTool.Web/Static/cached
+
+Kiosk/ClearwaveKioskManager/Kiosk.Installer/Debug/*
+Kiosk/ClearwaveKioskManager/Kiosk.Installer/Release/*
+Kiosk/ClearwaveKioskManager/KioskCursor.Installer/Debug/*
+Kiosk/ClearwaveKioskManager/KioskCursor.Installer/Release/*
+
+Kiosk/Clearwave.Kiosks.Web.csproj_deploy/*
+ProviderPortalMVC/Clearwave.ProviderPortal.Web.csproj_deploy/*
+Kiosk/KioskMVC/Features/*.html
+
+#nStep files
+*rerun.dat
+
+#database project output
+*.dbmdl
+*.dbproj.schemaview
+sql/
+
+
+# Ignore NUnit State and Test Results
+*.VisualState.xml
+TestResult.xml
+
+#SqlPatch logs
+*.log
+
+# Elmah Results
+ProviderPortal/ProviderPortal_Web/Log/*.xml
+ProviderPortal/ProviderPortal_Web/Log/*.txt
+ProviderPortalMVC/Clearwave.ProviderPortal.Web/App_Data/*.xml
+ProviderPortalMVC/Clearwave.ProviderPortal.Web/App_Data/*.txt
+ProviderPortalMVC/Clearwave.ProviderPortal.Web/logs/*
+Kiosk/KioskMVC/Clearwave.Kiosks.Web/App_Data/*.xml
+Kiosk/KioskMVC/Clearwave.Kiosks.Web/App_Data/*.txt
+Kiosk/KioskMVC/Clearwave.Kiosks.Web/logs/*
+
+# Shamelessly stolen from http://gist.github.com/114476
+# .gitignore for .NET projects
+# Thanks to Derick Bailey
+# http://www.lostechies.com/blogs/derickbailey/archive/2009/05/18/a-net-c-developer-s-gitignore-file.aspx
+# Additional Thanks to
+# - Alexey Abramov
+ 
+# Standard VS.NET and ReSharper Foo
+obj
+bin
+*.csproj.user
+*ReSharper*
+*resharper*
+*.suo
+*.cache
+Thumbs.db
+ 
+# Other useful stuff
+*.bak
+*.cache
+*.log
+*.swp
+*.user
+_compareTemp
+_notes
+aspnet_client
+httpd.parse.errors
+ 
+# Office Temp Files
+~$*
+ 
+# If you have a deploy folder
+deploy
+deploy/*
+*.Publish.xml
+ 
+# Exclude ALL DLLs? (
+# *.dll
+
+# Exclude Sublime Projects
+*.sublime-project
+
+# Excluse KioskUpdater Resources
+Kiosk/KioskUpdaters/KioskBrowserUpdater/Resources/*
+Kiosk/KioskUpdaters/SDKUpdater/Resources/*
