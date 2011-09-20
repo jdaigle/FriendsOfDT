@@ -1,0 +1,61 @@
+require 'rubygems'
+gem 'albacore', '<=0.1.5'
+require 'albacore'
+require 'fileutils'
+
+MSBUILD_PATH = File.join(ENV['SYSTEMROOT'], "Microsoft.NET", "Framework", "v4.0.30319", "MSBuild.exe").gsub(File::SEPARATOR, File::ALT_SEPARATOR || File::SEPARATOR)
+
+def transform(input, trnsfrm)
+    system "tools/transform/TransformXml.exe " + input + " " + trnsfrm + " " + input
+end
+
+def msdeploy(cmd, target)
+  system cmd+" /Y /m:"+target+" /u:"+get_username+" /p:"+get_password
+end
+
+PATH_TO_NUNIT = "tools/nunit/nunit-console-x86.exe"
+PATH_TO_MSDEPLOY = "C:/Program Files/IIS/Microsoft Web Deploy V2/msdeploy.exe"
+
+#BEGIN FIX
+class Exec
+  include RunCommand
+  include YAMLConfig
+  include Logging
+  
+  def initialize
+    @path_to_command=''
+    @parameters = []
+    super()
+  end
+    
+  def execute
+    result = run_command "Exec", ""
+    
+    failure_message = 'Exec Failed. See Build Log For Detail'
+    fail_with_message failure_message if !result
+  end
+end
+#END FIX
+
+desc 'Compiles Application'
+msbuild :compile do |msb|
+  msb.path_to_command = MSBUILD_PATH
+  msb.properties = { :configuration => "Release" }
+  msb.solution = 'friendsofdt\friendsofdt.csproj'
+end
+
+desc 'Packages the Application'
+msbuild :package => [:compile] do |msb|
+  msb.path_to_command = MSBUILD_PATH
+  msb.properties = { :configuration => "Release" }
+  msb.targets [:package]
+  msb.solution = 'friendsofdt\friendsofdt.csproj'
+end
+
+desc 'Deploys the Application'
+task :deploy => [:package] do
+  cmd = Exec.new
+  cmd.path_to_command = PATH_TO_MSDEPLOY
+  cmd.parameters ' -source:package="deploy\friendsofdt.zip" -dest:auto,computerName="https://cridion.com:8172/msdeploy.axd?site=friendsofdt.org",userName="ideploy",password="zeHuf&&us8e!7ube",authtype="basic",includeAcls="False" -verb:sync -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension -setParamFile:"deploy\friendsofdt.SetParameters.xml" -allowuntrusted'
+  cmd.execute
+end
