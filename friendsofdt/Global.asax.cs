@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace friendsofdt
+namespace FriendsOfDT
 {
     public class MvcApplication : System.Web.HttpApplication
     {
