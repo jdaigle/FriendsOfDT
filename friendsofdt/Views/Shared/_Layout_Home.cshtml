@@ -6,8 +6,15 @@
     <link href="@Url.Content("~/Content/base-min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/fonts-min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-    <script src="@Url.Content("~/Scripts/jquery-1.6.4.min.js")" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/fodt.js")" type="text/javascript"></script>
     @RenderSection("additionalHead", false)
+    <script type="text/javascript">
+        $(function () {
+            var slideshow = new fodt.SlideshowController($("div.slideshow"));
+            slideshow.start();
+        });
+    </script>
 </head>
 
 <body>
@@ -15,40 +22,48 @@
         <div class="head">
             <div class="navigation">
                 <ul>
-                    <li>// <a href="#">Home</a></li>
-                    <li class="active">// <a href="#">Active</a></li>
-                    <li>// <a href="#">About Us</a></li>
+                    <li class="active">// <a href="#" title="home">Home</a></li>
+                    @*<li>// <a href="#">Active</a></li>
+                    <li>// <a href="#">About Us</a></li>*@
+                </ul>
+            </div>
+            <div class="slideshow">
+                <ul>
+                    <li><img src="http://demo.tutorialzine.com/2010/09/html5-canvas-slideshow-jquery/img/photos/1.jpg" alt="slide" /></li>
+                    <li><img src="http://demo.tutorialzine.com/2010/09/html5-canvas-slideshow-jquery/img/photos/2.jpg" alt="slide" /></li>
+                    <li><img src="http://demo.tutorialzine.com/2010/09/html5-canvas-slideshow-jquery/img/photos/3.jpg" alt="slide" /></li>
+                    <li><img src="http://demo.tutorialzine.com/2010/09/html5-canvas-slideshow-jquery/img/photos/4.jpg" alt="slide" /></li>
                 </ul>
             </div>
         </div>
         <div class="body">
             <div class="sidebar">
                 <ul>
-                    <li>
-                        <h1>Upcoming Shows</h1>
+                    @*<li>
+                        <h1>Upcoming Events</h1>
                         <p>Come out and support our shows! More info here.</p>
-                    </li>
-                    <li class="icon rss">
+                    </li>*@
+                    @*<li class="icon rss">
                         <h1>Subscribe RSS</h1>
                         <p>Keep in touch with us.</p>
-                    </li>
-                    <li>
+                    </li>*@
+                    @*<li>
                         <h1>History Tidbit</h1>
                         <p>DramaTech is a Theater.</p>
-                    </li>
+                    </li>*@
                     <li>
                         <h1>Other Links</h1>
                         <ul class="links">
-                            <li><a href="http://dramatech.org">DramaTech</a></li>
-                            <li><a href="http://imdt.vilafamily.com/">IMDT</a></li>
-                            <li><a href="http://gt.entertainmentalumni.org/">GTEN</a></li>
+                            <li><a target="_blank" href="http://dramatech.org">DramaTech</a></li>
+                            <li><a target="_blank" href="http://imdt.friendsofdt.org/">IMDT</a></li>
+                            <li><a target="_blank" href="http://gt.entertainmentalumni.org/">GTEN</a></li>
                         </ul>
                     </li>
                     <li>
-                        <h1>Social Network</h1>
+                        <h1>Social Networking</h1>
                         <ul class="links icon-list">
-                            <li><a class="icon twitter" href="http://twitter.com"></a></li>
-                            <li><a class="icon fb" href="http://facebook.com/"></a></li>
+                            <li><a class="icon twitter" target="_blank" href="http://twitter.com/gtdramatech"></a></li>
+                            <li><a class="icon fb" target="_blank" href="http://facebook.com/group.php?gid=5944506425"></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -58,6 +73,8 @@
             </div>
         </div>
         <div class="foot">
+            <p>&copy; @DateTime.Now.Year Friends Of DramaTech</p>
+            <p>Contact the <a href="mailto:fodtadmin@cridion.com">webmaster</a></p>
         </div>
     </div>
 </body>
