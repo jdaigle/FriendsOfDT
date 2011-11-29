@@ -1,11 +1,20 @@
 ﻿<div class="sidebar">
     <ul>
         <li>
-            <h1>Users</h1>
         @if (!ViewBag.IsAuthenticated) {
-            <p><a href="@Url.Action(MVC.Accounts.Login())" title="sign in">Sign In</a></p>
+            <h1>Sign In</h1>
+            <form action="@Url.Action(MVC.Accounts.Login())" method="post">
+                <input type="text" name="emailAddress" placeholder="email" />
+                <input type="password" name="password" placeholder="password" />
+                <label for="login_persist">Remember Me:</label>@Html.CheckBox("persist", false, new { id = "login_persist" })
+                <input type="submit" value="Sign In" />
+            </form>
+            <div class="notRegisteredNotice">
+                <h3>New to FriendsOfDT.org?</h3>
+                <a href="@Url.Action(MVC.Accounts.SignUp())">Sign Up Today!</a>
+            </div>
         } else {
-            <p>Welcome back <strong>@(((FriendsOfDT.Models.Accounts.WebAccount)ViewBag.Account).FirstName)</strong>!</p>
+            <h1>Welcome back <strong>@(((FriendsOfDT.Models.Accounts.WebAccount)ViewBag.Account).FirstName)</strong>!</h1>
             <p><a href="@Url.Action(MVC.Accounts.SignOut())" title="sign out">Sign Out</a></p>
         }
         </li>

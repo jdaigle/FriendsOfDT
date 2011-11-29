@@ -6,8 +6,8 @@
 
 <div class="login">
     <form action="@Url.Action(MVC.Accounts.Login())" method="post">
-        E-Mail Address: <input type="text" name="emailAddress" />
-        Password: <input type="password" name="password" />
+        E-Mail Address: <input type="text" name="emailAddress" placeholder="email" />
+        Password: <input type="password" name="password" placeholder="password" />
         <label for="login_persist">Remember Me:</label>@Html.CheckBox("persist", false, new { id = "login_persist" })
         <input type="submit" value="Sign In" />
     </form>
