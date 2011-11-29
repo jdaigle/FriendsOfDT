@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    if (ViewBag.ActiveLink == null) {
+        ViewBag.ActiveLink = ActiveLinks.None;
+    }
+}
+<!DOCTYPE html>
 <html>
 <head>
     <title>@ViewBag.Title</title>

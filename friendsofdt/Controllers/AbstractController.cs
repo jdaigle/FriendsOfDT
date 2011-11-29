@@ -11,6 +11,8 @@ namespace FriendsOfDT.Controllers {
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext) {
+            ViewBag.IsAuthenticated = HttpContext.User.Identity.IsAuthenticated;
+            ViewBag.EmailAddress = HttpContext.User.Identity.Name;
             try {
                 using (DocumentSession) {
                     if (filterContext.Exception == null) {

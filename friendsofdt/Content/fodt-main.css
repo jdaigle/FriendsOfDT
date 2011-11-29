@@ -10,16 +10,30 @@ div.home div.head {
 }
 div.page {
 	margin: 0px auto;
-	background-image: url('images/layout/home-bg.jpg');
+	background-image: url('images/layout/inside-bg.jpg');
 	background-repeat: repeat-x;
 }
 div.page div.head {
-	height: 120px;
+	background-image: url('images/layout/inside-header.png');
+	height: 220px;
 	width: 1026px;
 }
 
 div.head {
 	margin: 0px auto;
+}
+
+.page .head {
+    position: relative;
+}
+.page .head div.title {
+    color: #343498;
+    font-family: Arial Black;
+    font-weight: bold;
+    font-size: 4em;
+    position: absolute;
+    left: 40px;
+    top: 130px;
 }
 
 div.head div.navigation {

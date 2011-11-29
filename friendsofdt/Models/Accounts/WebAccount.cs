@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace FriendsOfDT.Models.Accounts {
     [EntityMetadata(Version = 1)]
     public class WebAccount {
 
+        public static string GetId(Guid id) {
+            return "webAccounts/" + id;
+        }
+
         public static WebAccount RegisterNewAccount(RegisterNewAccountParameters parameters) {
-            return new WebAccount(parameters.EmailAddress) {
+            return new WebAccount() {
+                EmailAddress = parameters.EmailAddress,
                 FirstName = parameters.FirstName,
                 LastName = parameters.LastName,
                 RegistrationFirstName = parameters.FirstName,
@@ -19,13 +21,12 @@ namespace FriendsOfDT.Models.Accounts {
             };
         }
 
-        protected WebAccount() { }
-
-        public WebAccount(string emailAddress) {
-            this.Id = emailAddress;
+        public WebAccount() {
+            this.Id = "webAccounts/" + Guid.NewGuid();
         }
 
         public string Id { get; protected set; }
+        public string EmailAddress { get; protected set; }
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }
 
@@ -40,6 +41,10 @@ namespace FriendsOfDT.Models.Accounts {
                 RegistrationStatus = RegistrationStatus.Verified;
                 // TODO: Publish event for e-mail notification
             }
+        }
+
+        public bool CanLogin() {
+            return RegistrationStatus == Accounts.RegistrationStatus.Verified;
         }
     }
 }

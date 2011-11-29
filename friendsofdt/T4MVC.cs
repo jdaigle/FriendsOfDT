@@ -369,6 +369,8 @@ namespace Links {
                 public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
                 public static readonly string home_bg_jpg = Url("home-bg.jpg");
                 public static readonly string home_header_png = Url("home-header.png");
+                public static readonly string inside_bg_jpg = Url("inside-bg.jpg");
+                public static readonly string inside_header_png = Url("inside-header.png");
                 public static readonly string logo_png = Url("logo.png");
             }
         
@@ -488,6 +490,7 @@ namespace FriendsOfDT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
             public readonly string Login = "Login";
+            public readonly string SignOut = "SignOut";
             public readonly string SignUp = "SignUp";
             public readonly string RegisterNewWebAccount = "RegisterNewWebAccount";
             public readonly string VerifyWebAccount = "VerifyWebAccount";
@@ -513,10 +516,16 @@ namespace FriendsOfDT.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.RedirectToRouteResult Login(string emailAddress, string password) {
+        public override System.Web.Mvc.RedirectToRouteResult SignOut() {
+            var callInfo = new T4MVC_RedirectToRouteResult(Area, Name, ActionNames.SignOut);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.RedirectToRouteResult Login(string emailAddress, string password, bool persist) {
             var callInfo = new T4MVC_RedirectToRouteResult(Area, Name, ActionNames.Login);
             callInfo.RouteValueDictionary.Add("emailAddress", emailAddress);
             callInfo.RouteValueDictionary.Add("password", password);
+            callInfo.RouteValueDictionary.Add("persist", persist);
             return callInfo;
         }
 

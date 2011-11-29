@@ -7,25 +7,34 @@ namespace FriendsOfDT.Models.Accounts {
     [EntityMetadata(Version = 1)]
     public class WebAccountPassword {
 
-        public WebAccountPassword() {
+        public WebAccountPassword(string webAccountId) {
+            this.Id = "webAccounts/passwords/" + Guid.NewGuid();
+            this.WebAccountId = webAccountId;
             PasswordHash = new byte[0];
             PasswordHistory = new List<PasswordHistory>();
         }
 
-        public string WebSiteAccountId { get; protected set; }
-
+        public string Id { get; protected set; }
+        public string WebAccountId { get; protected set; }
         public byte[] PasswordHash { get; protected set; }
         public List<PasswordHistory> PasswordHistory { get; protected set; }
 
-        public void ValidatePassword(string password) {
+        public bool PasswordMatches(string password) {
             var hashedBuffer = HashGenerator.ComputeHash(Encoding.ASCII.GetBytes(password), HashAlgorithm.SHA256);
             if (PasswordHash.Length != hashedBuffer.Length) {
-                throw new InvalidPasswordException();
+                return false;
             }
             for (int i = 0; i < PasswordHash.Length; i++) {
                 if (PasswordHash[i] != hashedBuffer[i]) {
-                    throw new InvalidPasswordException();
+                    return false;
                 }
+            }
+            return true;
+        }
+
+        public void ValidatePassword(string password) {
+            if (!PasswordMatches(password)) {
+                throw new InvalidPasswordException();
             }
         }
 
