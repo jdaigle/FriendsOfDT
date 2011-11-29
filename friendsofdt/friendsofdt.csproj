@@ -14,7 +14,7 @@
     <AssemblyName>FriendsOfDT</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,9 +56,6 @@
     </Reference>
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\external-bin\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\external-bin\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -108,7 +105,6 @@
     <Compile Include="Infrastructure\AuthorizeRoleAttribute.cs" />
     <Compile Include="Infrastructure\DocumentVersionStoreListener.cs" />
     <Compile Include="Infrastructure\EntityMetadataAttribute.cs" />
-    <Compile Include="Infrastructure\StructureMapControllerFactory.cs" />
     <Compile Include="Models\Accounts\InvalidPasswordException.cs" />
     <Compile Include="Models\Accounts\PasswordHistory.cs" />
     <Compile Include="Models\Accounts\RegisterNewAccountParameters.cs" />
@@ -118,7 +114,6 @@
     <Compile Include="Models\Accounts\RegistrationStatus.cs" />
     <Compile Include="Models\Accounts\WebAccount.cs" />
     <Compile Include="Models\Accounts\WebAccountEmailReference.cs" />
-    <Compile Include="Models\Accounts\WebAccountPassword.cs" />
     <Compile Include="Models\Accounts\WebAccountRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\RenderJsonResult.cs" />
@@ -165,7 +160,6 @@
     <Content Include="Views\Shared\NavigationControls.cshtml" />
     <Content Include="Views\Shared\CommonHead.cshtml" />
     <Content Include="Views\Shared\CommonFoot.cshtml" />
-    <Content Include="Views\Accounts\Login.cshtml" />
     <Content Include="Views\Accounts\SignUp.cshtml" />
     <Content Include="Views\Admin\Dashboard.cshtml" />
     <Content Include="Views\Shared\CommonSidebar.cshtml" />
@@ -204,12 +198,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>51839</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:51839/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -1,43 +1,34 @@
-﻿using System.Web.Mvc;
-using System.Linq;
-using FriendsOfDT.Models.Accounts;
-using System;
+﻿using System.Linq;
+using System.Web.Mvc;
 using System.Web.Security;
+using FriendsOfDT.Models.Accounts;
 
 namespace FriendsOfDT.Controllers {
     public partial class AccountsController : AbstractController {
-        [HttpGet]
-        public virtual ViewResult Login() {
-            return View();
-        }
-
         [HttpGet]
         public virtual RedirectToRouteResult SignOut() {
             FormsAuthentication.SignOut();
             return RedirectToAction(MVC.Public.Index());
         }
 
-        [HttpPost, ValidateInput(false)]
-        public virtual RedirectToRouteResult Login(string emailAddress, string password, bool persist) {
+        [AjaxOnly, HttpPost, ValidateInput(false)]
+        public virtual RenderJsonResult Login(string emailAddress, string password, bool persist, string returnUrl) {
             var accountEmailReference = DocumentSession.Query<WebAccountEmailReference>()
                 .Where(x => x.Id == WebAccountEmailReference.GetId(emailAddress))
                 .SingleOrDefault();
             if (accountEmailReference == null) {
-                throw new Exception("Bad User");
-            }
-            var accountPassword = DocumentSession.Query<WebAccountPassword>()
-                .Where(x => x.WebAccountId == accountEmailReference.WebAccountId)
-                .SingleOrDefault();
-            if (accountPassword == null || !accountPassword.PasswordMatches(password)) {
-                throw new Exception("Bad Password");
+                return this.RenderJsonErrorCode(1, "Bad Username or Password");
             }
             var webAccount = DocumentSession.Load<WebAccount>(accountEmailReference.WebAccountId);
+            if (webAccount == null || !webAccount.PasswordMatches(password)) {
+                return this.RenderJsonErrorCode(1, "Bad Username or Password");
+            }
             if (!webAccount.CanLogin()) {
-                throw new Exception("Invalid Login");
+                return this.RenderJsonErrorCode(2, "Account is locked");
             }
             FormsAuthentication.SetAuthCookie(webAccount.Id, persist);
             SetRoles(webAccount.Roles);
-            return RedirectToAction(MVC.Public.Index());
+            return new RenderJsonResult() { Data = new { redirect = Url.IsLocalUrl(returnUrl) ? returnUrl : Url.Action(MVC.Public.Index()) } };
         }
 
         [HttpGet]
@@ -52,18 +43,16 @@ namespace FriendsOfDT.Controllers {
                 DocumentSession.Advanced.Clear();
                 return this.RenderJsonErrorCode(1, "An account already exists with this e-mail address.");
             }
-            var newAccount = WebAccount.RegisterNewAccount(parameters);
-            var newAccountEmailReference = new WebAccountEmailReference(newAccount.EmailAddress, newAccount.Id);
-            DocumentSession.Store(newAccount);
-            DocumentSession.Store(newAccountEmailReference);
-            // TODO: Publish event for e-mail notification
             if (string.IsNullOrWhiteSpace(requestedPassword) || requestedPassword != confirmedPassword) {
                 DocumentSession.Advanced.Clear();
                 return this.RenderJsonErrorCode(2, "A password is required, both passwords must match");
             }
-            var password = new WebAccountPassword(newAccount.Id);
-            password.ChangePassword(requestedPassword);
-            DocumentSession.Store(password);
+            var newAccount = WebAccount.RegisterNewAccount(parameters);
+            newAccount.ChangePassword(requestedPassword);
+            var newAccountEmailReference = new WebAccountEmailReference(newAccount.EmailAddress, newAccount.Id);
+            DocumentSession.Store(newAccount);
+            DocumentSession.Store(newAccountEmailReference);
+            // TODO: Publish event for e-mail notification
             return this.RenderJsonSuccessErrorCode();
         }
 

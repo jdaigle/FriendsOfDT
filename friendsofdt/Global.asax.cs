@@ -5,7 +5,6 @@ using FriendsOfDT.Tasks;
 using Newtonsoft.Json;
 using Raven.Client;
 using Raven.Client.Document;
-using StructureMap;
 
 namespace FriendsOfDT {
     public class MvcApplication : System.Web.HttpApplication {
@@ -28,12 +27,9 @@ namespace FriendsOfDT {
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
             InitializeRavenDb();
-            //InitializeStructureMap();
         }
 
         protected void Application_EndRequest() {
-            // Ensure the Dispose method is called on all registered objects that implement IDisposable
-            ObjectFactory.ReleaseAndDisposeAllHttpScopedObjects();
             var context = new HttpContextWrapper(Context);
             // If we're an ajax request, and doing a 302, then we actually need to do a 401
             if (Context.Response.StatusCode == 302 && context.Request.IsAjaxRequest()) {
@@ -41,8 +37,8 @@ namespace FriendsOfDT {
                 Context.Response.StatusCode = 200;
                 Context.Response.ContentType = "application/json";
                 var serializer = new JsonSerializer();
-                //serializer.Serialize(Context.Response.Output, new { redirect = Context.Response.Headers["Location"] });
-                serializer.Serialize(Context.Response.Output, new { redirect = VirtualPathUtility.ToAbsolute("~/Accounts/Login") });
+                serializer.Serialize(Context.Response.Output, new { redirect = Context.Response.Headers["Location"] });
+                //serializer.Serialize(Context.Response.Output, new { redirect = VirtualPathUtility.ToAbsolute("~/Accounts/Login") });
             }
         }
 
@@ -61,17 +57,5 @@ namespace FriendsOfDT {
             };
             DocumentStore = documentStore;
         }
-
-        //        public static void InitializeStructureMap() {
-        //            var container = new Container(i => {
-        //                i.Scan(s => s.IncludeNamespaceContainingType<PublicController>());
-        //                i.ForSingletonOf<IDocumentStore>().Use(() => MvcApplication.DocumentStore);
-        //            });
-        //#if DEBUG
-        //            container.AssertConfigurationIsValid();
-        //#endif
-        //            // Register the container with ASP.NET MVC
-        //            ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory(container));
-        //        }
     }
 }

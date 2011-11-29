@@ -1,5 +1,4 @@
-﻿
-fodt.slideshowController = function (container) {
+﻿fodt.slideshowController = function (container) {
     var controller = this;
     controller.container = container;
     controller.images = container.find("li");
