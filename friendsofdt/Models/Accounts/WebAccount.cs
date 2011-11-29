@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FriendsOfDT.Models.Accounts {
     [EntityMetadata(Version = 1)]
@@ -23,12 +24,15 @@ namespace FriendsOfDT.Models.Accounts {
 
         public WebAccount() {
             this.Id = "webAccounts/" + Guid.NewGuid();
+            Roles = new List<WebAccountRole>();
         }
 
         public string Id { get; protected set; }
         public string EmailAddress { get; protected set; }
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }
+
+        public List<WebAccountRole> Roles { get; protected set; }
 
         public RegistrationStatus RegistrationStatus { get; protected set; }
         public string RegistrationFirstName { get; protected set; }

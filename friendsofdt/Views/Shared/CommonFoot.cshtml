@@ -1,4 +1,7 @@
 ﻿<div class="foot">
+    @if (ViewBag.CanSeeAdminLink) {
+        <p><a href="@Url.Action(MVC.Admin.Index())" title="admin">Admin</a></p>
+    }
     <p>&copy; @DateTime.Now.Year Friends Of DramaTech</p>
     <p>Contact the <a href="mailto:fodtadmin@cridion.com">webmaster</a></p>
 </div>

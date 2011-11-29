@@ -35,7 +35,8 @@ namespace FriendsOfDT.Controllers {
             if (!webAccount.CanLogin()) {
                 throw new Exception("Invalid Login");
             }
-            FormsAuthentication.SetAuthCookie(webAccount.EmailAddress, persist);
+            FormsAuthentication.SetAuthCookie(webAccount.Id, persist);
+            SetRoles(webAccount.Roles);
             return RedirectToAction(MVC.Public.Index());
         }
 

@@ -6,7 +6,7 @@ namespace FriendsOfDT.Cryptography
 {
     public static class SecureValue
     {
-        private const string DEFAULT_KET = "Cl3@rw@v353cur1ty";
+        private const string DEFAULT_KET = "D4m4T3ch53cur1ty";
 
         public static string SymmetricEncrypt(this string plaintext, SymmetricAlgorithm algorithm)
         {

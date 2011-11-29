@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <div class="home">
+    <div class="main home">
         <div class="head">
             @Html.Partial("NavigationControls")
             <div class="slideshow">
@@ -31,37 +31,7 @@
             </div>
         </div>
         <div class="body">
-            <div class="sidebar">
-                <ul>
-                    @*<li>
-                        <h1>Upcoming Events</h1>
-                        <p>Come out and support our shows! More info here.</p>
-                    </li>*@
-                    @*<li class="icon rss">
-                        <h1>Subscribe RSS</h1>
-                        <p>Keep in touch with us.</p>
-                    </li>*@
-                    @*<li>
-                        <h1>History Tidbit</h1>
-                        <p>DramaTech is a Theater.</p>
-                    </li>*@
-                    <li>
-                        <h1>Other Links</h1>
-                        <ul class="links">
-                            <li><a target="_blank" href="http://dramatech.org">DramaTech</a></li>
-                            <li><a target="_blank" href="http://imdt.friendsofdt.org/">IMDT</a></li>
-                            <li><a target="_blank" href="http://gt.entertainmentalumni.org/">GTEN</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h1>Social Networking</h1>
-                        <ul class="links icon-list">
-                            <li><a class="icon twitter" target="_blank" href="http://twitter.com/gtdramatech"></a></li>
-                            <li><a class="icon fb" target="_blank" href="http://facebook.com/group.php?gid=5944506425"></a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+            @Html.Partial("CommonSidebar")
             <div class="content">
                 @RenderBody()
             </div>

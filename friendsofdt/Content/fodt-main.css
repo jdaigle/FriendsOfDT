@@ -1,21 +1,22 @@
-div.home {
-	margin: 0px auto;
-	background-image: url('images/layout/home-bg.jpg');
-	background-repeat: repeat-x;
-}
-div.home div.head {
-	background-image: url('images/layout/home-header.png');
-	height: 434px;
-	width: 1026px;
-}
-div.page {
+div.main {
 	margin: 0px auto;
 	background-image: url('images/layout/inside-bg.jpg');
 	background-repeat: repeat-x;
 }
-div.page div.head {
+div.main div.head {
 	background-image: url('images/layout/inside-header.png');
 	height: 220px;
+	width: 1026px;
+}
+
+div.main.home {
+	margin: 0px auto;
+	background-image: url('images/layout/home-bg.jpg');
+	background-repeat: repeat-x;
+}
+div.main.home div.head {
+	background-image: url('images/layout/home-header.png');
+	height: 434px;
 	width: 1026px;
 }
 
@@ -23,10 +24,10 @@ div.head {
 	margin: 0px auto;
 }
 
-.page .head {
+div.head {
     position: relative;
 }
-.page .head div.title {
+div.head div.title {
     color: #343498;
     font-family: Arial Black;
     font-weight: bold;

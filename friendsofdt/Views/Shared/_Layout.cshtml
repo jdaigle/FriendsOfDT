@@ -12,14 +12,15 @@
 </head>
 
 <body>
-    <div class="page">
+    <div class="main">
         <div class="head">
             @Html.Partial("NavigationControls")
             @if (!string.IsNullOrWhiteSpace(ViewBag.SubTitle ?? string.Empty)) {
             <div class="title">@ViewBag.SubTitle</div>
             }
         </div>
-        <div class="body">            
+        <div class="body">
+            @Html.Partial("CommonSidebar")
             <div class="content">
                 @RenderBody()
             </div>

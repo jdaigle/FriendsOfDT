@@ -25,6 +25,7 @@ using T4MVC;
 public static class MVC {
     public static FriendsOfDT.Controllers.AbstractController Abstract = new FriendsOfDT.Controllers.T4MVC_AbstractController();
     public static FriendsOfDT.Controllers.AccountsController Accounts = new FriendsOfDT.Controllers.T4MVC_AccountsController();
+    public static FriendsOfDT.Controllers.AdminController Admin = new FriendsOfDT.Controllers.T4MVC_AdminController();
     public static FriendsOfDT.Controllers.PublicController Public = new FriendsOfDT.Controllers.T4MVC_PublicController();
     public static T4MVC.SharedController Shared = new T4MVC.SharedController();
 }
@@ -545,6 +546,63 @@ namespace FriendsOfDT.Controllers {
         public override FriendsOfDT.RenderJsonResult VerifyWebAccount(string webAccountId) {
             var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.VerifyWebAccount);
             callInfo.RouteValueDictionary.Add("webAccountId", webAccountId);
+            return callInfo;
+        }
+
+    }
+}
+
+namespace FriendsOfDT.Controllers {
+    public partial class AdminController {
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public AdminController() { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected AdminController(Dummy d) { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToAction(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoute(callInfo.RouteValueDictionary);
+        }
+
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public AdminController Actions { get { return MVC.Admin; } }
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Area = "";
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Name = "Admin";
+
+        static readonly ActionNamesClass s_actions = new ActionNamesClass();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionNamesClass ActionNames { get { return s_actions; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNamesClass {
+            public readonly string Index = "Index";
+            public readonly string Dashboard = "Dashboard";
+        }
+
+
+        static readonly ViewNames s_views = new ViewNames();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ViewNames Views { get { return s_views; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ViewNames {
+        }
+    }
+
+    [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+    public class T4MVC_AdminController: FriendsOfDT.Controllers.AdminController {
+        public T4MVC_AdminController() : base(Dummy.Instance) { }
+
+        public override System.Web.Mvc.RedirectToRouteResult Index() {
+            var callInfo = new T4MVC_RedirectToRouteResult(Area, Name, ActionNames.Index);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ViewResult Dashboard() {
+            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.Dashboard);
             return callInfo;
         }
 

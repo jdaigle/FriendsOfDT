@@ -1,11 +1,8 @@
 ﻿<div class="navigation">
     <ul>
         <li class="@isHomeActive()">// <a href="@Url.Action(MVC.Public.Index())" title="home">Home</a></li>
-        @if (ViewBag.IsAuthenticated) {
-        <li>// <a href="@Url.Action(MVC.Accounts.SignOut())" title="sign in">Sign Out (@ViewBag.EmailAddress)</a></li>
-        } else {
-        <li class="@isSignInActive()">// <a href="@Url.Action(MVC.Accounts.Login())" title="sign in">Sign In</a></li>    
-        }
+        <li>// <a href="#" title="about us">About Us</a></li>
+        <li>// <a href="http://imdt.friendsofdt.org" title="show archive">Show Archive</a></li>        
         @*<li>// <a href="#">Active</a></li>
         <li>// <a href="#">About Us</a></li>*@
     </ul>
