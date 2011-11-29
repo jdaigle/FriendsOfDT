@@ -343,6 +343,8 @@ namespace Links {
                       
         public static readonly string fodt_slideshowController_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt.slideshowController.min.js") ? Url("fodt.slideshowController.min.js") : Url("fodt.slideshowController.js");
                       
+        public static readonly string jsrender_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jsrender.min.js") ? Url("jsrender.min.js") : Url("jsrender.js");
+                      
         public static readonly string site_min_js = Url("site.min.js");
     }
 
@@ -482,6 +484,11 @@ namespace FriendsOfDT.Controllers {
         public FriendsOfDT.RenderJsonResult VerifyWebAccount() {
             return new T4MVC_RenderJsonResult(Area, Name, ActionNames.VerifyWebAccount);
         }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public FriendsOfDT.RenderJsonResult ListAccounts() {
+            return new T4MVC_RenderJsonResult(Area, Name, ActionNames.ListAccounts);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public AccountsController Actions { get { return MVC.Accounts; } }
@@ -500,6 +507,7 @@ namespace FriendsOfDT.Controllers {
             public readonly string SignUp = "SignUp";
             public readonly string RegisterNewWebAccount = "RegisterNewWebAccount";
             public readonly string VerifyWebAccount = "VerifyWebAccount";
+            public readonly string ListAccounts = "ListAccounts";
         }
 
 
@@ -549,6 +557,13 @@ namespace FriendsOfDT.Controllers {
             return callInfo;
         }
 
+        public override FriendsOfDT.RenderJsonResult ListAccounts(int? page, int? itemsPerPage) {
+            var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.ListAccounts);
+            callInfo.RouteValueDictionary.Add("page", page);
+            callInfo.RouteValueDictionary.Add("itemsPerPage", itemsPerPage);
+            return callInfo;
+        }
+
     }
 }
 
@@ -581,6 +596,7 @@ namespace FriendsOfDT.Controllers {
         public class ActionNamesClass {
             public readonly string Index = "Index";
             public readonly string Dashboard = "Dashboard";
+            public readonly string Accounts = "Accounts";
         }
 
 
@@ -589,6 +605,7 @@ namespace FriendsOfDT.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
+            public readonly string Accounts = "~/Views/Admin/Accounts.cshtml";
             public readonly string Dashboard = "~/Views/Admin/Dashboard.cshtml";
         }
     }
@@ -604,6 +621,11 @@ namespace FriendsOfDT.Controllers {
 
         public override System.Web.Mvc.ViewResult Dashboard() {
             var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.Dashboard);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ViewResult Accounts() {
+            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.Accounts);
             return callInfo;
         }
 

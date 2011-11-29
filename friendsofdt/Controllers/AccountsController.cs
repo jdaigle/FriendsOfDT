@@ -65,5 +65,18 @@ namespace FriendsOfDT.Controllers {
             account.Verify();
             return this.RenderJsonSuccessErrorCode();
         }
+
+        [AjaxOnly]
+        [Authorize, AuthorizeRole()]
+        public virtual RenderJsonResult ListAccounts(int? page, int? itemsPerPage) {
+            page = page ?? 0;
+            itemsPerPage = itemsPerPage ?? 20;
+            var results = DocumentSession.Query<WebAccount>()
+                .OrderBy(x => x.LastName)
+                .Page(page.Value, itemsPerPage.Value)
+                .ToList()
+                .Select(x => new { webAccountId = x.Id, }).ToList();
+            return new RenderJsonResult() { Data = results };
+        }
     }
 }
