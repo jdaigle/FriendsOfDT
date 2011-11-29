@@ -37,6 +37,15 @@ class Exec
 end
 #END FIX
 
+desc 'Compiles Application Content'
+task :compileContent do
+	msb = MSBuild.new
+  msb.path_to_command = MSBUILD_PATH
+	msb.solution = 'friendsofdt/MsBuild\MsBuild.CompressContent.xml'
+	msb.properties = { :SourceLocation => :'../' }
+	msb.build
+end
+
 desc 'Compiles Application'
 msbuild :compile do |msb|
   msb.path_to_command = MSBUILD_PATH

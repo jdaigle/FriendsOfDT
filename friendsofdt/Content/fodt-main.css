@@ -8,7 +8,15 @@ div.home div.head {
 	height: 434px;
 	width: 1026px;
 }
-
+div.page {
+	margin: 0px auto;
+	background-image: url('images/layout/home-bg.jpg');
+	background-repeat: repeat-x;
+}
+div.page div.head {
+	height: 120px;
+	width: 1026px;
+}
 
 div.head {
 	margin: 0px auto;
@@ -47,22 +55,6 @@ div.head div.navigation ul li:hover, div.head div.navigation ul li a:hover, div.
 }
 div.head div.navigation ul a:hover {
 	text-decoration: underline;
-}
-
-div.head div.slideshow ul { 
-	margin: 0px; 
-    position: relative;
-}
-
-div.head div.slideshow ul li { 
-	list-style: none;
-	left: 35px;
-	top: 10px;
-}
-
-div.head div.slideshow ul li img {
-	height: 280px;
-	width: 960px;
 }
 
 div.body { 
@@ -123,6 +115,10 @@ div.sidebar ul.icon-list li a {
 }
 
 .content {
+	margin-bottom: 20px;
+}
+
+.home .content {
 	width: 670px;
 }
 

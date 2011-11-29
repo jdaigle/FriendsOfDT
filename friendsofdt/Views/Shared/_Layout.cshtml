@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    @Html.Partial("CommonHead")
+    @RenderSection("additionalHead", false)
+</head>
+
+<body>
+    <div class="page">
+        <div class="head">
+            @Html.Partial("NavigationControls")
+        </div>
+        <div class="body">            
+            <div class="content">
+                @RenderBody()
+            </div>
+        </div>
+        @Html.Partial("CommonFoot")
+    </div>
+</body>
+</html>

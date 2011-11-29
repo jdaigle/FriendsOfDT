@@ -1,0 +1,15 @@
+﻿div.head div.slideshow ul { 
+	margin: 0px; 
+    position: relative;
+}
+
+div.head div.slideshow ul li { 
+	list-style: none;
+	left: 35px;
+	top: 10px;
+}
+
+div.head div.slideshow ul li img {
+	height: 280px;
+	width: 960px;
+}

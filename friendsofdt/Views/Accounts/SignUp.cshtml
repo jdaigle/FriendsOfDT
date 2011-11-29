@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "FoDT Website Sign Up";
+}
+
+@section additionalHead {
+<script type="text/javascript">
+
+    fodt.ajaxFormController = function (formSelector) {
+        var controller = this;
+        $(formSelector).on("submit", function () {
+            controller.submit($(this));
+            return false;
+        });
+    }
+
+    $.extend(fodt.ajaxFormController.prototype, {
+        onSuccess: function (form, data) { return; },
+        onError: function (form, jqXHR) { return; },
+        onBefore: function (form) { return; },
+        onAfter: function (form) { return; },
+        submit: function (form) {
+            var controller = this;
+            $.ajax({
+                url: form.attr("action"),
+                type: "POST",
+                data: form.serialize(),
+                beforeSend: function () {
+                    var messages = form.find("div.messages");
+                    messages.empty().hide();
+                    form.find("div.working").show();
+                    controller.onBefore(form);
+                },
+                complete: function () {
+                    form.find("div.working").hide();
+                    controller.onAfter(form);
+                },
+                success: function (data) {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else {
+                        controller.onSuccess(form, data);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var messages = form.find("div.messages");
+                    messages.empty().html("An Error Occured, Please Try Again").show();
+                    controller.onError(form, jqXHR);
+                }
+            });
+        }
+    });
+
+    $(function () {
+        var controller = new fodt.ajaxFormController($("#signUpForm"));
+        controller.onSuccess = function (form, data) {
+            if (data.errorCode == 0) {
+
+            } else {
+                var messages = form.find("div.messages");
+                messages.empty().html(data.message);
+                messages.show();
+            }
+        };
+    });
+</script>
+}
+
+<div class="signup">
+    <form action="@Url.Action(MVC.Accounts.RegisterNewWebAccount())" method="post" autocomplete="off" id="signUpForm">
+        <p>In order to sign up for an account on this website we need to verify your DramaTech alumni or faculty status. To be considered an DramaTech alumnus you must be a current or prior student of Georgia Tech and participated in at one DramaTech show or performance.</p>
+        <p>
+            <label for="signup_emailAddress">E-Mail Address:</label><input type="text" id="signup_emailAddress" name="emailAddress" autocomplete="off" />
+            <label for="signup_firstName">First Name:</label><input type="text" id="signup_firstName" name="firstName" />
+            <label for="signup_lastName">Last Name:</label><input type="text" id="signup_lastName" name="lastName" />
+            <label for="signup_requestedPassword">Password:</label><input type="password" id="signup_requestedPassword" name="requestedPassword" autocomplete="off" />
+            <label for="signup_confirmedPassword">Confirm Password:</label><input type="password" id="signup_confirmedPassword" name="confirmedPassword" autocomplete="off" />
+        </p>
+        <p>If you went by a different name at time you were a student, please provide that name below so we can more quickly verify your status.</p>
+        <p>
+            <label for="signup_altFirstName">First Name:</label><input type="text" id="signup_altFirstName" name="altFirstName" />
+            <label for="signup_altLastName">Last Name:</label><input type="text" id="signup_altLastName" name="altLastName" />
+        </p>
+        <p>
+            <input type="submit" value="Sign Up" />
+        </p>
+        <div class="working"><img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="working" /><span>Please Wait</span></div>
+        <div class="messages"></div>
+    </form>
+</div>

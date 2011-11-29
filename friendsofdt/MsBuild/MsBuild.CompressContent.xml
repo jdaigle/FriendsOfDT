@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/MsBuild/2003">
+  <UsingTask
+      TaskName="CompressorTask"
+      AssemblyFile="Yahoo.Yui.Compressor.dll" />
+  <!-- Define the output locations. These can be set via the msbuild command line using
+         /p:SourceLocation="$(ProjectDir)"
+         /p:CssOutputFile=$(ProjectDir)../whatever...
+         /p:JavaScriptOutputFile=$(ProjectDir)../whatever...
+         
+         If they are not supplied or are empty, then we the value whatever is supplied, below.
+    -->
+  <PropertyGroup>
+    <CssOutputFile Condition=" '$(CssOutputFile)'=='' ">$(SourceLocation)Content\site.min.css</CssOutputFile>
+    <JavaScriptOutputFile Condition=" '$(JavaScriptOutputFile)'=='' ">$(SourceLocation)Scripts\site.min.js</JavaScriptOutputFile>
+  </PropertyGroup>
+
+
+  <Target Name="MyTaskTarget">
+    <!--
+            ItemGroup\CssFiles or ItemGroup\JavaScriptFiles: add zero to many files you wish to include in this compression task.
+                                                             Don't forget, you can use the wildcard (eg. *.css, *.js) if you feel up to it.
+                                                             Finally, at least one item is required - either a css file or a js file.
+                                                             
+            CssFiles/JavaScriptFiles data format: Please do not touch this.
+            DeleteCssFiles: [Optional] True | Yes | Yeah | Yep | True | FoSho | Fo Sho. Default is False. Anything else is False. (eg. blah = false, xxxx111 = false, etc)
+            CssCompressionType: YuiStockCompression | MichaelAshsRegexEnhancements | HaveMyCakeAndEatIt or BestOfBothWorlds or Hybrid; Default is YuiStockCompression.
+            ObfuscateJavaScript: [Optional] refer to DeleteCssFiles, above.
+            PreserveAllSemicolons: [Optional] refer to DeleteCssFiles, above.
+            DisableOptimizations: [Optional] refer to DeleteCssFiles, above.
+            EncodingType: [Optional] ASCII, BigEndianUnicode, Unicode, UTF32, UTF7, UTF8, Default. Default is 'Default'.
+            DeleteJavaScriptFiles: [Optional] refer to DeleteCssFiles, above.
+            LineBreakPosition: [Optional] the position where a line feed is appened when the next semicolon is reached. Default is -1 (never add a line break).
+                               0 (zero) means add a line break after every semicolon. (This might help with debugging troublesome files).          
+            LoggingType: None | ALittleBit | HardcoreBringItOn;  Hardcore also lists javascript verbose warnings, if there are any (and there usually is :P ).
+            ThreadCulture: [Optional] the culture you want the thread to run under. Default is 'en-gb'.
+            IsEvalIgnored: [Optional] compress any functions that contain 'eval'. Default is False, which means a function that contains
+                           'eval' will NOT be compressed. It's deemed risky to compress a function containing 'eval'. That said,
+                           if the usages are deemed safe this check can be disabled by setting this value to True.
+        -->
+    <ItemGroup>
+      <CssFiles Include="$(SourceLocation)Content\reset-min.css"/>
+      <CssFiles Include="$(SourceLocation)Content\base-min.css"/>
+      <CssFiles Include="$(SourceLocation)Content\fonts-min.css"/>
+      <CssFiles Include="$(SourceLocation)Content\fodt-main.css"/>
+      <CssFiles Include="$(SourceLocation)Content\fodt-forms.css"/>
+      <CssFiles Include="$(SourceLocation)Content\fodt-slideshow.css"/>
+
+      <JavaScriptFiles Include="$(SourceLocation)Scripts\fodt.common.js" />
+      <JavaScriptFiles Include="$(SourceLocation)Scripts\fodt.forms.js" />
+      <JavaScriptFiles Include="$(SourceLocation)Scripts\fodt.slideshowController.js" />
+
+
+    </ItemGroup>
+    <CompressorTask
+        CssFiles="@(CssFiles)"
+        DeleteCssFiles="false"
+        CssOutputFile="$(CssOutputFile)"
+        CssCompressionType="YuiStockCompression"
+        JavaScriptFiles="@(JavaScriptFiles)"
+        ObfuscateJavaScript="True"
+        PreserveAllSemicolons="False"
+        DisableOptimizations="Nope"
+        EncodingType="Default"
+        DeleteJavaScriptFiles="false"
+        LineBreakPosition="0"
+        JavaScriptOutputFile="$(JavaScriptOutputFile)"
+        LoggingType="ALittleBit"
+        ThreadCulture="en-us"
+        IsEvalIgnored="false"
+            />
+  </Target>
+</Project>

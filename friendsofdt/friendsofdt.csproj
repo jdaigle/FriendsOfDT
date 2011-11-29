@@ -39,6 +39,12 @@
     <DeployIisAppPath>friendsofdt.org</DeployIisAppPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Elmah">
+      <HintPath>..\external-bin\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\external-bin\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -50,6 +56,9 @@
     </Reference>
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\external-bin\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\external-bin\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -85,10 +94,11 @@
     <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AbstractController.cs" />
     <Compile Include="Infrastructure\AjaxOnlyAttribute.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\ControllerExtensions.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PublicController.cs" />
     <Compile Include="Cryptography\CWCryptoStream.cs" />
     <Compile Include="Cryptography\HashAlgorithm.cs" />
     <Compile Include="Cryptography\HashGenerator.cs" />
@@ -96,6 +106,7 @@
     <Compile Include="Cryptography\SymmetricAlgorithm.cs" />
     <Compile Include="Infrastructure\DocumentVersionStoreListener.cs" />
     <Compile Include="Infrastructure\EntityMetadataAttribute.cs" />
+    <Compile Include="Infrastructure\StructureMapControllerFactory.cs" />
     <Compile Include="Models\Accounts\InvalidPasswordException.cs" />
     <Compile Include="Models\Accounts\PasswordHistory.cs" />
     <Compile Include="Models\Accounts\RegisterNewAccountParameters.cs" />
@@ -107,10 +118,21 @@
     <Compile Include="Models\Accounts\WebAccountPassword.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\RenderJsonResult.cs" />
+    <Compile Include="T4MVC.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\BackgroundTask.cs" />
+    <Compile Include="Tasks\SendEmailTask.cs" />
+    <Compile Include="Tasks\TaskExecuter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\base-min.css" />
+    <Content Include="Content\fodt-slideshow.css" />
     <Content Include="Content\fonts-min.css" />
+    <Content Include="Content\fodt-forms.css" />
+    <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\fb-icon.gif" />
     <Content Include="Content\images\layout\home-bg.jpg" />
     <Content Include="Content\images\layout\home-header.png" />
@@ -118,23 +140,45 @@
     <Content Include="Content\images\rss-icon.gif" />
     <Content Include="Content\images\twitter-icon.gif" />
     <Content Include="Content\reset-min.css" />
+    <Content Include="Content\site.min.css" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
-    <Content Include="Scripts\fodt.js" />
+    <Content Include="Content\fodt-main.css" />
+    <None Include="MsBuild\EcmaScript.NET.modified.dll" />
+    <None Include="MsBuild\MsBuild.CompressContent.xml" />
+    <None Include="MsBuild\Yahoo.Yui.Compressor.dll" />
+    <Content Include="Scripts\fodt.forms.js" />
+    <Content Include="Scripts\fodt.common.js" />
+    <Content Include="Scripts\fodt.slideshowController.js" />
+    <Content Include="Scripts\site.min.js" />
     <Content Include="Web.config" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout_Home.cshtml" />
+    <Content Include="Views\Shared\NavigationControls.cshtml" />
+    <Content Include="Views\Shared\CommonHead.cshtml" />
+    <Content Include="Views\Shared\CommonFoot.cshtml" />
+    <Content Include="Views\Accounts\Login.cshtml" />
+    <Content Include="Views\Accounts\SignUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\Accounts\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Public\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\_Layout_Inside.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="T4MVC.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4MVC.cs</LastGenOutput>
+    </None>
+    <None Include="T4MVC.tt.settings.t4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
@@ -166,4 +210,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>$(MSBuildBinPath)\msbuild.exe $(ProjectDir)MsBuild\MsBuild.CompressContent.xml /p:SourceLocation=$(ProjectDir)\</PreBuildEvent>
+  </PropertyGroup>
 </Project>

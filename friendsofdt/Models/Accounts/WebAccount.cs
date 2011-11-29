@@ -22,10 +22,10 @@ namespace FriendsOfDT.Models.Accounts {
         protected WebAccount() { }
 
         public WebAccount(string emailAddress) {
-            this.WebSiteAccountId = emailAddress;
+            this.Id = emailAddress;
         }
 
-        public string WebSiteAccountId { get; protected set; }
+        public string Id { get; protected set; }
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }
 

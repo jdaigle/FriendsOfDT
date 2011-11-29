@@ -9,7 +9,6 @@ namespace FriendsOfDT.Models.Accounts {
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public string PhoneNumber { get; set; }
         public string AltFirstName { get; set; }
         public string AltLastName { get; set; }
     }

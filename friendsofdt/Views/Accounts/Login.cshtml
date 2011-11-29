@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "FoDT Website Sign In";
+}
+
+<div class="login">
+    <form action="@Url.Action(MVC.Accounts.Login())" method="post">
+        E-Mail Address: <input type="text" name="emailAddress" />
+        Password: <input type="password" name="password" />
+        <input type="submit" value="Sign In" />
+    </form>
+    <div class="notRegisteredNotice">
+        <h3>New to FriendsOfDT.org?</h3>
+        <a href="@Url.Action(MVC.Accounts.SignUp())">Sign Up Today!</a>
+    </div>
+</div>

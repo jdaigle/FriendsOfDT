@@ -1,11 +1,10 @@
-﻿if (typeof (fodt) == "undefined") fodt = {};
-
-fodt.SlideshowController = function (container) {
+﻿
+fodt.slideshowController = function (container) {
     var controller = this;
     controller.container = container;
     controller.images = container.find("li");
 }
-$.extend(fodt.SlideshowController.prototype, {
+$.extend(fodt.slideshowController.prototype, {
     slideshowIntervalInMilliseconds: 5000,
     intervalHandle: null,
     currentIndex: -1,

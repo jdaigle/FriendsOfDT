@@ -2,9 +2,9 @@
 
 namespace FriendsOfDT.Controllers
 {
-    public class HomeController : Controller
+    public partial class PublicController : AbstractController
     {
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             return View();
         }
