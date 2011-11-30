@@ -3,7 +3,4 @@
     ViewBag.SubTitle = "Admin";
 }
 
-<h2>Dashboard</h2>
-
-
-@Html.ActionLink("Accounts", MVC.Admin.Accounts())
+@Html.Partial("AdminTabs", new { Section = "Dashboard" }.ToExpando())

@@ -1,0 +1,8 @@
+﻿<div class="subheader">
+    <h1>
+        @Model.Section
+    </h1>
+    <div id="tabs">
+        <a class="@(Model.Section == "Accounts" ? "youarehere" : "")" href="@Url.Action(MVC.Accounts.AdminList())">Accounts</a>
+    </div>
+</div>

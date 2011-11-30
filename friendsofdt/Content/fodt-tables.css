@@ -1,4 +1,21 @@
-﻿table.paginated {
+﻿table, table td, table th {
+    border: 1px solid black;
+    text-align: center;
+}
+table > thead > tr {
+    background-color: #EEE;
+}
+table > tbody > tr:nth-child(odd) {
+    background-color: white;
+}
+table > tbody > tr:nth-child(even) {
+    background-color: #EEE;
+}
+table > tbody > tr:hover {
+    background-color: #CCC;
+}
+
+table.paginated {
 	width: 100%;
 	caption-side: bottom;
 }

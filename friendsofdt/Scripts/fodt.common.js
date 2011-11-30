@@ -10,6 +10,16 @@ fodt.getData = function (url, data, onSuccess, onError) {
     });
 };
 
+fodt.rootUrl = "/";
+
+fodt.buildUrl = function (url) {
+    if (url.charAt(0) != '/') {
+        return fodt.rootUrl + url;
+    } else {
+        return fodt.rootUrl + url.substring(1);
+    }
+};
+
 $(function () {
     "placeholder" in document.createElement("input") || $("textarea[placeholder], input[placeholder]").addClass("gray").each(function () {
         var a = $(this), b = a.attr("placeholder");

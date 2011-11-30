@@ -1,10 +1,12 @@
 ﻿@{
     ViewBag.Title = "FoDT Web Accounts Management";
+    ViewBag.SubTitle = "Admin";
 }
 
 @section additionalHead {
 <script type="text/javascript">
     $(function () {
+        $.views.allowCode = true;
         var paginatedTable = new fodt.paginatedTable($("#accountsTable"));
         var loadData = function (page, itemsPerPage) {
             fodt.getData("@Url.Action(MVC.Accounts.ListAccounts())", { page: page, itemsPerPage: itemsPerPage }, function (data) {
@@ -20,38 +22,28 @@
     <tr>
         <td>{{=emailAddress}}</td>
         <td>{{=registrationStatus}}</td>
+        <td><a href="{{* result += fodt.buildUrl("/Admin/" + $view.data.id + "/Manage"); }}">Edit</a></td>
     </tr>
 </script>
 <style type="text/css">
-    table, table td, table th {
-        border: 1px solid black;
-        text-align: center;
-    }
-    table > thead > tr {
-        background-color: #EEE;
-    }
-    table > tbody > tr:nth-child(odd) {
-        background-color: white;
-    }
-    table > tbody > tr:nth-child(even) {
-        background-color: #EEE;
-    }
+    
 </style>
 }
 
-@Html.Partial("AdminTabs", new { Section = "Accounts" })
+@Html.Partial("AdminTabs", new { Section = "Accounts" }.ToExpando())
 
 <table id="accountsTable">
     <thead>
         <tr>
             <th>Account</th>
             <th>Registration Status</th>
+            <th></th>
         </tr>
     </thead>
     <tbody></tbody>
     <caption>
         <a href="#" class="page prev" title="Previous Page">‹</a>
-        <span class="page-number">Page 2 of 5</span>
+        <span class="page-number"></span>
         <a href="#" class="page next" title="Next Page">›</a>
     </caption>
 </table>

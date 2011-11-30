@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using FriendsOfDT.Models.Accounts;
 using Raven.Client.Linq;
+using RiaLibrary.Web;
 
 namespace FriendsOfDT.Controllers {
     public partial class AccountsController : AbstractController {
@@ -67,6 +68,12 @@ namespace FriendsOfDT.Controllers {
             return this.RenderJsonSuccessErrorCode();
         }
 
+        [Authorize, AuthorizeRole()]
+        [HttpGet, Url("Admin/WebAccounts/List")]
+        public virtual ViewResult AdminList() {
+            return View();
+        }
+
         [AjaxOnly]
         [Authorize, AuthorizeRole()]
         public virtual RenderJsonResult ListAccounts(int? page, int? itemsPerPage) {
@@ -79,8 +86,15 @@ namespace FriendsOfDT.Controllers {
                 .OrderBy(x => x.EmailAddress)
                 .Page(page.Value, itemsPerPage.Value)
                 .ToList()
-                .Select(x => new { webAccountId = x.Id, emailAddress = x.EmailAddress, registrationStatus = x.RegistrationStatus.ToString() }).ToList();
+                .Select(x => new { id = x.Id, emailAddress = x.EmailAddress, registrationStatus = x.RegistrationStatus.ToString() }).ToList();
             return new RenderJsonResult() { Data = new { items = results, count = stats.TotalResults } };
+        }
+
+        [Authorize, AuthorizeRole()]
+        [HttpGet, Url("Admin/WebAccounts/{id}/Manage")]
+        public virtual ViewResult Manage(string id) {
+            var account = DocumentSession.Query<WebAccount>("webAccounts/" + id);
+            return View();
         }
     }
 }

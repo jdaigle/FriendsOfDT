@@ -343,6 +343,8 @@ namespace Links {
                       
         public static readonly string fodt_slideshowController_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt.slideshowController.min.js") ? Url("fodt.slideshowController.min.js") : Url("fodt.slideshowController.js");
                       
+        public static readonly string fodt_tables_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt.tables.min.js") ? Url("fodt.tables.min.js") : Url("fodt.tables.js");
+                      
         public static readonly string jsrender_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jsrender.min.js") ? Url("jsrender.min.js") : Url("jsrender.js");
                       
         public static readonly string site_min_js = Url("site.min.js");
@@ -357,6 +359,7 @@ namespace Links {
         public static readonly string fodt_forms_css = Url("fodt-forms.css");
         public static readonly string fodt_main_css = Url("fodt-main.css");
         public static readonly string fodt_slideshow_css = Url("fodt-slideshow.css");
+        public static readonly string fodt_tables_css = Url("fodt-tables.css");
         public static readonly string fonts_min_css = Url("fonts-min.css");
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public static class images {
@@ -489,6 +492,11 @@ namespace FriendsOfDT.Controllers {
         public FriendsOfDT.RenderJsonResult ListAccounts() {
             return new T4MVC_RenderJsonResult(Area, Name, ActionNames.ListAccounts);
         }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ViewResult Manage() {
+            return new T4MVC_ViewResult(Area, Name, ActionNames.Manage);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public AccountsController Actions { get { return MVC.Accounts; } }
@@ -507,7 +515,9 @@ namespace FriendsOfDT.Controllers {
             public readonly string SignUp = "SignUp";
             public readonly string RegisterNewWebAccount = "RegisterNewWebAccount";
             public readonly string VerifyWebAccount = "VerifyWebAccount";
+            public readonly string AdminList = "AdminList";
             public readonly string ListAccounts = "ListAccounts";
+            public readonly string Manage = "Manage";
         }
 
 
@@ -516,6 +526,7 @@ namespace FriendsOfDT.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
+            public readonly string AdminList = "~/Views/Accounts/AdminList.cshtml";
             public readonly string SignUp = "~/Views/Accounts/SignUp.cshtml";
         }
     }
@@ -557,10 +568,21 @@ namespace FriendsOfDT.Controllers {
             return callInfo;
         }
 
+        public override System.Web.Mvc.ViewResult AdminList() {
+            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.AdminList);
+            return callInfo;
+        }
+
         public override FriendsOfDT.RenderJsonResult ListAccounts(int? page, int? itemsPerPage) {
             var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.ListAccounts);
             callInfo.RouteValueDictionary.Add("page", page);
             callInfo.RouteValueDictionary.Add("itemsPerPage", itemsPerPage);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ViewResult Manage(string id) {
+            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.Manage);
+            callInfo.RouteValueDictionary.Add("id", id);
             return callInfo;
         }
 
@@ -596,7 +618,6 @@ namespace FriendsOfDT.Controllers {
         public class ActionNamesClass {
             public readonly string Index = "Index";
             public readonly string Dashboard = "Dashboard";
-            public readonly string Accounts = "Accounts";
         }
 
 
@@ -605,7 +626,6 @@ namespace FriendsOfDT.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
-            public readonly string Accounts = "~/Views/Admin/Accounts.cshtml";
             public readonly string Dashboard = "~/Views/Admin/Dashboard.cshtml";
         }
     }
@@ -621,11 +641,6 @@ namespace FriendsOfDT.Controllers {
 
         public override System.Web.Mvc.ViewResult Dashboard() {
             var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.Dashboard);
-            return callInfo;
-        }
-
-        public override System.Web.Mvc.ViewResult Accounts() {
-            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.Accounts);
             return callInfo;
         }
 
@@ -694,6 +709,7 @@ namespace T4MVC {
         public class ViewNames {
             public readonly string _Layout = "~/Views/Shared/_Layout.cshtml";
             public readonly string _Layout_Home = "~/Views/Shared/_Layout_Home.cshtml";
+            public readonly string AdminTabs = "~/Views/Shared/AdminTabs.cshtml";
             public readonly string CommonFoot = "~/Views/Shared/CommonFoot.cshtml";
             public readonly string CommonHead = "~/Views/Shared/CommonHead.cshtml";
             public readonly string CommonSidebar = "~/Views/Shared/CommonSidebar.cshtml";

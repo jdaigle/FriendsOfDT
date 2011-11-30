@@ -57,6 +57,9 @@
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\external-bin\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
+    <Reference Include="RiaLibrary.Web">
+      <HintPath>..\external-bin\RiaLibrary.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -93,6 +96,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AbstractController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Html\Helpers.cs" />
     <Compile Include="Infrastructure\AjaxOnlyAttribute.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\ControllerExtensions.cs" />
@@ -170,8 +174,8 @@
     <Content Include="Views\Accounts\SignUp.cshtml" />
     <Content Include="Views\Admin\Dashboard.cshtml" />
     <Content Include="Views\Shared\CommonSidebar.cshtml" />
-    <Content Include="Views\Admin\Accounts.cshtml" />
-    <Content Include="Views\Admin\AdminTabs.cshtml" />
+    <Content Include="Views\Accounts\AdminList.cshtml" />
+    <Content Include="Views\Shared\AdminTabs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\Accounts\" />

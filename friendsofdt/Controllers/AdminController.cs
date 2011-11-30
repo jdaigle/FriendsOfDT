@@ -14,10 +14,6 @@ namespace FriendsOfDT.Controllers {
             return View();
         }
 
-        public virtual ViewResult Accounts() {
-            return View();
-        }
-
         public static bool CanSeeAdminLink(IEnumerable<WebAccountRole> roles) {
             return true;
         }
