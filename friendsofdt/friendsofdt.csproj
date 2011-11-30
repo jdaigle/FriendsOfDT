@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AbstractController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\DirectoryController.cs" />
     <Compile Include="Html\Helpers.cs" />
     <Compile Include="Infrastructure\AjaxOnlyAttribute.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
@@ -142,6 +143,7 @@
     <Content Include="Content\fonts-min.css" />
     <Content Include="Content\fodt-forms.css" />
     <Content Include="Content\images\ajax-loader.gif" />
+    <Content Include="Content\images\bulletRelatedLinks.gif" />
     <Content Include="Content\images\fb-icon.gif" />
     <Content Include="Content\images\layout\home-bg.jpg" />
     <Content Include="Content\images\layout\home-header.png" />
@@ -176,6 +178,8 @@
     <Content Include="Views\Shared\CommonSidebar.cshtml" />
     <Content Include="Views\Accounts\AdminList.cshtml" />
     <Content Include="Views\Shared\AdminTabs.cshtml" />
+    <Content Include="Views\Directory\Index.cshtml" />
+    <Content Include="Views\Directory\ViewProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\Accounts\" />

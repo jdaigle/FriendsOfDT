@@ -22,8 +22,6 @@
                 <input type="hidden" name="returnUrl" value="@ViewContext.RequestContext.HttpContext.Request.Params["ReturnUrl"]" />
                 <label for="login_persist">Remember Me:</label>@Html.CheckBox("persist", false, new { id = "login_persist" })
                 <input type="submit" value="Sign In" />
-                <div class="working"><img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="working" /><span>Please Wait</span></div>
-                <div class="messages"></div>
             </form>
             <div class="notRegisteredNotice">
                 <h3>New to FriendsOfDT.org?</h3>

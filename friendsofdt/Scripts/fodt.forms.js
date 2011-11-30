@@ -4,6 +4,8 @@
         controller.submit($(this));
         return false;
     });
+    $(formSelector).append($("<div>").addClass("working").html("Please Wait"));
+    $(formSelector).append($("<div>").addClass("messages").html("Please Wait"));
 }
 
 $.extend(fodt.ajaxFormController.prototype, {

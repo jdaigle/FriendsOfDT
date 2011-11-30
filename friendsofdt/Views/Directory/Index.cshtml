@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "FoDT | Directory Search";
+    ViewBag.SubTitle = "Directory Search";
+    ViewBag.ActiveLink = ActiveLinks.Directory;
+}
+
+@section additionalHead {
+<script type="text/javascript">
+    $(function () {
+        var searchController = new fodt.ajaxFormController($("#searchForm"));
+        searchController.onSuccess = function (form, data) {
+            if (data.errorCode == 0) {
+            } else {
+                var messages = form.find("div.messages");
+                messages.empty().html(data.message);
+                messages.show();
+            }
+            $("#searchResults").show();
+        };
+    });
+</script>
+<style type="text/css">
+    #searchResults li {
+    	background: none;
+    	list-style: none;
+    }
+    #searchResults li a {
+    	text-decoration: none;
+    }
+    #searchResults li a:hover {
+    	text-decoration: underline;
+    }
+</style>
+}
+
+<div id="searchResults" style="display:none;">
+    <h2>Search Results</h2>
+    <ul>
+        <li><a href="@Url.Action(MVC.Directory.ViewProfile())">Daigle, Joseph (Class of 2007)</a></li>
+    </ul>
+    <h2>Search Again</h2>
+</div>
+
+ <form action="/" method="post" id="searchForm">
+    <p class="instructions">Enter the first name or last name of the person you want to find:</p>
+    <p>
+        <label for="searchForm_firstName">First Name:</label><input type="text" id="searchForm_firstName" name="firstName" placeholder="first name" />
+        <label for="searchForm_lastName">Last Name:</label><input type="text" id="searchForm_lastName" name="lastName" placeholder="last name" />
+    </p>
+    <p>
+        <input type="submit" value="Search" />
+    </p>
+</form>
+
+<div id="searchTips">
+    <h2>Tips for Searching:</h2>
+    <ul>
+        <li>Searches are not case sensitive.</li>
+        <li>If you can't find someone you are looking for or are unsure of the spelling, try searching only for the first part of the name.</li>
+        <li>Unless you are signed in, you will only find public profiles.</li>
+    </ul>
+</div>

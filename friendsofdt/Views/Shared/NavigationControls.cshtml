@@ -2,6 +2,7 @@
     <ul>
         <li class="@isHomeActive()">// <a href="@Url.Action(MVC.Public.Index())" title="home">Home</a></li>
         <li>// <a href="#" title="about us">About Us</a></li>
+        <li class="@isDirectoryActive()">// <a href="@Url.Action(MVC.Directory.Index())" title="about us">Directory</a></li>
         <li>// <a href="http://imdt.friendsofdt.org" title="show archive">Show Archive</a></li>        
         @*<li>// <a href="#">Active</a></li>
         <li>// <a href="#">About Us</a></li>*@
@@ -14,4 +15,8 @@
 
 @helper isSignInActive() {
     @(ViewBag.ActiveLink == ActiveLinks.SignIn ? "active" : "")
+}
+
+@helper isDirectoryActive() {
+    @(ViewBag.ActiveLink == ActiveLinks.Directory ? "active" : "")
 }

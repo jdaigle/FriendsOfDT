@@ -3,5 +3,6 @@
         None,
         Home,
         SignIn,
+        Directory,
     }
 }

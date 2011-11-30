@@ -1,3 +1,5 @@
+body, textarea { font-family: helvetica,arial,clean,sans-serif; }
+
 div.main {
 	margin: 0px auto;
 	background-image: url('images/layout/inside-bg.jpg');
@@ -78,6 +80,7 @@ div.body {
 	padding: 0px 22px 0px 25px;
 }
 
+
 div.sidebar {
 	float: right;
 	margin-left: 20px;
@@ -148,6 +151,13 @@ div.sidebar ul.icon-list li a {
 
 .content p {
 	color: #444;
+}
+
+div.content li {
+	list-style: none;
+	background: url('images/bulletRelatedLinks.gif') 0px 9px no-repeat;
+	padding: 0 0 0 18px;
+	line-height: 24px;
 }
 
 .content .article hr {

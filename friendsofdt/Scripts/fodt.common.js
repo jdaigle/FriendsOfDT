@@ -25,7 +25,10 @@ $(function () {
         var a = $(this), b = a.attr("placeholder");
         a.val() == "" && a.val(b)
     });
-    $("textarea.gray, input.gray").focus(function () {
+    $("body").on("focus", "textarea[placeholder].gray, input[placeholder].gray", function () {
         $(this).attr("rows", 7).filter(".gray").removeClass("gray").val("")
+    });
+    $("form").on("submit", function () {
+        $(this).find("textarea[placeholder].gray, input[placeholder].gray").removeClass("gray").val("");
     });
 });

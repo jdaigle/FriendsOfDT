@@ -26,6 +26,7 @@ public static class MVC {
     public static FriendsOfDT.Controllers.AbstractController Abstract = new FriendsOfDT.Controllers.T4MVC_AbstractController();
     public static FriendsOfDT.Controllers.AccountsController Accounts = new FriendsOfDT.Controllers.T4MVC_AccountsController();
     public static FriendsOfDT.Controllers.AdminController Admin = new FriendsOfDT.Controllers.T4MVC_AdminController();
+    public static FriendsOfDT.Controllers.DirectoryController Directory = new FriendsOfDT.Controllers.T4MVC_DirectoryController();
     public static FriendsOfDT.Controllers.PublicController Public = new FriendsOfDT.Controllers.T4MVC_PublicController();
     public static T4MVC.SharedController Shared = new T4MVC.SharedController();
 }
@@ -367,6 +368,7 @@ namespace Links {
             public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
             public static readonly string ajax_loader_gif = Url("ajax-loader.gif");
+            public static readonly string bulletRelatedLinks_gif = Url("bulletRelatedLinks.gif");
             public static readonly string fb_icon_gif = Url("fb-icon.gif");
             [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
             public static class layout {
@@ -641,6 +643,65 @@ namespace FriendsOfDT.Controllers {
 
         public override System.Web.Mvc.ViewResult Dashboard() {
             var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.Dashboard);
+            return callInfo;
+        }
+
+    }
+}
+
+namespace FriendsOfDT.Controllers {
+    public partial class DirectoryController {
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public DirectoryController() { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected DirectoryController(Dummy d) { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToAction(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoute(callInfo.RouteValueDictionary);
+        }
+
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public DirectoryController Actions { get { return MVC.Directory; } }
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Area = "";
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Name = "Directory";
+
+        static readonly ActionNamesClass s_actions = new ActionNamesClass();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionNamesClass ActionNames { get { return s_actions; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNamesClass {
+            public readonly string Index = "Index";
+            public readonly string ViewProfile = "ViewProfile";
+        }
+
+
+        static readonly ViewNames s_views = new ViewNames();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ViewNames Views { get { return s_views; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ViewNames {
+            public readonly string Index = "~/Views/Directory/Index.cshtml";
+            public readonly string ViewProfile = "~/Views/Directory/ViewProfile.cshtml";
+        }
+    }
+
+    [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+    public class T4MVC_DirectoryController: FriendsOfDT.Controllers.DirectoryController {
+        public T4MVC_DirectoryController() : base(Dummy.Instance) { }
+
+        public override System.Web.Mvc.ViewResult Index() {
+            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.Index);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ViewResult ViewProfile() {
+            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.ViewProfile);
             return callInfo;
         }
 

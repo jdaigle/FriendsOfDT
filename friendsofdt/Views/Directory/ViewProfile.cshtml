@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "FoDT | Joseph Daigle";
+    ViewBag.SubTitle = "Directory Profile";
+    ViewBag.ActiveLink = ActiveLinks.Directory;
+}
+
+@section additionalHead {
+<script type="text/javascript">
+
+</script>
+<style type="text/css">
+    .directory.profile span.datum {
+        font-weight: bold;
+        display: block;
+    }
+    .directory.profile span.datum em {
+    	font-weight: bold;
+    }
+    .directory.profile label.datum {
+        float: left;
+        width: 120px;
+        display: block;
+        text-align: right;
+        margin-right: 20px;
+    }
+</style>
+}
+
+<div class="directory profile">
+    <h1>Joseph Daigle</h1>
+    <div class="demographics">
+        <label class="datum">Class Of:</label><span class="datum">2007</span>
+    </div>
+    <div class="contact">
+        <label class="datum">E-Mail Address:</label><span class="datum"><a href="mailto:blah@blah.com">blah@blah.com</a></span>
+        <label class="datum">E-Mail Address:</label><span class="datum"><em>Not Visible</em></span>
+        <label class="datum">Phone Number:</label><span class="datum">123-456-7890</span>
+    </div>
+</div>

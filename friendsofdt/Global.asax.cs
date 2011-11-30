@@ -1,10 +1,12 @@
-﻿using System.Web;
+﻿using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using FriendsOfDT.Tasks;
 using Newtonsoft.Json;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Extensions;
 using RiaLibrary.Web;
 
 namespace FriendsOfDT {
@@ -48,9 +50,14 @@ namespace FriendsOfDT {
 
         public static void InitializeRavenDb() {
             var documentStore = new DocumentStore { Url = "http://localhost:8080" };
-            documentStore.DefaultDatabase = "FriendsOfDT";
             documentStore.RegisterListener(new DocumentVersionStoreListener());
             documentStore.Initialize();
+            documentStore.DefaultDatabase = "FriendsOfDT";
+            try {
+                documentStore.DatabaseCommands.GetRootDatabase().EnsureDatabaseExists(documentStore.DefaultDatabase);
+            } catch (WebException e) {
+                log4net.LogManager.GetLogger(typeof(MvcApplication)).Error("Error Ensuring Default Database Exisits", e);
+            }
             var defaultBehavior = documentStore.Conventions.FindTypeTagName;
             documentStore.Conventions.FindTypeTagName = type => {
                 if (typeof(BackgroundTask).IsAssignableFrom(type))
