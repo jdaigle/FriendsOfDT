@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Security;
 using FriendsOfDT.Models.Accounts;
+using Raven.Client.Linq;
 
 namespace FriendsOfDT.Controllers {
     public partial class AccountsController : AbstractController {
@@ -69,14 +70,17 @@ namespace FriendsOfDT.Controllers {
         [AjaxOnly]
         [Authorize, AuthorizeRole()]
         public virtual RenderJsonResult ListAccounts(int? page, int? itemsPerPage) {
-            page = page ?? 0;
+            page = page ?? 1;
             itemsPerPage = itemsPerPage ?? 20;
+            RavenQueryStatistics stats = null;
             var results = DocumentSession.Query<WebAccount>()
-                .OrderBy(x => x.LastName)
+                .Statistics(out stats)
+                //.OrderBy(x => x.LastName)
+                .OrderBy(x => x.EmailAddress)
                 .Page(page.Value, itemsPerPage.Value)
                 .ToList()
-                .Select(x => new { webAccountId = x.Id, }).ToList();
-            return new RenderJsonResult() { Data = results };
+                .Select(x => new { webAccountId = x.Id, emailAddress = x.EmailAddress, registrationStatus = x.RegistrationStatus.ToString() }).ToList();
+            return new RenderJsonResult() { Data = new { items = results, count = stats.TotalResults } };
         }
     }
 }

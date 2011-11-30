@@ -1,25 +1,57 @@
 ﻿@{
     ViewBag.Title = "FoDT Web Accounts Management";
-    ViewBag.SubTitle = "Admin";
 }
 
 @section additionalHead {
 <script type="text/javascript">
-
-    fodt.getData = function (url, data, onSuccess, onError) {
-        $.ajax({
-            url: url,
-            data: data,
-            cache: false,
-            success: onSuccess,
-            error: onError
-        });
-    };
-
     $(function () {
-        fodt.getData("@Url.Action(MVC.Accounts.ListAccounts())", null, function (data) {
-            alert(data);
-        }, function () { alert("error") });
+        var paginatedTable = new fodt.paginatedTable($("#accountsTable"));
+        var loadData = function (page, itemsPerPage) {
+            fodt.getData("@Url.Action(MVC.Accounts.ListAccounts())", { page: page, itemsPerPage: itemsPerPage }, function (data) {
+                $("#accountsTable>tbody").html($("#accountTemplate").render(data.items)).trigger("fodt.dataLoaded", [page, itemsPerPage, data.count]);
+            }, function () { alert("error occured") });
+        }
+        paginatedTable.onPrev = loadData;
+        paginatedTable.onNext = loadData;
+        loadData(1, 20);
     });
 </script>
+<script id="accountTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td>{{=emailAddress}}</td>
+        <td>{{=registrationStatus}}</td>
+    </tr>
+</script>
+<style type="text/css">
+    table, table td, table th {
+        border: 1px solid black;
+        text-align: center;
+    }
+    table > thead > tr {
+        background-color: #EEE;
+    }
+    table > tbody > tr:nth-child(odd) {
+        background-color: white;
+    }
+    table > tbody > tr:nth-child(even) {
+        background-color: #EEE;
+    }
+</style>
 }
+
+@Html.Partial("AdminTabs", new { Section = "Accounts" })
+
+<table id="accountsTable">
+    <thead>
+        <tr>
+            <th>Account</th>
+            <th>Registration Status</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+    <caption>
+        <a href="#" class="page prev" title="Previous Page">‹</a>
+        <span class="page-number">Page 2 of 5</span>
+        <a href="#" class="page next" title="Next Page">›</a>
+    </caption>
+</table>

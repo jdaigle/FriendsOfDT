@@ -44,11 +44,13 @@
       <CssFiles Include="$(SourceLocation)Content\fonts-min.css"/>
       <CssFiles Include="$(SourceLocation)Content\fodt-main.css"/>
       <CssFiles Include="$(SourceLocation)Content\fodt-forms.css"/>
+      <CssFiles Include="$(SourceLocation)Content\fodt-tables.css"/>
       <CssFiles Include="$(SourceLocation)Content\fodt-slideshow.css"/>
 
       <JavaScriptFiles Include="$(SourceLocation)Scripts\jsrender.js" />
       <JavaScriptFiles Include="$(SourceLocation)Scripts\fodt.common.js" />
       <JavaScriptFiles Include="$(SourceLocation)Scripts\fodt.forms.js" />
+      <JavaScriptFiles Include="$(SourceLocation)Scripts\fodt.tables.js" />
       <JavaScriptFiles Include="$(SourceLocation)Scripts\fodt.slideshowController.js" />
 
 

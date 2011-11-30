@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\base-min.css" />
+    <Content Include="Content\fodt-tables.css" />
     <Content Include="Content\fodt-slideshow.css" />
     <Content Include="Content\fonts-min.css" />
     <Content Include="Content\fodt-forms.css" />
@@ -155,6 +156,7 @@
     <Content Include="Scripts\fodt.forms.js" />
     <Content Include="Scripts\fodt.common.js" />
     <Content Include="Scripts\fodt.slideshowController.js" />
+    <Content Include="Scripts\fodt.tables.js" />
     <Content Include="Scripts\jsrender.js" />
     <Content Include="Scripts\site.min.js" />
     <Content Include="Web.config" />
@@ -169,6 +171,7 @@
     <Content Include="Views\Admin\Dashboard.cshtml" />
     <Content Include="Views\Shared\CommonSidebar.cshtml" />
     <Content Include="Views\Admin\Accounts.cshtml" />
+    <Content Include="Views\Admin\AdminTabs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\Accounts\" />
@@ -200,15 +203,19 @@
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>$(MSBuildBinPath)\msbuild.exe $(ProjectDir)MsBuild\MsBuild.CompressContent.xml /p:SourceLocation=$(ProjectDir)\</PreBuildEvent>
+  </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>51839</DevelopmentServerPort>
+          <DevelopmentServerPort>55926</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:51839/</IISUrl>
+          <IISUrl>
+          </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -218,7 +225,4 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <PropertyGroup>
-    <PreBuildEvent>$(MSBuildBinPath)\msbuild.exe $(ProjectDir)MsBuild\MsBuild.CompressContent.xml /p:SourceLocation=$(ProjectDir)\</PreBuildEvent>
-  </PropertyGroup>
 </Project>
