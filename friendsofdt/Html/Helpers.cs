@@ -11,5 +11,13 @@ namespace FriendsOfDT.Html {
                 expando.Add(item);
             return (ExpandoObject)expando;
         }
+        public static bool IsDebug(this HtmlHelper htmlHelper) {
+#if DEBUG
+      return true;
+#else
+            return false;
+#endif
+        }
     }
+
 }

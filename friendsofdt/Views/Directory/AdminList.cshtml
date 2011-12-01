@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "FoDT | Admin | Directory Profiles";
+    ViewBag.SubTitle = "Admin";
+}
+
+@section additionalHead {
+<script type="text/javascript">
+    $(function () {
+        $.views.allowCode = true;
+        var paginatedTable = new fodt.paginatedTable($("#accountsTable"));
+        var loadData = function (page, itemsPerPage) {
+            fodt.getData("@Url.Action(MVC.Accounts.ListAccounts())", { page: page, itemsPerPage: itemsPerPage }, function (data) {
+                $("#accountsTable>tbody").html($("#accountTemplate").render(data.items)).trigger("fodt.dataLoaded", [page, itemsPerPage, data.count]);
+            }, function () { alert("error occured") });
+        }
+        paginatedTable.onPrev = loadData;
+        paginatedTable.onNext = loadData;
+        loadData(1, 20);
+    });
+</script>
+<script id="accountTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td>{{=emailAddress}}</td>
+        <td>{{=registrationStatus}}</td>
+        <td><a href="{{* result += fodt.buildUrl("/Admin/" + $view.data.id + "/Manage"); }}">Edit</a></td>
+    </tr>
+</script>
+<style type="text/css">
+    
+</style>
+}
+
+@Html.Partial("AdminTabs", new { Section = "Directory Profiles" }.ToExpando())
+
+<p>
+@Html.ActionLink("Add New Profile", MVC.Directory.AdminNew())
+</p>
+<table id="accountsTable">
+    <thead>
+        <tr>
+            <th>Account</th>
+            <th>Registration Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+    <caption>
+        <a href="#" class="page prev" title="Previous Page">‹</a>
+        <span class="page-number"></span>
+        <a href="#" class="page next" title="Next Page">›</a>
+    </caption>
+</table>

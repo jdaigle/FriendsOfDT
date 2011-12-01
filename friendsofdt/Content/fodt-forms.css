@@ -37,12 +37,12 @@ form p input {
 form p input[type="text"], form p input[type="password"] {
 	height: 1.6em;
 }
-form p input[type="submit"] {
+form p input[type="submit"], form p input[type="button"], form p input[type="reset"] {
 	font-weight: bold;
 	padding: 3px;
 	vertical-align: middle;
 }
-form p input[type="submit"]:hover {
+form p input[type="submit"]:hover, form p input[type="button"]:hover, form p input[type="reset"]:hover {
 	background-color: #DDD;
 	cursor: pointer;
 }

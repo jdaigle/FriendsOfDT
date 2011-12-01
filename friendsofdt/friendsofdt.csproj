@@ -57,6 +57,9 @@
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\external-bin\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Client.MvcIntegration">
+      <HintPath>..\external-bin\Raven.Client.MvcIntegration.dll</HintPath>
+    </Reference>
     <Reference Include="RiaLibrary.Web">
       <HintPath>..\external-bin\RiaLibrary.Web.dll</HintPath>
     </Reference>
@@ -110,6 +113,7 @@
     <Compile Include="Infrastructure\AuthorizeRoleAttribute.cs" />
     <Compile Include="Infrastructure\DocumentVersionStoreListener.cs" />
     <Compile Include="Infrastructure\EntityMetadataAttribute.cs" />
+    <Compile Include="Infrastructure\ExtensionMethods.cs" />
     <Compile Include="Infrastructure\RavenQueryableExtensions.cs" />
     <Compile Include="Models\Accounts\InvalidPasswordException.cs" />
     <Compile Include="Models\Accounts\PasswordHistory.cs" />
@@ -121,6 +125,8 @@
     <Compile Include="Models\Accounts\WebAccount.cs" />
     <Compile Include="Models\Accounts\WebAccountEmailReference.cs" />
     <Compile Include="Models\Accounts\WebAccountRole.cs" />
+    <Compile Include="Models\Directory\DirectoryProfile.cs" />
+    <Compile Include="Models\Directory\RegisterNewProfileParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\RenderJsonResult.cs" />
     <Compile Include="Reflection\ObjectReflectionExtensions.cs" />
@@ -151,6 +157,8 @@
     <Content Include="Content\images\layout\inside-header.png" />
     <Content Include="Content\images\layout\logo.png" />
     <Content Include="Content\images\rss-icon.gif" />
+    <Content Include="Content\images\slider\slider-fodt.jpg" />
+    <Content Include="Content\images\slider\slider-football.jpg" />
     <Content Include="Content\images\twitter-icon.gif" />
     <Content Include="Content\reset-min.css" />
     <Content Include="Content\site.min.css" />
@@ -180,6 +188,8 @@
     <Content Include="Views\Shared\AdminTabs.cshtml" />
     <Content Include="Views\Directory\Index.cshtml" />
     <Content Include="Views\Directory\ViewProfile.cshtml" />
+    <Content Include="Views\Directory\AdminList.cshtml" />
+    <Content Include="Views\Directory\AdminNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\Accounts\" />

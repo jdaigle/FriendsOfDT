@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "FoDT | Admin | Directory Profiles | New";
+    ViewBag.SubTitle = "Admin";
+}
+
+@section additionalHead {
+<script type="text/javascript">
+    $(function () {
+        $.views.allowCode = true;
+        var controller = new fodt.ajaxFormController($("#newProfileForm"));
+        controller.onBefore = function (form) {
+            $("#matches").hide();
+        };
+        controller.onSuccess = function (form, data) {
+            if (data.errorCode == 0) {
+                var messages = form.find("div.messages");
+                messages.empty().html("success!");
+                messages.show();
+            } else if (data.errorCode == 2) {
+                $("#matches").show();
+                $("#matches>ul").html($("#matchTemplate").render(data.extra));
+            } else {
+                var messages = form.find("div.messages");
+                messages.empty().html(data.message);
+                messages.show();
+            }
+        };
+    });
+</script>
+<script id="matchTemplate" type="text/x-jquery-tmpl">
+    <li>{{=lastName}}</li>
+</script>
+}
+
+@Html.Partial("AdminTabs", new { Section = "Directory Profiles" }.ToExpando())
+
+<div class="newProfile">
+    <form action="@Url.Action(MVC.Directory.RegisterNewProfile())" method="post" autocomplete="off" id="newProfileForm">
+        <h1>New Directory Profile</h1>
+        <h3>Required Directory Information</h3>
+        <p>            
+            <label for="newProfile_firstName">First Name:</label><input type="text" id="newProfile_firstName" name="firstName" placeholder="first name" />
+            <label for="newProfile_lastName">Last Name:</label><input type="text" id="newProfile_lastName" name="lastName" placeholder="last name" />
+            <label for="newProfile_emailAddress">E-Mail Address:</label><input type="text" id="newProfile_emailAddress" name="emailAddress" autocomplete="off" placeholder="e-mail address" />            
+        </p>
+        <h3>Optional Contact Information</h3>
+        <p>
+            <label for="newProfile_phoneNumber">Phone Number:</label><input type="text" id="newProfile_phoneNumber" name="phoneNumber" placeholder="phone number" />
+            <label for="newProfile_graduationYear">Graduation Year:</label><input type="text" id="newProfile_graduationYear" name="graduationYear" placeholder="graduation year" />
+            <label for="newProfile_major">Major:</label><input type="text" id="newProfile_major" name="major" placeholder="major" />
+        </p>
+        <p>
+            <input type="submit" value="Add Profile" />
+        </p>
+        <div id="matches" style="display: none;">
+            <p class="instructions">I found the following possible existing profiles</p>
+            <ul>
+            </ul>
+            <p>
+                <input type="button" id="notAMatchButton" value="This Really Is A New Profile" />
+            </p>
+        </div>
+    </form>
+</div>

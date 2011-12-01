@@ -1,3 +1,6 @@
 ﻿<link href="@Url.Content("~/Content/site.min.css")" rel="stylesheet" type="text/css" />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/site.min.js")" type="text/javascript"></script>
+@if(Html.IsDebug()) {
+@Raven.Client.MvcIntegration.RavenProfiler.CurrentRequestSessions()
+}

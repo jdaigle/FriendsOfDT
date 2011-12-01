@@ -65,6 +65,9 @@ namespace FriendsOfDT {
                 return defaultBehavior(type);
             };
             DocumentStore = documentStore;
+#if DEBUG
+            Raven.Client.MvcIntegration.RavenProfiler.InitializeFor(documentStore);
+#endif
         }
     }
 }

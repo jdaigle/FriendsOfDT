@@ -139,6 +139,12 @@
             with the specified database
             </summary>
         </member>
+        <member name="M:Raven.Client.Connection.Async.IAsyncDatabaseCommands.ForDefaultDatabase">
+            <summary>
+            Create a new instance of <see cref="T:Raven.Client.Connection.Async.IAsyncDatabaseCommands"/> that will interacts
+            with the default database
+            </summary>
+        </member>
         <member name="M:Raven.Client.Connection.Async.IAsyncDatabaseCommands.With(System.Net.ICredentials)">
             <summary>
             Returns a new <see cref="T:Raven.Client.Connection.Async.IAsyncDatabaseCommands"/> using the specified credentials
@@ -289,7 +295,7 @@
             with the specified database
             </summary>
         </member>
-        <member name="M:Raven.Client.Connection.Async.AsyncServerClient.GetRootDatabase">
+        <member name="M:Raven.Client.Connection.Async.AsyncServerClient.ForDefaultDatabase">
             <summary>
             Create a new instance of <see cref="T:Raven.Client.Connection.IDatabaseCommands"/> that will interact
             with the root database. Useful if the database has works against a tenant database.
@@ -631,6 +637,12 @@
             <param name="key">The key.</param>
             <param name="etag">The etag.</param>
         </member>
+        <member name="M:Raven.Client.Connection.IDatabaseCommands.GetDatabaseNames">
+            <summary>
+            Returns the names of all tenant databases on the RavenDB server
+            </summary>
+            <returns>List of tenant database names</returns>
+        </member>
         <member name="M:Raven.Client.Connection.IDatabaseCommands.GetIndexNames(System.Int32,System.Int32)">
             <summary>
             Returns the names of all indexes that exist on the server
@@ -781,6 +793,12 @@
             with the specified database
             </summary>
         </member>
+        <member name="M:Raven.Client.Connection.IDatabaseCommands.ForDefaultDatabase">
+            <summary>
+            Create a new instance of <see cref="T:Raven.Client.Connection.IDatabaseCommands"/> that will interacts
+            with the default database
+            </summary>
+        </member>
         <member name="M:Raven.Client.Connection.IDatabaseCommands.GetRootDatabase">
             <summary>
             Create a new instance of <see cref="T:Raven.Client.Connection.IDatabaseCommands"/> that will interact
@@ -830,6 +848,11 @@
         <member name="M:Raven.Client.Connection.IDatabaseCommands.MultiGet(Raven.Abstractions.Data.GetRequest[])">
             <summary>
             Perform a single POST requst containing multiple nested GET requests
+            </summary>
+        </member>
+        <member name="M:Raven.Client.Connection.IDatabaseCommands.GetStatistics">
+            <summary>
+            Retrieve the statistics for the database
             </summary>
         </member>
         <member name="P:Raven.Client.Connection.IDatabaseCommands.OperationsHeaders">
@@ -1130,6 +1153,11 @@
             </summary>
             <param name="serverClient">The server client.</param>
         </member>
+        <member name="M:Raven.Client.Connection.ReplicationInformer.GetFailureCount(System.String)">
+            <summary>
+            Get the current failure count for the url
+            </summary>
+        </member>
         <member name="M:Raven.Client.Connection.ReplicationInformer.ShouldExecuteUsing(System.String,System.Int32,System.String,System.Boolean)">
             <summary>
             Should execute the operation using the specified operation URL
@@ -1226,6 +1254,12 @@
             <remarks>
             This method respects the replication semantics against the database.
             </remarks>
+        </member>
+        <member name="M:Raven.Client.Connection.ServerClient.InFailoverMode">
+            <summary>
+            Allow to query whatever we are in failover mode or not
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Raven.Client.Connection.ServerClient.DirectGet(System.String,System.String)">
             <summary>
@@ -1461,6 +1495,11 @@
             <param name="suggestionQuery">The suggestion query.</param>
             <returns></returns>
         </member>
+        <member name="M:Raven.Client.Connection.ServerClient.GetStatistics">
+            <summary>
+            Retrieve the statistics for the database
+            </summary>
+        </member>
         <member name="M:Raven.Client.Connection.ServerClient.MultiGet(Raven.Abstractions.Data.GetRequest[])">
             <summary>
             Perform a single POST requst containing multiple nested GET requests
@@ -1478,6 +1517,7 @@
             <summary>
             Using the given Index, calculate the facets as per the specified doc
             </summary>
+            <param name="index"></param>
             <param name="query"></param>
             <param name="facetSetupDoc"></param>
             <returns></returns>
@@ -3888,6 +3928,14 @@
             </summary>
             <typeparam name="T">The result of the query</typeparam>
         </member>
+        <member name="M:Raven.Client.IAsyncDocumentSession.Query``2">
+            <summary>
+            Queries the index specified by <typeparamref name="TIndexCreator"/> using Linq.
+            </summary>
+            <typeparam name="T">The result of the query</typeparam>
+            <typeparam name="TIndexCreator">The type of the index creator.</typeparam>
+            <returns></returns>
+        </member>
         <member name="P:Raven.Client.IAsyncDocumentSession.Advanced">
             <summary>
             Get the accessor for advanced operations
@@ -4000,16 +4048,6 @@
             <summary>
             Gets or sets the timeout to wait for authoritive information if encountered non authoritive document.
             </summary>
-        </member>
-        <member name="P:Raven.Client.IAdvancedDocumentSessionOperations.Conventions">
-            <summary>
-            Gets the conventions used by this session
-            </summary>
-            <remarks>
-            This instance is shared among all sessions, changes to the <see cref="T:Raven.Client.Document.DocumentConvention"/> should be done
-            via the <see cref="T:Raven.Client.IDocumentStore"/> instance, not on a single session.
-            </remarks>
-            <value>The conventions.</value>
         </member>
         <member name="P:Raven.Client.IAdvancedDocumentSessionOperations.MaxNumberOfRequestsPerSession">
             <summary>
@@ -4777,11 +4815,9 @@
             this to perform the actual work
             </summary>
         </member>
-        <member name="P:Raven.Client.Document.DocumentConvention.QueryEnumsAsIntegers">
+        <member name="P:Raven.Client.Document.DocumentConvention.SaveEnumsAsIntegers">
             <summary>
-            Instruct the Linq provider to query enums as integer values.
-            This is usually only useful if you customized the json serializer to serialize
-            enums as integers.
+            Saves Enums as integers and instruct the Linq provider to query enums as integer values.
             </summary>
         </member>
         <member name="T:Raven.Client.Document.ConsistencyOptions">
@@ -7018,7 +7054,7 @@
              Extension methods to create mutli tenants databases
             </summary>
         </member>
-        <member name="M:Raven.Client.Extensions.MultiTenancyExtensions.EnsureDatabaseExists(Raven.Client.Connection.IDatabaseCommands,System.String)">
+        <member name="M:Raven.Client.Extensions.MultiTenancyExtensions.EnsureDatabaseExists(Raven.Client.Connection.IDatabaseCommands,System.String,System.Boolean)">
             <summary>
              Ensures that the database exists, creating it if needed
             </summary>
@@ -7026,7 +7062,7 @@
              This operation happens _outside_ of any transaction
              </remarks>
         </member>
-        <member name="M:Raven.Client.Extensions.MultiTenancyExtensions.EnsureDatabaseExistsAsync(Raven.Client.Connection.Async.IAsyncDatabaseCommands,System.String)">
+        <member name="M:Raven.Client.Extensions.MultiTenancyExtensions.EnsureDatabaseExistsAsync(Raven.Client.Connection.Async.IAsyncDatabaseCommands,System.String,System.Boolean)">
             <summary>
              Ensures that the database exists, creating it if needed
             </summary>
@@ -7054,11 +7090,6 @@
         <member name="M:Raven.Client.Indexes.AbstractIndexCreationTask.Recurse``2(``0,System.Func{``0,``1})">
             <summary>
             Allows to use lambdas recursively
-            </summary>
-        </member>
-        <member name="M:Raven.Client.Indexes.AbstractIndexCreationTask.Project``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Object})">
-            <summary>
-            Allows to use lambdas over dynamic
             </summary>
         </member>
         <member name="M:Raven.Client.Indexes.AbstractIndexCreationTask.Execute(Raven.Client.IDocumentStore)">
@@ -7760,7 +7791,7 @@
             Generate index defintion from linq expressions
             </summary>
         </member>
-        <member name="M:Raven.Client.Indexes.IndexDefinitionHelper.PruneToFailureLinqQueryAsStringToWorkableCode``1(System.Linq.Expressions.LambdaExpression,Raven.Client.Document.DocumentConvention,System.String,System.Boolean)">
+        <member name="M:Raven.Client.Indexes.IndexDefinitionHelper.PruneToFailureLinqQueryAsStringToWorkableCode``2(System.Linq.Expressions.LambdaExpression,Raven.Client.Document.DocumentConvention,System.String,System.Boolean)">
             <summary>
             Perform the actual generation
             </summary>
@@ -7810,7 +7841,7 @@
             The index name
             </summary>
         </member>
-        <member name="M:Raven.Client.Linq.RavenQueryProviderProcessor`1.#ctor(Raven.Client.Linq.IDocumentQueryGenerator,System.Action{Raven.Client.IDocumentQueryCustomization},System.Action{Raven.Abstractions.Data.QueryResult},System.String,System.Collections.Generic.HashSet{System.String})">
+        <member name="M:Raven.Client.Linq.RavenQueryProviderProcessor`1.#ctor(Raven.Client.Linq.IDocumentQueryGenerator,System.Action{Raven.Client.IDocumentQueryCustomization},System.Action{Raven.Abstractions.Data.QueryResult},System.String,System.Collections.Generic.HashSet{System.String},System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>
             Initializes a new instance of the <see cref="T:Raven.Client.Linq.RavenQueryProviderProcessor`1"/> class.
             </summary>
@@ -7819,6 +7850,7 @@
             <param name="afterQueryExecuted">Executed after the query run, allow access to the query results</param>
             <param name="indexName">The name of the index the query is executed against.</param>
             <param name="fieldsToFetch">The fields to fetch in this query</param>
+            <param name="fieldsTRename">The fields to rename for the results of this query</param>
         </member>
         <member name="M:Raven.Client.Linq.RavenQueryProviderProcessor`1.VisitExpression(System.Linq.Expressions.Expression)">
             <summary>
@@ -7878,6 +7910,11 @@
             </summary>
             <value>The fields to fetch.</value>
         </member>
+        <member name="P:Raven.Client.Linq.RavenQueryProviderProcessor`1.FieldsToRename">
+            <summary>
+            Rename the fields from one name to another
+            </summary>
+        </member>
         <member name="T:Raven.Client.Linq.RavenQueryProviderProcessor`1.SpecialQueryType">
             <summary>
             Different query types 
@@ -7923,7 +7960,7 @@
             Get only the first item (or throw if there are more than one) or null if empty
             </summary>
         </member>
-        <member name="M:Raven.Client.Linq.DynamicQueryProviderProcessor`1.#ctor(Raven.Client.Linq.IDocumentQueryGenerator,System.Action{Raven.Client.IDocumentQueryCustomization},System.Action{Raven.Abstractions.Data.QueryResult},System.String,System.Collections.Generic.HashSet{System.String})">
+        <member name="M:Raven.Client.Linq.DynamicQueryProviderProcessor`1.#ctor(Raven.Client.Linq.IDocumentQueryGenerator,System.Action{Raven.Client.IDocumentQueryCustomization},System.Action{Raven.Abstractions.Data.QueryResult},System.String,System.Collections.Generic.HashSet{System.String},System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>
             Creates a dynamic query provider around the provided session
             </summary>
@@ -8162,6 +8199,11 @@
         <member name="P:Raven.Client.Linq.DynamicRavenQueryProvider`1.FieldsToFetch">
             <summary>
             Set the fields to fetch
+            </summary>
+        </member>
+        <member name="P:Raven.Client.Linq.DynamicRavenQueryProvider`1.FieldsToRename">
+            <summary>
+            Set the fields to rename
             </summary>
         </member>
         <member name="T:Raven.Client.Linq.ExpressionInfo">
@@ -8435,6 +8477,11 @@
         <member name="P:Raven.Client.Linq.RavenQueryProvider`1.FieldsToFetch">
             <summary>
             Set the fields to fetch
+            </summary>
+        </member>
+        <member name="P:Raven.Client.Linq.RavenQueryProvider`1.FieldsToRename">
+            <summary>
+            Set the fields to rename
             </summary>
         </member>
         <member name="T:Raven.Client.Linq.RavenQueryStatistics">

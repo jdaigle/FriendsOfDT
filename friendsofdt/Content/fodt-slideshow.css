@@ -5,11 +5,11 @@
 
 div.head div.slideshow ul li { 
 	list-style: none;
-	left: 35px;
-	top: 10px;
+	left: 26px;
+	top: 0px;
 }
 
 div.head div.slideshow ul li img {
-	height: 280px;
-	width: 960px;
+	height: 303px;
+	width: 980px;
 }

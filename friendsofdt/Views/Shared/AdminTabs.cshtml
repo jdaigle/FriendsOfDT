@@ -4,5 +4,6 @@
     </h1>
     <div id="tabs">
         <a class="@(Model.Section == "Accounts" ? "youarehere" : "")" href="@Url.Action(MVC.Accounts.AdminList())">Accounts</a>
+        <a class="@(Model.Section == "Directory Profiles" ? "youarehere" : "")" href="@Url.Action(MVC.Directory.AdminList())">Directory Profiles</a>
     </div>
 </div>

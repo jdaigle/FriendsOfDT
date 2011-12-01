@@ -383,6 +383,15 @@ namespace Links {
             }
         
             public static readonly string rss_icon_gif = Url("rss-icon.gif");
+            [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+            public static class slider {
+                private const string URLPATH = "~/Content/images/slider";
+                public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+                public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+                public static readonly string slider_fodt_jpg = Url("slider-fodt.jpg");
+                public static readonly string slider_football_jpg = Url("slider-football.jpg");
+            }
+        
             public static readonly string twitter_icon_gif = Url("twitter-icon.gif");
         }
     
@@ -663,6 +672,11 @@ namespace FriendsOfDT.Controllers {
             return RedirectToRoute(callInfo.RouteValueDictionary);
         }
 
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public FriendsOfDT.RenderJsonResult RegisterNewProfile() {
+            return new T4MVC_RenderJsonResult(Area, Name, ActionNames.RegisterNewProfile);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public DirectoryController Actions { get { return MVC.Directory; } }
@@ -678,6 +692,9 @@ namespace FriendsOfDT.Controllers {
         public class ActionNamesClass {
             public readonly string Index = "Index";
             public readonly string ViewProfile = "ViewProfile";
+            public readonly string AdminList = "AdminList";
+            public readonly string AdminNew = "AdminNew";
+            public readonly string RegisterNewProfile = "RegisterNewProfile";
         }
 
 
@@ -686,6 +703,8 @@ namespace FriendsOfDT.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
+            public readonly string AdminList = "~/Views/Directory/AdminList.cshtml";
+            public readonly string AdminNew = "~/Views/Directory/AdminNew.cshtml";
             public readonly string Index = "~/Views/Directory/Index.cshtml";
             public readonly string ViewProfile = "~/Views/Directory/ViewProfile.cshtml";
         }
@@ -702,6 +721,22 @@ namespace FriendsOfDT.Controllers {
 
         public override System.Web.Mvc.ViewResult ViewProfile() {
             var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.ViewProfile);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ViewResult AdminList() {
+            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.AdminList);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ViewResult AdminNew() {
+            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.AdminNew);
+            return callInfo;
+        }
+
+        public override FriendsOfDT.RenderJsonResult RegisterNewProfile(FriendsOfDT.Models.Directory.RegisterNewProfileParameters parameters) {
+            var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.RegisterNewProfile);
+            callInfo.RouteValueDictionary.Add("parameters", parameters);
             return callInfo;
         }
 
