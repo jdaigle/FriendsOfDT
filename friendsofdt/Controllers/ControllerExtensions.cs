@@ -7,7 +7,7 @@ namespace FriendsOfDT.Controllers {
         }
 
         public static RenderJsonResult RenderJsonErrorCode(this IController controller, int errorCode, string message, object data) {
-            return RenderJsonResult.Render(new { errorCode = errorCode, message = message ?? string.Empty, extra = data });
+            return RenderJsonResult.Render(new { errorCode = errorCode, message = message ?? string.Empty, data = data });
         }
 
         public static RenderJsonResult RenderJsonSuccessErrorCode(this IController controller) {

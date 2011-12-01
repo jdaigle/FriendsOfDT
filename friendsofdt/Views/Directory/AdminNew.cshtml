@@ -6,7 +6,6 @@
 @section additionalHead {
 <script type="text/javascript">
     $(function () {
-        $.views.allowCode = true;
         var controller = new fodt.ajaxFormController($("#newProfileForm"));
         controller.onBefore = function (form) {
             $("#matches").hide();
@@ -18,7 +17,7 @@
                 messages.show();
             } else if (data.errorCode == 2) {
                 $("#matches").show();
-                $("#matches>ul").html($("#matchTemplate").render(data.extra));
+                $("#matches>ul").html($("#matchTemplate").render(data.data));
             } else {
                 var messages = form.find("div.messages");
                 messages.empty().html(data.message);
@@ -28,8 +27,10 @@
     });
 </script>
 <script id="matchTemplate" type="text/x-jquery-tmpl">
-    <li>{{=lastName}}</li>
+    <li>{{=lastName}}, {{=firstName}} ({{=emailAddress}})</li>
 </script>
+<style type="text/css">
+</style>
 }
 
 @Html.Partial("AdminTabs", new { Section = "Directory Profiles" }.ToExpando())
