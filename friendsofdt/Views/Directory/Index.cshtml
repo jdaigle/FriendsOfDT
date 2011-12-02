@@ -43,10 +43,14 @@
 
  <form action="/" method="post" id="searchForm">
     <p class="instructions">Enter the first name or last name of the person you want to find:</p>
-    <p>
-        <label for="searchForm_firstName">First Name:</label><input type="text" id="searchForm_firstName" name="firstName" placeholder="first name" />
-        <label for="searchForm_lastName">Last Name:</label><input type="text" id="searchForm_lastName" name="lastName" placeholder="last name" />
-    </p>
+    <fieldset>
+        <p>
+            <label for="searchForm_firstName">First Name:</label><input type="text" id="searchForm_firstName" name="firstName" placeholder="first name" />
+        </p>
+        <p>
+            <label for="searchForm_lastName">Last Name:</label><input type="text" id="searchForm_lastName" name="lastName" placeholder="last name" />
+        </p>
+    </fieldset>
     <p>
         <input type="submit" value="Search" />
     </p>

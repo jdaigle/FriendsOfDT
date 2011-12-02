@@ -132,6 +132,7 @@
     <Compile Include="Reflection\ObjectReflectionExtensions.cs" />
     <Compile Include="Reflection\ReflectionExtensionPoint.cs" />
     <Compile Include="Reflection\ReflectionInfo.cs" />
+    <Content Include="Scripts\nfvalidate.js" />
     <Compile Include="T4MVC.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

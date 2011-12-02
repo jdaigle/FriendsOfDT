@@ -30,6 +30,11 @@
     <li>{{=lastName}}, {{=firstName}} ({{=emailAddress}})</li>
 </script>
 <style type="text/css">
+    form fieldset legend {
+    	font-weight: bold;
+    	font-size: 108%;
+    	margin: 1em 0;
+    }
 </style>
 }
 
@@ -38,23 +43,41 @@
 <div class="newProfile">
     <form action="@Url.Action(MVC.Directory.RegisterNewProfile())" method="post" autocomplete="off" id="newProfileForm">
         <h1>New Directory Profile</h1>
-        <h3>Required Directory Information</h3>
-        <p>            
-            <label for="newProfile_firstName">First Name:</label><input type="text" id="newProfile_firstName" name="firstName" placeholder="first name" />
-            <label for="newProfile_lastName">Last Name:</label><input type="text" id="newProfile_lastName" name="lastName" placeholder="last name" />
-            <label for="newProfile_emailAddress">E-Mail Address:</label><input type="text" id="newProfile_emailAddress" name="emailAddress" autocomplete="off" placeholder="e-mail address" />            
-        </p>
-        <h3>Optional Contact Information</h3>
-        <p>
-            <label for="newProfile_phoneNumber">Phone Number:</label><input type="text" id="newProfile_phoneNumber" name="phoneNumber" placeholder="phone number" />
-            <label for="newProfile_graduationYear">Graduation Year:</label><input type="text" id="newProfile_graduationYear" name="graduationYear" placeholder="graduation year" />
-            <label for="newProfile_major">Major:</label><input type="text" id="newProfile_major" name="major" placeholder="major" />
-        </p>
+        <fieldset>
+            <legend>Required Directory Information</legend>
+            <p>
+                <label for="newProfile_firstName">First Name:</label>
+                <input type="text" id="newProfile_firstName" name="firstName" placeholder="first name" data-validation-required="true" data-validation-required-message="name is required" />
+            </p>
+            <p>            
+                <label for="newProfile_lastName">Last Name:</label>
+                <input type="text" id="newProfile_lastName" name="lastName" placeholder="last name" data-validation-required="true" data-validation-required-message="name is required" />
+            </p>
+            <p> 
+                <label for="newProfile_emailAddress">E-Mail Address:</label>
+                <input type="text" id="newProfile_emailAddress" name="emailAddress" autocomplete="off" placeholder="e-mail address" data-validation-required="true" data-validation-required-message="e-mail is required" />            
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend>Optional Directory Information</legend>
+            <p>
+                <label for="newProfile_phoneNumber">Phone Number:</label>
+                <input type="text" id="newProfile_phoneNumber" name="phoneNumber" placeholder="phone number" />
+            </p>
+            <p> 
+                <label for="newProfile_graduationYear">Graduation Year:</label>
+                <input type="text" id="newProfile_graduationYear" name="graduationYear" placeholder="graduation year" />
+            </p>
+            <p> 
+                <label for="newProfile_major">Major:</label>
+                <input type="text" id="newProfile_major" name="major" placeholder="major" />
+            </p>
+        </fieldset>
         <p>
             <input type="submit" value="Add Profile" />
         </p>
         <div id="matches" style="display: none;">
-            <p class="instructions">I found the following possible existing profiles</p>
+            <p class="instructions">The following profiles might match who you are trying to add.</p>
             <ul>
             </ul>
             <p>

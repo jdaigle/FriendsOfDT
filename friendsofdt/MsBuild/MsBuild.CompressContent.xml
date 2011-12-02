@@ -48,6 +48,7 @@
       <CssFiles Include="$(SourceLocation)Content\fodt-slideshow.css"/>
 
       <JavaScriptFiles Include="$(SourceLocation)Scripts\jsrender.js" />
+      <JavaScriptFiles Include="$(SourceLocation)Scripts\nfvalidate.js" />
       <JavaScriptFiles Include="$(SourceLocation)Scripts\fodt.common.js" />
       <JavaScriptFiles Include="$(SourceLocation)Scripts\fodt.forms.js" />
       <JavaScriptFiles Include="$(SourceLocation)Scripts\fodt.tables.js" />

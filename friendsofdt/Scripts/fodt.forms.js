@@ -20,10 +20,19 @@ $.extend(fodt.ajaxFormController.prototype, {
             type: "POST",
             data: form.serialize(),
             beforeSend: function () {
-                var messages = form.find("div.messages");
-                messages.empty().hide();
-                form.find("div.working").show();
+                form.find("div.messages").empty().hide();
+                form.find("div.working").hide();
+                form.find("span.error").remove();
+                var errors = nfvalidate.validate(form);
+                if (errors.length > 0) {
+                    for (var i = 0; i < errors.length; i++) {
+                        var error = errors[i];
+                        $(error.element).after($("<span>").addClass("error").html(error.message));
+                    }
+                    return false;
+                }
                 controller.onBefore(form);
+                form.find("div.working").show();
             },
             complete: function () {
                 form.find("div.working").hide();
@@ -37,8 +46,7 @@ $.extend(fodt.ajaxFormController.prototype, {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                var messages = form.find("div.messages");
-                messages.empty().html("An Error Occured, Please Try Again").show();
+                form.find("div.messages").empty().html("An Error Occured, Please Try Again").show();
                 controller.onError(form, jqXHR);
             }
         });

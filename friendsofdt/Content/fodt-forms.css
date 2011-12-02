@@ -15,6 +15,9 @@ form {
 form p {
 	margin: 6px auto 24px auto;
 }
+form fieldset p {
+	margin: 12px auto 12px auto;
+}
 form p.instructions {
 	color: #606060;
 	font-style: italic;
@@ -30,8 +33,7 @@ form p label {
 	margin-right: 20px;
 }
 form p input {
-	display: block;
-	margin: 0 0 12px 0;
+	display: inline;
 	border: 1px solid #D7B350;
 }
 form p input[type="text"], form p input[type="password"] {
@@ -45,4 +47,10 @@ form p input[type="submit"], form p input[type="button"], form p input[type="res
 form p input[type="submit"]:hover, form p input[type="button"]:hover, form p input[type="reset"]:hover {
 	background-color: #DDD;
 	cursor: pointer;
+}
+form p .error {
+	color: Red;
+	font-weight: bold;
+	margin-left: 4px;
+	margin-right: 4px;
 }
