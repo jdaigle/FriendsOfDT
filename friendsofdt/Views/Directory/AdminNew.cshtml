@@ -11,6 +11,7 @@
             $("#matches").hide();
         };
         controller.onSuccess = function (form, data) {
+            $("#newProfile_ignoreMatches").val("false");
             if (data.errorCode == 0) {
                 var messages = form.find("div.messages");
                 messages.empty().html("success!");
@@ -24,17 +25,18 @@
                 messages.show();
             }
         };
+
+        $("#notAMatchButton").on("click", function (e) {
+            e.preventDefault();
+            $("#newProfile_ignoreMatches").val("true");
+            $("#newProfileForm").submit();
+        });
     });
 </script>
 <script id="matchTemplate" type="text/x-jquery-tmpl">
     <li>{{=lastName}}, {{=firstName}} ({{=emailAddress}})</li>
 </script>
 <style type="text/css">
-    form fieldset legend {
-    	font-weight: bold;
-    	font-size: 108%;
-    	margin: 1em 0;
-    }
 </style>
 }
 
@@ -74,6 +76,7 @@
             </p>
         </fieldset>
         <p>
+            @Html.Hidden("ignoreMatches", false, new { id = "newProfile_ignoreMatches" })
             <input type="submit" value="Add Profile" />
         </p>
         <div id="matches" style="display: none;">

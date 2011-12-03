@@ -1,5 +1,10 @@
 ﻿<link href="@Url.Content("~/Content/site.min.css")" rel="stylesheet" type="text/css" />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/site.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        fodt.rootUrl = "@Url.Content("~")";
+    });
+</script>
 @if(Html.IsDebug()) {
 }

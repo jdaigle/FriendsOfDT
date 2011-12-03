@@ -7,6 +7,12 @@ using RiaLibrary.Web;
 
 namespace FriendsOfDT.Controllers {
     public partial class AccountsController : AbstractController {
+
+        [HttpGet]
+        public virtual ViewResult Required() {
+            return View();
+        }
+
         [HttpGet]
         public virtual RedirectToRouteResult SignOut() {
             FormsAuthentication.SignOut();
@@ -28,6 +34,7 @@ namespace FriendsOfDT.Controllers {
             if (!webAccount.CanLogin()) {
                 return this.RenderJsonErrorCode(2, "Account is locked");
             }
+            webAccount.IncrementLogin();
             FormsAuthentication.SetAuthCookie(webAccount.Id, persist);
             SetRoles(webAccount.Roles);
             return new RenderJsonResult() { Data = new { redirect = Url.IsLocalUrl(returnUrl) ? returnUrl : Url.Action(MVC.Public.Index()) } };
@@ -68,6 +75,26 @@ namespace FriendsOfDT.Controllers {
             return this.RenderJsonSuccessErrorCode();
         }
 
+        [HttpPost, AjaxOnly]
+        public virtual RenderJsonResult DisableWebAccount(string webAccountId) {
+            var account = DocumentSession.Load<WebAccount>(webAccountId);
+            if (account == null) {
+                return this.RenderJsonErrorCode(1, "Missing Account");
+            }
+            account.Disable();
+            return this.RenderJsonSuccessErrorCode();
+        }
+
+        [HttpPost, AjaxOnly]
+        public virtual RenderJsonResult EnableWebAccount(string webAccountId) {
+            var account = DocumentSession.Load<WebAccount>(webAccountId);
+            if (account == null) {
+                return this.RenderJsonErrorCode(1, "Missing Account");
+            }
+            account.Enable();
+            return this.RenderJsonSuccessErrorCode();
+        }
+
         [Authorize, AuthorizeRole()]
         [HttpGet, Url("Admin/WebAccounts/List")]
         public virtual ViewResult AdminList() {
@@ -82,19 +109,27 @@ namespace FriendsOfDT.Controllers {
             RavenQueryStatistics stats = null;
             var results = DocumentSession.Query<WebAccount>()
                 .Statistics(out stats)
-                //.OrderBy(x => x.LastName)
-                .OrderBy(x => x.EmailAddress)
+                .OrderBy(x => x.LastName).OrderBy(x => x.FirstName)
                 .Page(page.Value, itemsPerPage.Value)
                 .ToList()
-                .Select(x => new { id = x.Id, emailAddress = x.EmailAddress, registrationStatus = x.RegistrationStatus.ToString() }).ToList();
+                .Select(x => new { id = x.Id, lastName = x.LastName, firstName = x.FirstName, emailAddress = x.EmailAddress, registrationStatus = x.RegistrationStatus.ToString() }).ToList();
             return new RenderJsonResult() { Data = new { items = results, count = stats.TotalResults } };
         }
 
         [Authorize, AuthorizeRole()]
         [HttpGet, Url("Admin/WebAccounts/{id}/Manage")]
-        public virtual ViewResult Manage(string id) {
-            var account = DocumentSession.Query<WebAccount>("webAccounts/" + id);
-            return View();
+        public virtual ActionResult Manage(string id) {
+            var account = DocumentSession.Load<WebAccount>("webAccounts/" + id);
+            if (account == null) {
+                return Content("Account Not Found");
+            }
+            var metadata = EntityMetadata.FromRaven(DocumentSession.Advanced.GetMetadataFor(account));
+            ViewBag.Metadata = metadata;
+            if (!string.IsNullOrWhiteSpace(metadata.LastModifiedBy)) {
+                var modifiedBy = DocumentSession.Load<WebAccount>(metadata.LastModifiedBy);
+                ViewBag.ModifiedBy = modifiedBy;
+            }
+            return View(account);
         }
     }
 }

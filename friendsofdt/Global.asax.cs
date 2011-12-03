@@ -51,6 +51,7 @@ namespace FriendsOfDT {
         public static void InitializeRavenDb() {
             var documentStore = new DocumentStore { Url = "http://localhost:8080" };
             documentStore.RegisterListener(new DocumentVersionStoreListener());
+            documentStore.RegisterListener(new DocumentAuditListener());
             documentStore.Initialize();
             documentStore.DefaultDatabase = "FriendsOfDT";
             try {

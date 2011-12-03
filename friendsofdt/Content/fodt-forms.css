@@ -6,7 +6,6 @@
 form div.messages {
 	display: none;
 }
-
 form {
 	background: #EEE;
 	border: 1px solid #DDD;
@@ -15,8 +14,15 @@ form {
 form p {
 	margin: 6px auto 24px auto;
 }
+form fieldset {
+	padding-top: .1em;
+}
 form fieldset p {
 	margin: 12px auto 12px auto;
+}
+form fieldset legend {
+    font-weight: bold;
+    font-size: 108%;
 }
 form p.instructions {
 	color: #606060;
@@ -25,15 +31,17 @@ form p.instructions {
 form p label {
 	font-weight: bold;
 	float: left;
-	display: block;
 	height: 1.6em;
 	width: 120px;
-	margin-top: 2px;
 	text-align: right;
 	margin-right: 20px;
+	line-height: 1em;
+}
+form p input, form p span {
+	display: inline-block;
+	line-height: 1em;
 }
 form p input {
-	display: inline;
 	border: 1px solid #D7B350;
 }
 form p input[type="text"], form p input[type="password"] {

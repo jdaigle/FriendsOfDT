@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "FoDT Website Sign Up";
+    ViewBag.Title = "FoDT | Accounts | Sign Up";
     ViewBag.SubTitle = "Sign Up";
     ViewBag.ActiveLink = ActiveLinks.SignIn;
 }
@@ -10,11 +10,11 @@
         var controller = new fodt.ajaxFormController($("#signUpForm"));
         controller.onSuccess = function (form, data) {
             if (data.errorCode == 0) {
-
+                form.find("input").attr("disabled", "disabled");
+                form.find("div.messages").empty().html("Thank You. You will receive an e-mail confirmation once your account has been verified.").show();
+                setTimeout(function () { window.location = fodt.rootUrl; }, 4000);
             } else {
-                var messages = form.find("div.messages");
-                messages.empty().html(data.message);
-                messages.show();
+                form.find("div.messages").empty().html(data.message).show();
             }
         };
     });
@@ -23,7 +23,7 @@
 
 <div class="signup">
     <form action="@Url.Action(MVC.Accounts.RegisterNewWebAccount())" method="post" autocomplete="off" id="signUpForm">
-        <p>In order to sign up for an account on this website we need to verify your DramaTech alumni or faculty status. To be considered an DramaTech alumnus you must be a current or prior student of Georgia Tech and participated in at one DramaTech show or performance.</p>
+        <p>Upon signing up for an account, we will need to verify who you are before you can sign in. Your account will be locked until then, but you will receive an e-mail once you have been verified.</p>
         <fieldset>
             <p>
                 <label for="signup_emailAddress">E-Mail Address:</label><input type="text" id="signup_emailAddress" name="emailAddress" autocomplete="off" />
@@ -41,7 +41,7 @@
                 <label for="signup_confirmedPassword">Confirm Password:</label><input type="password" id="signup_confirmedPassword" name="confirmedPassword" autocomplete="off" />
             </p>
         </fieldset>
-        <p>If you went by a different name at time you were a student, please provide that name below so we can more quickly verify your status.</p>
+        <p>If you went by a different name at time you were a student, please provide that name below so we can more quickly verify your account.</p>
         <fieldset>
             <p>
                 <label for="signup_altFirstName">First Name:</label><input type="text" id="signup_altFirstName" name="altFirstName" />

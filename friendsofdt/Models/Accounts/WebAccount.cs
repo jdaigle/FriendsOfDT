@@ -31,6 +31,10 @@ namespace FriendsOfDT.Models.Accounts {
             PasswordHistory = new List<PasswordHistory>();
         }
 
+        public string GetGuidPartOfId() {
+            return Id.Replace("webAccounts/", "");
+        }
+
         public string Id { get; protected set; }
         public string EmailAddress { get; protected set; }
         public string FirstName { get; protected set; }
@@ -39,6 +43,8 @@ namespace FriendsOfDT.Models.Accounts {
         public List<WebAccountRole> Roles { get; protected set; }
         public byte[] PasswordHash { get; protected set; }
         public List<PasswordHistory> PasswordHistory { get; protected set; }
+        public int LoginCount { get; protected set; }
+        public DateTime? LastLoginDateTime { get; protected set; }
 
         public RegistrationStatus RegistrationStatus { get; protected set; }
         public string RegistrationFirstName { get; protected set; }
@@ -50,6 +56,18 @@ namespace FriendsOfDT.Models.Accounts {
             if (RegistrationStatus == RegistrationStatus.NotVerified) {
                 RegistrationStatus = RegistrationStatus.Verified;
                 // TODO: Publish event for e-mail notification
+            }
+        }
+
+        public void Enable() {
+            if (RegistrationStatus == RegistrationStatus.Disabled) {
+                RegistrationStatus = RegistrationStatus.Verified;
+            }
+        }
+
+        public void Disable() {
+            if (RegistrationStatus == RegistrationStatus.Verified) {
+                RegistrationStatus = RegistrationStatus.Disabled;
             }
         }
 
@@ -86,6 +104,11 @@ namespace FriendsOfDT.Models.Accounts {
             while (PasswordHistory.Count > 5) {
                 PasswordHistory.RemoveAt(0);
             }
+        }
+
+        public void IncrementLogin() {
+            LoginCount++;
+            LastLoginDateTime = DateTime.UtcNow;
         }
     }
 }

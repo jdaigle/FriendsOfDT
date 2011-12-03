@@ -23,13 +23,19 @@
                 <label for="login_persist">Remember Me:</label>@Html.CheckBox("persist", false, new { id = "login_persist" })
                 <input type="submit" value="Sign In" />
             </form>
+            <div class="forgotPasswordNotice">
+                <h3>Forgot your password?</h3>
+                <a href="#">Reset Password</a>
+            </div>
             <div class="notRegisteredNotice">
-                <h3>New to FriendsOfDT.org?</h3>
+                <h3>Don't have an account?</h3>
                 <a href="@Url.Action(MVC.Accounts.SignUp())">Sign Up Today!</a>
             </div>
         } else {
             <h1>Welcome back <strong>@(((FriendsOfDT.Models.Accounts.WebAccount)ViewBag.Account).FirstName)</strong>!</h1>
-            <p><a href="@Url.Action(MVC.Accounts.SignOut())" title="sign out">Sign Out</a></p>
+            <div>
+                <p><a href="@Url.Action(MVC.Accounts.SignOut())" title="sign out">Sign Out</a></p>
+            </div>
         }
         </li>
         @*<li>

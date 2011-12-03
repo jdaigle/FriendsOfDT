@@ -288,6 +288,16 @@ public interface IT4MVCActionResult {
   
 
 [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+public class T4MVC_ViewResult : System.Web.Mvc.ViewResult, IT4MVCActionResult {
+    public T4MVC_ViewResult(string area, string controller, string action): base()  {
+        this.InitMVCT4Result(area, controller, action);
+    }
+    
+    public string Controller { get; set; }
+    public string Action { get; set; }
+    public RouteValueDictionary RouteValueDictionary { get; set; }
+}
+[GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
 public class T4MVC_RedirectToRouteResult : System.Web.Mvc.RedirectToRouteResult, IT4MVCActionResult {
     public T4MVC_RedirectToRouteResult(string area, string controller, string action): base(" ", default(System.Web.Routing.RouteValueDictionary), default(bool))  {
         this.InitMVCT4Result(area, controller, action);
@@ -300,16 +310,6 @@ public class T4MVC_RedirectToRouteResult : System.Web.Mvc.RedirectToRouteResult,
 [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
 public class T4MVC_RenderJsonResult : FriendsOfDT.RenderJsonResult, IT4MVCActionResult {
     public T4MVC_RenderJsonResult(string area, string controller, string action): base()  {
-        this.InitMVCT4Result(area, controller, action);
-    }
-    
-    public string Controller { get; set; }
-    public string Action { get; set; }
-    public RouteValueDictionary RouteValueDictionary { get; set; }
-}
-[GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-public class T4MVC_ViewResult : System.Web.Mvc.ViewResult, IT4MVCActionResult {
-    public T4MVC_ViewResult(string area, string controller, string action): base()  {
         this.InitMVCT4Result(area, controller, action);
     }
     
@@ -347,6 +347,8 @@ namespace Links {
         public static readonly string fodt_tables_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt.tables.min.js") ? Url("fodt.tables.min.js") : Url("fodt.tables.js");
                       
         public static readonly string jsrender_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jsrender.min.js") ? Url("jsrender.min.js") : Url("jsrender.js");
+                      
+        public static readonly string nfvalidate_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/nfvalidate.min.js") ? Url("nfvalidate.min.js") : Url("nfvalidate.js");
                       
         public static readonly string site_min_js = Url("site.min.js");
     }
@@ -500,13 +502,23 @@ namespace FriendsOfDT.Controllers {
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public FriendsOfDT.RenderJsonResult DisableWebAccount() {
+            return new T4MVC_RenderJsonResult(Area, Name, ActionNames.DisableWebAccount);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public FriendsOfDT.RenderJsonResult EnableWebAccount() {
+            return new T4MVC_RenderJsonResult(Area, Name, ActionNames.EnableWebAccount);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public FriendsOfDT.RenderJsonResult ListAccounts() {
             return new T4MVC_RenderJsonResult(Area, Name, ActionNames.ListAccounts);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ViewResult Manage() {
-            return new T4MVC_ViewResult(Area, Name, ActionNames.Manage);
+        public System.Web.Mvc.ActionResult Manage() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.Manage);
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -521,11 +533,14 @@ namespace FriendsOfDT.Controllers {
         public ActionNamesClass ActionNames { get { return s_actions; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
+            public readonly string Required = "Required";
             public readonly string SignOut = "SignOut";
             public readonly string Login = "Login";
             public readonly string SignUp = "SignUp";
             public readonly string RegisterNewWebAccount = "RegisterNewWebAccount";
             public readonly string VerifyWebAccount = "VerifyWebAccount";
+            public readonly string DisableWebAccount = "DisableWebAccount";
+            public readonly string EnableWebAccount = "EnableWebAccount";
             public readonly string AdminList = "AdminList";
             public readonly string ListAccounts = "ListAccounts";
             public readonly string Manage = "Manage";
@@ -538,6 +553,8 @@ namespace FriendsOfDT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
             public readonly string AdminList = "~/Views/Accounts/AdminList.cshtml";
+            public readonly string Manage = "~/Views/Accounts/Manage.cshtml";
+            public readonly string Required = "~/Views/Accounts/Required.cshtml";
             public readonly string SignUp = "~/Views/Accounts/SignUp.cshtml";
         }
     }
@@ -545,6 +562,11 @@ namespace FriendsOfDT.Controllers {
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
     public class T4MVC_AccountsController: FriendsOfDT.Controllers.AccountsController {
         public T4MVC_AccountsController() : base(Dummy.Instance) { }
+
+        public override System.Web.Mvc.ViewResult Required() {
+            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.Required);
+            return callInfo;
+        }
 
         public override System.Web.Mvc.RedirectToRouteResult SignOut() {
             var callInfo = new T4MVC_RedirectToRouteResult(Area, Name, ActionNames.SignOut);
@@ -579,6 +601,18 @@ namespace FriendsOfDT.Controllers {
             return callInfo;
         }
 
+        public override FriendsOfDT.RenderJsonResult DisableWebAccount(string webAccountId) {
+            var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.DisableWebAccount);
+            callInfo.RouteValueDictionary.Add("webAccountId", webAccountId);
+            return callInfo;
+        }
+
+        public override FriendsOfDT.RenderJsonResult EnableWebAccount(string webAccountId) {
+            var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.EnableWebAccount);
+            callInfo.RouteValueDictionary.Add("webAccountId", webAccountId);
+            return callInfo;
+        }
+
         public override System.Web.Mvc.ViewResult AdminList() {
             var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.AdminList);
             return callInfo;
@@ -591,8 +625,8 @@ namespace FriendsOfDT.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ViewResult Manage(string id) {
-            var callInfo = new T4MVC_ViewResult(Area, Name, ActionNames.Manage);
+        public override System.Web.Mvc.ActionResult Manage(string id) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Manage);
             callInfo.RouteValueDictionary.Add("id", id);
             return callInfo;
         }
@@ -674,6 +708,11 @@ namespace FriendsOfDT.Controllers {
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public FriendsOfDT.RenderJsonResult ListProfiles() {
+            return new T4MVC_RenderJsonResult(Area, Name, ActionNames.ListProfiles);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public FriendsOfDT.RenderJsonResult RegisterNewProfile() {
             return new T4MVC_RenderJsonResult(Area, Name, ActionNames.RegisterNewProfile);
         }
@@ -694,6 +733,7 @@ namespace FriendsOfDT.Controllers {
             public readonly string ViewProfile = "ViewProfile";
             public readonly string AdminList = "AdminList";
             public readonly string AdminNew = "AdminNew";
+            public readonly string ListProfiles = "ListProfiles";
             public readonly string RegisterNewProfile = "RegisterNewProfile";
         }
 
@@ -734,9 +774,17 @@ namespace FriendsOfDT.Controllers {
             return callInfo;
         }
 
-        public override FriendsOfDT.RenderJsonResult RegisterNewProfile(FriendsOfDT.Models.Directory.RegisterNewProfileParameters parameters) {
+        public override FriendsOfDT.RenderJsonResult ListProfiles(int? page, int? itemsPerPage) {
+            var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.ListProfiles);
+            callInfo.RouteValueDictionary.Add("page", page);
+            callInfo.RouteValueDictionary.Add("itemsPerPage", itemsPerPage);
+            return callInfo;
+        }
+
+        public override FriendsOfDT.RenderJsonResult RegisterNewProfile(FriendsOfDT.Models.Directory.RegisterNewProfileParameters parameters, bool ignoreMatches) {
             var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.RegisterNewProfile);
             callInfo.RouteValueDictionary.Add("parameters", parameters);
+            callInfo.RouteValueDictionary.Add("ignoreMatches", ignoreMatches);
             return callInfo;
         }
 

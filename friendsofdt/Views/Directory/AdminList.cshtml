@@ -7,10 +7,10 @@
 <script type="text/javascript">
     $(function () {
         $.views.allowCode = true;
-        var paginatedTable = new fodt.paginatedTable($("#accountsTable"));
+        var paginatedTable = new fodt.paginatedTable($("#profilesTable"));
         var loadData = function (page, itemsPerPage) {
-            fodt.getData("@Url.Action(MVC.Accounts.ListAccounts())", { page: page, itemsPerPage: itemsPerPage }, function (data) {
-                $("#accountsTable>tbody").html($("#accountTemplate").render(data.items)).trigger("fodt.dataLoaded", [page, itemsPerPage, data.count]);
+            fodt.getData("@Url.Action(MVC.Directory.ListProfiles())", { page: page, itemsPerPage: itemsPerPage }, function (data) {
+                $("#profilesTable>tbody").html($("#profileTemplate").render(data.items)).trigger("fodt.dataLoaded", [page, itemsPerPage, data.count]);
             }, function () { alert("error occured") });
         }
         paginatedTable.onPrev = loadData;
@@ -18,11 +18,12 @@
         loadData(1, 20);
     });
 </script>
-<script id="accountTemplate" type="text/x-jquery-tmpl">
+<script id="profileTemplate" type="text/x-jquery-tmpl">
     <tr>
+        <td>{{=lastName}}, {{=firstName}}</td>
         <td>{{=emailAddress}}</td>
-        <td>{{=registrationStatus}}</td>
-        <td><a href="{{* result += fodt.buildUrl("/Admin/" + $view.data.id + "/Manage"); }}">Edit</a></td>
+        <td>{{=graduationYear}}</td>
+        <td><a href="{{* result += fodt.buildUrl("/Admin/" + $view.data.id + "/Manage"); }}">Manage</a></td>
     </tr>
 </script>
 <style type="text/css">
@@ -35,11 +36,12 @@
 <p>
 @Html.ActionLink("Add New Profile", MVC.Directory.AdminNew())
 </p>
-<table id="accountsTable">
+<table id="profilesTable">
     <thead>
         <tr>
-            <th>Account</th>
-            <th>Registration Status</th>
+            <th>Name</th>
+            <th>E-Mail Address</th>
+            <th>Graduation Year</th>
             <th></th>
         </tr>
     </thead>

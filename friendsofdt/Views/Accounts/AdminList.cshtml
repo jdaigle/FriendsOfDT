@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "FoDT Web Accounts Management";
+    ViewBag.Title = "FoDT | Admin | Accounts";
     ViewBag.SubTitle = "Admin";
 }
 
@@ -20,9 +20,10 @@
 </script>
 <script id="accountTemplate" type="text/x-jquery-tmpl">
     <tr>
+        <td>{{=lastName}}, {{=firstName}}</td>
         <td>{{=emailAddress}}</td>
         <td>{{=registrationStatus}}</td>
-        <td><a href="{{* result += fodt.buildUrl("/Admin/" + $view.data.id + "/Manage"); }}">Edit</a></td>
+        <td><a href="{{* result += fodt.buildUrl("/Admin/" + $view.data.id + "/Manage"); }}">Manage</a></td>
     </tr>
 </script>
 <style type="text/css">
@@ -35,6 +36,7 @@
 <table id="accountsTable">
     <thead>
         <tr>
+            <th>Name</th>
             <th>Account</th>
             <th>Registration Status</th>
             <th></th>

@@ -100,6 +100,7 @@
     <Compile Include="Controllers\AbstractController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DirectoryController.cs" />
+    <Compile Include="Html\DateTimeHelpers.cs" />
     <Compile Include="Html\Helpers.cs" />
     <Compile Include="Infrastructure\AjaxOnlyAttribute.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
@@ -111,10 +112,12 @@
     <Compile Include="Cryptography\SecureValue.cs" />
     <Compile Include="Cryptography\SymmetricAlgorithm.cs" />
     <Compile Include="Infrastructure\AuthorizeRoleAttribute.cs" />
+    <Compile Include="Infrastructure\DocumentAuditListener.cs" />
     <Compile Include="Infrastructure\DocumentVersionStoreListener.cs" />
     <Compile Include="Infrastructure\EntityMetadataAttribute.cs" />
     <Compile Include="Infrastructure\ExtensionMethods.cs" />
     <Compile Include="Infrastructure\RavenQueryableExtensions.cs" />
+    <Compile Include="Infrastructure\TimeZoneCode.cs" />
     <Compile Include="Models\Accounts\InvalidPasswordException.cs" />
     <Compile Include="Models\Accounts\PasswordHistory.cs" />
     <Compile Include="Models\Accounts\RegisterNewAccountParameters.cs" />
@@ -127,6 +130,7 @@
     <Compile Include="Models\Accounts\WebAccountRole.cs" />
     <Compile Include="Models\Directory\DirectoryProfile.cs" />
     <Compile Include="Models\Directory\RegisterNewProfileParameters.cs" />
+    <Compile Include="Infrastructure\EntityMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\RenderJsonResult.cs" />
     <Compile Include="Reflection\ObjectReflectionExtensions.cs" />
@@ -191,6 +195,8 @@
     <Content Include="Views\Directory\ViewProfile.cshtml" />
     <Content Include="Views\Directory\AdminList.cshtml" />
     <Content Include="Views\Directory\AdminNew.cshtml" />
+    <Content Include="Views\Accounts\Required.cshtml" />
+    <Content Include="Views\Accounts\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\Accounts\" />

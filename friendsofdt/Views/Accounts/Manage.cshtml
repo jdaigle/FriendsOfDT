@@ -1,0 +1,104 @@
+﻿@model FriendsOfDT.Models.Accounts.WebAccount
+@{
+    ViewBag.Title = "FoDT | Admin | Accounts | " + Model.LastName + ", " + Model.FirstName;
+    ViewBag.SubTitle = "Admin";
+
+    var metadata = (EntityMetadata)ViewBag.Metadata;
+}
+@section additionalHead {
+<script type="text/javascript">
+    $(function () {
+        $("#verifyAccountButton").on("click", function (e) {
+            e.preventDefault();
+            $.post("@Url.Action(MVC.Accounts.VerifyWebAccount())", { "webAccountId": "@Model.Id" }, function () { window.location.reload(true); });
+        });
+        $("#disableAccountButton").on("click", function (e) {
+            e.preventDefault();
+            $.post("@Url.Action(MVC.Accounts.DisableWebAccount())", { "webAccountId": "@Model.Id" }, function () { window.location.reload(true); });
+        });
+        $("#enableAccountButton").on("click", function (e) {
+            e.preventDefault();
+            $.post("@Url.Action(MVC.Accounts.EnableWebAccount())", { "webAccountId": "@Model.Id" }, function () { window.location.reload(true); });
+        });
+    });
+</script>
+}
+
+@Html.Partial("AdminTabs", new { Section = "Accounts" }.ToExpando())
+
+<form>
+    <fieldset>
+        <legend>Account</legend>
+        <p>
+            <label>Name:</label>
+            <span>@Model.LastName, @Model.FirstName</span>
+        </p>
+        <p>
+            <label>E-Mail Address:</label>
+            <span>@Model.EmailAddress</span>
+        </p>
+        <p>
+            <label>Sign In Count:</label>
+            <span>@Model.LoginCount</span>
+        </p>
+        <p>
+            <label>Last Sign In:</label>
+            <span>@Html.ConvertAndDisplayDateTime(Model.LastLoginDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo(), "Never Signed In")</span>
+        </p>
+    </fieldset>
+    <fieldset>
+        <legend>Registration Status</legend>
+        <p>
+            <label>Status:</label>
+            <span>@Model.RegistrationStatus</span>
+        </p>
+        @if (Model.RegistrationStatus == FriendsOfDT.Models.Accounts.RegistrationStatus.NotVerified) {
+        <p>
+            <label>Name Provided:</label>
+            <span>
+                @Model.LastName, @Model.FirstName
+                @if (!string.IsNullOrWhiteSpace(Model.RegistrationAltFirstName) || !string.IsNullOrWhiteSpace(Model.RegistrationAltLastName)) {
+                @: (alt: @Model.LastName, @Model.FirstName)
+                }
+            </span>
+        </p>
+        <p>
+            <input type="button" id="verifyAccountButton" value="Verify Account" />
+        </p>
+        }
+        @if (Model.RegistrationStatus == FriendsOfDT.Models.Accounts.RegistrationStatus.Verified) {
+        <p>
+            <input type="button" id="disableAccountButton" value="Disable Account" />
+        </p>
+        }
+        @if (Model.RegistrationStatus == FriendsOfDT.Models.Accounts.RegistrationStatus.Disabled) {
+        <p>
+            <input type="button" id="enableAccountButton" value="Enable Account" />
+        </p>
+        }
+    </fieldset>
+    <fieldset>
+        <legend>Metadata</legend>
+        <p>
+            <label>Created:</label>
+            <span>@Html.ConvertAndDisplayDateTime(metadata.Created, TimeZoneCode.Eastern.ToTimeZoneInfo(), "Unknown")</span>
+        </p>
+        <p>
+            <label>Last Modified:</label>
+            <span>@Html.DisplayDateTime(metadata.LastModified, TimeZoneCode.Eastern.ToTimeZoneInfo(), "Unknown")</span>
+        </p>
+        <p>
+            <label>Last Modified By:</label>
+            @if (ViewBag.ModifiedBy != null) {
+                var modifiedby = (FriendsOfDT.Models.Accounts.WebAccount)ViewBag.ModifiedBy;
+                <span>@Html.ActionLink(modifiedby.LastName + ", " + modifiedby.FirstName, MVC.Accounts.Manage(modifiedby.GetGuidPartOfId()))</span>
+            } else {
+            <span>@metadata.LastModifiedBy</span>
+            }
+        </p>
+        <p>
+            <label>Last Modified Action:</label>
+            <span>@metadata.LastModifiedAction</span>
+        </p>
+    </fieldset>
+</form>
