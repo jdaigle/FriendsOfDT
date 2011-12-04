@@ -11,6 +11,23 @@ namespace FriendsOfDT.Controllers {
             return View();
         }
 
+        [AjaxOnly]
+        public virtual RenderJsonResult Search(string lastName, string firstName, int? maxResults) {
+            var query = DocumentSession.Query<DirectoryProfile>();
+            if (!string.IsNullOrWhiteSpace(lastName))
+                query = query.Where(x => x.LastName.StartsWith(lastName));
+            if (!string.IsNullOrWhiteSpace(firstName))
+                query = query.Where(x => x.FirstName.StartsWith(firstName));
+            var results = query.Take(maxResults ?? 20).ToList();
+            return this.RenderJsonSuccessErrorCode(results.Select(x => new {
+                id = x.Id,
+                firstName = x.FirstName,
+                lastName = x.LastName,
+                emailAddress = x.EmailAddress,
+                graduationYear = x.GraduationYear,
+            }).ToArray());
+        }
+
         public virtual ViewResult ViewProfile() {
             return View();
         }

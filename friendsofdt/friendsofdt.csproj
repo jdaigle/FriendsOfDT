@@ -197,6 +197,7 @@
     <Content Include="Views\Directory\AdminNew.cshtml" />
     <Content Include="Views\Accounts\Required.cshtml" />
     <Content Include="Views\Accounts\Manage.cshtml" />
+    <Content Include="Views\Accounts\Link.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\Accounts\" />

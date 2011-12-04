@@ -20,6 +20,10 @@
             e.preventDefault();
             $.post("@Url.Action(MVC.Accounts.EnableWebAccount())", { "webAccountId": "@Model.Id" }, function () { window.location.reload(true); });
         });
+        $("#linkAccountToDirectoryButton").on("click", function (e) {
+            e.preventDefault();
+            window.location = "@Url.Action(MVC.Accounts.Link(Model.GetGuidPartOfId()))";
+        });
     });
 </script>
 }
@@ -63,17 +67,42 @@
             </span>
         </p>
         <p>
+            <label></label>
             <input type="button" id="verifyAccountButton" value="Verify Account" />
         </p>
         }
         @if (Model.RegistrationStatus == FriendsOfDT.Models.Accounts.RegistrationStatus.Verified) {
         <p>
+            <label></label>
             <input type="button" id="disableAccountButton" value="Disable Account" />
         </p>
         }
         @if (Model.RegistrationStatus == FriendsOfDT.Models.Accounts.RegistrationStatus.Disabled) {
         <p>
+            <label></label>
             <input type="button" id="enableAccountButton" value="Enable Account" />
+        </p>
+        }
+    </fieldset>
+    <fieldset>
+        <legend>Directory Profile</legend>
+        @if (string.IsNullOrWhiteSpace(Model.LinkedDirectoryProfileId)) {
+        <p>
+            <label>Link:</label>
+            <span>Not Linked</span>            
+        </p>
+        <p>
+            <label></label>
+            <input type="button" id="linkAccountToDirectoryButton" value="Link Account" />
+        </p>
+        } else {
+        <p>
+            <label>Link:</label>
+            <span>Linked</span>            
+        </p>
+        <p>
+            <label></label>
+            <input type="button" id="linkAccountToDirectoryButton" value="Re-Link Account" />
         </p>
         }
     </fieldset>

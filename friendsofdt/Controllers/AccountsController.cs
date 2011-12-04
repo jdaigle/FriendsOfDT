@@ -131,5 +131,15 @@ namespace FriendsOfDT.Controllers {
             }
             return View(account);
         }
+
+        [Authorize, AuthorizeRole()]
+        [HttpGet, Url("Admin/WebAccounts/{id}/Link")]
+        public virtual ActionResult Link(string id) {
+            var account = DocumentSession.Load<WebAccount>("webAccounts/" + id);
+            if (account == null) {
+                return Content("Account Not Found");
+            }
+            return View(account);
+        }
     }
 }

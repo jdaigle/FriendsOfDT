@@ -1,0 +1,91 @@
+﻿@model FriendsOfDT.Models.Accounts.WebAccount
+@{
+    ViewBag.Title = "FoDT | Admin | Accounts | " + Model.LastName + ", " + Model.FirstName;
+    ViewBag.SubTitle = "Admin";
+
+    var metadata = (EntityMetadata)ViewBag.Metadata;
+}
+@section additionalHead {
+<script type="text/javascript">
+    $(function () {
+        var controller = new fodt.ajaxFormController($("#searchForm"));
+        controller.onBefore = function (form) {
+            $("#matches").hide();
+            $("#profilesTable").hide();
+            $("#profilesTable>tbody").empty();
+        };
+        controller.onSuccess = function (form, data) {
+            $("#newProfile_ignoreMatches").val("false");
+            if (data.errorCode == 0) {
+                if (data.data.length == 0) {
+                    $("#matches .message").html("No Matches Found");
+                } else {
+                    $("#matches .message").html("Matches");
+                    $("#profilesTable>tbody").empty();
+                    $("#profilesTable>tbody").html($("#profileTemplate").render(data.data));
+                    $("#profilesTable").show();
+                }
+                $("#matches").show();
+            } else {
+                form.find("div.messages").empty().html(data.message).show();
+                messages.show();
+            }
+        };
+
+        $("#searchForm_firstName").val("@Model.FirstName.Substring(0,3)");
+        $("#searchForm_lastName").val("@Model.LastName.Substring(0, 3)");
+        $("#searchForm").submit();
+    });
+</script>
+<script id="profileTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td>{{=lastName}}, {{=firstName}}</td>
+        <td>{{=emailAddress}}</td>
+        <td>{{=graduationYear}}</td>
+        <td><a href="{{* result += fodt.buildUrl("/Admin/" + $view.data.id + "/Manage"); }}">Link To Profile</a></td>
+    </tr>
+</script>
+<style type="text/css">
+    #matches {
+    	display: none;
+    }
+</style>
+}
+
+@Html.Partial("AdminTabs", new { Section = "Accounts" }.ToExpando())
+
+<div>
+    <p>Search for profiles, and then select one to link to <strong>@Html.ActionLink(Model.FirstName + " " + Model.LastName + "'s", MVC.Accounts.Manage(Model.GetGuidPartOfId()))</strong> account. Once linked the user will be able to change details about their own profile.</p>
+</div>
+
+<form action="@Url.Action(MVC.Directory.Search())" method="post" id="searchForm">
+    <p class="instructions">Enter the first name or last name of the person you want to find:</p>
+    <fieldset>
+        <p>
+            <label for="searchForm_firstName">First Name:</label><input type="text" id="searchForm_firstName" name="firstName" placeholder="first name" />
+        </p>
+        <p>
+            <label for="searchForm_lastName">Last Name:</label><input type="text" id="searchForm_lastName" name="lastName" placeholder="last name" />
+        </p>
+    </fieldset>
+    <p>
+        <label></label>
+        <input type="submit" value="Search" />
+    </p>
+</form>
+
+<div id="matches">
+    <h3 class="message"></h3>
+    <table id="profilesTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>E-Mail Address</th>
+                <th>Graduation Year</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <input type="button" value="Create a New Profile For @Model.FirstName @Model.LastName" />
+</div>

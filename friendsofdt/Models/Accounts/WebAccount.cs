@@ -52,6 +52,8 @@ namespace FriendsOfDT.Models.Accounts {
         public string RegistrationLastName { get; protected set; }
         public string RegistrationAltLastName { get; protected set; }
 
+        public string LinkedDirectoryProfileId { get; protected set; }
+
         public void Verify() {
             if (RegistrationStatus == RegistrationStatus.NotVerified) {
                 RegistrationStatus = RegistrationStatus.Verified;
