@@ -47,8 +47,9 @@ namespace FriendsOfDT.Controllers {
 
         [HttpPost, AjaxOnly, ValidateInput(false)]
         public virtual RenderJsonResult RegisterNewWebAccount(RegisterNewAccountParameters parameters, string requestedPassword, string confirmedPassword) {
-            var existingAccountEmailReference = DocumentSession.Load<WebAccountEmailReference>(WebAccountEmailReference.GetId(parameters.EmailAddress));
-            if (existingAccountEmailReference != null) {
+            var existingWebAccountEmailReferenceId = DocumentSession.GetEntityIdFromValue<WebAccountEmailReference>(parameters.EmailAddress);
+            var existingWebAccountEmailReference = DocumentSession.Load<WebAccountEmailReference>(existingWebAccountEmailReferenceId);
+            if (existingWebAccountEmailReference != null) {
                 DocumentSession.Advanced.Clear();
                 return this.RenderJsonErrorCode(1, "An account already exists with this e-mail address.");
             }
@@ -58,9 +59,11 @@ namespace FriendsOfDT.Controllers {
             }
             var newAccount = WebAccount.RegisterNewAccount(parameters);
             newAccount.ChangePassword(requestedPassword);
-            var newAccountEmailReference = new WebAccountEmailReference(newAccount.EmailAddress, newAccount.Id);
             DocumentSession.Store(newAccount);
+
+            var newAccountEmailReference = new WebAccountEmailReference(existingWebAccountEmailReferenceId, newAccount.Id);
             DocumentSession.Store(newAccountEmailReference);
+
             // TODO: Publish event for e-mail notification
             return this.RenderJsonSuccessErrorCode();
         }

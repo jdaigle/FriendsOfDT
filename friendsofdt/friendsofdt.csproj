@@ -113,6 +113,7 @@
     <Compile Include="Cryptography\SymmetricAlgorithm.cs" />
     <Compile Include="Infrastructure\AuthorizeRoleAttribute.cs" />
     <Compile Include="Infrastructure\DocumentAuditListener.cs" />
+    <Compile Include="Infrastructure\DocumentSessionExtensions.cs" />
     <Compile Include="Infrastructure\DocumentVersionStoreListener.cs" />
     <Compile Include="Infrastructure\EntityMetadataAttribute.cs" />
     <Compile Include="Infrastructure\ExtensionMethods.cs" />

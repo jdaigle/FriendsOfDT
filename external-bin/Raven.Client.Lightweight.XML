@@ -614,7 +614,7 @@
             <param name="key">The key.</param>
             <param name="etag">The etag.</param>
         </member>
-        <member name="M:Raven.Client.Connection.IDatabaseCommands.PutAttachment(System.String,System.Nullable{System.Guid},System.Byte[],Raven.Json.Linq.RavenJObject)">
+        <member name="M:Raven.Client.Connection.IDatabaseCommands.PutAttachment(System.String,System.Nullable{System.Guid},System.IO.Stream,Raven.Json.Linq.RavenJObject)">
             <summary>
             Puts a byte array as attachment with the specified key
             </summary>
@@ -1187,11 +1187,31 @@
             </summary>
             <param name="operationUrl">The operation URL.</param>
         </member>
+        <member name="E:Raven.Client.Connection.ReplicationInformer.FailoverStatusChanged">
+            <summary>
+            Notify when the failover status changed
+            </summary>
+        </member>
         <member name="P:Raven.Client.Connection.ReplicationInformer.ReplicationDestinations">
             <summary>
             Gets the replication destinations.
             </summary>
             <value>The replication destinations.</value>
+        </member>
+        <member name="T:Raven.Client.Connection.FailoverStatusChangedEventArgs">
+            <summary>
+            The event arguments for when the failover status changed
+            </summary>
+        </member>
+        <member name="P:Raven.Client.Connection.FailoverStatusChangedEventArgs.Failing">
+            <summary>
+            Whatever that url is now failing
+            </summary>
+        </member>
+        <member name="P:Raven.Client.Connection.FailoverStatusChangedEventArgs.Url">
+            <summary>
+            The url whose failover status changed
+            </summary>
         </member>
         <member name="T:Raven.Client.Connection.SerializationHelper">
             <summary>
@@ -1286,7 +1306,7 @@
             <param name="key">The key.</param>
             <param name="etag">The etag.</param>
         </member>
-        <member name="M:Raven.Client.Connection.ServerClient.PutAttachment(System.String,System.Nullable{System.Guid},System.Byte[],Raven.Json.Linq.RavenJObject)">
+        <member name="M:Raven.Client.Connection.ServerClient.PutAttachment(System.String,System.Nullable{System.Guid},System.IO.Stream,Raven.Json.Linq.RavenJObject)">
             <summary>
             Puts the attachment with the specified key
             </summary>
@@ -1551,6 +1571,11 @@
         <member name="M:Raven.Client.Connection.ServerClient.Finalize">
             <summary>
             Allows an <see cref="T:System.Object"/> to attempt to free resources and perform other cleanup operations before the <see cref="T:System.Object"/> is reclaimed by garbage collection.
+            </summary>
+        </member>
+        <member name="E:Raven.Client.Connection.ServerClient.FailoverStatusChanged">
+            <summary>
+            Notify when the failover status changed
             </summary>
         </member>
         <member name="P:Raven.Client.Connection.ServerClient.ReplicationInformer">
@@ -4820,6 +4845,11 @@
             Saves Enums as integers and instruct the Linq provider to query enums as integer values.
             </summary>
         </member>
+        <member name="P:Raven.Client.Document.DocumentConvention.TransformTypeTagNameToDocumentKeyPrefix">
+            <summary>
+            Translate the type tag name to the document key prefix
+            </summary>
+        </member>
         <member name="T:Raven.Client.Document.ConsistencyOptions">
             <summary>
             The consistency options for all queries, fore more details about the consistency options, see:
@@ -5926,7 +5956,7 @@
             </summary>
             <remarks>
             This is mainly useful for internal use inside RavenDB, when we are executing
-            queries that has been marked with WaitForNonStaleResults, we temporarily disable
+            queries that have been marked with WaitForNonStaleResults, we temporarily disable
             aggressive caching.
             </remarks>
         </member>
@@ -7154,7 +7184,7 @@
             Index storage options
             </summary>
         </member>
-        <member name="P:Raven.Client.Indexes.AbstractGenericIndexCreationTask`1.SortOptions">
+        <member name="P:Raven.Client.Indexes.AbstractGenericIndexCreationTask`1.IndexSortOptions">
             <summary>
             Index sort options
             </summary>

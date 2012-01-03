@@ -1,14 +1,10 @@
 ﻿namespace FriendsOfDT.Models.Accounts {
     [EntityMetadata(Version = 1)]
     public class WebAccountEmailReference {
-        public static string GetId(string emailAddress) {
-            return "webAccounts/emails/" + emailAddress;
-        }
-
         protected WebAccountEmailReference() { }
 
-        public WebAccountEmailReference(string emailAddress, string webAccountId) {
-            this.Id = GetId(emailAddress);
+        public WebAccountEmailReference(string id, string webAccountId) {
+            this.Id = GetId(id);
             this.WebAccountId = webAccountId;
         }
 
