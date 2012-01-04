@@ -10,8 +10,8 @@ namespace FriendsOfDT {
             var metadataAttribute = entity.GetType().GetCustomAttributes(typeof(EntityMetadataAttribute), false).FirstOrDefault() as EntityMetadataAttribute;
             if (metadataAttribute == null)
                 return false;
-            if (metadata.Value<int>("fodt-schema-version") < metadataAttribute.Version)
-                metadata["fodt-schema-version"] = metadataAttribute.Version;
+            if (metadata.Value<int>("Entity-Class-Version") < metadataAttribute.Version)
+                metadata["Entity-Class-Version"] = metadataAttribute.Version;
             return false;
         }
         public void AfterStore(string key, object entity, RavenJObject metadata) {

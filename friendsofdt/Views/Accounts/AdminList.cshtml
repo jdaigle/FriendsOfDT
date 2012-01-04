@@ -6,16 +6,8 @@
 @section additionalHead {
 <script type="text/javascript">
     $(function () {
-        $.views.allowCode = true;
         var paginatedTable = new fodt.paginatedTable($("#accountsTable"));
-        var loadData = function (page, itemsPerPage) {
-            fodt.getData("@Url.Action(MVC.Accounts.ListAccounts())", { page: page, itemsPerPage: itemsPerPage }, function (data) {
-                $("#accountsTable>tbody").html($("#accountTemplate").render(data.items)).trigger("fodt.dataLoaded", [page, itemsPerPage, data.count]);
-            }, function () { alert("error occured") });
-        }
-        paginatedTable.onPrev = loadData;
-        paginatedTable.onNext = loadData;
-        loadData(1, 20);
+        paginatedTable.useConventions("@Url.Action(MVC.Accounts.ListAccounts())", "#accountTemplate");
     });
 </script>
 <script id="accountTemplate" type="text/x-jquery-tmpl">

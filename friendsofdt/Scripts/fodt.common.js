@@ -32,3 +32,8 @@ $(function () {
         $(this).find("textarea[placeholder].gray, input[placeholder].gray").removeClass("gray").val("");
     });
 });
+
+$(function () {
+    $.views.allowCode = true;
+
+});

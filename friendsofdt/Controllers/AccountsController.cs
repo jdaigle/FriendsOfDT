@@ -21,9 +21,8 @@ namespace FriendsOfDT.Controllers {
 
         [AjaxOnly, HttpPost, ValidateInput(false)]
         public virtual RenderJsonResult Login(string emailAddress, string password, bool persist, string returnUrl) {
-            var accountEmailReference = DocumentSession.Query<WebAccountEmailReference>()
-                .Where(x => x.Id == WebAccountEmailReference.GetId(emailAddress))
-                .SingleOrDefault();
+            var webAccountEmailReferenceId = DocumentSession.GetEntityIdFromValue<WebAccountEmailReference>(emailAddress);
+            var accountEmailReference = DocumentSession.Load<WebAccountEmailReference>(webAccountEmailReferenceId);
             if (accountEmailReference == null) {
                 return this.RenderJsonErrorCode(1, "Bad Username or Password");
             }
@@ -46,19 +45,19 @@ namespace FriendsOfDT.Controllers {
         }
 
         [HttpPost, AjaxOnly, ValidateInput(false)]
-        public virtual RenderJsonResult RegisterNewWebAccount(RegisterNewAccountParameters parameters, string requestedPassword, string confirmedPassword) {
+        public virtual RenderJsonResult RegisterNewWebAccount(RegisterNewAccountParameters parameters) {
             var existingWebAccountEmailReferenceId = DocumentSession.GetEntityIdFromValue<WebAccountEmailReference>(parameters.EmailAddress);
             var existingWebAccountEmailReference = DocumentSession.Load<WebAccountEmailReference>(existingWebAccountEmailReferenceId);
             if (existingWebAccountEmailReference != null) {
                 DocumentSession.Advanced.Clear();
                 return this.RenderJsonErrorCode(1, "An account already exists with this e-mail address.");
             }
-            if (string.IsNullOrWhiteSpace(requestedPassword) || requestedPassword != confirmedPassword) {
+            if (string.IsNullOrWhiteSpace(parameters.RequestedPassword)) {
                 DocumentSession.Advanced.Clear();
                 return this.RenderJsonErrorCode(2, "A password is required, both passwords must match");
             }
             var newAccount = WebAccount.RegisterNewAccount(parameters);
-            newAccount.ChangePassword(requestedPassword);
+            newAccount.ChangePassword(parameters.RequestedPassword);
             DocumentSession.Store(newAccount);
 
             var newAccountEmailReference = new WebAccountEmailReference(existingWebAccountEmailReferenceId, newAccount.Id);
@@ -69,7 +68,7 @@ namespace FriendsOfDT.Controllers {
         }
 
         [HttpPost, AjaxOnly]
-        public virtual RenderJsonResult VerifyWebAccount(string webAccountId) {
+        public virtual RenderJsonResult VerifyWebAccount(long webAccountId) {
             var account = DocumentSession.Load<WebAccount>(webAccountId);
             if (account == null) {
                 return this.RenderJsonErrorCode(1, "Missing Account");
@@ -79,7 +78,7 @@ namespace FriendsOfDT.Controllers {
         }
 
         [HttpPost, AjaxOnly]
-        public virtual RenderJsonResult DisableWebAccount(string webAccountId) {
+        public virtual RenderJsonResult DisableWebAccount(long webAccountId) {
             var account = DocumentSession.Load<WebAccount>(webAccountId);
             if (account == null) {
                 return this.RenderJsonErrorCode(1, "Missing Account");
@@ -89,7 +88,7 @@ namespace FriendsOfDT.Controllers {
         }
 
         [HttpPost, AjaxOnly]
-        public virtual RenderJsonResult EnableWebAccount(string webAccountId) {
+        public virtual RenderJsonResult EnableWebAccount(long webAccountId) {
             var account = DocumentSession.Load<WebAccount>(webAccountId);
             if (account == null) {
                 return this.RenderJsonErrorCode(1, "Missing Account");
@@ -121,8 +120,8 @@ namespace FriendsOfDT.Controllers {
 
         [Authorize, AuthorizeRole()]
         [HttpGet, Url("Admin/WebAccounts/{id}/Manage")]
-        public virtual ActionResult Manage(string id) {
-            var account = DocumentSession.Load<WebAccount>("webAccounts/" + id);
+        public virtual ActionResult Manage(long id) {
+            var account = DocumentSession.Load<WebAccount>(id);
             if (account == null) {
                 return Content("Account Not Found");
             }
@@ -130,18 +129,23 @@ namespace FriendsOfDT.Controllers {
             ViewBag.Metadata = metadata;
             if (!string.IsNullOrWhiteSpace(metadata.LastModifiedBy)) {
                 var modifiedBy = DocumentSession.Load<WebAccount>(metadata.LastModifiedBy);
-                ViewBag.ModifiedBy = modifiedBy;
+                if (modifiedBy != null) {
+                    ViewBag.ModifiedBy = modifiedBy;
+                    ViewBag.ModifiedById = DocumentSession.GetEntityIdValue(modifiedBy);
+                }
             }
+            ViewBag.Id = id;
             return View(account);
         }
 
         [Authorize, AuthorizeRole()]
         [HttpGet, Url("Admin/WebAccounts/{id}/Link")]
-        public virtual ActionResult Link(string id) {
-            var account = DocumentSession.Load<WebAccount>("webAccounts/" + id);
+        public virtual ActionResult Link(long id) {
+            var account = DocumentSession.Load<WebAccount>(id);
             if (account == null) {
                 return Content("Account Not Found");
             }
+            ViewBag.Id = id;
             return View(account);
         }
     }

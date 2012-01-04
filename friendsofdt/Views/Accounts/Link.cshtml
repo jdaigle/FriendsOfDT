@@ -55,7 +55,7 @@
 @Html.Partial("AdminTabs", new { Section = "Accounts" }.ToExpando())
 
 <div>
-    <p>Search for profiles, and then select one to link to <strong>@Html.ActionLink(Model.FirstName + " " + Model.LastName + "'s", MVC.Accounts.Manage(Model.GetGuidPartOfId()))</strong> account. Once linked the user will be able to change details about their own profile.</p>
+    <p>Search for profiles, and then select one to link to <strong>@Html.ActionLink(Model.FirstName + " " + Model.LastName + "'s", MVC.Accounts.Manage((long)ViewBag.Id))</strong> account. Once linked the user will be able to change details about their own profile.</p>
 </div>
 
 <form action="@Url.Action(MVC.Directory.Search())" method="post" id="searchForm">

@@ -4,7 +4,7 @@
         protected WebAccountEmailReference() { }
 
         public WebAccountEmailReference(string id, string webAccountId) {
-            this.Id = GetId(id);
+            this.Id = id;
             this.WebAccountId = webAccountId;
         }
 

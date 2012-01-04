@@ -11,7 +11,7 @@ namespace FriendsOfDT {
                 LastModified = metadata.Value<DateTime?>("Last-Modified"),
                 LastModifiedBy = metadata.Value<string>("Last-Modified-By"),
                 LastModifiedAction = metadata.Value<string>("Last-Modified-Action"),
-                FodtSchemaVersion = metadata.Value<int?>("Fodt-Schema-Version"),
+                EntityClassVersion = metadata.Value<int?>("Entity-Class-Version"),
                 RavenEntityName = metadata.Value<string>("Raven-Entity-Name"),
                 RavenClrType = metadata.Value<string>("Raven-Clr-Type"),
             };
@@ -19,7 +19,7 @@ namespace FriendsOfDT {
 
         public string RavenEntityName { get; set; }
         public string RavenClrType { get; set; }
-        public int? FodtSchemaVersion { get; set; }
+        public int? EntityClassVersion { get; set; }
         public Guid? ETag { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? LastModified { get; set; }

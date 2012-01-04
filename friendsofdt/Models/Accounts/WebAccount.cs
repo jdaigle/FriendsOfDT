@@ -7,32 +7,19 @@ namespace FriendsOfDT.Models.Accounts {
     [EntityMetadata(Version = 1)]
     public class WebAccount {
 
-        public static string GetId(Guid id) {
-            return "webAccounts/" + id;
-        }
-
         public static WebAccount RegisterNewAccount(RegisterNewAccountParameters parameters) {
             return new WebAccount() {
                 EmailAddress = parameters.EmailAddress,
-                FirstName = parameters.FirstName,
-                LastName = parameters.LastName,
-                RegistrationFirstName = parameters.FirstName,
-                RegistrationLastName = parameters.LastName,
-                RegistrationAltFirstName = parameters.AltFirstName,
-                RegistrationAltLastName = parameters.AltLastName,
                 RegistrationStatus = RegistrationStatus.NotVerified,
             };
         }
 
         public WebAccount() {
-            this.Id = "webAccounts/" + Guid.NewGuid();
             Roles = new List<WebAccountRole>();
             PasswordHash = new byte[0];
             PasswordHistory = new List<PasswordHistory>();
-        }
-
-        public string GetGuidPartOfId() {
-            return Id.Replace("webAccounts/", "");
+            FirstName = string.Empty;
+            LastName = string.Empty;
         }
 
         public string Id { get; protected set; }
@@ -74,7 +61,7 @@ namespace FriendsOfDT.Models.Accounts {
         }
 
         public bool CanLogin() {
-            return RegistrationStatus == Accounts.RegistrationStatus.Verified;
+            return true;
         }
 
         public bool PasswordMatches(string password) {

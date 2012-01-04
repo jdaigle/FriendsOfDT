@@ -1,0 +1,14 @@
+1. User Sign Up
+
+If you go to the website and you do not have an account, you can register
+in seconds. All you need to register is an EMAIL ADDRESS, and a PASSWORD.
+
+Immediately after sign-up, the user will be taken to their profile page
+where he/she can manage their account profile.
+
+2. E-Mail Address Verification
+
+When a user signs up, an e-mail verification will be sent to the new user.
+This verification is NOT required for the user to login, but IS required
+for the user to subscribe to nofications and such.
+

@@ -594,27 +594,25 @@ namespace FriendsOfDT.Controllers {
             return callInfo;
         }
 
-        public override FriendsOfDT.RenderJsonResult RegisterNewWebAccount(FriendsOfDT.Models.Accounts.RegisterNewAccountParameters parameters, string requestedPassword, string confirmedPassword) {
+        public override FriendsOfDT.RenderJsonResult RegisterNewWebAccount(FriendsOfDT.Models.Accounts.RegisterNewAccountParameters parameters) {
             var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.RegisterNewWebAccount);
             callInfo.RouteValueDictionary.Add("parameters", parameters);
-            callInfo.RouteValueDictionary.Add("requestedPassword", requestedPassword);
-            callInfo.RouteValueDictionary.Add("confirmedPassword", confirmedPassword);
             return callInfo;
         }
 
-        public override FriendsOfDT.RenderJsonResult VerifyWebAccount(string webAccountId) {
+        public override FriendsOfDT.RenderJsonResult VerifyWebAccount(long webAccountId) {
             var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.VerifyWebAccount);
             callInfo.RouteValueDictionary.Add("webAccountId", webAccountId);
             return callInfo;
         }
 
-        public override FriendsOfDT.RenderJsonResult DisableWebAccount(string webAccountId) {
+        public override FriendsOfDT.RenderJsonResult DisableWebAccount(long webAccountId) {
             var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.DisableWebAccount);
             callInfo.RouteValueDictionary.Add("webAccountId", webAccountId);
             return callInfo;
         }
 
-        public override FriendsOfDT.RenderJsonResult EnableWebAccount(string webAccountId) {
+        public override FriendsOfDT.RenderJsonResult EnableWebAccount(long webAccountId) {
             var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.EnableWebAccount);
             callInfo.RouteValueDictionary.Add("webAccountId", webAccountId);
             return callInfo;
@@ -632,13 +630,13 @@ namespace FriendsOfDT.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult Manage(string id) {
+        public override System.Web.Mvc.ActionResult Manage(long id) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Manage);
             callInfo.RouteValueDictionary.Add("id", id);
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult Link(string id) {
+        public override System.Web.Mvc.ActionResult Link(long id) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Link);
             callInfo.RouteValueDictionary.Add("id", id);
             return callInfo;
@@ -734,6 +732,11 @@ namespace FriendsOfDT.Controllers {
         public FriendsOfDT.RenderJsonResult RegisterNewProfile() {
             return new T4MVC_RenderJsonResult(Area, Name, ActionNames.RegisterNewProfile);
         }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult Manage() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.Manage);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public DirectoryController Actions { get { return MVC.Directory; } }
@@ -754,6 +757,7 @@ namespace FriendsOfDT.Controllers {
             public readonly string AdminNew = "AdminNew";
             public readonly string ListProfiles = "ListProfiles";
             public readonly string RegisterNewProfile = "RegisterNewProfile";
+            public readonly string Manage = "Manage";
         }
 
 
@@ -812,6 +816,12 @@ namespace FriendsOfDT.Controllers {
             var callInfo = new T4MVC_RenderJsonResult(Area, Name, ActionNames.RegisterNewProfile);
             callInfo.RouteValueDictionary.Add("parameters", parameters);
             callInfo.RouteValueDictionary.Add("ignoreMatches", ignoreMatches);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Manage(long id) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Manage);
+            callInfo.RouteValueDictionary.Add("id", id);
             return callInfo;
         }
 

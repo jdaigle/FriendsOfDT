@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using FriendsOfDT.Models.Directory;
 using Raven.Client.Linq;
 using RiaLibrary.Web;
+using FriendsOfDT.Models.Accounts;
 
 namespace FriendsOfDT.Controllers {
     [Authorize]
@@ -83,6 +84,26 @@ namespace FriendsOfDT.Controllers {
             var newProfile = DirectoryProfile.RegisterNewProfile(parameters);
             DocumentSession.Store(newProfile);
             return this.RenderJsonSuccessErrorCode();
+        }
+
+        [Authorize, AuthorizeRole()]
+        [HttpGet, Url("Admin/DirectoryProfiles/{id}/Manage")]
+        public virtual ActionResult Manage(long id) {
+            var directoryProfile = DocumentSession.Load<DirectoryProfile>(id);
+            if (directoryProfile == null) {
+                return Content("Directory Profile Not Found");
+            }
+            var metadata = EntityMetadata.FromRaven(DocumentSession.Advanced.GetMetadataFor(directoryProfile));
+            ViewBag.Metadata = metadata;
+            if (!string.IsNullOrWhiteSpace(metadata.LastModifiedBy)) {
+                var modifiedBy = DocumentSession.Load<WebAccount>(metadata.LastModifiedBy);
+                if (modifiedBy != null) {
+                    ViewBag.ModifiedBy = modifiedBy;
+                    ViewBag.ModifiedById = DocumentSession.GetEntityIdValue(modifiedBy);
+                }
+            }
+            ViewBag.Id = id;
+            return View(directoryProfile);
         }
     }
 }

@@ -34,5 +34,16 @@
 $.extend(fodt.paginatedTable.prototype, {
     tableSelector: null,
     onPrev: function (page, itemsPerPage) { return; },
-    onNext: function (page, itemsPerPage) { return; }
+    onNext: function (page, itemsPerPage) { return; },
+    useConventions: function (dataUrl, dataTemplate) {
+        var controller = this;
+        controller.loadData = function (page, itemsPerPage) {
+            fodt.getData(dataUrl, { page: page, itemsPerPage: itemsPerPage }, function (data) {
+                $(controller.tableSelector).children("tbody").html($(dataTemplate).render(data.items)).trigger("fodt.dataLoaded", [page, itemsPerPage, data.count]);
+            }, function () { alert("error occured") });
+        }
+        controller.onPrev = function (page, itemsPerPage) { controller.loadData(page, itemsPerPage); };
+        controller.onNext = function (page, itemsPerPage) { controller.loadData(page, itemsPerPage); };
+        controller.loadData(1, 20);
+    }
 });

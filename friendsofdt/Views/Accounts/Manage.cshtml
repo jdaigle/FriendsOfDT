@@ -10,20 +10,20 @@
     $(function () {
         $("#verifyAccountButton").on("click", function (e) {
             e.preventDefault();
-            $.post("@Url.Action(MVC.Accounts.VerifyWebAccount())", { "webAccountId": "@Model.Id" }, function () { window.location.reload(true); });
+            $.post("@Url.Action(MVC.Accounts.VerifyWebAccount((long)ViewBag.Id))", { }, function () { window.location.reload(true); });
         });
         $("#disableAccountButton").on("click", function (e) {
             e.preventDefault();
-            $.post("@Url.Action(MVC.Accounts.DisableWebAccount())", { "webAccountId": "@Model.Id" }, function () { window.location.reload(true); });
+            $.post("@Url.Action(MVC.Accounts.DisableWebAccount((long)ViewBag.Id))", { }, function () { window.location.reload(true); });
         });
         $("#enableAccountButton").on("click", function (e) {
             e.preventDefault();
-            $.post("@Url.Action(MVC.Accounts.EnableWebAccount())", { "webAccountId": "@Model.Id" }, function () { window.location.reload(true); });
+            $.post("@Url.Action(MVC.Accounts.EnableWebAccount((long)ViewBag.Id))", { }, function () { window.location.reload(true); });
         });
         $("#linkAccountToDirectoryButton").on("click", function (e) {
             e.preventDefault();
-            window.location = "@Url.Action(MVC.Accounts.Link(Model.GetGuidPartOfId()))";
-        });
+            window.location = "@Url.Action(MVC.Accounts.Link((long)ViewBag.Id))";
+        })
     });
 </script>
 }
@@ -120,7 +120,7 @@
             <label>Last Modified By:</label>
             @if (ViewBag.ModifiedBy != null) {
                 var modifiedby = (FriendsOfDT.Models.Accounts.WebAccount)ViewBag.ModifiedBy;
-                <span>@Html.ActionLink(modifiedby.LastName + ", " + modifiedby.FirstName, MVC.Accounts.Manage(modifiedby.GetGuidPartOfId()))</span>
+                <span>@Html.ActionLink(modifiedby.LastName + ", " + modifiedby.FirstName, MVC.Accounts.Manage((long)ViewBag.ModifiedById))</span>
             } else {
             <span>@metadata.LastModifiedBy</span>
             }

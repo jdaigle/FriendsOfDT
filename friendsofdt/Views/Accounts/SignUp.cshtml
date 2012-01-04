@@ -23,16 +23,10 @@
 
 <div class="signup">
     <form action="@Url.Action(MVC.Accounts.RegisterNewWebAccount())" method="post" autocomplete="off" id="signUpForm">
-        <p>Upon signing up for an account, we will need to verify who you are before you can sign in. Your account will be locked until then, but you will receive an e-mail once you have been verified.</p>
+        <p>Aftering signing up, you will be able to update your profile and preferences.</p>
         <fieldset>
             <p>
                 <label for="signup_emailAddress">E-Mail Address:</label><input type="text" id="signup_emailAddress" name="emailAddress" autocomplete="off" />
-            </p>
-            <p>
-                <label for="signup_firstName">First Name:</label><input type="text" id="signup_firstName" name="firstName" />
-            </p>
-            <p>
-                <label for="signup_lastName">Last Name:</label><input type="text" id="signup_lastName" name="lastName" />
             </p>
             <p>
                 <label for="signup_requestedPassword">Password:</label><input type="password" id="signup_requestedPassword" name="requestedPassword" autocomplete="off" />
@@ -40,16 +34,7 @@
             <p>
                 <label for="signup_confirmedPassword">Confirm Password:</label><input type="password" id="signup_confirmedPassword" name="confirmedPassword" autocomplete="off" />
             </p>
-        </fieldset>
-        <p>If you went by a different name at time you were a student, please provide that name below so we can more quickly verify your account.</p>
-        <fieldset>
-            <p>
-                <label for="signup_altFirstName">First Name:</label><input type="text" id="signup_altFirstName" name="altFirstName" />
-            </p>
-            <p>
-                <label for="signup_altLastName">Last Name:</label><input type="text" id="signup_altLastName" name="altLastName" />
-            </p>
-        </fieldset>
+        </fieldset>       
         <p>
             <label></label>
             <input type="submit" value="Sign Up" />

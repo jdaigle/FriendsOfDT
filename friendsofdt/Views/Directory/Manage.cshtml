@@ -1,0 +1,56 @@
+﻿@model FriendsOfDT.Models.Directory.DirectoryProfile
+@{
+    ViewBag.Title = "FoDT | Admin | Directory Profiles | " + Model.LastName + ", " + Model.FirstName;
+    ViewBag.SubTitle = "Admin";
+
+    var metadata = (EntityMetadata)ViewBag.Metadata;
+}
+@section additionalHead {
+<script type="text/javascript">
+    $(function () {
+
+    });
+</script>
+}
+
+@Html.Partial("AdminTabs", new { Section = "Directory Profiles" }.ToExpando())
+
+<form>
+    <fieldset>
+        <legend>Profile</legend>
+        <p>
+            <label>Name:</label>
+            <span>@Model.LastName, @Model.FirstName</span>
+        </p>
+        <p>
+            <label>E-Mail Address:</label>
+            <span>@Model.EmailAddress</span>
+        </p>
+       
+    </fieldset>
+   
+    <fieldset>
+        <legend>Metadata</legend>
+        <p>
+            <label>Created:</label>
+            <span>@Html.ConvertAndDisplayDateTime(metadata.Created, TimeZoneCode.Eastern.ToTimeZoneInfo(), "Unknown")</span>
+        </p>
+        <p>
+            <label>Last Modified:</label>
+            <span>@Html.DisplayDateTime(metadata.LastModified, TimeZoneCode.Eastern.ToTimeZoneInfo(), "Unknown")</span>
+        </p>
+        <p>
+            <label>Last Modified By:</label>
+            @if (ViewBag.ModifiedBy != null) {
+                var modifiedby = (FriendsOfDT.Models.Accounts.WebAccount)ViewBag.ModifiedBy;
+                <span>@Html.ActionLink(modifiedby.LastName + ", " + modifiedby.FirstName, MVC.Accounts.Manage((long)ViewBag.ModifiedById))</span>
+            } else {
+            <span>@metadata.LastModifiedBy</span>
+            }
+        </p>
+        <p>
+            <label>Last Modified Action:</label>
+            <span>@metadata.LastModifiedAction</span>
+        </p>
+    </fieldset>
+</form>
