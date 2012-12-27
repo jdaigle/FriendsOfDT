@@ -359,6 +359,14 @@ namespace Links {
         public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
         public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
         public static readonly string base_min_css = Url("base-min.css");
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class css {
+            private const string URLPATH = "~/Content/css";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string bootstrap_css = Url("bootstrap.css");
+        }
+    
         public static readonly string fodt_forms_css = Url("fodt-forms.css");
         public static readonly string fodt_main_css = Url("fodt-main.css");
         public static readonly string fodt_slideshow_css = Url("fodt-slideshow.css");
@@ -395,6 +403,15 @@ namespace Links {
             }
         
             public static readonly string twitter_icon_gif = Url("twitter-icon.gif");
+        }
+    
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class img {
+            private const string URLPATH = "~/Content/img";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string glyphicons_halflings_white_png = Url("glyphicons-halflings-white.png");
+            public static readonly string glyphicons_halflings_png = Url("glyphicons-halflings.png");
         }
     
         public static readonly string reset_min_css = Url("reset-min.css");
@@ -769,6 +786,7 @@ namespace FriendsOfDT.Controllers {
             public readonly string AdminList = "~/Views/Directory/AdminList.cshtml";
             public readonly string AdminNew = "~/Views/Directory/AdminNew.cshtml";
             public readonly string Index = "~/Views/Directory/Index.cshtml";
+            public readonly string Manage = "~/Views/Directory/Manage.cshtml";
             public readonly string ViewProfile = "~/Views/Directory/ViewProfile.cshtml";
         }
     }
