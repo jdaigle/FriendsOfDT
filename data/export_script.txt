@@ -1,0 +1,13 @@
+echo select * from awards; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_awards.csv
+echo select * from awards_list; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_awards_list.csv
+echo select * from cast; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_cast.csv
+echo select * from crew; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_crew.csv
+echo select * from ec; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_ec.csv
+echo select * from ec_list; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_ec_list.csv
+echo select * from jobs; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_jobs.csv
+echo select * from media; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_media.csv
+echo select * from media_items; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_media_items.csv
+echo select * from people; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_people.csv
+echo select * from q_list; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_q_list.csv
+echo select * from shows; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_shows.csv
+echo select * from site_text; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_site_text.csv

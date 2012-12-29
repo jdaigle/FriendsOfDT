@@ -1,0 +1,94 @@
+awards
+- ID
+- showID
+- peopID
+- awardID
+- year
+- last_mod
+
+awards_list
+- ID
+- name
+
+cast
+- ID
+- peopID
+- showID
+- role (text)
+- last_mod
+
+crew
+- ID
+- peopID
+- showID
+- jobID
+- last_mod
+
+ec
+- ID
+- peopID
+- ECID
+- year
+- last_mod
+
+ec_list
+- ID
+- title
+
+jobs
+- ID
+- job (text)
+- priority (num)
+- URL (text)
+
+media
+- ID
+- assocID
+- IDtype (people,shows) 
+- last_mod
+- item_id
+
+media_items
+- ID
+- item (URI)
+- thumb (URI)
+- timy (URI)
+- lastmod
+
+people
+- ID
+- hon
+- fname
+- mname
+- lname
+- suffix
+- nickname
+- bio (text)
+- username
+- password
+- email
+- level
+- last_mod
+- media_id (picture)
+
+q_list (quarter)
+- ID
+- Name
+
+shows
+- ID
+- title
+- quarter (id)
+- author
+- year
+- pictures (URI)
+- funfacts (text)
+- last_mod
+- media_id (picture)
+- toaster (text)
+
+site_text
+- ID
+- name
+- content
+- last_mod

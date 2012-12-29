@@ -1,0 +1,39 @@
+﻿@model FODT.Views.Shows.DisplayViewModel   
+@{
+    ViewBag.Title = "Display";
+}
+
+<h1>@Model.Name <small>by @Model.Author</small></h1>
+<h2>@Model.Quarter @Model.Year</h2>
+
+<h3>Awards</h3>
+<ul>
+@foreach (var award in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
+{
+    if(award.PersonId.HasValue)
+    {
+    <li>@award.Year - @award.Name - @award.PersonName
+    </li>
+    } 
+    else
+    {
+    <li>@award.Year - @award.Name</li>
+    }
+}
+</ul>
+
+<h3>Cast</h3>
+<ul>
+@foreach (var castPosition in Model.Cast.OrderBy(x => x.PersonName))
+{
+    <li>@castPosition.PersonName - @castPosition.Role</li>
+}
+</ul>
+
+<h3>Crew</h3>
+<ul>
+@foreach (var crewPosition in Model.Crew.OrderBy(x => x.PersonName))
+{
+    <li>@crewPosition.PersonName - @crewPosition.Name</li>
+}
+</ul>

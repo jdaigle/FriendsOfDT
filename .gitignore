@@ -1,4 +1,4 @@
-# Clearwave Ignores
+data/dump/**
 
 *.orig
 *.sou
@@ -22,51 +22,12 @@ obj/
 *.rdl.data
 output/
 
-ProviderPortal/ProviderPortal_Web/Config/authentication.config
-ProviderPortal/ProviderPortal_Web/Config/clearwave.config
-ProviderPortal/ProviderPortal_Web/Config/connectionStrings.config
-ProviderPortalMVC/Clearwave.ProviderPortal.Web/Config/clearwave.config
-ProviderPortalMVC/Clearwave.ProviderPortal.Web/Config/connectionStrings.config
-ProviderPortalMVC/Clearwave.ProviderPortal.Web/Config/authentication.config
-ProviderPortalMVC/Clearwave.ProviderPortal.Web/Static/cached/*
-Kiosk/KioskMVC/Clearwave.Kiosks.Web/Config/clearwave.config
-Integration/IntegrationWebServices/Config/clearwave.config
-Kiosk/KioskBrowser/Config/clearwave.config
-ProviderPortalMVC/Clearwave.ProviderPortal.Web/StartupLog.txt
+
 *.eprj
 *.onetoc2
-Technology/nStep-bin/rerun.dat
 
 StartupLog.txt
 
-Integration/IntegrationWebServices.csproj_deploy/Debug/*
-Integration/IntegrationWebServices.csproj_deploy/Release/*
-
-ProviderPortal/ProviderPortal_Web.csproj_deploy/Release/*
-ProviderPortal/ProviderPortal_Web.csproj_deploy/Source/*
-ProviderPortal/ProviderPortal_Web.csproj_deploy/Debug/*
-
-ClearwaveAdmin/Clearwave.Admin.Web.csproj_deploy/Release/*
-ClearwaveAdmin/Clearwave.Admin.Web.csproj_deploy/Debug/*
-ClearwaveAdmin/Clearwave.Admin.Web.csproj_deploy/Source/*
-ClearwaveAdmin/Clearwave.Admin.Web/Config/*.config
-
-ProviderPortalMVC/Clearwave.ProviderPortal.Web/Static/Cached
-ProviderPortalMVC/Clearwave.ProviderPortal.Web/Static/cached
-AdminTool/Clearwave.AdminTool.Web/Static/Cached
-AdminTool/Clearwave.AdminTool.Web/Static/cached
-
-Kiosk/ClearwaveKioskManager/Kiosk.Installer/Debug/*
-Kiosk/ClearwaveKioskManager/Kiosk.Installer/Release/*
-Kiosk/ClearwaveKioskManager/KioskCursor.Installer/Debug/*
-Kiosk/ClearwaveKioskManager/KioskCursor.Installer/Release/*
-
-Kiosk/Clearwave.Kiosks.Web.csproj_deploy/*
-ProviderPortalMVC/Clearwave.ProviderPortal.Web.csproj_deploy/*
-Kiosk/KioskMVC/Features/*.html
-
-#nStep files
-*rerun.dat
 
 #database project output
 *.dbmdl
@@ -81,15 +42,6 @@ TestResult.xml
 #SqlPatch logs
 *.log
 
-# Elmah Results
-ProviderPortal/ProviderPortal_Web/Log/*.xml
-ProviderPortal/ProviderPortal_Web/Log/*.txt
-ProviderPortalMVC/Clearwave.ProviderPortal.Web/App_Data/*.xml
-ProviderPortalMVC/Clearwave.ProviderPortal.Web/App_Data/*.txt
-ProviderPortalMVC/Clearwave.ProviderPortal.Web/logs/*
-Kiosk/KioskMVC/Clearwave.Kiosks.Web/App_Data/*.xml
-Kiosk/KioskMVC/Clearwave.Kiosks.Web/App_Data/*.txt
-Kiosk/KioskMVC/Clearwave.Kiosks.Web/logs/*
 
 # Shamelessly stolen from http://gist.github.com/114476
 # .gitignore for .NET projects
@@ -132,7 +84,3 @@ deploy/*
 
 # Exclude Sublime Projects
 *.sublime-project
-
-# Excluse KioskUpdater Resources
-Kiosk/KioskUpdaters/KioskBrowserUpdater/Resources/*
-Kiosk/KioskUpdaters/SDKUpdater/Resources/*

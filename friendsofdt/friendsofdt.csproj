@@ -21,6 +21,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -138,6 +142,9 @@
     <Compile Include="Models\Directory\DirectoryProfile.cs" />
     <Compile Include="Models\Directory\RegisterNewProfileParameters.cs" />
     <Compile Include="Infrastructure\EntityMetadata.cs" />
+    <Compile Include="Models\IMDT\ClubPosition.cs" />
+    <Compile Include="Models\IMDT\Person.cs" />
+    <Compile Include="Models\IMDT\PersonInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\RenderJsonResult.cs" />
     <Compile Include="Reflection\ObjectReflectionExtensions.cs" />

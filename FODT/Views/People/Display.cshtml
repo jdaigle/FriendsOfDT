@@ -1,0 +1,51 @@
+﻿@model FODT.Views.People.DisplayViewModel   
+@{
+    ViewBag.Title = "Display";
+}
+
+<h1>@Model.Name</h1>
+
+<h2>Biographical Data</h2>
+<pre>
+    @Model.Biography
+</pre>
+
+<h2>Positions Held</h2>
+<ul>
+@foreach (var clubPosition in Model.ClubPositions.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
+{
+    <li>@clubPosition.Year - @clubPosition.Name</li>
+}
+</ul>
+
+<h3>Awards</h3>
+<ul>
+@foreach (var award in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
+{
+    if(award.ShowId.HasValue)
+    {
+    <li>@award.Year - @award.Name - @award.ShowName (@award.ShowYear.Value)
+    </li>
+    } 
+    else
+    {
+    <li>@award.Year - @award.Name</li>
+    }
+}
+</ul>
+
+<h3>Cast Positions</h3>
+<ul>
+@foreach (var castPosition in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.Role))
+{
+    <li>@castPosition.ShowQuarter @castPosition.ShowYear - @castPosition.ShowName - @castPosition.Role</li>
+}
+</ul>
+
+<h3>Crew Positions</h3>
+<ul>
+@foreach (var crewPosition in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName).ThenBy(x => x.Name))
+{
+    <li>@crewPosition.ShowQuarter @crewPosition.ShowYear - @crewPosition.ShowName - @crewPosition.Name</li>
+}
+</ul>

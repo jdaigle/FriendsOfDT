@@ -1458,6 +1458,13 @@
             to use a specific connection string for connecting to the database.
             </summary>
         </member>
+        <member name="M:Elmah.OracleErrorLog.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Elmah.OracleErrorLog"/> class
+            to use a specific connection string for connecting to the database and
+            a specific schema owner.
+            </summary>
+        </member>
         <member name="M:Elmah.OracleErrorLog.Log(Elmah.Error)">
             <summary>
             Logs an error to the database.
@@ -1478,6 +1485,11 @@
             <summary>
             Returns the specified error from the database, or null 
             if it does not exist.
+            </summary>
+        </member>
+        <member name="P:Elmah.OracleErrorLog.SchemaOwner">
+            <summary>
+            Gets the name of the schema owner where the errors are being stored.
             </summary>
         </member>
         <member name="P:Elmah.OracleErrorLog.Name">
@@ -1562,13 +1574,13 @@
             number.
             </summary>
         </member>
-        <member name="M:Elmah.SccStamp.SortByRevision(Elmah.SccStamp[])">
+        <member name="M:Elmah.SccStamp.SortByLastChanged(Elmah.SccStamp[])">
             <summary>
             Sorts an array of <see cref="T:Elmah.SccStamp"/> objects by their 
             revision numbers in ascending order.
             </summary>
         </member>
-        <member name="M:Elmah.SccStamp.SortByRevision(Elmah.SccStamp[],System.Boolean)">
+        <member name="M:Elmah.SccStamp.SortByLastChanged(Elmah.SccStamp[],System.Boolean)">
             <summary>
             Sorts an array of <see cref="T:Elmah.SccStamp"/> objects by their 
             revision numbers in ascending or descending order.
@@ -1591,7 +1603,7 @@
         </member>
         <member name="P:Elmah.SccStamp.Revision">
             <summary>
-            Gets the revision number component of the SCC stamp ID.
+            Gets the revision component of the SCC stamp ID.
             </summary>
         </member>
         <member name="P:Elmah.SccStamp.LastChanged">
