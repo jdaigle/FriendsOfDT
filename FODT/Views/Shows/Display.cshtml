@@ -6,6 +6,14 @@
 <h1>@ExtensionMethods.RearrangeShowTitle(Model.Name) <small>by @Model.Author</small></h1>
 <h2>@Model.Quarter @Model.Year</h2>
 
+<h3>Other Performances</h3>
+<ul>
+@foreach (var show in Model.OtherPerformances)
+{
+    <li>@Html.ActionLink(show.Item2, MVC.Shows.Display(show.Item1)) (@show.Item3)</li>
+}
+</ul>
+
 <h3>Awards</h3>
 <ul>
 @foreach (var award in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using AttributeRouting;
 using AttributeRouting.Web.Mvc;
@@ -32,12 +33,21 @@ namespace FODT.Controllers
                 .Where(x => x.__document_id == ("shows/" + showId).ToString())
                 .AsProjection<CrewProjection>().ToList();
 
+            // TODO: replace with static index query
+            var otherPerformances = DocumentSession.Query<Show>()
+                .Where(x => x.Name == show.Name)
+                .ToList()
+                .Where(x => x.Id != show.Id)
+                .ToList();
+
             var viewModel = new DisplayViewModel();
             viewModel.ShowId = showId;
             viewModel.Name = show.Name;
             viewModel.Author = show.Author;
             viewModel.Quarter = show.Quarter;
             viewModel.Year = show.Year;
+
+            viewModel.OtherPerformances = otherPerformances.Select(x => new Tuple<int, string, short>(x.Id, x.Name, x.Year)).ToList();
 
             viewModel.Awards = awards.Select(x => new DisplayViewModel.Award
             {

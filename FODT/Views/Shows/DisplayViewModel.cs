@@ -13,6 +13,7 @@ namespace FODT.Views.Shows
         public string Author { get; set; }
         public Quarter Quarter { get; set; }
         public short Year { get; set; }
+        public IEnumerable<Tuple<int, string, short>> OtherPerformances { get; set; }
 
         public IEnumerable<ClubPosition> ClubPositions { get; set; }
 
@@ -52,6 +53,7 @@ namespace FODT.Views.Shows
             public string Name { get; set; }
             public int CrewPositionId { get; set; }
         }
+
 
     }
 }
