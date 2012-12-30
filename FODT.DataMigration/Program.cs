@@ -65,6 +65,7 @@ namespace FODT.DataMigration
                     .Select(x => new { peepID = int.Parse(x.peepID), awardID = int.Parse(x.awardID), year = short.Parse(x.year) })
                     .GroupBy(x => x.peepID).ToDictionary(x => x.Key);
                 int maxPersonId = 0;
+                var loadedPersonIds = new HashSet<int>();
                 foreach (var item in loadedPeople)
                 {
                     using (var session = store.OpenSession())
@@ -72,6 +73,12 @@ namespace FODT.DataMigration
                         var person = session.Load<Person>(int.Parse((string)item.ID)) ?? new Person();
                         person.Id = int.Parse((string)item.ID);
                         person.Name = ((string)(item.hon + " " + item.fname + " " + item.mname + " " + item.lname + " " + item.suffix)).Replace("NULL", "").Trim().Replace("  ", " ");
+                        if (person.Name.Contains("Deleted"))
+                        {
+                            // skip deleted people
+                            continue;
+                        }
+                        loadedPersonIds.Add(person.Id);
                         person.AlsoKnownAs = new[] { (string)item.nickname }.ToList();
                         person.EmailAddress = ((string)item.email).Replace("NULL", "").Trim();
                         person.Biography = ((string)item.bio).Replace("NULL", "").Replace("\\n", Environment.NewLine).Trim();
@@ -132,14 +139,17 @@ namespace FODT.DataMigration
                 var loadedShows = LoadEntities("imdt_shows_fixed.csv");
                 var loadedCast_byShowId = LoadEntities("imdt_cast.csv")
                     .Where(x => x.peepID != "NULL" && x.showID != "NULL")
+                    .Where(x => loadedPersonIds.Contains(int.Parse((string)x.peepID)))
                     .Select(x => new { peepID = int.Parse(x.peepID), showID = int.Parse(x.showID), role = x.role })
                     .GroupBy(x => x.showID).ToDictionary(x => x.Key);
                 var loadedCrew_byShowId = LoadEntities("imdt_crew.csv")
                     .Where(x => x.peepID != "NULL" && x.showID != "NULL")
+                    .Where(x => loadedPersonIds.Contains(int.Parse((string)x.peepID)))
                     .Select(x => new { peepID = int.Parse(x.peepID), showID = int.Parse(x.showID), jobID = int.Parse(x.jobID) })
                     .GroupBy(x => x.showID).ToDictionary(x => x.Key);
                 var loadedAwards_byShowId = LoadEntities("imdt_awards.csv")
                     .Where(x => x.showID != "NULL")
+                    .Where(x => !parseIntOrNullInt((string)x.peepID).HasValue || loadedPersonIds.Contains(int.Parse((string)x.peepID)))
                     .Select(x => new { showID = int.Parse(x.showID), peepID = (int?)parseIntOrNullInt(x.peepID), awardID = int.Parse(x.awardID), year = short.Parse(x.year) })
                     .GroupBy(x => x.showID).ToDictionary(x => x.Key);
                 int maxShowId = 0;
