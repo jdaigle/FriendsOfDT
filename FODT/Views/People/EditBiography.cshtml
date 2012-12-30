@@ -1,0 +1,18 @@
+﻿@model FODT.Views.People.EditBiographyViewModel
+<h2>Editing Information For: @Model.Name</h2>
+
+<form method="post" action="@Url.Action(MVC.People.SaveEditBiography(Model.PersonId, null))">
+    <div>
+        <label>Name</label>
+        <input type="text" name="name" value="@Model.Name" />
+    </div>
+    <div>
+        <label>Biography</label>
+        <textarea cols="40" rows="10" name="biography">@Model.Biography</textarea>        
+    </div>
+    <div>
+        <a href="@Url.Action(MVC.People.Display(Model.PersonId))">Back</a>
+        <input type="reset" />
+        <input type="submit" />
+    </div> 
+</form>

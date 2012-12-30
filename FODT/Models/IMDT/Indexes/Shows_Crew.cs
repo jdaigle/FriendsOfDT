@@ -35,6 +35,7 @@ select new
                     { "ShowQuarter", FieldStorage.Yes },
                     { "ShowYear", FieldStorage.Yes },
                     { "CrewPositionId", FieldStorage.Yes },
+                    { "PersonId", FieldStorage.Yes },
                     { "PersonName", FieldStorage.Yes },
                 },
             };

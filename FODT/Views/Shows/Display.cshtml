@@ -3,7 +3,7 @@
     ViewBag.Title = "Display";
 }
 
-<h1>@Model.Name <small>by @Model.Author</small></h1>
+<h1>@ExtensionMethods.RearrangeShowTitle(Model.Name) <small>by @Model.Author</small></h1>
 <h2>@Model.Quarter @Model.Year</h2>
 
 <h3>Awards</h3>
@@ -12,7 +12,7 @@
 {
     if(award.PersonId.HasValue)
     {
-    <li>@award.Year - @award.Name - @award.PersonName
+    <li>@award.Year - @award.Name - @Html.ActionLink(award.PersonName, MVC.People.Display(award.PersonId.Value))
     </li>
     } 
     else
@@ -24,9 +24,9 @@
 
 <h3>Cast</h3>
 <ul>
-@foreach (var castPosition in Model.Cast.OrderBy(x => x.PersonName))
+@foreach (var role in Model.Cast.OrderBy(x => x.PersonName))
 {
-    <li>@castPosition.PersonName - @castPosition.Role</li>
+    <li>@Html.ActionLink(role.PersonName, MVC.People.Display(role.PersonId)) - @role.Role</li>
 }
 </ul>
 
@@ -34,6 +34,6 @@
 <ul>
 @foreach (var crewPosition in Model.Crew.OrderBy(x => x.PersonName))
 {
-    <li>@crewPosition.PersonName - @crewPosition.Name</li>
+    <li>@Html.ActionLink(crewPosition.PersonName, MVC.People.Display(crewPosition.PersonId)) - @crewPosition.Name</li>
 }
 </ul>

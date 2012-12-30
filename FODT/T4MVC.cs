@@ -350,6 +350,16 @@ namespace FODT.Controllers {
         public System.Web.Mvc.ActionResult Display() {
             return new T4MVC_ActionResult(Area, Name, ActionNames.Display);
         }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult EditBiography() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.EditBiography);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult SaveEditBiography() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.SaveEditBiography);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public PeopleController Actions { get { return MVC.People; } }
@@ -366,11 +376,15 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
             public readonly string Display = "Display";
+            public readonly string EditBiography = "EditBiography";
+            public readonly string SaveEditBiography = "SaveEditBiography";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants {
             public const string Display = "Display";
+            public const string EditBiography = "EditBiography";
+            public const string SaveEditBiography = "SaveEditBiography";
         }
 
 
@@ -381,6 +395,21 @@ namespace FODT.Controllers {
         public class ActionParamsClass_Display {
             public readonly string personId = "personId";
         }
+        static readonly ActionParamsClass_EditBiography s_params_EditBiography = new ActionParamsClass_EditBiography();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_EditBiography EditBiographyParams { get { return s_params_EditBiography; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_EditBiography {
+            public readonly string personId = "personId";
+        }
+        static readonly ActionParamsClass_SaveEditBiography s_params_SaveEditBiography = new ActionParamsClass_SaveEditBiography();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_SaveEditBiography SaveEditBiographyParams { get { return s_params_SaveEditBiography; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_SaveEditBiography {
+            public readonly string personId = "personId";
+            public readonly string model = "model";
+        }
         static readonly ViewNames s_views = new ViewNames();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewNames Views { get { return s_views; } }
@@ -388,6 +417,8 @@ namespace FODT.Controllers {
         public class ViewNames {
             public readonly string Display = "~/Views/People/Display.cshtml";
             public readonly string DisplayViewModel = "~/Views/People/DisplayViewModel.cs";
+            public readonly string EditBiography = "~/Views/People/EditBiography.cshtml";
+            public readonly string EditBiographyViewModel = "~/Views/People/EditBiographyViewModel.cs";
         }
     }
 
@@ -398,6 +429,19 @@ namespace FODT.Controllers {
         public override System.Web.Mvc.ActionResult Display(int personId) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Display);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult EditBiography(int personId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.EditBiography);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult SaveEditBiography(int personId, FODT.Controllers.PeopleController.SaveEditBiographyModel model) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.SaveEditBiography);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "model", model);
             return callInfo;
         }
 

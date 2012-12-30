@@ -123,6 +123,7 @@
     </Compile>
     <Compile Include="HttpHeadersCleanupModule.cs" />
     <Compile Include="Models\DocumentStoreConfiguration.cs" />
+    <Compile Include="Models\ExtensionMethods.cs" />
     <Compile Include="Models\IDocumentSessionExtensions.cs" />
     <Compile Include="Models\IMDT\AwardsList.cs" />
     <Compile Include="Models\IMDT\CastMember.cs" />
@@ -150,6 +151,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="Views\People\EditBiographyViewModel.cs" />
     <Compile Include="Views\Shows\DisplayViewModel.cs" />
     <Compile Include="Views\People\DisplayViewModel.cs" />
   </ItemGroup>
@@ -181,6 +183,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\People\EditBiography.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

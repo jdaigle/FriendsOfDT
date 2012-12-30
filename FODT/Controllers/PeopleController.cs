@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Web.Mvc;
 using AttributeRouting;
 using AttributeRouting.Web.Mvc;
@@ -62,6 +64,42 @@ namespace FODT.Controllers
                 CrewPositionId = x.CrewPositionId,
             }).ToList();
             return View(viewModel);
+        }
+
+
+        [GET("{personId}/Edit")]
+        public virtual ActionResult EditBiography(int personId)
+        {
+            var person = DocumentSession.Load<Person>(personId);
+
+            var viewModel = new EditBiographyViewModel();
+            viewModel.PersonId = personId;
+            viewModel.Name = person.Name;
+            viewModel.Biography = person.Biography;
+            return View(viewModel);
+        }
+
+        [POST("{personId}/Edit")]
+        public virtual ActionResult SaveEditBiography(int personId, SaveEditBiographyModel model)
+        {
+            var person = DocumentSession.Load<Person>(personId);
+            if (string.IsNullOrWhiteSpace(model.Name))
+            {
+                throw new Exception("Name is required");
+            }
+            person.Name = model.Name.Trim();
+            person.Biography = (model.Biography ?? string.Empty).Trim();
+
+            DocumentSession.SaveChanges();
+            return RedirectToAction(Actions.Display(personId));
+        }
+
+        public class SaveEditBiographyModel
+        {
+            [Required]
+            public string Name { get; set; }
+            [AllowHtml]
+            public string Biography { get; set; }
         }
     }
 }

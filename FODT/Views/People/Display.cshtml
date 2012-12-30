@@ -5,7 +5,7 @@
 
 <h1>@Model.Name</h1>
 
-<h2>Biographical Data</h2>
+<h2>Biographical Data <small><a href="@Url.Action(MVC.People.EditBiography(Model.PersonId))">edit</a></small></h2>
 <pre>
     @Model.Biography
 </pre>
@@ -24,7 +24,7 @@
 {
     if(award.ShowId.HasValue)
     {
-    <li>@award.Year - @award.Name - @award.ShowName (@award.ShowYear.Value)
+    <li>@award.Year - @award.Name - @Html.ActionLink(ExtensionMethods.RearrangeShowTitle(award.ShowName), MVC.Shows.Display(award.ShowId.Value)) (@award.ShowYear.Value)
     </li>
     } 
     else
@@ -38,7 +38,7 @@
 <ul>
 @foreach (var castPosition in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.Role))
 {
-    <li>@castPosition.ShowQuarter @castPosition.ShowYear - @castPosition.ShowName - @castPosition.Role</li>
+    <li>@castPosition.ShowQuarter @castPosition.ShowYear - @Html.ActionLink(ExtensionMethods.RearrangeShowTitle(castPosition.ShowName), MVC.Shows.Display(castPosition.ShowId)) - @castPosition.Role</li>
 }
 </ul>
 
@@ -46,6 +46,6 @@
 <ul>
 @foreach (var crewPosition in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName).ThenBy(x => x.Name))
 {
-    <li>@crewPosition.ShowQuarter @crewPosition.ShowYear - @crewPosition.ShowName - @crewPosition.Name</li>
+    <li>@crewPosition.ShowQuarter @crewPosition.ShowYear - @Html.ActionLink(ExtensionMethods.RearrangeShowTitle(crewPosition.ShowName), MVC.Shows.Display(crewPosition.ShowId)) - @crewPosition.Name</li>
 }
 </ul>
