@@ -72,14 +72,19 @@ namespace FODT.DataMigration
                     {
                         var person = session.Load<Person>(int.Parse((string)item.ID)) ?? new Person();
                         person.Id = int.Parse((string)item.ID);
-                        person.Name = ((string)(item.hon + " " + item.fname + " " + item.mname + " " + item.lname + " " + item.suffix)).Replace("NULL", "").Trim().Replace("  ", " ");
-                        if (person.Name.Contains("Deleted"))
+                        person.Honorific = ((string)item.hon).Replace("NULL", "").Trim();
+                        person.FirstName = ((string)item.fname).Replace("NULL", "").Trim();
+                        person.LastName = ((string)item.lname).Replace("NULL", "").Trim();
+                        person.MiddleName = ((string)item.mname).Replace("NULL", "").Trim();
+                        person.Suffix = ((string)item.suffix).Replace("NULL", "").Trim();
+                        person.SetFullName();
+                        if (person.FullName.Contains("Deleted"))
                         {
                             // skip deleted people
                             continue;
                         }
                         loadedPersonIds.Add(person.Id);
-                        person.AlsoKnownAs = new[] { (string)item.nickname }.ToList();
+                        person.AlternateName = ((string)item.nickname).Replace("NULL", "").Trim();
                         person.EmailAddress = ((string)item.email).Replace("NULL", "").Trim();
                         person.Biography = ((string)item.bio).Replace("NULL", "").Replace("\\n", Environment.NewLine).Trim();
                         var mediaId = ((string)item.media_id).Replace("NULL", "").Trim();

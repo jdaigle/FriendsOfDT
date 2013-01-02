@@ -22,7 +22,8 @@ select new
 	AwardId = award.AwardId,
 	AwardYear = award.Year,
 	PersonId = award.PersonId,
-	PersonName = LoadDocument(award.PersonId).Name,
+	PersonFullName = LoadDocument(award.PersonId).FullName,
+    PersonLastName = LoadDocument(award.PersonId).LastName,
 };"
 , @"
 from person in docs.People
@@ -35,7 +36,8 @@ select new
 	AwardId = award.AwardId,
 	AwardYear = award.Year,
 	PersonId = person.__document_id,
-	PersonName = person.Name,
+	PersonFullName = person.FullName,
+    PersonLastName = person.LastName,
 };" 
                 },
                 Fields = { { "PersonId" } },
@@ -46,7 +48,8 @@ select new
                     { "ShowYear", FieldIndexing.No },
                     { "AwardId", FieldIndexing.No },
                     { "AwardYear", FieldIndexing.No },
-                    { "PersonName", FieldIndexing.No },
+                    { "PersonFullName", FieldIndexing.No },
+                    { "PersonLastName", FieldIndexing.No },
                 },
                 Stores = { 
                     { "ShowName", FieldStorage.Yes },
@@ -55,7 +58,8 @@ select new
                     { "AwardId", FieldStorage.Yes },
                     { "AwardYear", FieldStorage.Yes },
                     { "PersonId", FieldStorage.Yes },
-                    { "PersonName", FieldStorage.Yes },
+                    { "PersonFullName", FieldStorage.Yes },
+                    { "PersonLastName", FieldStorage.Yes },
                 },
             };
         }

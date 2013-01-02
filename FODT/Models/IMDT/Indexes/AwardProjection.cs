@@ -5,7 +5,8 @@ namespace FODT.Models.IMDT.Indexes
     {
         public string __document_id { get; set; } // show or person id
         public string PersonId { get; set; }
-        public string PersonName { get; set; }
+        public string PersonFullName { get; set; }
+        public string PersonLastName { get; set; }
         public string ShowName { get; set; }
         public Quarter? ShowQuarter { get; set; }
         public short? ShowYear { get; set; }

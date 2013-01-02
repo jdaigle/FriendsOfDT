@@ -19,7 +19,8 @@ select new
 	ShowYear = show.Year,
 	PersonId = cast.PersonId,	
 	Role = cast.Role,
-	PersonName = LoadDocument(cast.PersonId).Name,
+	PersonFullName = LoadDocument(cast.PersonId).FullName,
+    PersonLastName = LoadDocument(cast.PersonId).LastName,
 };",
                 Fields = { { "PersonId" } },
                 Indexes = {
@@ -28,7 +29,8 @@ select new
                     { "ShowQuarter", FieldIndexing.No },
                     { "ShowYear", FieldIndexing.No },
                     { "Role", FieldIndexing.No },
-                    { "PersonName", FieldIndexing.No },
+                    { "PersonFullName", FieldIndexing.No },
+                    { "PersonLastName", FieldIndexing.No },
                 },
                 Stores = { 
                     { "ShowName", FieldStorage.Yes },
@@ -36,7 +38,8 @@ select new
                     { "ShowYear", FieldStorage.Yes },
                     { "Role", FieldStorage.Yes },
                     { "PersonId", FieldStorage.Yes },
-                    { "PersonName", FieldStorage.Yes },
+                    { "PersonFullName", FieldStorage.Yes },
+                    { "PersonLastName", FieldStorage.Yes },
                 },
             };
         }

@@ -19,7 +19,8 @@ select new
 	ShowYear = show.Year,
 	PersonId = crew.PersonId,	
 	CrewPositionId = crew.CrewPositionId,
-	PersonName = LoadDocument(crew.PersonId).Name,
+	PersonFullName = LoadDocument(crew.PersonId).FullName,
+    PersonLastName = LoadDocument(crew.PersonId).LastName,
 };",
                 Fields = { { "PersonId" } },
                 Indexes = {
@@ -28,7 +29,8 @@ select new
                     { "ShowQuarter", FieldIndexing.No },
                     { "ShowYear", FieldIndexing.No },
                     { "CrewPositionId", FieldIndexing.No },
-                    { "PersonName", FieldIndexing.No },
+                    { "PersonFullName", FieldIndexing.No },
+                    { "PersonLastName", FieldIndexing.No },
                 },
                 Stores = { 
                     { "ShowName", FieldStorage.Yes },
@@ -36,7 +38,8 @@ select new
                     { "ShowYear", FieldStorage.Yes },
                     { "CrewPositionId", FieldStorage.Yes },
                     { "PersonId", FieldStorage.Yes },
-                    { "PersonName", FieldStorage.Yes },
+                    { "PersonFullName", FieldStorage.Yes },
+                    { "PersonLastName", FieldStorage.Yes },
                 },
             };
         }

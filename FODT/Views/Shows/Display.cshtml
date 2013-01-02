@@ -32,7 +32,7 @@
 
 <h3>Cast</h3>
 <ul>
-@foreach (var role in Model.Cast.OrderBy(x => x.PersonName))
+@foreach (var role in Model.Cast.OrderBy(x => x.PersonLastName))
 {
     <li>@Html.ActionLink(role.PersonName, MVC.People.Display(role.PersonId)) - @role.Role</li>
 }
@@ -40,7 +40,7 @@
 
 <h3>Crew</h3>
 <ul>
-@foreach (var crewPosition in Model.Crew.OrderBy(x => x.PersonName))
+@foreach (var crewPosition in Model.Crew.OrderBy(x => x.PersonLastName))
 {
     <li>@Html.ActionLink(crewPosition.PersonName, MVC.People.Display(crewPosition.PersonId)) - @crewPosition.Name</li>
 }

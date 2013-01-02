@@ -29,7 +29,7 @@ namespace FODT.Controllers
             
             var viewModel = new DisplayViewModel();
             viewModel.PersonId = personId;
-            viewModel.Name = person.Name;
+            viewModel.Name = person.FullName;
             viewModel.Biography = person.Biography;
             viewModel.ClubPositions = person.ClubPositions.Select(x => new DisplayViewModel.ClubPosition
             {
@@ -74,7 +74,7 @@ namespace FODT.Controllers
 
             var viewModel = new EditBiographyViewModel();
             viewModel.PersonId = personId;
-            viewModel.Name = person.Name;
+            viewModel.Name = person.FullName;
             viewModel.Biography = person.Biography;
             return View(viewModel);
         }
@@ -87,7 +87,7 @@ namespace FODT.Controllers
             {
                 throw new Exception("Name is required");
             }
-            person.Name = model.Name.Trim();
+            //person.Name = model.Name.Trim();
             person.Biography = (model.Biography ?? string.Empty).Trim();
 
             DocumentSession.SaveChanges();

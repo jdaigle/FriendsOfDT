@@ -33,6 +33,7 @@ namespace FODT.Views.Shows
             public string Name { get; set; }
             public int? PersonId { get; set; }
             public string PersonName { get; set; }
+            public string PersonLastName { get; set; }
         }
 
         public IEnumerable<CastRole> Cast { get; set; }
@@ -41,6 +42,7 @@ namespace FODT.Views.Shows
         {
             public int PersonId { get; set; }
             public string PersonName { get; set; }
+            public string PersonLastName { get; set; }
             public string Role { get; set; }
         }
 
@@ -50,6 +52,7 @@ namespace FODT.Views.Shows
         {
             public int PersonId { get; set; }
             public string PersonName { get; set; }
+            public string PersonLastName { get; set; }
             public string Name { get; set; }
             public int CrewPositionId { get; set; }
         }

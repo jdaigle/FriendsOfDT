@@ -55,20 +55,23 @@ namespace FODT.Controllers
                 AwardId = x.AwardId,
                 Name = this.LoadAwardsList()[x.AwardId],
                 PersonId = DocumentSession.GetId<int?>(x.PersonId),
-                PersonName = x.PersonName,
+                PersonName = x.PersonFullName,
+                PersonLastName = x.PersonLastName,
             });
 
             viewModel.Cast = cast.Select(x => new DisplayViewModel.CastRole
             {
                 PersonId = DocumentSession.GetId<int>(x.PersonId),
-                PersonName = x.PersonName,
+                PersonName = x.PersonFullName,
+                PersonLastName = x.PersonLastName,
                 Role = x.Role,
             }).ToList();
 
             viewModel.Crew = crew.Select(x => new DisplayViewModel.CrewPosition
             {
                 PersonId = DocumentSession.GetId<int>(x.PersonId),
-                PersonName = x.PersonName,
+                PersonName = x.PersonFullName,
+                PersonLastName = x.PersonLastName,
                 CrewPositionId = x.CrewPositionId,
                 Name = this.LoadCrewPositionsList()[x.CrewPositionId].Name,
             }).ToList();
