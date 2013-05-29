@@ -14,7 +14,7 @@ namespace FODT
             routes.IgnoreRoute("routes.axd");
             routes.MapAttributeRoutes(x =>
             {
-                x.ScanAssembly(typeof(MvcApplication).Assembly);
+                x.AddRoutesFromAssembly(typeof(MvcApplication).Assembly);
                 x.UseLowercaseRoutes = true;
             });
         }

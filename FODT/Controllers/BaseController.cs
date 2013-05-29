@@ -1,61 +1,94 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using FODT.Models;
-using FODT.Models.IMDT;
-using Raven.Client;
+using FODT.Database;
+using FODT.Models.Entities;
+using NHibernate;
 
 namespace FODT.Controllers
 {
     public abstract partial class BaseController : Controller
     {
-        protected IDocumentSession DocumentSession;
+        private ISession databaseSession;
+        private bool databaseSessionClosed;
+        protected ISession DatabaseSession
+        {
+            get
+            {
+                if (databaseSessionClosed)
+                {
+                    throw new InvalidOperationException("The database Session has been closed. You should not execute database statements except in a Controller Action.");
+                }
+                return databaseSession;
+            }
+        }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            this.DocumentSession = DocumentStoreConfiguration.DocumentStore.OpenSession();
+            this.databaseSession = DatabaseBootstrapper.SessionFactory.OpenSession();
+            this.databaseSession.FlushMode = FlushMode.Commit;
+            this.databaseSession.Transaction.Begin();
+            databaseSessionClosed = false;
             base.OnActionExecuting(filterContext);
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            if (DocumentSession != null)
+            if (databaseSession != null)
             {
-                using (DocumentSession) { }
+                try
+                {
+                    using (databaseSession)
+                    {
+                        if (databaseSession.Transaction.IsActive)
+                        {
+                            databaseSession.CommitTransaction();
+                        }
+                        databaseSession.Close();
+                    }
+                }
+                finally
+                {
+                    databaseSession = null;
+                    databaseSessionClosed = true;
+                }
             }
             base.OnActionExecuted(filterContext);
         }
 
-        private ClubPositionsList loadedClubPositionsList;
-        protected virtual ClubPositionsList LoadClubPositionsList()
+        protected override void OnException(ExceptionContext filterContext)
         {
-            if (loadedClubPositionsList == null)
+            if (databaseSession != null)
             {
-                loadedClubPositionsList = DocumentSession.Load<ClubPositionsList>(ClubPositionsList.ID);
+                try
+                {
+                    using (databaseSession)
+                    {
+                        if (databaseSession.Transaction.IsActive)
+                        {
+                            databaseSession.RollbackTransaction();
+                        }
+                        databaseSession.Close();
+                    }
+                }
+                finally
+                {
+                    databaseSession = null;
+                    databaseSessionClosed = true;
+                }
             }
-            return loadedClubPositionsList;
+            base.OnException(filterContext);
         }
 
-        private AwardsList loadedAwardsList;
-        protected virtual AwardsList LoadAwardsList()
+        private IDictionary<int, Award> loadedAwardsList;
+        protected virtual IDictionary<int, Award> LoadAwardsList()
         {
             if (loadedAwardsList == null)
             {
-                loadedAwardsList = DocumentSession.Load<AwardsList>(AwardsList.ID);
+                loadedAwardsList = DatabaseSession.CreateCriteria<Award>().List<Award>().ToDictionary(x => x.AwardId);
             }
             return loadedAwardsList;
-        }
-
-        private CrewPositionsList loadedCrewPositionsList;
-        protected virtual CrewPositionsList LoadCrewPositionsList()
-        {
-            if (loadedCrewPositionsList == null)
-            {
-                loadedCrewPositionsList = DocumentSession.Load<CrewPositionsList>(CrewPositionsList.ID);
-            }
-            return loadedCrewPositionsList;
         }
     }
 }

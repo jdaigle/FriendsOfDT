@@ -3,12 +3,11 @@ using System.Linq;
 using System.Web.Mvc;
 using AttributeRouting;
 using AttributeRouting.Web.Mvc;
+using FODT.Database;
 using FODT.Models;
-using FODT.Models.IMDT;
-using FODT.Models.IMDT.Indexes;
+using FODT.Models.Entities;
 using FODT.Views.Shows;
-using Raven.Client;
-using Raven.Client.Linq;
+using NHibernate.Linq;
 
 namespace FODT.Controllers
 {
@@ -18,64 +17,54 @@ namespace FODT.Controllers
         [GET("{showId}")]
         public virtual ActionResult Display(int showId)
         {
-            var show = DocumentSession
-                .Load<Show>(showId);
+            var show = DatabaseSession.Get<Show>(showId);
 
-            var awards = DocumentSession.Query<AwardProjection, Awards>()
-                .Where(x => x.__document_id == ("shows/" + showId).ToString())
-                .AsProjection<AwardProjection>().ToList();
-
-            var cast = DocumentSession.Query<CastProjection, Shows_Cast>()
-                .Where(x => x.__document_id == ("shows/" + showId).ToString())
-                .AsProjection<CastProjection>().ToList();
-
-            var crew = DocumentSession.Query<CrewProjection, Shows_Crew>()
-                .Where(x => x.__document_id == ("shows/" + showId).ToString())
-                .AsProjection<CrewProjection>().ToList();
+            var crew = DatabaseSession.Query<ShowCrew>().Where(x => x.Show == show).Fetch(x => x.Person).ToList();
+            var cast = DatabaseSession.Query<ShowCast>().Where(x => x.Show == show).Fetch(x => x.Person).ToList();
+            var awards = DatabaseSession.Query<ShowAward>().Where(x => x.Show == show).Fetch(x => x.Person).ToList();
 
             // TODO: replace with static index query
-            var otherPerformances = DocumentSession.Query<Show>()
-                .Where(x => x.Name == show.Name)
+            var otherPerformances = DatabaseSession.Query<Show>()
+                .Where(x => x.Title == show.Title)
                 .ToList()
-                .Where(x => x.Id != show.Id)
+                .Where(x => x.ShowId != show.ShowId)
                 .ToList();
 
             var viewModel = new DisplayViewModel();
             viewModel.ShowId = showId;
-            viewModel.Name = show.Name;
+            viewModel.Name = show.Title;
             viewModel.Author = show.Author;
-            viewModel.Quarter = show.Quarter;
+            viewModel.Quarter = (Quarter)show.Quarter;
             viewModel.Year = show.Year;
 
-            viewModel.OtherPerformances = otherPerformances.Select(x => new Tuple<int, string, short>(x.Id, x.Name, x.Year)).ToList();
+            viewModel.OtherPerformances = otherPerformances.Select(x => new System.Tuple<int, string, short>(x.ShowId, x.Title, x.Year)).ToList();
 
             viewModel.Awards = awards.Select(x => new DisplayViewModel.Award
             {
-                Year = x.AwardYear,
-                AwardId = x.AwardId,
-                Name = this.LoadAwardsList()[x.AwardId],
-                PersonId = DocumentSession.GetId<int?>(x.PersonId),
-                PersonName = x.PersonFullName,
-                PersonLastName = x.PersonLastName,
-            });
+                Year = x.Year,
+                AwardId = x.ShowAwardId,
+                Name = this.LoadAwardsList()[x.Award.AwardId].Name,
+                PersonId = x.Person != null ? x.Person.PersonId : (int?)null,
+                PersonName = x.Person != null ? x.Person.LastName : (string)null,
+                PersonLastName = x.Person != null ? x.Person.LastName : (string)null,
+            }).ToList();
 
             viewModel.Cast = cast.Select(x => new DisplayViewModel.CastRole
             {
-                PersonId = DocumentSession.GetId<int>(x.PersonId),
-                PersonName = x.PersonFullName,
-                PersonLastName = x.PersonLastName,
+                PersonId = x.Person.PersonId,
+                PersonName = x.Person.LastName,
+                PersonLastName = x.Person.LastName,
                 Role = x.Role,
             }).ToList();
 
             viewModel.Crew = crew.Select(x => new DisplayViewModel.CrewPosition
             {
-                PersonId = DocumentSession.GetId<int>(x.PersonId),
-                PersonName = x.PersonFullName,
-                PersonLastName = x.PersonLastName,
-                CrewPositionId = x.CrewPositionId,
-                Name = this.LoadCrewPositionsList()[x.CrewPositionId].Name,
+                PersonId = x.Person.PersonId,
+                PersonName = x.Person.LastName,
+                PersonLastName = x.Person.LastName,
+                Name = x.Position,
             }).ToList();
-            
+
             return View(viewModel);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using FODT.Database;
 using FODT.Models;
 
 namespace FODT
@@ -12,8 +13,7 @@ namespace FODT
         protected void Application_Start()
         {
             log4net.Config.XmlConfigurator.Configure();
-            DocumentStoreConfiguration.BeginInit(DocumentStoreUrl);
-            Raven.Client.MvcIntegration.RavenProfiler.InitializeFor(DocumentStoreConfiguration.DocumentStore);
+            DatabaseBootstrapper.Bootstrap();
             MvcHandler.DisableMvcResponseHeader = true;
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

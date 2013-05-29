@@ -4,12 +4,11 @@ using System.Linq;
 using System.Web.Mvc;
 using AttributeRouting;
 using AttributeRouting.Web.Mvc;
+using FODT.Database;
 using FODT.Models;
-using FODT.Models.IMDT;
-using FODT.Models.IMDT.Indexes;
+using FODT.Models.Entities;
 using FODT.Views.People;
-using Raven.Client;
-using Raven.Client.Linq;
+using NHibernate.Linq;
 
 namespace FODT.Controllers
 {
@@ -19,49 +18,47 @@ namespace FODT.Controllers
         [GET("{personId}")]
         public virtual ActionResult Display(int personId)
         {
-            var person = DocumentSession.Load<Person>(personId);
-            var crew = DocumentSession.Query<CrewProjection, Shows_Crew>()
-                .Where(x => x.PersonId == ("people/" + person.Id).ToString()).AsProjection<CrewProjection>().ToList();
-            var cast = DocumentSession.Query<CastProjection, Shows_Cast>()
-                .Where(x => x.PersonId == ("people/" + person.Id).ToString()).AsProjection<CastProjection>().ToList();
-            var showAwards = DocumentSession.Query<AwardProjection, Awards>()
-                .Where(x => x.PersonId == ("people/" + person.Id).ToString()).AsProjection<AwardProjection>().ToList();
+            var person = DatabaseSession.Get<Person>(personId);
+            var clubPositions = DatabaseSession.Query<PersonClubPosition>().Where(x => x.Person == person).ToList();
+            var crew = DatabaseSession.Query<ShowCrew>().Where(x => x.Person == person).Fetch(x => x.Show).ToList();
+            var cast = DatabaseSession.Query<ShowCast>().Where(x => x.Person == person).Fetch(x => x.Show).ToList();
+            var showAwards = DatabaseSession.Query<ShowAward>().Where(x => x.Person == person).Fetch(x => x.Show).ToList();
+            var myAwards = DatabaseSession.Query<PersonAward>().Where(x => x.Person == person).ToList();
             
             var viewModel = new DisplayViewModel();
             viewModel.PersonId = personId;
-            viewModel.Name = person.FullName;
+            viewModel.Name = person.FirstName;
             viewModel.Biography = person.Biography;
-            viewModel.ClubPositions = person.ClubPositions.Select(x => new DisplayViewModel.ClubPosition
+            viewModel.ClubPositions = clubPositions.Select(x => new DisplayViewModel.ClubPosition
             {
                 Year = x.Year,
-                ClubPositionId = x.ClubPositionId,
-                Name = this.LoadClubPositionsList()[x.ClubPositionId],
+                Name = x.Position,
             }).ToList();
             viewModel.Awards = showAwards.Select(x => new DisplayViewModel.Award
             {
-                Year = x.AwardYear,
-                AwardId = x.AwardId,
-                Name = this.LoadAwardsList()[x.AwardId],
-                ShowId = DocumentSession.GetId<int?>(x.GetShowId()),
-                ShowName = x.ShowName,
-                ShowYear = x.ShowYear,
+                Year = x.Year,
+                AwardId = x.ShowAwardId,
+                Name = this.LoadAwardsList()[x.Award.AwardId].Name,
+                ShowId = x.Show.ShowId,
+                ShowName = x.Show.Title,
+                ShowQuarter = (Quarter)x.Show.Quarter,
+                ShowYear = x.Show.Year,
             }).ToList();
             viewModel.CastRoles = cast.Select(x => new DisplayViewModel.CastRole
             {
-                ShowId = DocumentSession.GetId<int>(x.__document_id),
-                ShowName = x.ShowName,
-                ShowQuarter = x.ShowQuarter,
-                ShowYear = x.ShowYear,
+                ShowId = x.Show.ShowId,
+                ShowName = x.Show.Title,
+                ShowQuarter = (Quarter)x.Show.Quarter,
+                ShowYear = x.Show.Year,
                 Role = x.Role,
             }).ToList();
             viewModel.CrewPositions = crew.Select(x => new DisplayViewModel.CrewPosition
             {
-                ShowId = DocumentSession.GetId<int>(x.__document_id),
-                ShowName = x.ShowName,
-                ShowQuarter = x.ShowQuarter,
-                ShowYear = x.ShowYear,
-                Name = this.LoadCrewPositionsList()[x.CrewPositionId].Name,
-                CrewPositionId = x.CrewPositionId,
+                ShowId = x.Show.ShowId,
+                ShowName = x.Show.Title,
+                ShowQuarter = (Quarter)x.Show.Quarter,
+                ShowYear = x.Show.Year,
+                Name = x.Position,
             }).ToList();
             return View(viewModel);
         }
@@ -70,11 +67,11 @@ namespace FODT.Controllers
         [GET("{personId}/Edit")]
         public virtual ActionResult EditBiography(int personId)
         {
-            var person = DocumentSession.Load<Person>(personId);
+            var person = DatabaseSession.Get<Person>(personId);
 
             var viewModel = new EditBiographyViewModel();
             viewModel.PersonId = personId;
-            viewModel.Name = person.FullName;
+            viewModel.Name = person.FirstName;
             viewModel.Biography = person.Biography;
             return View(viewModel);
         }
@@ -82,7 +79,7 @@ namespace FODT.Controllers
         [POST("{personId}/Edit")]
         public virtual ActionResult SaveEditBiography(int personId, SaveEditBiographyModel model)
         {
-            var person = DocumentSession.Load<Person>(personId);
+            var person = DatabaseSession.Get<Person>(personId);
             if (string.IsNullOrWhiteSpace(model.Name))
             {
                 throw new Exception("Name is required");
@@ -90,7 +87,7 @@ namespace FODT.Controllers
             //person.Name = model.Name.Trim();
             person.Biography = (model.Biography ?? string.Empty).Trim();
 
-            DocumentSession.SaveChanges();
+            DatabaseSession.CommitTransaction();
             return RedirectToAction(Actions.Display(personId));
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using FODT.Models.IMDT;
+using FODT.Models;
 
 namespace FODT.Views.Shows
 {
@@ -54,7 +54,6 @@ namespace FODT.Views.Shows
             public string PersonName { get; set; }
             public string PersonLastName { get; set; }
             public string Name { get; set; }
-            public int CrewPositionId { get; set; }
         }
 
 

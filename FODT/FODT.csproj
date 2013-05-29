@@ -30,6 +30,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,6 +39,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AttributeRouting">
@@ -52,6 +54,12 @@
     <Reference Include="Elmah">
       <HintPath>..\external-bin\Elmah.dll</HintPath>
     </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\external-bin\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="HibernatingRhinos.Profiler.Appender.v4.0">
+      <HintPath>..\external-bin\HibernatingRhinos.Profiler.Appender.v4.0.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\external-bin\log4net.dll</HintPath>
     </Reference>
@@ -59,14 +67,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\external-bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\external-bin\ravendb\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\external-bin\ravendb\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.MvcIntegration">
-      <HintPath>..\external-bin\ravendb\Raven.Client.MvcIntegration.dll</HintPath>
+    <Reference Include="NHibernate">
+      <HintPath>..\external-bin\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -118,32 +120,25 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\PeopleController.cs" />
     <Compile Include="Controllers\ShowsController.cs" />
+    <Compile Include="Database\CustomSqlClientDriver.cs" />
+    <Compile Include="Database\DatabaseBootstrapper.cs" />
+    <Compile Include="Database\SessionExtensions.cs" />
+    <Compile Include="Database\SqlMapper.cs" />
+    <Compile Include="Database\UtcDateTimeUserType.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HttpHeadersCleanupModule.cs" />
-    <Compile Include="Models\DocumentStoreConfiguration.cs" />
+    <Compile Include="Models\Entities\Award.cs" />
+    <Compile Include="Models\Entities\PersonClubPosition.cs" />
+    <Compile Include="Models\Quarter.cs" />
+    <Compile Include="Models\Entities\ShowCast.cs" />
+    <Compile Include="Models\Entities\ShowCrew.cs" />
+    <Compile Include="Models\Entities\ShowAward.cs" />
+    <Compile Include="Models\Entities\PersonAward.cs" />
+    <Compile Include="Models\Entities\Show.cs" />
+    <Compile Include="Models\Entities\Person.cs" />
     <Compile Include="Models\ExtensionMethods.cs" />
-    <Compile Include="Models\IDocumentSessionExtensions.cs" />
-    <Compile Include="Models\IMDT\AwardsList.cs" />
-    <Compile Include="Models\IMDT\CastMember.cs" />
-    <Compile Include="Models\IMDT\ClubPosition.cs" />
-    <Compile Include="Models\IMDT\ClubPositionsList.cs" />
-    <Compile Include="Models\IMDT\CrewMember.cs" />
-    <Compile Include="Models\IMDT\CrewPositionListItem.cs" />
-    <Compile Include="Models\IMDT\CrewPositionsList.cs" />
-    <Compile Include="Models\IMDT\Indexes\CastProjection.cs" />
-    <Compile Include="Models\IMDT\Indexes\AwardProjection.cs" />
-    <Compile Include="Models\IMDT\Indexes\CrewProjection.cs" />
-    <Compile Include="Models\IMDT\Indexes\Awards.cs" />
-    <Compile Include="Models\IMDT\Indexes\Shows_Crew.cs" />
-    <Compile Include="Models\IMDT\Indexes\Shows_Cast.cs" />
-    <Compile Include="Models\IMDT\KeyValuePair.cs" />
-    <Compile Include="Models\IMDT\Person.cs" />
-    <Compile Include="Models\IMDT\PersonAward.cs" />
-    <Compile Include="Models\IMDT\Quarter.cs" />
-    <Compile Include="Models\IMDT\Show.cs" />
-    <Compile Include="Models\IMDT\ShowAward.cs" />
     <Compile Include="ObjectDisposal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="T4MVC.cs">
@@ -151,6 +146,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="TimeZoneCode.cs" />
     <Compile Include="Views\People\EditBiographyViewModel.cs" />
     <Compile Include="Views\Shows\DisplayViewModel.cs" />
     <Compile Include="Views\People\DisplayViewModel.cs" />

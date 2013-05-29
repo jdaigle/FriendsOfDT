@@ -5,7 +5,7 @@ using System.IO;
 
 namespace FODT.DataMigration
 {
-    public class TSVReader : IDisposable, IDelimitedReader
+    public class TSVReader : IDisposable, IDelimitedReader, IEnumerable<IDelimitedRow>
     {
         private StreamReader reader;
         private bool reuseRow;
@@ -87,6 +87,26 @@ namespace FODT.DataMigration
                 disposed = true;
             }
         }
+
+        public IEnumerator<IDelimitedRow> GetEnumerator()
+        {
+            var row = NextRow();
+            while (row != null)
+            {
+                yield return row;
+                row = NextRow();
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            var row = NextRow();
+            while (row != null)
+            {
+                yield return row;
+                row = NextRow();
+            }
+        }
     }
 
     public class TSVRow : IEnumerable<string>, IDelimitedRow
@@ -107,7 +127,7 @@ namespace FODT.DataMigration
 
         public string this[int index]
         {
-            get { return fieldData[index]; }
+            get { return fieldData[index].Replace("\\N", ""); }
         }
 
         public IEnumerator<string> GetEnumerator()

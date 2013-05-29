@@ -1,94 +1,94 @@
 awards
-- ID
-- showID
-- peopID
-- awardID
-- year
-- last_mod
+- ID int
+- showID int
+- peopID int
+- awardID tinyint
+- year smallint
+- last_mod date
 
 awards_list
-- ID
-- name
+- ID int
+- name varchar(50)
 
 cast
-- ID
-- peopID
-- showID
-- role (text)
-- last_mod
+- ID int
+- peopID int
+- showID int
+- role varchar(75)
+- last_mod date
 
 crew
-- ID
-- peopID
-- showID
-- jobID
-- last_mod
+- ID int
+- peopID int
+- showID int
+- jobID int
+- last_mod date
 
 ec
-- ID
-- peopID
-- ECID
-- year
-- last_mod
+- ID int
+- peopID int
+- ECID tinyint
+- year smallint
+- last_mod date
 
 ec_list
-- ID
-- title
+- ID int
+- title varchar(50)
 
 jobs
-- ID
-- job (text)
-- priority (num)
-- URL (text)
+- ID int
+- job varchar(30)
+- priority smallint
+- URL varchar(50)
 
 media
-- ID
-- assocID
-- IDtype (people,shows) 
-- last_mod
-- item_id
+- ID int
+- assocID int
+- IDtype (people,shows) varchar(6)
+- last_mod date
+- item_id int
 
 media_items
-- ID
-- item (URI)
-- thumb (URI)
-- timy (URI)
-- lastmod
+- ID int
+- item (URI) varchar(100)
+- thumb (URI) varchar(100)
+- timy (URI) varchar(100)
+- lastmod date
 
 people
-- ID
-- hon
-- fname
-- mname
-- lname
-- suffix
-- nickname
-- bio (text)
-- username
-- password
-- email
-- level
-- last_mod
-- media_id (picture)
+- ID int
+- hon varchar(20
+- fname varchar(25
+- mname varchar(25
+- lname varchar(25
+- suffix varchar(10
+- nickname varchar(20
+- bio blob
+- username varchar(25
+- password varchar(32
+- email varchar(50
+- level varchar(50
+- last_mod date
+- media_id (picture) int
 
 q_list (quarter)
-- ID
-- Name
+- ID tinyint
+- quarter varchar(10
 
 shows
-- ID
-- title
-- quarter (id)
-- author
-- year
-- pictures (URI)
-- funfacts (text)
-- last_mod
-- media_id (picture)
-- toaster (text)
+- ID int
+- title varchar(100
+- quarter (id) tinyint
+- author varchar(100
+- year smalling
+- pictures (URI) varchar(100
+- funfacts (text) blob
+- last_mod date
+- media_id (picture) int
+- toaster (text) blob
 
 site_text
-- ID
-- name
-- content
-- last_mod
+- ID int
+- name varchar(30
+- content blob
+- last_mod date

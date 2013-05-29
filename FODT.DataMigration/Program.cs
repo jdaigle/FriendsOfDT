@@ -1,234 +1,402 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
-using FODT.Models;
-using FODT.Models.IMDT;
-using Raven.Abstractions.Data;
-using Raven.Client;
-using Raven.Json.Linq;
+using FODT.Database;
+using FODT.Models.Entities;
 
 namespace FODT.DataMigration
 {
     public class Program
     {
         public const string DocumentStoreUrl = @"http://localhost:8080";
-        public const string DataDumpDirectory = @"C:\src\FriendsOfDT\data\dump\";
+        public const string DataDumpDirectory = @"C:\src\FriendsOfDT\data\";
 
         public static void Main(string[] args)
         {
             log4net.Config.XmlConfigurator.Configure();
 
-            DocumentStoreConfiguration.BeginInit(DocumentStoreUrl);
+            var connectionString = ConfigurationManager.ConnectionStrings["fodt"].ConnectionString;
+            var cfg = DatabaseBootstrapper.Bootstrap(connectionString);
+            var sessionFactory = cfg.BuildSessionFactory();
 
-            using (var store = DocumentStoreConfiguration.DocumentStore)
+            ImportAwardsList(sessionFactory);
+            ImportPersons(sessionFactory);
+            ImportShows(sessionFactory);
+            ImportShowAwards(sessionFactory);
+            ImportPersonAwards(sessionFactory);
+            ImportCast(sessionFactory);
+            ImportCrew(sessionFactory);
+            ImportEC(sessionFactory);
+        }
+
+        private static void ImportShows(NHibernate.ISessionFactory sessionFactory)
+        {
+            using (var session = sessionFactory.OpenSession())
             {
-
-                AwardsList awardsList;
-                ClubPositionsList clubPositionsList;
-                CrewPositionsList crewPositionsList;
-                using (var session = store.OpenSession())
+                var shows = LoadEntities("shows_fixed.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT Show ON").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in shows)
                 {
-                    var loadedAwardsList = LoadEntities("imdt_awards_list.csv");
-                    awardsList = session.Load<AwardsList>("AwardsList") ?? new AwardsList();
-                    awardsList.Awards = loadedAwardsList.Select(x => new FODT.Models.IMDT.KeyValuePair<int, string>() { Key = int.Parse(x.ID), Value = ((string)x.name) }).ToList();
-                    session.Store(awardsList, "AwardsList");
-
-                    var loadedECList = LoadEntities("imdt_ec_list.csv");
-                    clubPositionsList = session.Load<ClubPositionsList>("ClubPositionsList") ?? new ClubPositionsList();
-                    clubPositionsList.ClubPositions = loadedECList.Select(x => new FODT.Models.IMDT.KeyValuePair<int, string>() { Key = int.Parse(x.ID), Value = ((string)x.title) }).ToList();
-                    session.Store(clubPositionsList, "ClubPositionsList");
-
-                    var loadedJobsList = LoadEntities("imdt_jobs.csv");
-                    crewPositionsList = session.Load<CrewPositionsList>("CrewPositionsList") ?? new CrewPositionsList();
-                    crewPositionsList.CrewPositions = loadedJobsList.Select(x =>
+                    if (string.IsNullOrWhiteSpace(_row[1]))
                     {
-                        var c = new CrewPositionListItem() { Key = int.Parse(x.ID), Name = (string)x.job, Priority = int.Parse(((string)x.priority).Replace("NULL", short.MaxValue.ToString())), DefinitionURL = ((string)x.URL).Replace("NULL", "") };
-                        if (string.IsNullOrWhiteSpace(c.Name))
-                        {
-                            c.Name = "NULL";
-                        }
-                        return c;
-                    }).ToList();
-                    session.Store(crewPositionsList, "CrewPositionsList");
-                    session.SaveChanges();
-                }
-
-
-                var loadedPeople = LoadEntities("imdt_people_fixed.csv");
-                var loadedEC_byPeepID = LoadEntities("imdt_ec.csv")
-                    .Where(x => x.peepID != "NULL")
-                    .Select(x => new { peepID = int.Parse(x.peepID), ECID = int.Parse(x.ECID), year = short.Parse(x.year) })
-                    .GroupBy(x => x.peepID).ToDictionary(x => x.Key);
-                var loadedAwards_byPeepID = LoadEntities("imdt_awards.csv")
-                    .Where(x => x.peepID != "NULL" && (x.showID == "NULL" || string.IsNullOrWhiteSpace(x.showID)))
-                    .Select(x => new { peepID = int.Parse(x.peepID), awardID = int.Parse(x.awardID), year = short.Parse(x.year) })
-                    .GroupBy(x => x.peepID).ToDictionary(x => x.Key);
-                int maxPersonId = 0;
-                var loadedPersonIds = new HashSet<int>();
-                foreach (var item in loadedPeople)
-                {
-                    using (var session = store.OpenSession())
-                    {
-                        var person = session.Load<Person>(int.Parse((string)item.ID)) ?? new Person();
-                        person.Id = int.Parse((string)item.ID);
-                        person.Honorific = ((string)item.hon).Replace("NULL", "").Trim();
-                        person.FirstName = ((string)item.fname).Replace("NULL", "").Trim();
-                        person.LastName = ((string)item.lname).Replace("NULL", "").Trim();
-                        person.MiddleName = ((string)item.mname).Replace("NULL", "").Trim();
-                        person.Suffix = ((string)item.suffix).Replace("NULL", "").Trim();
-                        person.SetFullName();
-                        if (person.FullName.Contains("Deleted"))
-                        {
-                            // skip deleted people
-                            continue;
-                        }
-                        loadedPersonIds.Add(person.Id);
-                        person.AlternateName = ((string)item.nickname).Replace("NULL", "").Trim();
-                        person.EmailAddress = ((string)item.email).Replace("NULL", "").Trim();
-                        person.Biography = ((string)item.bio).Replace("NULL", "").Replace("\\n", Environment.NewLine).Trim();
-                        var mediaId = ((string)item.media_id).Replace("NULL", "").Trim();
-                        int intMediaId = 0;
-                        if (int.TryParse(mediaId, out intMediaId))
-                        {
-                            person.PictureMediaId = "medias\\" + intMediaId;
-                            if (intMediaId == 1)
-                            {
-                                person.PictureMediaId = string.Empty;
-                            }
-                        }
-                        if (loadedEC_byPeepID.ContainsKey(person.Id))
-                        {
-                            person.ClubPositions = loadedEC_byPeepID[person.Id].Select(x => new ClubPosition()
-                            {
-                                ClubPositionId = x.ECID,
-                                Year = x.year,
-                            }).ToList();
-                            if (person.ClubPositions.Any(x => !clubPositionsList.ClubPositions.Any(y => y.Key == x.ClubPositionId)))
-                            {
-                                System.Diagnostics.Debug.Fail("uh-oh, missing club position?");
-                            }
-                        }
-                        if (loadedAwards_byPeepID.ContainsKey(person.Id))
-                        {
-                            person.Awards = loadedAwards_byPeepID[person.Id].Select(x => new PersonAward()
-                            {
-                                AwardId = x.awardID,
-                                Year = x.year,
-                            }).ToList();
-                            if (person.Awards.Any(x => !awardsList.Awards.Any(y => y.Key == x.AwardId)))
-                            {
-                                System.Diagnostics.Debug.Fail("uh-oh, missing award?");
-                            }
-                        }
-                        if (person.Id > maxPersonId)
-                        {
-                            maxPersonId = person.Id;
-                        }
-                        session.Store(person);
-                        session.SaveChanges();
+                        // no title? no show
+                        continue;
                     }
-                }
-                SetHiLoMax(store, maxPersonId, "Raven/Hilo/people");
-
-                var parseIntOrNullInt = new Func<string, int?>(x =>
-                {
-                    int parsed = 0;
-                    if (int.TryParse(x, out parsed))
+                    var entity = new Show();
+                    entity.ShowId = int.Parse(_row[0]);
+                    entity.Title = (_row[1] ?? string.Empty).Trim();
+                    if (!string.IsNullOrWhiteSpace(_row[2]))
                     {
-                        return parsed;
+                        entity.Quarter = byte.Parse(_row[2]);
                     }
-                    return null;
-                });
-
-                var loadedShows = LoadEntities("imdt_shows_fixed.csv");
-                var loadedCast_byShowId = LoadEntities("imdt_cast.csv")
-                    .Where(x => x.peepID != "NULL" && x.showID != "NULL")
-                    .Where(x => loadedPersonIds.Contains(int.Parse((string)x.peepID)))
-                    .Select(x => new { peepID = int.Parse(x.peepID), showID = int.Parse(x.showID), role = x.role })
-                    .GroupBy(x => x.showID).ToDictionary(x => x.Key);
-                var loadedCrew_byShowId = LoadEntities("imdt_crew.csv")
-                    .Where(x => x.peepID != "NULL" && x.showID != "NULL")
-                    .Where(x => loadedPersonIds.Contains(int.Parse((string)x.peepID)))
-                    .Select(x => new { peepID = int.Parse(x.peepID), showID = int.Parse(x.showID), jobID = int.Parse(x.jobID) })
-                    .GroupBy(x => x.showID).ToDictionary(x => x.Key);
-                var loadedAwards_byShowId = LoadEntities("imdt_awards.csv")
-                    .Where(x => x.showID != "NULL")
-                    .Where(x => !parseIntOrNullInt((string)x.peepID).HasValue || loadedPersonIds.Contains(int.Parse((string)x.peepID)))
-                    .Select(x => new { showID = int.Parse(x.showID), peepID = (int?)parseIntOrNullInt(x.peepID), awardID = int.Parse(x.awardID), year = short.Parse(x.year) })
-                    .GroupBy(x => x.showID).ToDictionary(x => x.Key);
-                int maxShowId = 0;
-                foreach (var item in loadedShows.Where(x => x.title != "NULL"))
-                {
-                    using (var session = store.OpenSession())
+                    else
                     {
-                        var show = session.Load<Show>(int.Parse((string)item.ID)) ?? new Show();
-                        show.Id = int.Parse((string)item.ID);
-                        show.Name = ((string)(item.title)).Replace("NULL", "").Trim().Replace("  ", " ");
-                        show.Author = ((string)(item.author)).Replace("NULL", "").Trim().Replace("  ", " ");
-                        show.Quarter = (Quarter)(byte)short.Parse(item.quarter);
-                        show.Year = short.Parse(item.year);
-                        if (loadedCast_byShowId.ContainsKey(show.Id))
-                        {
-                            show.Cast = loadedCast_byShowId[show.Id].Select(x => new CastMember()
-                            {
-                                PersonId = "people/" + x.peepID,
-                                Role = x.role.Trim().Replace("  ", " "),
-                            }).ToList();
-                        }
-                        if (loadedCrew_byShowId.ContainsKey(show.Id))
-                        {
-                            show.Crew = loadedCrew_byShowId[show.Id].Select(x => new CrewMember()
-                            {
-                                PersonId = "people/" + x.peepID,
-                                CrewPositionId = x.jobID,
-                            }).ToList();
-                        }
-                        if (loadedAwards_byShowId.ContainsKey(show.Id))
-                        {
-                            show.Awards = loadedAwards_byShowId[show.Id].Select(x => new ShowAward()
-                            {
-                                AwardId = x.awardID,
-                                Year = x.year,
-                                PersonId = x.peepID.HasValue ? "people/"+x.peepID.Value : null,
-                            }).ToList();
-                            if (show.Awards.Any(x => !awardsList.Awards.Any(y => y.Key == x.AwardId)))
-                            {
-                                System.Diagnostics.Debug.Fail("uh-oh, missing award?");
-                            }
-                        }
-                        if (show.Id > maxShowId)
-                        {
-                            maxShowId = show.Id;
-                        }
-                        session.Store(show);
-                        session.SaveChanges();
+                        // TODO?
                     }
+                    entity.Author = (_row[3] ?? string.Empty).Trim();
+                    if (!string.IsNullOrWhiteSpace(_row[4]))
+                    {
+                        entity.Year = short.Parse(_row[4]);
+                    }
+                    else
+                    {
+                        // TODO?
+                    }
+                    entity.Pictures = (_row[5] ?? string.Empty).Trim();
+                    entity.FunFacts = (_row[6] ?? string.Empty).Trim();
+                    entity.Toaster = (_row[9] ?? string.Empty).Trim();
+                    entity.MediaId = int.Parse(_row[8]);
+                    entity.InsertedDateTime = DateTime.UtcNow;
+                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    var lastModifiedDateTime = DateTime.UtcNow;
+                    if (DateTime.TryParse(_row[7], out lastModifiedDateTime))
+                    {
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                    }
+                    session.Save(entity, entity.ShowId);
+                    if (entity.ShowId > maxId) maxId = entity.ShowId;
                 }
-                SetHiLoMax(store, maxShowId, "Raven/Hilo/shows");
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT Show OFF").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.Show', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
             }
         }
 
-        private static void SetHiLoMax(IDocumentStore store, int maxId, string doc)
+        private static void ImportPersons(NHibernate.ISessionFactory sessionFactory)
         {
-            store.DatabaseCommands.Patch(
-                doc,
-                new[]
+            using (var session = sessionFactory.OpenSession())
+            {
+                var people = LoadEntities("people_fixed.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT Person ON").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in people)
+                {
+                    var entity = new Person();
+                    entity.PersonId = int.Parse(_row[0]);
+                    entity.Honorific = (_row[1] ?? string.Empty).Trim();
+                    entity.FirstName = (_row[2] ?? string.Empty).Trim();
+                    entity.MiddleName = (_row[3] ?? string.Empty).Trim();
+                    entity.LastName = (_row[4] ?? string.Empty).Trim();
+                    entity.Suffix = (_row[5] ?? string.Empty).Trim();
+                    entity.Nickname = (_row[6] ?? string.Empty).Trim();
+                    entity.Biography = (_row[7] ?? string.Empty).Trim();
+                    entity.MediaId = int.Parse(_row[13]);
+                    entity.InsertedDateTime = DateTime.UtcNow;
+                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    var lastModifiedDateTime = DateTime.UtcNow;
+                    if (DateTime.TryParse(_row[12], out lastModifiedDateTime))
                     {
-                    new PatchRequest
-                        {
-                            Type = PatchCommandType.Set,
-                            Name = "Max",                                     
-                            Value = RavenJToken.FromObject(maxId + 1),
-                        }
-                });
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                    }
+                    session.Save(entity, entity.PersonId);
+                    if (entity.PersonId > maxId) maxId = entity.PersonId;
+                }
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT Person OFF").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.Person', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
         }
 
-        public static List<dynamic> LoadEntities(string file)
+        private static void ImportAwardsList(NHibernate.ISessionFactory sessionFactory)
         {
-            var reader = new DynamicDelimitedReader(new TSVReader(File.OpenRead(Path.Combine(DataDumpDirectory, file)), false));
-            reader.Initialize();
-            return reader.Cast<dynamic>().ToList();
+            using (var session = sessionFactory.OpenSession())
+            {
+                var awards = LoadEntities("awards_list.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT Award ON").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in awards)
+                {
+                    var entity = new Award();
+                    entity.AwardId = int.Parse(_row[0]);
+                    entity.Name = (_row[1] ?? string.Empty).Trim();
+                    if (string.IsNullOrWhiteSpace(entity.Name))
+                    {
+                        entity.Name = "[MISSING]";
+                    }
+                    session.Save(entity, entity.AwardId);
+                    if (entity.AwardId > maxId) maxId = entity.AwardId;
+                }
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT Award OFF").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.Award', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
+        }
+
+        private static void ImportShowAwards(NHibernate.ISessionFactory sessionFactory)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var awards = LoadEntities("awards.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT ShowAward ON;").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in awards)
+                {
+                    int showId = 0;
+                    if (int.TryParse(_row[1], out showId))
+                    {
+                        var entity = new ShowAward();
+                        entity.ShowAwardId = int.Parse(_row[0]);
+                        entity.Show = session.Load<Show>(showId);
+                        int personId = 0;
+                        if (int.TryParse(_row[2], out personId))
+                        {
+                            entity.Person = session.Load<Person>(personId);
+                        }
+                        entity.Award = session.Load<Award>(int.Parse(_row[3]));
+                        entity.Year = short.Parse(_row[4]);
+                        entity.InsertedDateTime = DateTime.UtcNow;
+                        entity.LastModifiedDateTime = DateTime.UtcNow;
+                        var lastModifiedDateTime = DateTime.UtcNow;
+                        if (DateTime.TryParse(_row[5], out lastModifiedDateTime))
+                        {
+                            entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                        }
+                        session.Save(entity, entity.ShowAwardId);
+                        if (entity.ShowAwardId > maxId) maxId = entity.ShowAwardId;
+                    }
+                }
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT ShowAward OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.ShowAward', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
+        }
+
+        private static void ImportPersonAwards(NHibernate.ISessionFactory sessionFactory)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var awards = LoadEntities("awards.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT PersonAward ON;").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in awards)
+                {
+                    int showId = 0;
+                    int personId = 0;
+                    if (!int.TryParse(_row[1], out showId) && int.TryParse(_row[2], out personId))
+                    {
+                        // no show, only a person
+                        var entity = new PersonAward();
+                        entity.PersonAwardId = int.Parse(_row[0]);
+                        entity.Person = session.Load<Person>(personId);
+                        entity.Award = session.Load<Award>(int.Parse(_row[3]));
+                        entity.Year = short.Parse(_row[4]);
+                        entity.InsertedDateTime = DateTime.UtcNow;
+                        entity.LastModifiedDateTime = DateTime.UtcNow;
+                        var lastModifiedDateTime = DateTime.UtcNow;
+                        if (DateTime.TryParse(_row[5], out lastModifiedDateTime))
+                        {
+                            entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                        }
+                        session.Save(entity, entity.PersonAwardId);
+                        if (entity.PersonAwardId > maxId) maxId = entity.PersonAwardId;
+                    }
+                }
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT PersonAward OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.PersonAward', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
+        }
+
+        private static void ImportCast(NHibernate.ISessionFactory sessionFactory)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var cast = LoadEntities("cast.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT ShowCast ON;").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in cast)
+                {
+                    if (string.IsNullOrWhiteSpace(_row[1]) || string.IsNullOrWhiteSpace(_row[2]))
+                    {
+                        // broken?
+                        continue;
+                    }
+                    var entity = new ShowCast();
+                    entity.ShowCastId = int.Parse(_row[0]);
+                    entity.Person = session.Load<Person>(int.Parse(_row[1]));
+                    entity.Show = session.Load<Show>(int.Parse(_row[2]));
+                    entity.Role = (_row[3] ?? string.Empty).Trim();
+                    if (string.IsNullOrWhiteSpace(entity.Role))
+                    {
+                        entity.Role = "[MISSING]";
+                    }
+                    entity.InsertedDateTime = DateTime.UtcNow;
+                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    var lastModifiedDateTime = DateTime.UtcNow;
+                    if (DateTime.TryParse(_row[4], out lastModifiedDateTime))
+                    {
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                    }
+                    session.Save(entity, entity.ShowCastId);
+                    if (entity.ShowCastId > maxId) maxId = entity.ShowCastId;
+                }
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT ShowCast OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.ShowCast', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
+        }
+
+        private static void ImportCrew(NHibernate.ISessionFactory sessionFactory)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var jobs = LoadEntities("jobs.txt").Select(x =>
+                {
+                    int id = 0;
+                    if (!int.TryParse(x[0], out id))
+                    {
+                        return null;
+                    }
+                    int order = 0;
+                    if (!int.TryParse(x[2], out order)) order = 999;
+                    return new
+                    {
+                        id = id,
+                        name = x[1],
+                        order = order,
+                    };
+                }).Where(x => x != null).ToDictionary(x => x.id);
+                var crew = LoadEntities("crew.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT ShowCrew ON;").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in crew)
+                {
+                    if (string.IsNullOrWhiteSpace(_row[1]) || string.IsNullOrWhiteSpace(_row[2]))
+                    {
+                        // broken?
+                        continue;
+                    }
+                    var entity = new ShowCrew();
+                    entity.ShowCrewId = int.Parse(_row[0]);
+                    entity.Person = session.Load<Person>(int.Parse(_row[1]));
+                    entity.Show = session.Load<Show>(int.Parse(_row[2]));
+                    int jobId = int.Parse(_row[3]);
+                    entity.DisplayOrder = jobs[jobId].order;
+                    entity.Position = jobs[jobId].name;
+                    if (string.IsNullOrWhiteSpace(entity.Position))
+                    {
+                        entity.Position = "[MISSING]";
+                    }
+                    entity.InsertedDateTime = DateTime.UtcNow;
+                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    var lastModifiedDateTime = DateTime.UtcNow;
+                    if (DateTime.TryParse(_row[4], out lastModifiedDateTime))
+                    {
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                    }
+                    session.Save(entity, entity.ShowCrewId);
+                    if (entity.ShowCrewId > maxId) maxId = entity.ShowCrewId;
+                }
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT ShowCrew OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.ShowCrew', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
+        }
+
+        private static void ImportEC(NHibernate.ISessionFactory sessionFactory)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var ec_list = LoadEntities("ec_list.txt").Select(x =>
+                {
+                    int id = 0;
+                    if (!int.TryParse(x[0], out id))
+                    {
+                        return null;
+                    }
+                    return new
+                    {
+                        id = id,
+                        name = x[1],
+                    };
+                }).Where(x => x != null).ToDictionary(x => x.id);
+                var ec = LoadEntities("ec.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT PersonClubPosition ON;").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in ec)
+                {
+                    if (string.IsNullOrWhiteSpace(_row[1]))
+                    {
+                        // broken?
+                        continue;
+                    }
+                    var entity = new PersonClubPosition();
+                    entity.PersonClubPositionId = int.Parse(_row[0]);
+                    entity.Person = session.Load<Person>(int.Parse(_row[1]));
+                    int ecId = int.Parse(_row[2]);
+                    entity.Position = ec_list[ecId].name;
+                    entity.Year = short.Parse(_row[3]);
+                    if (string.IsNullOrWhiteSpace(entity.Position))
+                    {
+                        entity.Position = "[MISSING]";
+                    }
+                    entity.DisplayOrder = ecId;
+                    entity.InsertedDateTime = DateTime.UtcNow;
+                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    var lastModifiedDateTime = DateTime.UtcNow;
+                    if (DateTime.TryParse(_row[4], out lastModifiedDateTime))
+                    {
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                    }
+                    session.Save(entity, entity.PersonClubPositionId);
+                    if (entity.PersonClubPositionId > maxId) maxId = entity.PersonClubPositionId;
+                }
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT PersonClubPosition OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.PersonClubPosition', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
+        }
+
+        public static List<IDelimitedRow> LoadEntities(string file)
+        {
+            return new TSVReader(File.OpenRead(Path.Combine(DataDumpDirectory, file)), false).ToList();
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using FODT.Models.IMDT;
+using FODT.Models;
 
 namespace FODT.Views.People
 {
@@ -17,7 +17,6 @@ namespace FODT.Views.People
         public class ClubPosition
         {
             public short Year { get; set; }
-            public int ClubPositionId { get; set; }
             public string Name { get; set; }
         }
 
@@ -30,6 +29,7 @@ namespace FODT.Views.People
             public string Name { get; set; }
             public int? ShowId { get; set; }
             public string ShowName { get; set; }
+            public Quarter ShowQuarter { get; set; }
             public short? ShowYear { get; set; }
         }
 
@@ -53,7 +53,6 @@ namespace FODT.Views.People
             public Quarter ShowQuarter { get; set; }
             public short ShowYear { get; set; }
             public string Name { get; set; }
-            public int CrewPositionId { get; set; }
         }
     }
 }

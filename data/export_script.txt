@@ -11,3 +11,6 @@ echo select * from people; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_
 echo select * from q_list; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_q_list.csv
 echo select * from shows; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_shows.csv
 echo select * from site_text; | mysql -uroot -pPASSWORD dramatech > d:\upload\imdt_site_text.csv
+
+
+mysqldump -u root -p -t -Td:\upload\ dramatech
