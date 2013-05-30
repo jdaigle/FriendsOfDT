@@ -6,13 +6,21 @@ using FODT.Models;
 
 namespace FODT.Views.Shows
 {
-    public class DisplayViewModel
+    public class GetViewModel
     {
         public int ShowId { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Author { get; set; }
         public Quarter Quarter { get; set; }
         public short Year { get; set; }
+        public string FunFacts { get; set; }
+        public string Pictures { get; set; }
+        public string Toaster { get; set; }
+        public int MediaItemId { get; set; }
+
+        public int? NextShowId { get; set; }
+        public int? PreviousShowId { get; set; }
+
         public IEnumerable<Tuple<int, string, short>> OtherPerformances { get; set; }
 
         public IEnumerable<ClubPosition> ClubPositions { get; set; }
@@ -54,8 +62,7 @@ namespace FODT.Views.Shows
             public string PersonName { get; set; }
             public string PersonLastName { get; set; }
             public string Name { get; set; }
+            public int DisplayOrder { get; set; }
         }
-
-
     }
 }

@@ -24,7 +24,7 @@ folk of DT have tried to sneak this icon into their shows.
         @foreach (var item in Model.Shows)
         {
             <tr>
-                <td><a href="?action=show_detail&amp;show_id=154">@item.ShowName</a></td>
+                <td><a href="@Url.Action(MVC.Shows.Get(item.ShowId))">@item.ShowName</a></td>
                 <td>@item.ShowQuarter @item.ShowYear</td>
                 <td>@item.Toaster</td>
             </tr>

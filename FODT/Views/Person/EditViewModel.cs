@@ -5,7 +5,7 @@ using System.Web;
 
 namespace FODT.Views.Person
 {
-    public class EditBiographyViewModel
+    public class EditViewModel
     {
         public int PersonId { get; set; }
         public string Name { get; set; }

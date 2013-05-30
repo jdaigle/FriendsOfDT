@@ -1,4 +1,4 @@
-﻿@model FODT.Views.Person.DisplayViewModel  
+﻿@model FODT.Views.Person.GetViewModel
 <table align="center" border="0">
     <tbody>
         <tr>
@@ -12,13 +12,17 @@
         </tr>
         <tr>
             <td align="center" valign="top" rowspan="3" width="30%">
-                <a href="?action=media_detail&amp;media_id=101">
+                @if (Model.MediaItemId != 1){
+                <a href="@Url.Action(MVC.Person.GetMedia(Model.PersonId, Model.MediaItemId))">
                     <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
                 </a>
+                } else {
+                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
+                }
                 <br>
                 Click picture to see original size<br>
                 <br>
-                <a href="/index.php?action=media_index&amp;IDtype=people&amp;ID=598">See all media associated with this person</a>
+                <a href="@Url.Action(MVC.Person.ListMedia(Model.PersonId))">See all media associated with this person</a>
                 <br>
                 <br>
             </td>
@@ -64,13 +68,13 @@
                                         @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
                                         {
                                         <tr>
-                                            <td align="center"><a href="?action=awards_by_year&amp;year=2006">@item.Year</a></td>
+                                            <td align="center"><a href="@Url.Action(MVC.Awards.ByYear(item.Year))">@item.Year</a></td>
                                             <td>&nbsp; - &nbsp; </td>
                                             <td align="center">@item.Name</td>
                                             @if (item.ShowId.HasValue)
                                             {
                                                 <td>&nbsp; - &nbsp; </td>
-                                                <td align="left"><a href="?action=show_detail&amp;show_id=242">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                                                <td align="left"><a href="@Url.Action(MVC.Shows.Get(item.ShowId.Value))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                                             }
                                             else
                                             {
@@ -98,7 +102,7 @@
                             <tr align="center">
                                 <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
                                 <td>&nbsp; - &nbsp;</td>
-                                <td><a href="/index.php?action=show_detail&amp;show_id=246">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                                <td><a href="@Url.Action(MVC.Shows.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                                 <td>&nbsp; - &nbsp;</td>
                                 <td align="left">@item.Role</td>
                             </tr>
@@ -120,7 +124,7 @@
                             <tr align="center">
                                 <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
                                 <td>&nbsp; - &nbsp;</td>
-                                <td><a href="/index.php?action=show_detail&amp;show_id=246">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                                <td><a href="@Url.Action(MVC.Shows.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                                 <td>&nbsp; - &nbsp;</td>
                                 <td align="left">@item.Name</td>
                             </tr>

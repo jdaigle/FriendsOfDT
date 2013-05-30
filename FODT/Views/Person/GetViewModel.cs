@@ -6,7 +6,7 @@ using FODT.Models;
 
 namespace FODT.Views.Person
 {
-    public class DisplayViewModel
+    public class GetViewModel
     {
         public int PersonId { get; set; }
         public string FullName { get; set; }

@@ -16,7 +16,7 @@ namespace FODT.Controllers
     public partial class PersonController : BaseController
     {
         [GET("{personId}")]
-        public virtual ActionResult Display(int personId)
+        public virtual ActionResult Get(int personId)
         {
             var person = DatabaseSession.Get<Person>(personId);
             var clubPositions = DatabaseSession.Query<PersonClubPosition>().Where(x => x.Person == person).ToList();
@@ -25,17 +25,17 @@ namespace FODT.Controllers
             var showAwards = DatabaseSession.Query<ShowAward>().Where(x => x.Person == person).Fetch(x => x.Show).Fetch(x => x.Award).ToList();
             var myAwards = DatabaseSession.Query<PersonAward>().Where(x => x.Person == person).Fetch(x => x.Award).ToList();
 
-            var viewModel = new DisplayViewModel();
+            var viewModel = new GetViewModel();
             viewModel.PersonId = personId;
             viewModel.FullName = person.Fullname;
             viewModel.Biography = person.Biography;
             viewModel.MediaItemId = person.MediaItem.MediaItemId;
-            viewModel.ClubPositions = clubPositions.Select(x => new DisplayViewModel.ClubPosition
+            viewModel.ClubPositions = clubPositions.Select(x => new GetViewModel.ClubPosition
             {
                 Year = x.Year,
                 Name = x.Position,
             }).ToList();
-            viewModel.Awards = showAwards.Select(x => new DisplayViewModel.Award
+            viewModel.Awards = showAwards.Select(x => new GetViewModel.Award
             {
                 Year = x.Year,
                 AwardId = x.ShowAwardId,
@@ -45,13 +45,13 @@ namespace FODT.Controllers
                 ShowQuarter = (Quarter)x.Show.Quarter,
                 ShowYear = x.Show.Year,
             })
-            .Concat(myAwards.Select(x => new DisplayViewModel.Award
+            .Concat(myAwards.Select(x => new GetViewModel.Award
             {
                 Year = x.Year,
                 AwardId = x.PersonAwardId,
                 Name = x.Award.Name,
             })).ToList();
-            viewModel.CastRoles = cast.Select(x => new DisplayViewModel.CastRole
+            viewModel.CastRoles = cast.Select(x => new GetViewModel.CastRole
             {
                 ShowId = x.Show.ShowId,
                 ShowName = x.Show.Title,
@@ -59,7 +59,7 @@ namespace FODT.Controllers
                 ShowYear = x.Show.Year,
                 Role = x.Role,
             }).ToList();
-            viewModel.CrewPositions = crew.Select(x => new DisplayViewModel.CrewPosition
+            viewModel.CrewPositions = crew.Select(x => new GetViewModel.CrewPosition
             {
                 ShowId = x.Show.ShowId,
                 ShowName = x.Show.Title,
@@ -70,13 +70,24 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
+        [GET("{personId}/Media")]
+        public virtual ActionResult ListMedia(int personId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [GET("{personId}/Media/{mediaId}")]
+        public virtual ActionResult GetMedia(int personId, int mediaId)
+        {
+            throw new NotImplementedException();
+        }
 
         [GET("{personId}/Edit")]
-        public virtual ActionResult EditBiography(int personId)
+        public virtual ActionResult Edit(int personId)
         {
             var person = DatabaseSession.Get<Person>(personId);
 
-            var viewModel = new EditBiographyViewModel();
+            var viewModel = new EditViewModel();
             viewModel.PersonId = personId;
             viewModel.Name = person.FirstName;
             viewModel.Biography = person.Biography;
@@ -84,21 +95,21 @@ namespace FODT.Controllers
         }
 
         [POST("{personId}/Edit")]
-        public virtual ActionResult SaveEditBiography(int personId, SaveEditBiographyModel model)
+        public virtual ActionResult SaveEdit(int personId, SaveEditParameters param)
         {
             var person = DatabaseSession.Get<Person>(personId);
-            if (string.IsNullOrWhiteSpace(model.Name))
+            if (string.IsNullOrWhiteSpace(param.Name))
             {
                 throw new Exception("Name is required");
             }
             //person.Name = model.Name.Trim();
-            person.Biography = (model.Biography ?? string.Empty).Trim();
+            person.Biography = (param.Biography ?? string.Empty).Trim();
 
             DatabaseSession.CommitTransaction();
-            return RedirectToAction(Actions.Display(personId));
+            return RedirectToAction(Actions.Get(personId));
         }
 
-        public class SaveEditBiographyModel
+        public class SaveEditParameters
         {
             [Required]
             public string Name { get; set; }

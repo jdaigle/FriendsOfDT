@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="Controllers\AwardsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -154,10 +155,10 @@
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="TimeZoneCode.cs" />
-    <Compile Include="Views\Person\EditBiographyViewModel.cs" />
+    <Compile Include="Views\Person\EditViewModel.cs" />
     <Compile Include="Views\Search\SearchResultsViewModel.cs" />
-    <Compile Include="Views\Shows\DisplayViewModel.cs" />
-    <Compile Include="Views\Person\DisplayViewModel.cs" />
+    <Compile Include="Views\Shows\GetViewModel.cs" />
+    <Compile Include="Views\Person\GetViewModel.cs" />
     <Compile Include="Views\Toaster\HuntViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -184,7 +185,7 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Person\Display.cshtml" />
+    <Content Include="Views\Person\Get.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -193,7 +194,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shows\Display.cshtml" />
+    <Content Include="Views\Shows\Get.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="T4MVC.tt">
@@ -206,7 +207,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Person\EditBiography.cshtml" />
+    <Content Include="Views\Person\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
