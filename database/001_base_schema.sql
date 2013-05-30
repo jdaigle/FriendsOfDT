@@ -1,12 +1,18 @@
-CREATE TABLE [Person] (
+USE fodt;
+GO
+
+CREATE SCHEMA [imdt] AUTHORIZATION [dbo]
+GO
+
+CREATE TABLE [imdt].[Person] (
 	[PersonId] [int] IDENTITY(1,1) NOT NULL,
-	[Honorific] [varchar](50) NOT NULL,
-	[FirstName] [varchar](50) NOT NULL,
-	[MiddleName] [varchar](50) NOT NULL,
-	[LastName] [varchar](50) NOT NULL,
-	[Suffix] [varchar](50) NOT NULL,
-	[Nickname] [varchar](100) NOT NULL,
-	[Biography] [varchar](max) NOT NULL,
+	[Honorific] [nvarchar](50) NOT NULL,
+	[FirstName] [nvarchar](50) NOT NULL,
+	[MiddleName] [nvarchar](50) NOT NULL,
+	[LastName] [nvarchar](50) NOT NULL,
+	[Suffix] [nvarchar](50) NOT NULL,
+	[Nickname] [nvarchar](100) NOT NULL,
+	[Biography] [nvarchar](max) NOT NULL,
 	[MediaId] [int] NOT NULL CONSTRAINT DF_Person_MediaId DEFAULT 1,
 	[InsertedDateTime] [datetime2] NOT NULL,
 	[LastModifiedDateTime] [datetime2] NOT NULL,
@@ -14,22 +20,22 @@ CREATE TABLE [Person] (
     (
 	    [PersonId] ASC
     ),
- -- `username` varchar(25) DEFAULT NULL,
- -- `password` varchar(32) DEFAULT NULL,
- -- `email` varchar(50) DEFAULT NULL,
- -- `level` varchar(50) DEFAULT NULL,
+ -- `username` nvarchar(25) DEFAULT NULL,
+ -- `password` nvarchar(32) DEFAULT NULL,
+ -- `email` nvarchar(50) DEFAULT NULL,
+ -- `level` nvarchar(50) DEFAULT NULL,
 );
 GO
 
-CREATE TABLE [Show] (
+CREATE TABLE [imdt].[Show] (
 	[ShowId] [int] IDENTITY(1,1) NOT NULL,
-	[Title] [varchar](150) NOT NULL,
-	[Author] [varchar](150) NOT NULL,
+	[Title] [nvarchar](150) NOT NULL,
+	[Author] [nvarchar](150) NOT NULL,
 	[Quarter] tinyint NOT NULL,
 	[Year] smallint NOT NULL,
-	[Pictures] [varchar](100) NOT NULL,
-	[FunFacts] [varchar](max) NOT NULL,
-	[Toaster] [varchar](max) NOT NULL,
+	[Pictures] [nvarchar](100) NOT NULL,
+	[FunFacts] [nvarchar](max) NOT NULL,
+	[Toaster] [nvarchar](max) NOT NULL,
 	[MediaId] [int] NOT NULL CONSTRAINT DF_Show_MediaId DEFAULT 1,
 	[InsertedDateTime] [datetime2] NOT NULL,
 	[LastModifiedDateTime] [datetime2] NOT NULL,
@@ -40,9 +46,9 @@ CREATE TABLE [Show] (
 );
 GO
 
-CREATE TABLE [Award] (
+CREATE TABLE [imdt].[Award] (
 	[AwardId] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [varchar](50) NOT NULL,
+	[Name] [nvarchar](50) NOT NULL,
 	CONSTRAINT [PK_Award] PRIMARY KEY CLUSTERED 
     (
 	    [AwardId] ASC
@@ -50,7 +56,7 @@ CREATE TABLE [Award] (
 );
 GO
 
-CREATE TABLE [ShowAward] (
+CREATE TABLE [imdt].[ShowAward] (
 	[ShowAwardId] [int] IDENTITY(1,1) NOT NULL,
 	[ShowId] [int] NOT NULL,
 	[PersonId] [int] NULL,
@@ -64,17 +70,17 @@ CREATE TABLE [ShowAward] (
     ),
 	CONSTRAINT [FK_ShowAward_Award]
 		FOREIGN KEY ([AwardId])
-		REFERENCES [dbo].[Award],
+		REFERENCES [imdt].[Award],
 	CONSTRAINT [FK_ShowAward_Show]
 		FOREIGN KEY ([ShowId])
-		REFERENCES [dbo].[Show],
+		REFERENCES [imdt].[Show],
 	CONSTRAINT [FK_ShowAward_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [dbo].[Person],
+		REFERENCES [imdt].[Person],
 );
 GO
 
-CREATE TABLE [PersonAward] (
+CREATE TABLE [imdt].[PersonAward] (
 	[PersonAwardId] [int] IDENTITY(1,1) NOT NULL,
 	[PersonId] [int] NOT NULL,
 	[AwardId] [int] NOT NULL,
@@ -87,18 +93,18 @@ CREATE TABLE [PersonAward] (
     ),
 	CONSTRAINT [FK_PersonAward_Award]
 		FOREIGN KEY ([AwardId])
-		REFERENCES [dbo].[Award],
+		REFERENCES [imdt].[Award],
 	CONSTRAINT [FK_PersonAward_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [dbo].[Person],
+		REFERENCES [imdt].[Person],
 );
 GO
 
-CREATE TABLE [ShowCast] (
+CREATE TABLE [imdt].[ShowCast] (
 	[ShowCastId] [int] IDENTITY(1,1) NOT NULL,
 	[ShowId] [int] NOT NULL,
 	[PersonId] [int] NOT NULL,
-	[Role] [varchar](75) NOT NULL,
+	[Role] [nvarchar](75) NOT NULL,
 	[InsertedDateTime] [datetime2] NOT NULL,
 	[LastModifiedDateTime] [datetime2] NOT NULL,
 	CONSTRAINT [PK_ShowCast] PRIMARY KEY CLUSTERED 
@@ -107,19 +113,19 @@ CREATE TABLE [ShowCast] (
     ),
 	CONSTRAINT [FK_ShowCast_Show]
 		FOREIGN KEY ([ShowId])
-		REFERENCES [dbo].[Show],
+		REFERENCES [imdt].[Show],
 	CONSTRAINT [FK_ShowCast_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [dbo].[Person],
+		REFERENCES [imdt].[Person],
 );
 GO
 
-CREATE TABLE [ShowCrew] (
+CREATE TABLE [imdt].[ShowCrew] (
 	[ShowCrewId] [int] IDENTITY(1,1) NOT NULL,
 	[ShowId] [int] NOT NULL,
 	[PersonId] [int] NOT NULL,
 	[DisplayOrder] [int] NOT NULL,
-	[Position] [varchar](75) NOT NULL,
+	[Position] [nvarchar](75) NOT NULL,
 	[InsertedDateTime] [datetime2] NOT NULL,
 	[LastModifiedDateTime] [datetime2] NOT NULL,
 	CONSTRAINT [PK_ShowCrew] PRIMARY KEY CLUSTERED 
@@ -128,17 +134,17 @@ CREATE TABLE [ShowCrew] (
     ),
 	CONSTRAINT [FK_ShowCrew_Show]
 		FOREIGN KEY ([ShowId])
-		REFERENCES [dbo].[Show],
+		REFERENCES [imdt].[Show],
 	CONSTRAINT [FK_ShowCrew_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [dbo].[Person],
+		REFERENCES [imdt].[Person],
 );
 GO
 
-CREATE TABLE [PersonClubPosition] (
+CREATE TABLE [imdt].[PersonClubPosition] (
 	[PersonClubPositionId] [int] IDENTITY(1,1) NOT NULL,
 	[PersonId] [int] NOT NULL,
-	[Position] [varchar](75) NOT NULL,
+	[Position] [nvarchar](75) NOT NULL,
 	[DisplayOrder] [int] NOT NULL,
 	[Year] smallint NOT NULL,
 	[InsertedDateTime] [datetime2] NOT NULL,
@@ -149,6 +155,6 @@ CREATE TABLE [PersonClubPosition] (
     ),
 	CONSTRAINT [FK_PersonClubPosition_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [dbo].[Person],
+		REFERENCES [imdt].[Person],
 );
 GO

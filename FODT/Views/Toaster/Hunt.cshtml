@@ -1,0 +1,35 @@
+﻿@model FODT.Views.Toaster.HuntViewModel
+
+<br>
+
+<center><font size="+3"><b>What's With The Toaster?</b></font></center>
+
+<br><br>
+
+The <a href="?action=peep_detail&amp;peep_id=2104">Dramatech Toaster</a> has
+been hidden in plain sight in every DramaTech show since the late 1980s. The
+idea for this came from an impromptu art installation called
+<a href="?action=media_detail&amp;media_id=2985"><i>Toaster Dreams</i></a>
+created by <a href="?action=peep_detail&amp;peep_id=334">Eddie Maise</a> in the
+<a href="?action=media_detail&amp;media_id=2553">old theater</a>. It featured
+several pieces of furniture suspended from the grid, with a toaster spotlit in
+the middle.<br><br>This list is a humble attempt to record where the creative
+folk of DT have tried to sneak this icon into their shows.
+
+<br><br><br>
+
+<table align="center" width="75%" border="1">
+    <tbody>
+        <tr><td colspan="3" align="center"><font size="+2">Where was the Toaster?</font></td></tr>
+        @foreach (var item in Model.Shows)
+        {
+            <tr>
+                <td><a href="?action=show_detail&amp;show_id=154">@item.ShowName</a></td>
+                <td>@item.ShowQuarter @item.ShowYear</td>
+                <td>@item.Toaster</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br>

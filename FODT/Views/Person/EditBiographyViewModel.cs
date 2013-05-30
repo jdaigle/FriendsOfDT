@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FODT.Views.People
+namespace FODT.Views.Person
 {
     public class EditBiographyViewModel
     {

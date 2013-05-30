@@ -4,12 +4,12 @@ using System.Linq;
 using System.Web;
 using FODT.Models;
 
-namespace FODT.Views.People
+namespace FODT.Views.Person
 {
     public class DisplayViewModel
     {
         public int PersonId { get; set; }
-        public string Name { get; set; }
+        public string FullName { get; set; }
         public string Biography { get; set; }
 
         public IEnumerable<ClubPosition> ClubPositions { get; set; }

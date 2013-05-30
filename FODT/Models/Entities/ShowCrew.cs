@@ -19,11 +19,12 @@ namespace FODT.Models.Entities
     {
         public CrewClassMap()
         {
+            Schema("imdt");
             Id(x => x.ShowCrewId).GeneratedBy.Identity();
             References(x => x.Show, "ShowId").Not.Nullable();
             References(x => x.Person, "PersonId").Not.Nullable();
             Map(x => x.DisplayOrder).Not.Nullable();
-            Map(x => x.Position).Not.Nullable().CustomType("AnsiString").Length(75);
+            Map(x => x.Position).Not.Nullable().Length(75);
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.LastModifiedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }

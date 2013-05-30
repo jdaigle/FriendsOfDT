@@ -1,12 +1,76 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>_Layout</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>DramaTech Theatre Cast and Crew Database - IMDT</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/dtstyle.css")" />
 </head>
 <body>
-    <div>
+    <table border="0" width="100%" bgcolor='#b6b6f2'>
+        <tr>
+            <td align="center" valign="middle">
+                <a href="/index.php"><img src='@Url.Content("~/Content/dtlogo.png")'></a>
+            </td>
+            <td align="center" valign="middle">
+                <img src="@Url.Content("~/Content/dttitle.png")" border="0" usemap='#toaster'>
+                <map name="toaster">
+                    <area shape='RECT' coords='261,7,351,92' href='@Url.Action(MVC.Toaster.Hunt())'>
+                    <area shape='RECT' coords='64,0,381,136' href='@Url.Action(MVC.Home.Index())'>
+                </map>
+            </td>
+            <td align="center" valign="middle">
+                <a href="/index.php">
+                    <img src='@Url.Content("~/Content/imdtlogo.png")'></a><br>
+                Welcome Guest! ( <a href="/index.php?action=loginpage">Login</a> | <a href="/index.php?action=register_form">Register</a> )
+                <br>
+            </td>
+        </tr>
+    </table>
+    <basefont face="verdana">
+    <table border=0 width=100%>
+	    <tr>
+            <td align=center valign='middle'>
+	            <br />
+                <b><a title="See what has changed in the last few days." href="?action=whats_new">Latest Updates</a></b>
+	        </td>
+            <td align=center valign='middle'>
+		        <br />
+                <b><a title="Top Ten Lists, Quick Show Lists, and more!" href="?action=stats">IMDT Stats</a></b>
+	        </td>
+            <td rowspan=2 align=center valign='middle'>
+		        <form method=GET action='@Url.Action(MVC.Search.Search())' STYLE="DISPLAY:INLINE;">
+		            <b>Search: </b>
+		            <input type='hidden' name='action' value='search' />
+		            <input type='text' name='searchfield' size='40' value='@ViewBag.SearchTerm' />
+		            <select name='searchtype'>
+		                <option value='all'>All</option>
+		                <option value='show'>Shows</option>
+		                <option value='peep'>People</option>
+		            </select>
+		            <input type=submit value='Search' />
+	            </form>
+	        </td>
+	        <td rowspan=2 align=center valign='middle'>
+	            <br>
+	            <iframe src="https://www.facebook.com/plugins/like.php?href=http://imdt.friendsofdt.org/"
+                       scrolling="no" frameborder="0"
+                       style="border:none; width:300px; height:100px;">
+	            </iframe>
+	        </td>
+            <td align=center rowspan=2 valign=middle>
+            </td>
+	    </tr>
+	    <tr>
+            <td align=center valign=middle>
+	            <b><a title="Show pictures, posters, and programs" href="?action=media_index">Media Center</a></b>
+            </td>
+	        <td align=center valign='middle'>
+	            <b><a title="How are people connected to each other?" href="?action=six_degrees">6 Degrees of DT</a></b>
+	        </td>
+	    </tr>
+    </table>
+	<hr>	
         @RenderBody()
-    </div>
+    <table align=center><tr><td align=center valign=middle>Copyright @DateTime.Now.Year Friends of Dramatech</td></tr></table>
 </body>
 </html>

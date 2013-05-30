@@ -21,6 +21,7 @@ namespace FODT.Models.Entities
     {
         public PersonAwardClassMap()
         {
+            Schema("imdt");
             Id(x => x.PersonAwardId).GeneratedBy.Identity();
             References(x => x.Person, "PersonId").Not.Nullable();
             References(x => x.Award, "AwardId").Not.Nullable();

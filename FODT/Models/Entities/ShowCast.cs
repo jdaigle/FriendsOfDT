@@ -18,10 +18,11 @@ namespace FODT.Models.Entities
     {
         public CastClassMap()
         {
+            Schema("imdt");
             Id(x => x.ShowCastId).GeneratedBy.Identity();
             References(x => x.Show, "ShowId").Not.Nullable();
             References(x => x.Person, "PersonId").Not.Nullable();
-            Map(x => x.Role).Not.Nullable().CustomType("AnsiString").Length(75);
+            Map(x => x.Role).Not.Nullable().Length(75);
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.LastModifiedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }

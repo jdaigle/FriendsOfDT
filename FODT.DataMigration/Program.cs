@@ -37,7 +37,7 @@ namespace FODT.DataMigration
             {
                 var shows = LoadEntities("shows_fixed.txt");
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT Show ON").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].Show ON").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in shows)
                 {
@@ -81,8 +81,8 @@ namespace FODT.DataMigration
                     if (entity.ShowId > maxId) maxId = entity.ShowId;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT Show OFF").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.Show', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].Show OFF").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.Show', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
@@ -94,7 +94,7 @@ namespace FODT.DataMigration
             {
                 var people = LoadEntities("people_fixed.txt");
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT Person ON").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].Person ON").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in people)
                 {
@@ -119,8 +119,8 @@ namespace FODT.DataMigration
                     if (entity.PersonId > maxId) maxId = entity.PersonId;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT Person OFF").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.Person', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].Person OFF").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.Person', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
@@ -132,7 +132,7 @@ namespace FODT.DataMigration
             {
                 var awards = LoadEntities("awards_list.txt");
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT Award ON").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].Award ON").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in awards)
                 {
@@ -147,8 +147,8 @@ namespace FODT.DataMigration
                     if (entity.AwardId > maxId) maxId = entity.AwardId;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT Award OFF").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.Award', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].Award OFF").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.Award', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
@@ -160,7 +160,7 @@ namespace FODT.DataMigration
             {
                 var awards = LoadEntities("awards.txt");
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT ShowAward ON;").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].ShowAward ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in awards)
                 {
@@ -189,8 +189,8 @@ namespace FODT.DataMigration
                     }
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT ShowAward OFF;").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.ShowAward', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].ShowAward OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.ShowAward', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
@@ -202,7 +202,7 @@ namespace FODT.DataMigration
             {
                 var awards = LoadEntities("awards.txt");
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT PersonAward ON;").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].PersonAward ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in awards)
                 {
@@ -228,8 +228,8 @@ namespace FODT.DataMigration
                     }
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT PersonAward OFF;").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.PersonAward', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].PersonAward OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.PersonAward', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
@@ -241,7 +241,7 @@ namespace FODT.DataMigration
             {
                 var cast = LoadEntities("cast.txt");
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT ShowCast ON;").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].ShowCast ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in cast)
                 {
@@ -270,8 +270,8 @@ namespace FODT.DataMigration
                     if (entity.ShowCastId > maxId) maxId = entity.ShowCastId;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT ShowCast OFF;").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.ShowCast', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].ShowCast OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.ShowCast', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
@@ -299,7 +299,7 @@ namespace FODT.DataMigration
                 }).Where(x => x != null).ToDictionary(x => x.id);
                 var crew = LoadEntities("crew.txt");
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT ShowCrew ON;").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].ShowCrew ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in crew)
                 {
@@ -330,8 +330,8 @@ namespace FODT.DataMigration
                     if (entity.ShowCrewId > maxId) maxId = entity.ShowCrewId;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT ShowCrew OFF;").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.ShowCrew', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].ShowCrew OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.ShowCrew', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
@@ -356,7 +356,7 @@ namespace FODT.DataMigration
                 }).Where(x => x != null).ToDictionary(x => x.id);
                 var ec = LoadEntities("ec.txt");
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT PersonClubPosition ON;").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].PersonClubPosition ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in ec)
                 {
@@ -387,8 +387,8 @@ namespace FODT.DataMigration
                     if (entity.PersonClubPositionId > maxId) maxId = entity.PersonClubPositionId;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT PersonClubPosition OFF;").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.PersonClubPosition', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].PersonClubPosition OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.PersonClubPosition', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }

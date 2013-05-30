@@ -7,13 +7,13 @@ using AttributeRouting.Web.Mvc;
 using FODT.Database;
 using FODT.Models;
 using FODT.Models.Entities;
-using FODT.Views.People;
+using FODT.Views.Person;
 using NHibernate.Linq;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("People")]
-    public partial class PeopleController : BaseController
+    [RoutePrefix("Person")]
+    public partial class PersonController : BaseController
     {
         [GET("{personId}")]
         public virtual ActionResult Display(int personId)
@@ -24,10 +24,10 @@ namespace FODT.Controllers
             var cast = DatabaseSession.Query<ShowCast>().Where(x => x.Person == person).Fetch(x => x.Show).ToList();
             var showAwards = DatabaseSession.Query<ShowAward>().Where(x => x.Person == person).Fetch(x => x.Show).ToList();
             var myAwards = DatabaseSession.Query<PersonAward>().Where(x => x.Person == person).ToList();
-            
+
             var viewModel = new DisplayViewModel();
             viewModel.PersonId = personId;
-            viewModel.Name = person.FirstName;
+            viewModel.FullName = person.FormalFullname;
             viewModel.Biography = person.Biography;
             viewModel.ClubPositions = clubPositions.Select(x => new DisplayViewModel.ClubPosition
             {
@@ -43,7 +43,13 @@ namespace FODT.Controllers
                 ShowName = x.Show.Title,
                 ShowQuarter = (Quarter)x.Show.Quarter,
                 ShowYear = x.Show.Year,
-            }).ToList();
+            })
+            .Concat(myAwards.Select(x => new DisplayViewModel.Award
+            {
+                Year = x.Year,
+                AwardId = x.PersonAwardId,
+                Name = this.LoadAwardsList()[x.Award.AwardId].Name,
+            })).ToList();
             viewModel.CastRoles = cast.Select(x => new DisplayViewModel.CastRole
             {
                 ShowId = x.Show.ShowId,

@@ -118,8 +118,11 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\PeopleController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\ShowsController.cs" />
+    <Compile Include="Controllers\ToasterController.cs" />
     <Compile Include="Database\CustomSqlClientDriver.cs" />
     <Compile Include="Database\DatabaseBootstrapper.cs" />
     <Compile Include="Database\SessionExtensions.cs" />
@@ -147,19 +150,37 @@
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="TimeZoneCode.cs" />
-    <Compile Include="Views\People\EditBiographyViewModel.cs" />
+    <Compile Include="Views\Person\EditBiographyViewModel.cs" />
+    <Compile Include="Views\Search\SearchResultsViewModel.cs" />
     <Compile Include="Views\Shows\DisplayViewModel.cs" />
-    <Compile Include="Views\People\DisplayViewModel.cs" />
+    <Compile Include="Views\Person\DisplayViewModel.cs" />
+    <Compile Include="Views\Toaster\HuntViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Content Include="Content\bkup.imdtlogo.png" />
+    <Content Include="Content\dtlogo.png" />
+    <Content Include="Content\dtstyle.css" />
+    <Content Include="Content\dttitle.png" />
+    <Content Include="Content\greg_abbott.jpg" />
+    <Content Include="Content\header.png" />
+    <Content Include="Content\imdtlogo.png" />
+    <Content Include="Content\imdtlogosmall.png" />
+    <Content Include="Content\imdtlogotrans.png" />
+    <Content Include="Content\IMG_0001.JPG" />
+    <Content Include="Content\nopic.gif" />
+    <Content Include="Content\nopicind.gif" />
+    <Content Include="Content\noposter.gif" />
+    <Content Include="Content\peep.1049.jpg" />
+    <Content Include="Content\thumbnail.jpg" />
+    <Content Include="Content\tinyposter.gif" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\People\Display.cshtml" />
+    <Content Include="Views\Person\Display.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -181,7 +202,16 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\People\EditBiography.cshtml" />
+    <Content Include="Views\Person\EditBiography.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Search\SearchResults.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Toaster\Hunt.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

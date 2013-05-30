@@ -19,9 +19,10 @@ namespace FODT.Models.Entities
     {
         public PersonClubPositionClassMap()
         {
+            Schema("imdt");
             Id(x => x.PersonClubPositionId).GeneratedBy.Identity();
             References(x => x.Person, "PersonId").Not.Nullable();
-            Map(x => x.Position).Not.Nullable().CustomType("AnsiString").Length(75);
+            Map(x => x.Position).Not.Nullable().Length(75);
             Map(x => x.DisplayOrder).Not.Nullable();
             Map(x => x.Year).Not.Nullable();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();

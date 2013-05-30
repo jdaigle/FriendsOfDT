@@ -17,8 +17,9 @@ namespace FODT.Models.Entities
     {
         public AwardClassMap()
         {
+            Schema("imdt");
             Id(x => x.AwardId).GeneratedBy.Identity();
-            Map(x => x.Name).Not.Nullable().CustomType("AnsiString").Length(50);
+            Map(x => x.Name).Not.Nullable().Length(50);
         }
     }
 }

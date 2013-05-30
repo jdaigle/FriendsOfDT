@@ -1,0 +1,124 @@
+﻿@model FODT.Views.Person.DisplayViewModel  
+<table align="center" border="0">
+    <tbody>
+        <tr>
+            <td></td>
+            <td>
+                <center>
+                    <font size="+3"><b>@Model.FullName</b></font>
+                    <br><br>
+                </center>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="top" rowspan="3" width="30%">
+                <a href="?action=media_detail&amp;media_id=101">
+                    <img src="./images/people/598-thumb.jpg" alt="Will 'Duba Dub' Wright">
+                </a>
+                <br>
+                Click picture to see original size<br>
+                <br>
+                <a href="/index.php?action=media_index&amp;IDtype=people&amp;ID=598">See all media associated with this person</a>
+                <br>
+                <br>
+            </td>
+            <td valign="top">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr align="center">
+                            <td colspan="5">
+                                <b><u>Biographical Data</u></b>
+                                <br>
+                                <br>
+                                @Model.Biography
+                                <br>
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td colspan="5"><b><u>Positions Held</u></b><br>
+                                <br>
+                            </td>
+                        </tr>
+                        @foreach (var item in Model.ClubPositions)
+                        {
+                        <tr>
+                            <td align="center" valign="middle" colspan="5">@item.Year&nbsp; - &nbsp;@item.Name</td>
+                        </tr>   
+                        }
+                        <tr align="center">
+                            <td colspan="5">
+                                <br>
+                                <b><u>Awards</u></b><br>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" colspan="5">
+                                <table>
+                                    <tbody>
+                                        @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
+                                        {
+                                        <tr>
+                                            <td align="center"><a href="?action=awards_by_year&amp;year=2006">@item.Year</a></td>
+                                            <td>&nbsp; - &nbsp; </td>
+                                            <td align="center">@item.Name</td>
+                                            @if (item.ShowId.HasValue)
+                                            {
+                                                <td>&nbsp; - &nbsp; </td>
+                                                <td align="left"><a href="?action=show_detail&amp;show_id=242">@FODT.Models.ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                                            }
+                                            else
+                                            {
+                                                <td>&nbsp;</td>
+                                            }
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td colspan="2"></td>
+                            <td>
+                                <br>
+                                <b><u>Acting Credits</u></b><br>
+                                <br>
+                            </td>
+                            <td colspan="2"></td>
+                        </tr>
+                        @foreach (var item in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
+                        {
+                        <tr align="center">
+                            <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
+                            <td>&nbsp; - &nbsp;</td>
+                            <td><a href="/index.php?action=show_detail&amp;show_id=246">@FODT.Models.ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                            <td>&nbsp; - &nbsp;</td>
+                            <td align="left">@item.Role</td>
+                        </tr>
+                        }
+                        <tr align="center">
+                            <td colspan="2"></td>
+                            <td align="center">
+                                <br>
+                                <br>
+                                <b><u>Production Credits</u></b><br>
+                                <br>
+                            </td>
+                            <td colspan="2"></td>
+                        </tr>
+                        @foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
+                        {
+                        <tr align="center">
+                            <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
+                            <td>&nbsp; - &nbsp;</td>
+                            <td><a href="/index.php?action=show_detail&amp;show_id=246">@FODT.Models.ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                            <td>&nbsp; - &nbsp;</td>
+                            <td align="left">@item.Name</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
