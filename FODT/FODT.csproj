@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
@@ -132,15 +133,18 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HttpHeadersCleanupModule.cs" />
-    <Compile Include="Models\Entities\Award.cs" />
-    <Compile Include="Models\Entities\PersonClubPosition.cs" />
+    <Compile Include="Models\IMDT\Award.cs" />
+    <Compile Include="Models\IMDT\PersonMedia.cs" />
+    <Compile Include="Models\IMDT\ShowMedia.cs" />
+    <Compile Include="Models\IMDT\MediaItem.cs" />
+    <Compile Include="Models\IMDT\PersonClubPosition.cs" />
     <Compile Include="Models\Quarter.cs" />
-    <Compile Include="Models\Entities\ShowCast.cs" />
-    <Compile Include="Models\Entities\ShowCrew.cs" />
-    <Compile Include="Models\Entities\ShowAward.cs" />
-    <Compile Include="Models\Entities\PersonAward.cs" />
-    <Compile Include="Models\Entities\Show.cs" />
-    <Compile Include="Models\Entities\Person.cs" />
+    <Compile Include="Models\IMDT\ShowCast.cs" />
+    <Compile Include="Models\IMDT\ShowCrew.cs" />
+    <Compile Include="Models\IMDT\ShowAward.cs" />
+    <Compile Include="Models\IMDT\PersonAward.cs" />
+    <Compile Include="Models\IMDT\Show.cs" />
+    <Compile Include="Models\IMDT\Person.cs" />
     <Compile Include="Models\ExtensionMethods.cs" />
     <Compile Include="ObjectDisposal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -212,6 +216,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Toaster\Hunt.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

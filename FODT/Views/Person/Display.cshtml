@@ -13,7 +13,7 @@
         <tr>
             <td align="center" valign="top" rowspan="3" width="30%">
                 <a href="?action=media_detail&amp;media_id=101">
-                    <img src="./images/people/598-thumb.jpg" alt="Will 'Duba Dub' Wright">
+                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
                 </a>
                 <br>
                 Click picture to see original size<br>
@@ -25,6 +25,7 @@
             <td valign="top">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tbody>
+                        @if (!string.IsNullOrWhiteSpace(Model.Biography)) {
                         <tr align="center">
                             <td colspan="5">
                                 <b><u>Biographical Data</u></b>
@@ -34,17 +35,21 @@
                                 <br>
                             </td>
                         </tr>
-                        <tr align="center">
-                            <td colspan="5"><b><u>Positions Held</u></b><br>
-                                <br>
-                            </td>
-                        </tr>
-                        @foreach (var item in Model.ClubPositions)
-                        {
-                        <tr>
-                            <td align="center" valign="middle" colspan="5">@item.Year&nbsp; - &nbsp;@item.Name</td>
-                        </tr>   
                         }
+                        @if (Model.ClubPositions.Any()) {
+                            <tr align="center">
+                                <td colspan="5"><b><u>Positions Held</u></b><br>
+                                    <br>
+                                </td>
+                            </tr>
+                            foreach (var item in Model.ClubPositions)
+                            {
+                            <tr>
+                                <td align="center" valign="middle" colspan="5">@item.Year&nbsp; - &nbsp;@item.Name</td>
+                            </tr>   
+                            }
+                        }
+                        @if (Model.Awards.Any()) {
                         <tr align="center">
                             <td colspan="5">
                                 <br>
@@ -65,7 +70,7 @@
                                             @if (item.ShowId.HasValue)
                                             {
                                                 <td>&nbsp; - &nbsp; </td>
-                                                <td align="left"><a href="?action=show_detail&amp;show_id=242">@FODT.Models.ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                                                <td align="left"><a href="?action=show_detail&amp;show_id=242">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                                             }
                                             else
                                             {
@@ -77,44 +82,49 @@
                                 </table>
                             </td>
                         </tr>
-                        <tr align="center">
-                            <td colspan="2"></td>
-                            <td>
-                                <br>
-                                <b><u>Acting Credits</u></b><br>
-                                <br>
-                            </td>
-                            <td colspan="2"></td>
-                        </tr>
-                        @foreach (var item in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
-                        {
-                        <tr align="center">
-                            <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
-                            <td>&nbsp; - &nbsp;</td>
-                            <td><a href="/index.php?action=show_detail&amp;show_id=246">@FODT.Models.ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
-                            <td>&nbsp; - &nbsp;</td>
-                            <td align="left">@item.Role</td>
-                        </tr>
                         }
-                        <tr align="center">
-                            <td colspan="2"></td>
-                            <td align="center">
-                                <br>
-                                <br>
-                                <b><u>Production Credits</u></b><br>
-                                <br>
-                            </td>
-                            <td colspan="2"></td>
-                        </tr>
-                        @foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
-                        {
-                        <tr align="center">
-                            <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
-                            <td>&nbsp; - &nbsp;</td>
-                            <td><a href="/index.php?action=show_detail&amp;show_id=246">@FODT.Models.ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
-                            <td>&nbsp; - &nbsp;</td>
-                            <td align="left">@item.Name</td>
-                        </tr>
+                        @if (Model.CastRoles.Any()) {
+                            <tr align="center">
+                                <td colspan="2"></td>
+                                <td>
+                                    <br>
+                                    <b><u>Acting Credits</u></b><br>
+                                    <br>
+                                </td>
+                                <td colspan="2"></td>
+                            </tr>
+                            foreach (var item in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
+                            {
+                            <tr align="center">
+                                <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
+                                <td>&nbsp; - &nbsp;</td>
+                                <td><a href="/index.php?action=show_detail&amp;show_id=246">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                                <td>&nbsp; - &nbsp;</td>
+                                <td align="left">@item.Role</td>
+                            </tr>
+                            }
+                        }
+                        @if (Model.CrewPositions.Any()) {
+                            <tr align="center">
+                                <td colspan="2"></td>
+                                <td align="center">
+                                    <br>
+                                    <br>
+                                    <b><u>Production Credits</u></b><br>
+                                    <br>
+                                </td>
+                                <td colspan="2"></td>
+                            </tr>
+                            foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
+                            {
+                            <tr align="center">
+                                <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
+                                <td>&nbsp; - &nbsp;</td>
+                                <td><a href="/index.php?action=show_detail&amp;show_id=246">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                                <td>&nbsp; - &nbsp;</td>
+                                <td align="left">@item.Name</td>
+                            </tr>
+                            }
                         }
                     </tbody>
                 </table>

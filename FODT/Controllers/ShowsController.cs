@@ -5,7 +5,7 @@ using AttributeRouting;
 using AttributeRouting.Web.Mvc;
 using FODT.Database;
 using FODT.Models;
-using FODT.Models.Entities;
+using FODT.Models.IMDT;
 using FODT.Views.Shows;
 using NHibernate.Linq;
 
@@ -43,7 +43,7 @@ namespace FODT.Controllers
             {
                 Year = x.Year,
                 AwardId = x.ShowAwardId,
-                Name = this.LoadAwardsList()[x.Award.AwardId].Name,
+                Name = x.Award.Name,
                 PersonId = x.Person != null ? x.Person.PersonId : (int?)null,
                 PersonName = x.Person != null ? x.Person.LastName : (string)null,
                 PersonLastName = x.Person != null ? x.Person.LastName : (string)null,

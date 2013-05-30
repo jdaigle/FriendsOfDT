@@ -6,7 +6,7 @@ using AttributeRouting;
 using AttributeRouting.Web.Mvc;
 using FODT.Database;
 using FODT.Models;
-using FODT.Models.Entities;
+using FODT.Models.IMDT;
 using FODT.Views.Person;
 using NHibernate.Linq;
 
@@ -22,13 +22,14 @@ namespace FODT.Controllers
             var clubPositions = DatabaseSession.Query<PersonClubPosition>().Where(x => x.Person == person).ToList();
             var crew = DatabaseSession.Query<ShowCrew>().Where(x => x.Person == person).Fetch(x => x.Show).ToList();
             var cast = DatabaseSession.Query<ShowCast>().Where(x => x.Person == person).Fetch(x => x.Show).ToList();
-            var showAwards = DatabaseSession.Query<ShowAward>().Where(x => x.Person == person).Fetch(x => x.Show).ToList();
-            var myAwards = DatabaseSession.Query<PersonAward>().Where(x => x.Person == person).ToList();
+            var showAwards = DatabaseSession.Query<ShowAward>().Where(x => x.Person == person).Fetch(x => x.Show).Fetch(x => x.Award).ToList();
+            var myAwards = DatabaseSession.Query<PersonAward>().Where(x => x.Person == person).Fetch(x => x.Award).ToList();
 
             var viewModel = new DisplayViewModel();
             viewModel.PersonId = personId;
-            viewModel.FullName = person.FormalFullname;
+            viewModel.FullName = person.Fullname;
             viewModel.Biography = person.Biography;
+            viewModel.MediaItemId = person.MediaItem.MediaItemId;
             viewModel.ClubPositions = clubPositions.Select(x => new DisplayViewModel.ClubPosition
             {
                 Year = x.Year,
@@ -38,7 +39,7 @@ namespace FODT.Controllers
             {
                 Year = x.Year,
                 AwardId = x.ShowAwardId,
-                Name = this.LoadAwardsList()[x.Award.AwardId].Name,
+                Name = x.Award.Name,
                 ShowId = x.Show.ShowId,
                 ShowName = x.Show.Title,
                 ShowQuarter = (Quarter)x.Show.Quarter,
@@ -48,7 +49,7 @@ namespace FODT.Controllers
             {
                 Year = x.Year,
                 AwardId = x.PersonAwardId,
-                Name = this.LoadAwardsList()[x.Award.AwardId].Name,
+                Name = x.Award.Name,
             })).ToList();
             viewModel.CastRoles = cast.Select(x => new DisplayViewModel.CastRole
             {

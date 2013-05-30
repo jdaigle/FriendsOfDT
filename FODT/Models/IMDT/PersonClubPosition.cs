@@ -2,29 +2,29 @@
 using FluentNHibernate.Mapping;
 using FODT.Database;
 
-namespace FODT.Models.Entities
+namespace FODT.Models.IMDT
 {
-    public class ShowCrew
+    public class PersonClubPosition
     {
-        public virtual int ShowCrewId { get; set; }
-        public virtual Show Show { get; set; }
+        public virtual int PersonClubPositionId { get; set; }
         public virtual Person Person { get; set; }
-        public virtual int DisplayOrder { get; set; }
         public virtual string Position { get; set; }
+        public virtual int DisplayOrder { get; set; }
+        public virtual short Year { get; set; }
         public virtual DateTime InsertedDateTime { get; set; }
         public virtual DateTime LastModifiedDateTime { get; set; }
     }
 
-    public class CrewClassMap : ClassMap<ShowCrew>
+    public class PersonClubPositionClassMap : ClassMap<PersonClubPosition>
     {
-        public CrewClassMap()
+        public PersonClubPositionClassMap()
         {
             Schema("imdt");
-            Id(x => x.ShowCrewId).GeneratedBy.Identity();
-            References(x => x.Show, "ShowId").Not.Nullable();
+            Id(x => x.PersonClubPositionId).GeneratedBy.Identity();
             References(x => x.Person, "PersonId").Not.Nullable();
-            Map(x => x.DisplayOrder).Not.Nullable();
             Map(x => x.Position).Not.Nullable().Length(75);
+            Map(x => x.DisplayOrder).Not.Nullable();
+            Map(x => x.Year).Not.Nullable();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.LastModifiedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }

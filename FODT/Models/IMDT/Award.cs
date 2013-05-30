@@ -5,7 +5,7 @@ using System.Web;
 using FluentNHibernate.Mapping;
 using FODT.Database;
 
-namespace FODT.Models.Entities
+namespace FODT.Models.IMDT
 {
     public class Award
     {

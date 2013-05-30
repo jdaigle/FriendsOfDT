@@ -24,6 +24,7 @@ using T4MVC;
 [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
 public static class MVC {
     public static FODT.Controllers.HomeController Home = new FODT.Controllers.T4MVC_HomeController();
+    public static FODT.Controllers.MediaController Media = new FODT.Controllers.T4MVC_MediaController();
     public static FODT.Controllers.PersonController Person = new FODT.Controllers.T4MVC_PersonController();
     public static FODT.Controllers.SearchController Search = new FODT.Controllers.T4MVC_SearchController();
     public static FODT.Controllers.ShowsController Shows = new FODT.Controllers.T4MVC_ShowsController();
@@ -387,6 +388,123 @@ namespace FODT.Controllers {
 
         public override System.Web.Mvc.ActionResult Index() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
+            return callInfo;
+        }
+
+    }
+}
+
+namespace FODT.Controllers {
+    public partial class MediaController {
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public MediaController() { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected MediaController(Dummy d) { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToAction(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoute(callInfo.RouteValueDictionary);
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToActionPermanent(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
+        }
+
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult GetItem() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.GetItem);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult GetItemTiny() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.GetItemTiny);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult GetItemThumbnail() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.GetItemThumbnail);
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public MediaController Actions { get { return MVC.Media; } }
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Area = "";
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Name = "Media";
+        [GeneratedCode("T4MVC", "2.0")]
+        public const string NameConst = "Media";
+
+        static readonly ActionNamesClass s_actions = new ActionNamesClass();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionNamesClass ActionNames { get { return s_actions; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNamesClass {
+            public readonly string GetItem = "GetItem";
+            public readonly string GetItemTiny = "GetItemTiny";
+            public readonly string GetItemThumbnail = "GetItemThumbnail";
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNameConstants {
+            public const string GetItem = "GetItem";
+            public const string GetItemTiny = "GetItemTiny";
+            public const string GetItemThumbnail = "GetItemThumbnail";
+        }
+
+
+        static readonly ActionParamsClass_GetItem s_params_GetItem = new ActionParamsClass_GetItem();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_GetItem GetItemParams { get { return s_params_GetItem; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_GetItem {
+            public readonly string id = "id";
+        }
+        static readonly ActionParamsClass_GetItemTiny s_params_GetItemTiny = new ActionParamsClass_GetItemTiny();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_GetItemTiny GetItemTinyParams { get { return s_params_GetItemTiny; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_GetItemTiny {
+            public readonly string id = "id";
+        }
+        static readonly ActionParamsClass_GetItemThumbnail s_params_GetItemThumbnail = new ActionParamsClass_GetItemThumbnail();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_GetItemThumbnail GetItemThumbnailParams { get { return s_params_GetItemThumbnail; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_GetItemThumbnail {
+            public readonly string id = "id";
+        }
+        static readonly ViewNames s_views = new ViewNames();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ViewNames Views { get { return s_views; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ViewNames {
+        }
+    }
+
+    [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+    public class T4MVC_MediaController: FODT.Controllers.MediaController {
+        public T4MVC_MediaController() : base(Dummy.Instance) { }
+
+        public override System.Web.Mvc.ActionResult GetItem(int id) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetItem);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult GetItemTiny(int id) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetItemTiny);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult GetItemThumbnail(int id) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetItemThumbnail);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
             return callInfo;
         }
 

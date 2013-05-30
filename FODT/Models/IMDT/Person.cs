@@ -2,7 +2,7 @@
 using FluentNHibernate.Mapping;
 using FODT.Database;
 
-namespace FODT.Models.Entities
+namespace FODT.Models.IMDT
 {
     public class Person
     {
@@ -14,12 +14,38 @@ namespace FODT.Models.Entities
         public virtual string Suffix { get; set; }
         public virtual string Nickname { get; set; }
         public virtual string Biography { get; set; }
-        public virtual int MediaId { get; set; }
+        public virtual MediaItem MediaItem { get; set; }
         public virtual DateTime InsertedDateTime { get; set; }
         public virtual DateTime LastModifiedDateTime { get; set; }
 
-        public virtual string FormalFullname { get { return string.Format("{0} {1} '{2}' {3} {4}", Honorific, FirstName, MiddleName, LastName, Suffix).Trim(); } }
-        public virtual string Fullname { get { return string.Format("{0} {1} {2}", FirstName, MiddleName, LastName).Trim(); } }
+        public virtual string Fullname
+        {
+            get
+            {
+                var name = FirstName.Trim();
+                if (!string.IsNullOrWhiteSpace(Honorific))
+                {
+                    name = Honorific.Trim() + " " + name;
+                }
+                if (!string.IsNullOrWhiteSpace(MiddleName))
+                {
+                    name = name + " " + MiddleName.Trim();
+                }
+                if (!string.IsNullOrWhiteSpace(Nickname))
+                {
+                    name = name + " '" + Nickname.Trim() + "'";
+                }
+                if (!string.IsNullOrWhiteSpace(LastName))
+                {
+                    name = name + " " + LastName.Trim();
+                }
+                if (!string.IsNullOrWhiteSpace(Suffix))
+                {
+                    name = name + ", " + Suffix.Trim();
+                }
+                return name.Trim();
+            }
+        }
     }
 
     public class PersonClassMap : ClassMap<Person>
@@ -35,7 +61,7 @@ namespace FODT.Models.Entities
             Map(x => x.Suffix).Not.Nullable().Length(50);
             Map(x => x.Nickname).Not.Nullable().Length(100);
             Map(x => x.Biography).Not.Nullable().Length(10000);
-            Map(x => x.MediaId).Not.Nullable();
+            References(x => x.MediaItem, "MediaItemId").Not.Nullable();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.LastModifiedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }

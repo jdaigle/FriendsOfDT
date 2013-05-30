@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using FODT.Database;
-using FODT.Models.Entities;
+using FODT.Models.IMDT;
 using NHibernate;
 
 namespace FODT.Controllers
@@ -79,16 +79,6 @@ namespace FODT.Controllers
                 }
             }
             base.OnException(filterContext);
-        }
-
-        private IDictionary<int, Award> loadedAwardsList;
-        protected virtual IDictionary<int, Award> LoadAwardsList()
-        {
-            if (loadedAwardsList == null)
-            {
-                loadedAwardsList = DatabaseSession.CreateCriteria<Award>().List<Award>().ToDictionary(x => x.AwardId);
-            }
-            return loadedAwardsList;
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using FODT.Database;
-using FODT.Models.Entities;
+using FODT.Models.IMDT;
 
 namespace FODT.DataMigration
 {
@@ -21,9 +21,12 @@ namespace FODT.DataMigration
             var cfg = DatabaseBootstrapper.Bootstrap(connectionString);
             var sessionFactory = cfg.BuildSessionFactory();
 
+            ImportMediaItems(sessionFactory);
             ImportAwardsList(sessionFactory);
             ImportPersons(sessionFactory);
+            ImportPersonMedia(sessionFactory);
             ImportShows(sessionFactory);
+            ImportShowMedia(sessionFactory);
             ImportShowAwards(sessionFactory);
             ImportPersonAwards(sessionFactory);
             ImportCast(sessionFactory);
@@ -35,6 +38,9 @@ namespace FODT.DataMigration
         {
             using (var session = sessionFactory.OpenSession())
             {
+                var mediaLookup = LoadEntities("media.txt")
+                    .Select(x => new { media_id = int.Parse(x[0]), mediaItem_id = int.Parse(x[4]) })
+                    .ToDictionary(x => x.media_id);
                 var shows = LoadEntities("shows_fixed.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].Show ON").ExecuteUpdate();
@@ -69,7 +75,14 @@ namespace FODT.DataMigration
                     entity.Pictures = (_row[5] ?? string.Empty).Trim();
                     entity.FunFacts = (_row[6] ?? string.Empty).Trim();
                     entity.Toaster = (_row[9] ?? string.Empty).Trim();
-                    entity.MediaId = int.Parse(_row[8]);
+                    if (mediaLookup.ContainsKey(int.Parse(_row[8])))
+                    {
+                        entity.MediaItem = session.Load<MediaItem>(mediaLookup[int.Parse(_row[8])].mediaItem_id);
+                    }
+                    else
+                    {
+                        entity.MediaItem = session.Load<MediaItem>(1); // default to nopic
+                    }
                     entity.InsertedDateTime = DateTime.UtcNow;
                     entity.LastModifiedDateTime = DateTime.UtcNow;
                     var lastModifiedDateTime = DateTime.UtcNow;
@@ -92,6 +105,9 @@ namespace FODT.DataMigration
         {
             using (var session = sessionFactory.OpenSession())
             {
+                var mediaLookup = LoadEntities("media.txt")
+                    .Select(x => new { media_id = int.Parse(x[0]), mediaItem_id = int.Parse(x[4]) })
+                    .ToDictionary(x => x.media_id);
                 var people = LoadEntities("people_fixed.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].Person ON").ExecuteUpdate();
@@ -107,7 +123,14 @@ namespace FODT.DataMigration
                     entity.Suffix = (_row[5] ?? string.Empty).Trim();
                     entity.Nickname = (_row[6] ?? string.Empty).Trim();
                     entity.Biography = (_row[7] ?? string.Empty).Trim();
-                    entity.MediaId = int.Parse(_row[13]);
+                    if (mediaLookup.ContainsKey(int.Parse(_row[13])))
+                    {
+                        entity.MediaItem = session.Load<MediaItem>(mediaLookup[int.Parse(_row[13])].mediaItem_id);
+                    }
+                    else
+                    {
+                        entity.MediaItem = session.Load<MediaItem>(1); // default to nopic
+                    }
                     entity.InsertedDateTime = DateTime.UtcNow;
                     entity.LastModifiedDateTime = DateTime.UtcNow;
                     var lastModifiedDateTime = DateTime.UtcNow;
@@ -121,6 +144,38 @@ namespace FODT.DataMigration
                 session.Flush();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].Person OFF").ExecuteUpdate();
                 session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.Person', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
+        }
+
+        private static void ImportMediaItems(NHibernate.ISessionFactory sessionFactory)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var media_items = LoadEntities("media_items.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].[MediaItem] ON").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in media_items)
+                {
+                    var entity = new MediaItem();
+                    entity.MediaItemId = int.Parse(_row[0]);
+                    entity.Path = (_row[1] ?? string.Empty).Trim();
+                    entity.ThumbnailPath = (_row[2] ?? string.Empty).Trim();
+                    entity.TinyPath = (_row[3] ?? string.Empty).Trim();
+                    entity.InsertedDateTime = DateTime.UtcNow;
+                    var insertedDateTime = DateTime.UtcNow;
+                    if (DateTime.TryParse(_row[4], out insertedDateTime))
+                    {
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(insertedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                    }
+                    session.Save(entity, entity.MediaItemId);
+                    if (entity.MediaItemId > maxId) maxId = entity.MediaItemId;
+                }
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].[MediaItem] OFF").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.[MediaItem]', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
@@ -149,6 +204,76 @@ namespace FODT.DataMigration
                 session.Flush();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].Award OFF").ExecuteUpdate();
                 session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.Award', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
+        }
+
+        private static void ImportPersonMedia(NHibernate.ISessionFactory sessionFactory)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var media = LoadEntities("media.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].PersonMedia ON;").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in media)
+                {
+                    if (_row[2].ToLower() != "people")
+                    {
+                        continue;
+                    }
+                    var entity = new PersonMedia();
+                    entity.PersonMediaId = int.Parse(_row[0]);
+                    entity.Person = session.Load<Person>(int.Parse(_row[1]));
+                    entity.MediaItem = session.Load<MediaItem>(int.Parse(_row[4]));
+                    entity.InsertedDateTime = DateTime.UtcNow;
+                    var insertedDateTime = DateTime.UtcNow;
+                    if (DateTime.TryParse(_row[3], out insertedDateTime))
+                    {
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(insertedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                    }
+                    session.Save(entity, entity.PersonMediaId);
+                    if (entity.PersonMediaId > maxId) maxId = entity.PersonMediaId;
+                }
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].PersonMedia OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.PersonMedia', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
+        }
+
+        private static void ImportShowMedia(NHibernate.ISessionFactory sessionFactory)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var media = LoadEntities("media.txt");
+                session.Transaction.Begin();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].ShowMedia ON;").ExecuteUpdate();
+                var maxId = 0;
+                foreach (var _row in media)
+                {
+                    if (_row[2].ToLower() != "shows")
+                    {
+                        continue;
+                    }
+                    var entity = new ShowMedia();
+                    entity.ShowMediaId = int.Parse(_row[0]);
+                    entity.Show = session.Load<Show>(int.Parse(_row[1]));
+                    entity.MediaItem = session.Load<MediaItem>(int.Parse(_row[4]));
+                    entity.InsertedDateTime = DateTime.UtcNow;
+                    var insertedDateTime = DateTime.UtcNow;
+                    if (DateTime.TryParse(_row[3], out insertedDateTime))
+                    {
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(insertedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                    }
+                    session.Save(entity, entity.ShowMediaId);
+                    if (entity.ShowMediaId > maxId) maxId = entity.ShowMediaId;
+                }
+                session.Flush();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [imdt].ShowMedia OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('imdt.ShowMedia', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }

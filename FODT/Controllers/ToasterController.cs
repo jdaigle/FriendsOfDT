@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using AttributeRouting;
 using AttributeRouting.Web.Mvc;
 using FODT.Models;
-using FODT.Models.Entities;
+using FODT.Models.IMDT;
 using FODT.Views.Toaster;
 using NHibernate.Linq;
 

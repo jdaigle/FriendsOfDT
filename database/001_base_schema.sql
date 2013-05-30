@@ -4,6 +4,19 @@ GO
 CREATE SCHEMA [imdt] AUTHORIZATION [dbo]
 GO
 
+CREATE TABLE [imdt].[MediaItem] (
+	[MediaItemId] [int] IDENTITY(1,1) NOT NULL,
+	[Path] [varchar](100) NOT NULL,
+	[ThumbnailPath] [varchar](100) NOT NULL,
+	[TinyPath] [varchar](100) NOT NULL,
+	[InsertedDateTime] [datetime2] NOT NULL,
+	CONSTRAINT [PK_MediaItem] PRIMARY KEY CLUSTERED 
+    (
+	    [MediaItemId] ASC
+    ),
+);
+GO
+
 CREATE TABLE [imdt].[Person] (
 	[PersonId] [int] IDENTITY(1,1) NOT NULL,
 	[Honorific] [nvarchar](50) NOT NULL,
@@ -13,17 +26,38 @@ CREATE TABLE [imdt].[Person] (
 	[Suffix] [nvarchar](50) NOT NULL,
 	[Nickname] [nvarchar](100) NOT NULL,
 	[Biography] [nvarchar](max) NOT NULL,
-	[MediaId] [int] NOT NULL CONSTRAINT DF_Person_MediaId DEFAULT 1,
+	[MediaItemId] [int] NOT NULL CONSTRAINT DF_Person_MediaItemId DEFAULT 1,
 	[InsertedDateTime] [datetime2] NOT NULL,
 	[LastModifiedDateTime] [datetime2] NOT NULL,
 	CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED 
     (
 	    [PersonId] ASC
     ),
+    CONSTRAINT [FK_Person_MediaItem]
+		FOREIGN KEY ([MediaItemId])
+		REFERENCES [imdt].[MediaItem],
  -- `username` nvarchar(25) DEFAULT NULL,
  -- `password` nvarchar(32) DEFAULT NULL,
  -- `email` nvarchar(50) DEFAULT NULL,
  -- `level` nvarchar(50) DEFAULT NULL,
+);
+GO
+
+CREATE TABLE [imdt].[PersonMedia] (
+	[PersonMediaId] [int] IDENTITY(1,1) NOT NULL,
+	[PersonId] [int] NOT NULL,
+	[MediaItemId] [int] NOT NULL,
+	[InsertedDateTime] [datetime2] NOT NULL,
+	CONSTRAINT [PK_PersonMedia] PRIMARY KEY CLUSTERED 
+    (
+	    [PersonMediaId] ASC
+    ),
+    CONSTRAINT [FK_PersonMedia_Person]
+		FOREIGN KEY ([PersonId])
+		REFERENCES [imdt].[Person],
+    CONSTRAINT [FK_PersonMedia_MediaItem]
+		FOREIGN KEY ([MediaItemId])
+		REFERENCES [imdt].[MediaItem],
 );
 GO
 
@@ -36,13 +70,34 @@ CREATE TABLE [imdt].[Show] (
 	[Pictures] [nvarchar](100) NOT NULL,
 	[FunFacts] [nvarchar](max) NOT NULL,
 	[Toaster] [nvarchar](max) NOT NULL,
-	[MediaId] [int] NOT NULL CONSTRAINT DF_Show_MediaId DEFAULT 1,
+	[MediaItemId] [int] NOT NULL CONSTRAINT DF_Show_MediaItemId DEFAULT 1,
 	[InsertedDateTime] [datetime2] NOT NULL,
 	[LastModifiedDateTime] [datetime2] NOT NULL,
 	CONSTRAINT [PK_Show] PRIMARY KEY CLUSTERED 
     (
 	    [ShowId] ASC
     ),
+    CONSTRAINT [FK_Show_MediaItem]
+		FOREIGN KEY ([MediaItemId])
+		REFERENCES [imdt].[MediaItem],
+);
+GO
+
+CREATE TABLE [imdt].[ShowMedia] (
+	[ShowMediaId] [int] IDENTITY(1,1) NOT NULL,
+	[ShowId] [int] NOT NULL,
+	[MediaItemId] [int] NOT NULL,
+	[InsertedDateTime] [datetime2] NOT NULL,
+	CONSTRAINT [PK_ShowMedia] PRIMARY KEY CLUSTERED 
+    (
+	    [ShowMediaId] ASC
+    ),
+    CONSTRAINT [FK_ShowMedia_Show]
+		FOREIGN KEY ([ShowId])
+		REFERENCES [imdt].[Show],
+    CONSTRAINT [FK_ShowMedia_MediaItem]
+		FOREIGN KEY ([MediaItemId])
+		REFERENCES [imdt].[MediaItem],
 );
 GO
 

@@ -5,12 +5,11 @@ using System.Web;
 using FluentNHibernate.Mapping;
 using FODT.Database;
 
-namespace FODT.Models.Entities
+namespace FODT.Models.IMDT
 {
-    public class ShowAward
+    public class PersonAward
     {
-        public virtual int ShowAwardId { get; set; }
-        public virtual Show Show { get; set; }
+        public virtual int PersonAwardId { get; set; }
         public virtual Person Person { get; set; }
         public virtual Award Award { get; set; }
         public virtual short Year { get; set; }
@@ -18,14 +17,13 @@ namespace FODT.Models.Entities
         public virtual DateTime LastModifiedDateTime { get; set; }
     }
 
-    public class ShowAwardClassMap : ClassMap<ShowAward>
+    public class PersonAwardClassMap : ClassMap<PersonAward>
     {
-        public ShowAwardClassMap()
+        public PersonAwardClassMap()
         {
             Schema("imdt");
-            Id(x => x.ShowAwardId).GeneratedBy.Identity();
-            References(x => x.Show, "ShowId").Not.Nullable();
-            References(x => x.Person, "PersonId").Nullable();
+            Id(x => x.PersonAwardId).GeneratedBy.Identity();
+            References(x => x.Person, "PersonId").Not.Nullable();
             References(x => x.Award, "AwardId").Not.Nullable();
             Map(x => x.Year).Not.Nullable();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();

@@ -1,31 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using FluentNHibernate.Mapping;
 using FODT.Database;
 
-namespace FODT.Models.Entities
+namespace FODT.Models.IMDT
 {
-    public class PersonAward
+    public class ShowCast
     {
-        public virtual int PersonAwardId { get; set; }
+        public virtual int ShowCastId { get; set; }
+        public virtual Show Show { get; set; }
         public virtual Person Person { get; set; }
-        public virtual Award Award { get; set; }
-        public virtual short Year { get; set; }
+        public virtual string Role { get; set; }
         public virtual DateTime InsertedDateTime { get; set; }
         public virtual DateTime LastModifiedDateTime { get; set; }
     }
 
-    public class PersonAwardClassMap : ClassMap<PersonAward>
+    public class CastClassMap : ClassMap<ShowCast>
     {
-        public PersonAwardClassMap()
+        public CastClassMap()
         {
             Schema("imdt");
-            Id(x => x.PersonAwardId).GeneratedBy.Identity();
+            Id(x => x.ShowCastId).GeneratedBy.Identity();
+            References(x => x.Show, "ShowId").Not.Nullable();
             References(x => x.Person, "PersonId").Not.Nullable();
-            References(x => x.Award, "AwardId").Not.Nullable();
-            Map(x => x.Year).Not.Nullable();
+            Map(x => x.Role).Not.Nullable().Length(75);
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.LastModifiedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }

@@ -11,6 +11,7 @@ namespace FODT.Views.Person
         public int PersonId { get; set; }
         public string FullName { get; set; }
         public string Biography { get; set; }
+        public int MediaItemId { get; set; }
 
         public IEnumerable<ClubPosition> ClubPositions { get; set; }
 
