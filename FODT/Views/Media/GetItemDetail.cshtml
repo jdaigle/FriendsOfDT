@@ -1,0 +1,34 @@
+﻿@model FODT.Views.Media.GetItemDetailViewModel
+
+<table align="center" width="100%">
+    <tbody>
+        <tr align="center">
+            <td align="left" valign="top">
+                @if (Model.PreviousId.HasValue)
+                {
+                    <a href="@Url.Action(MVC.Media.GetItemDetail(Model.PreviousId.Value))">&lt;--- Previous Item</a>
+                } else {
+                    @:&lt;--- Previous Item
+                }
+            </td>
+            <td align="center">
+                <center><font size="+2">Item @Model.Id</font><br><br><a href="?action=media_upload">Upload a new picture</a></center>
+                <br>
+                <br>
+            </td>
+            <td align="right" valign="top">
+                @if (Model.NextId.HasValue)
+                {
+                    <a href="@Url.Action(MVC.Media.GetItemDetail(Model.NextId.Value))">Next Item ---&gt;</a>
+                } else {
+                    @:Next Item ---&gt;
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+@Html.Partial("MediaItem", Model.MediaItemViewModel)
+
+

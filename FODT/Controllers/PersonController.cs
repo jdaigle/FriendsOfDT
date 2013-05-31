@@ -8,6 +8,7 @@ using FODT.Database;
 using FODT.Models;
 using FODT.Models.IMDT;
 using FODT.Views.Person;
+using FODT.Views.Shared;
 using NHibernate.Linq;
 
 namespace FODT.Controllers
@@ -71,15 +72,61 @@ namespace FODT.Controllers
         }
 
         [GET("{personId}/Media")]
-        public virtual ActionResult ListMedia(int personId)
+        public virtual ActionResult ListPersonMedia(int personId)
         {
-            throw new NotImplementedException();
+            var person = DatabaseSession.Get<Person>(personId);
+            var relatedMedia = DatabaseSession.Query<PersonMedia>().Where(x => x.Person == person).Fetch(x => x.MediaItem).ToList();
+
+            var viewModel = new ListPersonMediaViewModel();
+            viewModel.PersonId = personId;
+            viewModel.PersonFullname = person.Fullname;
+            viewModel.RelatedMedia = relatedMedia.OrderBy(x => x.MediaItem.InsertedDateTime).ThenBy(x => x.MediaItem.MediaItemId).Select(x => new ListPersonMediaViewModel.Media
+            {
+                MediaItemId = x.MediaItem.MediaItemId,
+            }).ToList();
+            return View(viewModel);
         }
 
-        [GET("{personId}/Media/{mediaId}")]
-        public virtual ActionResult GetMedia(int personId, int mediaId)
+        [GET("{personId}/Media/{mediaItemId}")]
+        public virtual ActionResult GetPersonMedia(int personId, int mediaItemId)
         {
-            throw new NotImplementedException();
+            var person = DatabaseSession.Get<Person>(personId);
+            var relatedMedia = DatabaseSession
+                .Query<PersonMedia>().Where(x => x.Person == person).Fetch(x => x.MediaItem)
+                .ToList()
+                .OrderBy(x => x.MediaItem.InsertedDateTime).ThenBy(x => x.MediaItem.MediaItemId)
+                .ToList();
+            var media = relatedMedia.Single(x => x.MediaItem.MediaItemId == mediaItemId);
+
+            var index = relatedMedia.IndexOf(relatedMedia.Single(x => x.PersonMediaId == media.PersonMediaId));
+            var previousId = index > 0 ? relatedMedia[index - 1].MediaItem.MediaItemId : (int?)null;
+            var nextId = index < relatedMedia.Count - 1 ? relatedMedia[index + 1].MediaItem.MediaItemId : (int?)null;
+
+            var relatedPeople = DatabaseSession.Query<PersonMedia>().Where(x => x.MediaItem == media.MediaItem).Fetch(x => x.Person).ToList();
+            var relatedShows = DatabaseSession.Query<ShowMedia>().Where(x => x.MediaItem == media.MediaItem).Fetch(x => x.Show).ToList();
+
+            var viewModel = new GetPersonMediaViewModel();
+            viewModel.PersonId = personId;
+            viewModel.PersonFullname = person.Fullname;
+            viewModel.PreviousId = previousId;
+            viewModel.NextId = nextId;
+            viewModel.MediaItemId = media.MediaItem.MediaItemId;
+            viewModel.MediaItemViewModel = new MediaItemViewModel();
+            viewModel.MediaItemViewModel.Id = media.MediaItem.MediaItemId;
+            viewModel.MediaItemViewModel.RelatedShows = relatedShows.Select(x => new MediaItemViewModel.RelatedShow
+            {
+                ShowId = x.Show.ShowId,
+                ShowQuarter = (Quarter)x.Show.Quarter,
+                ShowYear = x.Show.Year,
+                ShowTitle = x.Show.Title,
+            }).ToList();
+            viewModel.MediaItemViewModel.RelatedPeople = relatedPeople.Select(x => new MediaItemViewModel.RelatedPerson
+            {
+                PersonId = x.Person.PersonId,
+                PersonLastName = x.Person.LastName,
+                PersonFullname = x.Person.Fullname,
+            }).ToList();
+            return View(viewModel);
         }
 
         [GET("{personId}/Edit")]

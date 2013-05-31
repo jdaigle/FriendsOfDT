@@ -13,7 +13,7 @@
         <tr>
             <td align="center" valign="top" rowspan="3" width="30%">
                 @if (Model.MediaItemId != 1){
-                <a href="@Url.Action(MVC.Person.GetMedia(Model.PersonId, Model.MediaItemId))">
+                <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))">
                     <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
                 </a>
                 } else {
@@ -22,7 +22,7 @@
                 <br>
                 Click picture to see original size<br>
                 <br>
-                <a href="@Url.Action(MVC.Person.ListMedia(Model.PersonId))">See all media associated with this person</a>
+                <a href="@Url.Action(MVC.Person.ListPersonMedia(Model.PersonId))">See all media associated with this person</a>
                 <br>
                 <br>
             </td>

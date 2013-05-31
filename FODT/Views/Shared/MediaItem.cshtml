@@ -1,0 +1,70 @@
+﻿@model FODT.Views.Shared.MediaItemViewModel
+<center>
+    <a href="@Url.Action(MVC.Media.GetItem(Model.Id))" target="_blank"><img src="@Url.Action(MVC.Media.GetItem(Model.Id))" style="max-width: 600px;" /></a>
+    <br><br>
+    This picture is associated with
+    @{
+        var first = true;
+    }
+    @foreach (var item in Model.RelatedShows)
+    {
+        if (!first) {
+        @:,   
+        }
+        <a href="@Url.Action(MVC.Shows.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowTitle) (@item.ShowYear)</a>
+        first = false;
+    }
+    @{
+        first = true;
+    }
+    @foreach (var item in Model.RelatedPeople)
+    {
+        if (!first || Model.RelatedShows.Any()) {
+        @:,   
+        }
+        <a href="@Url.Action(MVC.Person.Get(item.PersonId))">@item.PersonFullname</a>
+        first = false;
+    }
+    <br><br>
+    See someone in the picture not listed above? Should it be tied to a show? Tie them in!<br>
+	<center></center>
+    <table align="center" frame="1" width="50%">
+        <form method="POST" action="/index.php"></form>
+        <tbody>
+            <tr align="center" valign="middle">
+                <td colspan="2" align="center">
+                    <font size="+2"><b>Tie a Person or Show to Media</b></font>
+                </td>
+            </tr>
+            <tr align="center" valign="middle">
+                <th align="center">Person</th>
+                <th align="center">Show</th>
+            </tr>
+            <tr>
+                <td align="center">
+                    <select name="peep_id">
+                        <option value=""></option>
+	                    <option value="605">, Jerred</option>
+	                    <option value="1095">, Sparky</option>
+	                    <option value="2194"> Babaie, Anna</option>
+                    </select>
+                </td>
+                <td align="center">
+                    <select name="show_id">
+                        <option value=""></option>
+                        <option value="192">1984 (1997)</option>
+                        <option value="36">Abie's Irish Rose (1958)</option>
+                        <option value="115">Act Without Words II (1981)</option>
+                    </select>
+	            </td>
+            </tr>
+            <tr>
+                <td align="center" colspan="2">
+                    <input type="hidden" name="action" value="tie_media">
+                    <input type="hidden" name="item_id" value="2027">
+                    <input type="submit" value="Tie to Media">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</center>

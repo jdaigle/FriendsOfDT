@@ -507,6 +507,11 @@ namespace FODT.Controllers {
         public System.Web.Mvc.ActionResult GetItemThumbnail() {
             return new T4MVC_ActionResult(Area, Name, ActionNames.GetItemThumbnail);
         }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult GetItemDetail() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.GetItemDetail);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public MediaController Actions { get { return MVC.Media; } }
@@ -525,6 +530,8 @@ namespace FODT.Controllers {
             public readonly string GetItem = "GetItem";
             public readonly string GetItemTiny = "GetItemTiny";
             public readonly string GetItemThumbnail = "GetItemThumbnail";
+            public readonly string GetItemDetail = "GetItemDetail";
+            public readonly string Index = "Index";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -532,6 +539,8 @@ namespace FODT.Controllers {
             public const string GetItem = "GetItem";
             public const string GetItemTiny = "GetItemTiny";
             public const string GetItemThumbnail = "GetItemThumbnail";
+            public const string GetItemDetail = "GetItemDetail";
+            public const string Index = "Index";
         }
 
 
@@ -556,11 +565,22 @@ namespace FODT.Controllers {
         public class ActionParamsClass_GetItemThumbnail {
             public readonly string id = "id";
         }
+        static readonly ActionParamsClass_GetItemDetail s_params_GetItemDetail = new ActionParamsClass_GetItemDetail();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_GetItemDetail GetItemDetailParams { get { return s_params_GetItemDetail; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_GetItemDetail {
+            public readonly string id = "id";
+        }
         static readonly ViewNames s_views = new ViewNames();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
+            public readonly string GetItemDetail = "~/Views/Media/GetItemDetail.cshtml";
+            public readonly string GetItemDetailViewModel = "~/Views/Media/GetItemDetailViewModel.cs";
+            public readonly string Index = "~/Views/Media/Index.cshtml";
+            public readonly string IndexViewModel = "~/Views/Media/IndexViewModel.cs";
         }
     }
 
@@ -583,6 +603,17 @@ namespace FODT.Controllers {
         public override System.Web.Mvc.ActionResult GetItemThumbnail(int id) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetItemThumbnail);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult GetItemDetail(int id) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetItemDetail);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Index() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
             return callInfo;
         }
 
@@ -616,13 +647,13 @@ namespace FODT.Controllers {
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult ListMedia() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.ListMedia);
+        public System.Web.Mvc.ActionResult ListPersonMedia() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.ListPersonMedia);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult GetMedia() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.GetMedia);
+        public System.Web.Mvc.ActionResult GetPersonMedia() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.GetPersonMedia);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -650,8 +681,8 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
             public readonly string Get = "Get";
-            public readonly string ListMedia = "ListMedia";
-            public readonly string GetMedia = "GetMedia";
+            public readonly string ListPersonMedia = "ListPersonMedia";
+            public readonly string GetPersonMedia = "GetPersonMedia";
             public readonly string Edit = "Edit";
             public readonly string SaveEdit = "SaveEdit";
         }
@@ -659,8 +690,8 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants {
             public const string Get = "Get";
-            public const string ListMedia = "ListMedia";
-            public const string GetMedia = "GetMedia";
+            public const string ListPersonMedia = "ListPersonMedia";
+            public const string GetPersonMedia = "GetPersonMedia";
             public const string Edit = "Edit";
             public const string SaveEdit = "SaveEdit";
         }
@@ -673,20 +704,20 @@ namespace FODT.Controllers {
         public class ActionParamsClass_Get {
             public readonly string personId = "personId";
         }
-        static readonly ActionParamsClass_ListMedia s_params_ListMedia = new ActionParamsClass_ListMedia();
+        static readonly ActionParamsClass_ListPersonMedia s_params_ListPersonMedia = new ActionParamsClass_ListPersonMedia();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_ListMedia ListMediaParams { get { return s_params_ListMedia; } }
+        public ActionParamsClass_ListPersonMedia ListPersonMediaParams { get { return s_params_ListPersonMedia; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_ListMedia {
+        public class ActionParamsClass_ListPersonMedia {
             public readonly string personId = "personId";
         }
-        static readonly ActionParamsClass_GetMedia s_params_GetMedia = new ActionParamsClass_GetMedia();
+        static readonly ActionParamsClass_GetPersonMedia s_params_GetPersonMedia = new ActionParamsClass_GetPersonMedia();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_GetMedia GetMediaParams { get { return s_params_GetMedia; } }
+        public ActionParamsClass_GetPersonMedia GetPersonMediaParams { get { return s_params_GetPersonMedia; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_GetMedia {
+        public class ActionParamsClass_GetPersonMedia {
             public readonly string personId = "personId";
-            public readonly string mediaId = "mediaId";
+            public readonly string mediaItemId = "mediaItemId";
         }
         static readonly ActionParamsClass_Edit s_params_Edit = new ActionParamsClass_Edit();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -711,7 +742,11 @@ namespace FODT.Controllers {
             public readonly string Edit = "~/Views/Person/Edit.cshtml";
             public readonly string EditViewModel = "~/Views/Person/EditViewModel.cs";
             public readonly string Get = "~/Views/Person/Get.cshtml";
+            public readonly string GetPersonMedia = "~/Views/Person/GetPersonMedia.cshtml";
+            public readonly string GetPersonMediaViewModel = "~/Views/Person/GetPersonMediaViewModel.cs";
             public readonly string GetViewModel = "~/Views/Person/GetViewModel.cs";
+            public readonly string ListPersonMedia = "~/Views/Person/ListPersonMedia.cshtml";
+            public readonly string ListPersonMediaViewModel = "~/Views/Person/ListPersonMediaViewModel.cs";
         }
     }
 
@@ -725,16 +760,16 @@ namespace FODT.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult ListMedia(int personId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.ListMedia);
+        public override System.Web.Mvc.ActionResult ListPersonMedia(int personId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.ListPersonMedia);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult GetMedia(int personId, int mediaId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetMedia);
+        public override System.Web.Mvc.ActionResult GetPersonMedia(int personId, int mediaItemId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetPersonMedia);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "mediaId", mediaId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "mediaItemId", mediaItemId);
             return callInfo;
         }
 
@@ -862,13 +897,13 @@ namespace FODT.Controllers {
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult ListMedia() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.ListMedia);
+        public System.Web.Mvc.ActionResult ListShowMedia() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.ListShowMedia);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult GetMedia() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.GetMedia);
+        public System.Web.Mvc.ActionResult GetShowMedia() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.GetShowMedia);
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -886,15 +921,15 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
             public readonly string Get = "Get";
-            public readonly string ListMedia = "ListMedia";
-            public readonly string GetMedia = "GetMedia";
+            public readonly string ListShowMedia = "ListShowMedia";
+            public readonly string GetShowMedia = "GetShowMedia";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants {
             public const string Get = "Get";
-            public const string ListMedia = "ListMedia";
-            public const string GetMedia = "GetMedia";
+            public const string ListShowMedia = "ListShowMedia";
+            public const string GetShowMedia = "GetShowMedia";
         }
 
 
@@ -905,20 +940,20 @@ namespace FODT.Controllers {
         public class ActionParamsClass_Get {
             public readonly string showId = "showId";
         }
-        static readonly ActionParamsClass_ListMedia s_params_ListMedia = new ActionParamsClass_ListMedia();
+        static readonly ActionParamsClass_ListShowMedia s_params_ListShowMedia = new ActionParamsClass_ListShowMedia();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_ListMedia ListMediaParams { get { return s_params_ListMedia; } }
+        public ActionParamsClass_ListShowMedia ListShowMediaParams { get { return s_params_ListShowMedia; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_ListMedia {
+        public class ActionParamsClass_ListShowMedia {
             public readonly string showId = "showId";
         }
-        static readonly ActionParamsClass_GetMedia s_params_GetMedia = new ActionParamsClass_GetMedia();
+        static readonly ActionParamsClass_GetShowMedia s_params_GetShowMedia = new ActionParamsClass_GetShowMedia();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_GetMedia GetMediaParams { get { return s_params_GetMedia; } }
+        public ActionParamsClass_GetShowMedia GetShowMediaParams { get { return s_params_GetShowMedia; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_GetMedia {
+        public class ActionParamsClass_GetShowMedia {
             public readonly string showId = "showId";
-            public readonly string mediaId = "mediaId";
+            public readonly string mediaItemId = "mediaItemId";
         }
         static readonly ViewNames s_views = new ViewNames();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -926,7 +961,11 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
             public readonly string Get = "~/Views/Shows/Get.cshtml";
+            public readonly string GetShowMedia = "~/Views/Shows/GetShowMedia.cshtml";
+            public readonly string GetShowMediaViewModel = "~/Views/Shows/GetShowMediaViewModel.cs";
             public readonly string GetViewModel = "~/Views/Shows/GetViewModel.cs";
+            public readonly string ListShowMedia = "~/Views/Shows/ListShowMedia.cshtml";
+            public readonly string ListShowMediaViewModel = "~/Views/Shows/ListShowMediaViewModel.cs";
         }
     }
 
@@ -940,16 +979,16 @@ namespace FODT.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult ListMedia(int showId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.ListMedia);
+        public override System.Web.Mvc.ActionResult ListShowMedia(int showId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.ListShowMedia);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showId", showId);
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult GetMedia(int showId, int mediaId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetMedia);
+        public override System.Web.Mvc.ActionResult GetShowMedia(int showId, int mediaItemId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetShowMedia);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showId", showId);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "mediaId", mediaId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "mediaItemId", mediaItemId);
             return callInfo;
         }
 
@@ -1031,6 +1070,8 @@ namespace T4MVC {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
             public readonly string _Layout = "~/Views/Shared/_Layout.cshtml";
+            public readonly string MediaItem = "~/Views/Shared/MediaItem.cshtml";
+            public readonly string MediaItemViewModel = "~/Views/Shared/MediaItemViewModel.cs";
         }
     }
 

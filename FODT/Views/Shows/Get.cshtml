@@ -5,6 +5,8 @@
             <td align="left" valign="top">
                 @if (Model.PreviousShowId.HasValue) {
                 <a href="@Url.Action(MVC.Shows.Get(Model.PreviousShowId.Value))">&lt;--- Previous Show</a>
+                } else {
+                    @:&lt;--- Previous Show
                 }
             </td>
             <td align="center">
@@ -13,6 +15,8 @@
             <td align="right" valign="top">
                 @if (Model.NextShowId.HasValue) {
                 <a href="@Url.Action(MVC.Shows.Get(Model.NextShowId.Value))">Next Show ---&gt;</a>
+                } else {
+                    @:Next Show ---&gt;
                 }
             </td>
         </tr>
@@ -24,7 +28,7 @@
         <tr>
             <td align="center" valign="top" rowspan="3" width="30%">
                 @if (Model.MediaItemId != 1){
-                <a href="@Url.Action(MVC.Shows.GetMedia(Model.ShowId, Model.MediaItemId))">
+                <a href="@Url.Action(MVC.Shows.GetShowMedia(Model.ShowId, Model.MediaItemId))">
                     <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model">
                 </a>
                 } else {
@@ -33,7 +37,7 @@
                 <br>
                 Click picture to see original size<br>
                 <br>
-                <a href="@Url.Action(MVC.Shows.ListMedia(Model.ShowId))">See all media associated with this show</a>
+                <a href="@Url.Action(MVC.Shows.ListShowMedia(Model.ShowId))">See all media associated with this show</a>
                 <br>
                 <br>
                 

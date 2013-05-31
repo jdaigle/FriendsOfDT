@@ -1,0 +1,64 @@
+﻿@model FODT.Views.Media.IndexViewModel
+
+<font size="+3"><center>IMDT Media Center</center></font>
+<br>
+<br>
+<center>
+    <b>
+	This is the home for headshots, posters, programs, and production stills.  We hope to add movies soon as well.<br>
+	If you're logged in, you can <a href="?action=media_upload">Upload a Picture</a> or you can just browse below.
+    </b>
+</center>
+<br>
+<br>
+
+<table align="center" border="1" frame="1">
+    <tbody>
+        <tr>
+            <td bgcolor="#b6b6f2" colspan="5"><font size="+2">Random Files</font></td>
+        </tr>
+        <tr>
+            @foreach (var item in Model.RandomPic.Take(5))
+            {
+            <td align="center">
+                <a href="@Url.Action(MVC.Media.GetItemDetail(item))">
+                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(item))">
+                </a>
+            </td>
+            }
+        </tr>
+        <tr>
+            @foreach (var item in Model.RandomPic.Skip(5).Take(5))
+            {
+            <td align="center">
+                <a href="@Url.Action(MVC.Media.GetItemDetail(item))">
+                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(item))">
+                </a>
+            </td>
+            }
+        </tr>
+        <tr>
+            <td bgcolor="#b6b6f2" colspan="5"><font size="+2" align="center">Last 10 Files Uploaded</font></td>
+        </tr>
+        <tr>
+            @foreach (var item in Model.RecentlyUploaded.Take(5))
+            {
+            <td align="center">
+                <a href="@Url.Action(MVC.Media.GetItemDetail(item))">
+                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(item))">
+                </a>
+            </td>
+            }
+        </tr>
+        <tr>
+            @foreach (var item in Model.RecentlyUploaded.Skip(5).Take(5))
+            {
+            <td align="center">
+                <a href="@Url.Action(MVC.Media.GetItemDetail(item))">
+                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(item))">
+                </a>
+            </td>
+            }
+        </tr>
+    </tbody>
+</table>

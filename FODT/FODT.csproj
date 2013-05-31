@@ -155,10 +155,17 @@
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="TimeZoneCode.cs" />
+    <Compile Include="Views\Media\GetItemDetailViewModel.cs" />
+    <Compile Include="Views\Media\IndexViewModel.cs" />
     <Compile Include="Views\Person\EditViewModel.cs" />
+    <Compile Include="Views\Person\GetPersonMediaViewModel.cs" />
+    <Compile Include="Views\Person\ListPersonMediaViewModel.cs" />
     <Compile Include="Views\Search\SearchResultsViewModel.cs" />
+    <Compile Include="Views\Shared\MediaItemViewModel.cs" />
+    <Compile Include="Views\Shows\GetShowMediaViewModel.cs" />
     <Compile Include="Views\Shows\GetViewModel.cs" />
     <Compile Include="Views\Person\GetViewModel.cs" />
+    <Compile Include="Views\Shows\ListShowMediaViewModel.cs" />
     <Compile Include="Views\Toaster\HuntViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +226,13 @@
     <Content Include="Views\Toaster\Hunt.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\Media\Index.cshtml" />
+    <Content Include="Views\Media\GetItemDetail.cshtml" />
+    <Content Include="Views\Shows\ListShowMedia.cshtml" />
+    <Content Include="Views\Shows\GetShowMedia.cshtml" />
+    <Content Include="Views\Shared\MediaItem.cshtml" />
+    <Content Include="Views\Person\ListPersonMedia.cshtml" />
+    <Content Include="Views\Person\GetPersonMedia.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
