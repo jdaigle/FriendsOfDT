@@ -124,6 +124,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\ShowController.cs" />
+    <Compile Include="Controllers\ShowsController.cs" />
     <Compile Include="Controllers\ToasterController.cs" />
     <Compile Include="Database\CustomSqlClientDriver.cs" />
     <Compile Include="Database\DatabaseBootstrapper.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Views\Person\ListPersonMediaViewModel.cs" />
     <Compile Include="Views\Search\SearchResultsViewModel.cs" />
     <Compile Include="Views\Shared\MediaItemViewModel.cs" />
+    <Compile Include="Views\Shows\SortedShowsViewModel.cs" />
     <Compile Include="Views\Show\GetShowMediaViewModel.cs" />
     <Compile Include="Views\Show\GetViewModel.cs" />
     <Compile Include="Views\Person\GetViewModel.cs" />
@@ -217,7 +219,7 @@
     <Content Include="Views\Person\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Welcome.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Search\SearchResults.cshtml" />
@@ -233,6 +235,9 @@
     <Content Include="Views\Shared\MediaItem.cshtml" />
     <Content Include="Views\Person\ListPersonMedia.cshtml" />
     <Content Include="Views\Person\GetPersonMedia.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shows\SortByYear.cshtml" />
+    <Content Include="Views\Shows\SortByTitle.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

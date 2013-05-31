@@ -1,0 +1,9 @@
+﻿@model FODT.Views.Shows.SortedShowsViewModel
+
+<center>
+    <h1>All shows sorted by title</h1>  
+    @foreach (var item in Model.Shows)
+    {
+        <a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowTitle) (@item.ShowQuarter @item.ShowYear)</a><br>
+    }
+</center>

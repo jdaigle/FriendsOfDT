@@ -29,6 +29,7 @@ public static class MVC {
     public static FODT.Controllers.PersonController Person = new FODT.Controllers.T4MVC_PersonController();
     public static FODT.Controllers.SearchController Search = new FODT.Controllers.T4MVC_SearchController();
     public static FODT.Controllers.ShowController Show = new FODT.Controllers.T4MVC_ShowController();
+    public static FODT.Controllers.ShowsController Shows = new FODT.Controllers.T4MVC_ShowsController();
     public static FODT.Controllers.ToasterController Toaster = new FODT.Controllers.T4MVC_ToasterController();
     public static T4MVC.SharedController Shared = new T4MVC.SharedController();
 }
@@ -350,11 +351,6 @@ namespace FODT.Controllers {
             return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
         }
 
-        [NonAction]
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult ByYear() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.ByYear);
-        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public AwardsController Actions { get { return MVC.Awards; } }
@@ -379,13 +375,6 @@ namespace FODT.Controllers {
         }
 
 
-        static readonly ActionParamsClass_ByYear s_params_ByYear = new ActionParamsClass_ByYear();
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_ByYear ByYearParams { get { return s_params_ByYear; } }
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_ByYear {
-            public readonly string year = "year";
-        }
         static readonly ViewNames s_views = new ViewNames();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewNames Views { get { return s_views; } }
@@ -397,6 +386,11 @@ namespace FODT.Controllers {
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
     public class T4MVC_AwardsController: FODT.Controllers.AwardsController {
         public T4MVC_AwardsController() : base(Dummy.Instance) { }
+
+        public override System.Web.Mvc.ActionResult ByYear() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.ByYear);
+            return callInfo;
+        }
 
         public override System.Web.Mvc.ActionResult ByYear(short year) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.ByYear);
@@ -458,7 +452,7 @@ namespace FODT.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
-            public readonly string Index = "~/Views/Home/Index.cshtml";
+            public readonly string Welcome = "~/Views/Home/Welcome.cshtml";
         }
     }
 
@@ -996,6 +990,77 @@ namespace FODT.Controllers {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetShowMedia);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showId", showId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "mediaItemId", mediaItemId);
+            return callInfo;
+        }
+
+    }
+}
+
+namespace FODT.Controllers {
+    public partial class ShowsController {
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ShowsController() { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected ShowsController(Dummy d) { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToAction(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoute(callInfo.RouteValueDictionary);
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToActionPermanent(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
+        }
+
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ShowsController Actions { get { return MVC.Shows; } }
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Area = "";
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Name = "Shows";
+        [GeneratedCode("T4MVC", "2.0")]
+        public const string NameConst = "Shows";
+
+        static readonly ActionNamesClass s_actions = new ActionNamesClass();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionNamesClass ActionNames { get { return s_actions; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNamesClass {
+            public readonly string SortByYear = "SortByYear";
+            public readonly string SortByTitle = "SortByTitle";
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNameConstants {
+            public const string SortByYear = "SortByYear";
+            public const string SortByTitle = "SortByTitle";
+        }
+
+
+        static readonly ViewNames s_views = new ViewNames();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ViewNames Views { get { return s_views; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ViewNames {
+        }
+    }
+
+    [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+    public class T4MVC_ShowsController: FODT.Controllers.ShowsController {
+        public T4MVC_ShowsController() : base(Dummy.Instance) { }
+
+        public override System.Web.Mvc.ActionResult SortByYear() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.SortByYear);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult SortByTitle() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.SortByTitle);
             return callInfo;
         }
 

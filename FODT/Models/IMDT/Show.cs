@@ -12,7 +12,7 @@ namespace FODT.Models.IMDT
         public virtual string DisplayTitle { get { return ExtensionMethods.RearrangeShowTitle(this.Title); } }
 
         public virtual string Author { get; set; }
-        public virtual byte Quarter { get; set; }
+        public virtual Quarter Quarter { get; set; }
         public virtual short Year { get; set; }
         public virtual string Pictures { get; set; }
         public virtual string FunFacts { get; set; }
@@ -30,7 +30,7 @@ namespace FODT.Models.IMDT
             Id(x => x.ShowId).GeneratedBy.Identity();
             Map(x => x.Title).Not.Nullable().Length(50);
             Map(x => x.Author).Not.Nullable().Length(50);
-            Map(x => x.Quarter).Not.Nullable();
+            Map(x => x.Quarter).Not.Nullable().CustomType<Quarter>();
             Map(x => x.Year).Not.Nullable();
             Map(x => x.Pictures).Not.Nullable().Length(100);
             Map(x => x.FunFacts).Not.Nullable().Length(10000);

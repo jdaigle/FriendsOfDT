@@ -79,7 +79,7 @@ namespace FODT.Controllers
             viewModel.MediaItemViewModel.RelatedShows = relatedshows.Select(x => new MediaItemViewModel.RelatedShow
             {
                 ShowId = x.Show.ShowId,
-                ShowQuarter = (Quarter)x.Show.Quarter,
+                ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
                 ShowTitle = x.Show.Title,
             }).ToList();

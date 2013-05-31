@@ -24,7 +24,7 @@ namespace FODT.Controllers
             {
                 ShowId = x.ShowId,
                 ShowName = x.Title,
-                ShowQuarter = (Quarter)x.Quarter,
+                ShowQuarter = x.Quarter,
                 ShowYear = x.Year,
                 Toaster = x.Toaster,
             }));

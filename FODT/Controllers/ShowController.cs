@@ -19,7 +19,7 @@ namespace FODT.Controllers
         {
             public virtual int ShowId { get; set; }
             public virtual string Title { get; set; }
-            public virtual byte Quarter { get; set; }
+            public virtual Quarter Quarter { get; set; }
             public virtual short Year { get; set; }
         }
 
@@ -52,7 +52,7 @@ namespace FODT.Controllers
             viewModel.ShowId = showId;
             viewModel.Title = show.Title;
             viewModel.Author = show.Author;
-            viewModel.Quarter = (Quarter)show.Quarter;
+            viewModel.Quarter = show.Quarter;
             viewModel.Year = show.Year;
             viewModel.FunFacts = show.FunFacts;
             viewModel.Pictures = show.Pictures;
@@ -140,7 +140,7 @@ namespace FODT.Controllers
             viewModel.MediaItemViewModel.RelatedShows = relatedshows.Select(x => new MediaItemViewModel.RelatedShow
             {
                 ShowId = x.Show.ShowId,
-                ShowQuarter = (Quarter)x.Show.Quarter,
+                ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
                 ShowTitle = x.Show.Title,
             }).ToList();

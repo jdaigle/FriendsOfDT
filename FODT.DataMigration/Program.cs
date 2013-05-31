@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using FODT.Database;
+using FODT.Models;
 using FODT.Models.IMDT;
 
 namespace FODT.DataMigration
@@ -57,7 +58,7 @@ namespace FODT.DataMigration
                     entity.Title = (_row[1] ?? string.Empty).Trim();
                     if (!string.IsNullOrWhiteSpace(_row[2]))
                     {
-                        entity.Quarter = byte.Parse(_row[2]);
+                        entity.Quarter = (Quarter)byte.Parse(_row[2]);
                     }
                     else
                     {

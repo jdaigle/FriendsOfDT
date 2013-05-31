@@ -43,7 +43,7 @@ namespace FODT.Controllers
                 Name = x.Award.Name,
                 ShowId = x.Show.ShowId,
                 ShowName = x.Show.Title,
-                ShowQuarter = (Quarter)x.Show.Quarter,
+                ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
             })
             .Concat(myAwards.Select(x => new GetViewModel.Award
@@ -56,7 +56,7 @@ namespace FODT.Controllers
             {
                 ShowId = x.Show.ShowId,
                 ShowName = x.Show.Title,
-                ShowQuarter = (Quarter)x.Show.Quarter,
+                ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
                 Role = x.Role,
             }).ToList();
@@ -64,7 +64,7 @@ namespace FODT.Controllers
             {
                 ShowId = x.Show.ShowId,
                 ShowName = x.Show.Title,
-                ShowQuarter = (Quarter)x.Show.Quarter,
+                ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
                 Name = x.Position,
             }).ToList();
@@ -116,7 +116,7 @@ namespace FODT.Controllers
             viewModel.MediaItemViewModel.RelatedShows = relatedShows.Select(x => new MediaItemViewModel.RelatedShow
             {
                 ShowId = x.Show.ShowId,
-                ShowQuarter = (Quarter)x.Show.Quarter,
+                ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
                 ShowTitle = x.Show.Title,
             }).ToList();
