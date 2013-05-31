@@ -9,13 +9,13 @@
     <table border="0" width="100%" bgcolor='#b6b6f2'>
         <tr>
             <td align="center" valign="middle">
-                <a href="/index.php"><img src='@Url.Content("~/Content/dtlogo.png")'></a>
+                <a href="@Url.Action(MVC.Home.Welcome())"><img src='@Url.Content("~/Content/dtlogo.png")'></a>
             </td>
             <td align="center" valign="middle">
                 <img src="@Url.Content("~/Content/dttitle.png")" border="0" usemap='#toaster'>
                 <map name="toaster">
                     <area shape='RECT' coords='261,7,351,92' href='@Url.Action(MVC.Toaster.Hunt())'>
-                    <area shape='RECT' coords='64,0,381,136' href='@Url.Action(MVC.Home.Index())'>
+                    <area shape='RECT' coords='64,0,381,136' href='@Url.Action(MVC.Home.Welcome())'>
                 </map>
             </td>
             <td align="center" valign="middle">
@@ -35,7 +35,7 @@
 	        </td>
             <td align=center valign='middle'>
 		        <br />
-                <b><a title="Top Ten Lists, Quick Show Lists, and more!" href="?action=stats">IMDT Stats</a></b>
+                <b><a title="Top Ten Lists, Quick Show Lists, and more!" href="@Url.Action(MVC.Home.Index())">IMDT Stats</a></b>
 	        </td>
             <td rowspan=2 align=center valign='middle'>
 		        <form method=GET action='@Url.Action(MVC.Search.Search())' STYLE="DISPLAY:INLINE;">

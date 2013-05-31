@@ -28,7 +28,7 @@ public static class MVC {
     public static FODT.Controllers.MediaController Media = new FODT.Controllers.T4MVC_MediaController();
     public static FODT.Controllers.PersonController Person = new FODT.Controllers.T4MVC_PersonController();
     public static FODT.Controllers.SearchController Search = new FODT.Controllers.T4MVC_SearchController();
-    public static FODT.Controllers.ShowsController Shows = new FODT.Controllers.T4MVC_ShowsController();
+    public static FODT.Controllers.ShowController Show = new FODT.Controllers.T4MVC_ShowController();
     public static FODT.Controllers.ToasterController Toaster = new FODT.Controllers.T4MVC_ToasterController();
     public static T4MVC.SharedController Shared = new T4MVC.SharedController();
 }
@@ -442,11 +442,13 @@ namespace FODT.Controllers {
         public ActionNamesClass ActionNames { get { return s_actions; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
+            public readonly string Welcome = "Welcome";
             public readonly string Index = "Index";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants {
+            public const string Welcome = "Welcome";
             public const string Index = "Index";
         }
 
@@ -463,6 +465,11 @@ namespace FODT.Controllers {
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
     public class T4MVC_HomeController: FODT.Controllers.HomeController {
         public T4MVC_HomeController() : base(Dummy.Instance) { }
+
+        public override System.Web.Mvc.ActionResult Welcome() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Welcome);
+            return callInfo;
+        }
 
         public override System.Web.Mvc.ActionResult Index() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
@@ -871,12 +878,12 @@ namespace FODT.Controllers {
 }
 
 namespace FODT.Controllers {
-    public partial class ShowsController {
+    public partial class ShowController {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ShowsController() { }
+        public ShowController() { }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        protected ShowsController(Dummy d) { }
+        protected ShowController(Dummy d) { }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         protected RedirectToRouteResult RedirectToAction(ActionResult result) {
@@ -907,13 +914,13 @@ namespace FODT.Controllers {
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ShowsController Actions { get { return MVC.Shows; } }
+        public ShowController Actions { get { return MVC.Show; } }
         [GeneratedCode("T4MVC", "2.0")]
         public readonly string Area = "";
         [GeneratedCode("T4MVC", "2.0")]
-        public readonly string Name = "Shows";
+        public readonly string Name = "Show";
         [GeneratedCode("T4MVC", "2.0")]
-        public const string NameConst = "Shows";
+        public const string NameConst = "Show";
 
         static readonly ActionNamesClass s_actions = new ActionNamesClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -960,18 +967,18 @@ namespace FODT.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
-            public readonly string Get = "~/Views/Shows/Get.cshtml";
-            public readonly string GetShowMedia = "~/Views/Shows/GetShowMedia.cshtml";
-            public readonly string GetShowMediaViewModel = "~/Views/Shows/GetShowMediaViewModel.cs";
-            public readonly string GetViewModel = "~/Views/Shows/GetViewModel.cs";
-            public readonly string ListShowMedia = "~/Views/Shows/ListShowMedia.cshtml";
-            public readonly string ListShowMediaViewModel = "~/Views/Shows/ListShowMediaViewModel.cs";
+            public readonly string Get = "~/Views/Show/Get.cshtml";
+            public readonly string GetShowMedia = "~/Views/Show/GetShowMedia.cshtml";
+            public readonly string GetShowMediaViewModel = "~/Views/Show/GetShowMediaViewModel.cs";
+            public readonly string GetViewModel = "~/Views/Show/GetViewModel.cs";
+            public readonly string ListShowMedia = "~/Views/Show/ListShowMedia.cshtml";
+            public readonly string ListShowMediaViewModel = "~/Views/Show/ListShowMediaViewModel.cs";
         }
     }
 
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-    public class T4MVC_ShowsController: FODT.Controllers.ShowsController {
-        public T4MVC_ShowsController() : base(Dummy.Instance) { }
+    public class T4MVC_ShowController: FODT.Controllers.ShowController {
+        public T4MVC_ShowController() : base(Dummy.Instance) { }
 
         public override System.Web.Mvc.ActionResult Get(int showId) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Get);

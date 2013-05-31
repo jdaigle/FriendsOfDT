@@ -7,13 +7,13 @@ using FODT.Database;
 using FODT.Models;
 using FODT.Models.IMDT;
 using FODT.Views.Shared;
-using FODT.Views.Shows;
+using FODT.Views.Show;
 using NHibernate.Linq;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("Shows")]
-    public partial class ShowsController : BaseController
+    [RoutePrefix("Show")]
+    public partial class ShowController : BaseController
     {
         public class ShowOrderDto
         {

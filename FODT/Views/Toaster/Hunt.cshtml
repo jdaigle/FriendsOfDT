@@ -6,12 +6,12 @@
 
 <br><br>
 
-The <a href="?action=peep_detail&amp;peep_id=2104">Dramatech Toaster</a> has
+The <a href="@Url.Action(MVC.Person.Get(2104))">Dramatech Toaster</a> has
 been hidden in plain sight in every DramaTech show since the late 1980s. The
 idea for this came from an impromptu art installation called
-<a href="?action=media_detail&amp;media_id=2985"><i>Toaster Dreams</i></a>
-created by <a href="?action=peep_detail&amp;peep_id=334">Eddie Maise</a> in the
-<a href="?action=media_detail&amp;media_id=2553">old theater</a>. It featured
+<a href="@Url.Action(MVC.Person.GetPersonMedia(2104, 1864))"><i>Toaster Dreams</i></a>
+created by <a href="@Url.Action(MVC.Person.Get(334))">Eddie Maise</a> in the
+<a href="@Url.Action(MVC.Person.GetPersonMedia(2090, 1709))">old theater</a>. It featured
 several pieces of furniture suspended from the grid, with a toaster spotlit in
 the middle.<br><br>This list is a humble attempt to record where the creative
 folk of DT have tried to sneak this icon into their shows.
@@ -24,7 +24,7 @@ folk of DT have tried to sneak this icon into their shows.
         @foreach (var item in Model.Shows)
         {
             <tr>
-                <td><a href="@Url.Action(MVC.Shows.Get(item.ShowId))">@item.ShowName</a></td>
+                <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@item.ShowName</a></td>
                 <td>@item.ShowQuarter @item.ShowYear</td>
                 <td>@item.Toaster</td>
             </tr>

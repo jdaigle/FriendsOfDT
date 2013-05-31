@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using FODT.Models;
 
-namespace FODT.Views.Shows
+namespace FODT.Views.Show
 {
     public class GetViewModel
     {

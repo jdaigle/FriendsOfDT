@@ -1,10 +1,10 @@
-﻿@model FODT.Views.Shows.GetViewModel
+﻿@model FODT.Views.Show.GetViewModel
 <table border="0" align="center" width="100%">
     <tbody>
         <tr align="center">
             <td align="left" valign="top">
                 @if (Model.PreviousShowId.HasValue) {
-                <a href="@Url.Action(MVC.Shows.Get(Model.PreviousShowId.Value))">&lt;--- Previous Show</a>
+                <a href="@Url.Action(MVC.Show.Get(Model.PreviousShowId.Value))">&lt;--- Previous Show</a>
                 } else {
                     @:&lt;--- Previous Show
                 }
@@ -14,7 +14,7 @@
             </td>
             <td align="right" valign="top">
                 @if (Model.NextShowId.HasValue) {
-                <a href="@Url.Action(MVC.Shows.Get(Model.NextShowId.Value))">Next Show ---&gt;</a>
+                <a href="@Url.Action(MVC.Show.Get(Model.NextShowId.Value))">Next Show ---&gt;</a>
                 } else {
                     @:Next Show ---&gt;
                 }
@@ -28,16 +28,16 @@
         <tr>
             <td align="center" valign="top" rowspan="3" width="30%">
                 @if (Model.MediaItemId != 1){
-                <a href="@Url.Action(MVC.Shows.GetShowMedia(Model.ShowId, Model.MediaItemId))">
-                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model">
+                <a href="@Url.Action(MVC.Show.GetShowMedia(Model.ShowId, Model.MediaItemId))">
+                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.Title">
                 </a>
                 } else {
-                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model">
+                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.Title">
                 }
                 <br>
                 Click picture to see original size<br>
                 <br>
-                <a href="@Url.Action(MVC.Shows.ListShowMedia(Model.ShowId))">See all media associated with this show</a>
+                <a href="@Url.Action(MVC.Show.ListShowMedia(Model.ShowId))">See all media associated with this show</a>
                 <br>
                 <br>
                 
@@ -116,7 +116,7 @@
                                 <br>
                                 @foreach (var item in Model.OtherPerformances.OrderBy(x => x.Item3))
                                 {
-                                    <a href="@Url.Action(MVC.Shows.Get(item.Item1))">@ExtensionMethods.RearrangeShowTitle(item.Item2) (@item.Item3)</a>
+                                    <a href="@Url.Action(MVC.Show.Get(item.Item1))">@ExtensionMethods.RearrangeShowTitle(item.Item2) (@item.Item3)</a>
                                     <br>
                                 }
                             </td>

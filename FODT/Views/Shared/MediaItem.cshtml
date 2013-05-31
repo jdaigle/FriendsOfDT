@@ -11,7 +11,7 @@
         if (!first) {
         @:,   
         }
-        <a href="@Url.Action(MVC.Shows.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowTitle) (@item.ShowYear)</a>
+        <a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowTitle) (@item.ShowYear)</a>
         first = false;
     }
     @{

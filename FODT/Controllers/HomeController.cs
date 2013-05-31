@@ -12,10 +12,15 @@ namespace FODT.Controllers
     public partial class HomeController : BaseController
     {
         [GET("")]
-        public virtual ActionResult Index()
+        public virtual ActionResult Welcome()
         {
             return View();
         }
 
+        [GET("Index")]
+        public virtual ActionResult Index()
+        {
+            return View();
+        }
     }
 }

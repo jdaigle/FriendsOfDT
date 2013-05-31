@@ -74,7 +74,7 @@
                                             @if (item.ShowId.HasValue)
                                             {
                                                 <td>&nbsp; - &nbsp; </td>
-                                                <td align="left"><a href="@Url.Action(MVC.Shows.Get(item.ShowId.Value))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                                                <td align="left"><a href="@Url.Action(MVC.Show.Get(item.ShowId.Value))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                                             }
                                             else
                                             {
@@ -102,7 +102,7 @@
                             <tr align="center">
                                 <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
                                 <td>&nbsp; - &nbsp;</td>
-                                <td><a href="@Url.Action(MVC.Shows.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                                <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                                 <td>&nbsp; - &nbsp;</td>
                                 <td align="left">@item.Role</td>
                             </tr>
@@ -124,7 +124,7 @@
                             <tr align="center">
                                 <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
                                 <td>&nbsp; - &nbsp;</td>
-                                <td><a href="@Url.Action(MVC.Shows.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                                <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                                 <td>&nbsp; - &nbsp;</td>
                                 <td align="left">@item.Name</td>
                             </tr>

@@ -20,7 +20,7 @@ namespace FODT.Controllers
         {
             if (string.IsNullOrWhiteSpace(searchField))
             {
-                return RedirectToAction(MVC.Home.Index());
+                return RedirectToAction(MVC.Home.Welcome());
             }
 
             searchType = searchType.ToLower() ?? "all";
@@ -44,7 +44,7 @@ namespace FODT.Controllers
                     Year = x.Year.ToString(),
                     SortField = x.Title,
                     ImageUrl = Url.Action(MVC.Media.GetItemTiny(x.MediaItem.MediaItemId)),
-                    LinkUrl = Url.Action(MVC.Shows.Get(x.ShowId)),
+                    LinkUrl = Url.Action(MVC.Show.Get(x.ShowId)),
                 }));
             }
 

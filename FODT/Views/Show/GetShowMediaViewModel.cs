@@ -5,7 +5,7 @@ using System.Web;
 using FODT.Models;
 using FODT.Views.Shared;
 
-namespace FODT.Views.Shows
+namespace FODT.Views.Show
 {
     public class GetShowMediaViewModel
     {
