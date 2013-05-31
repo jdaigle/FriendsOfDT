@@ -19,9 +19,9 @@
                 </map>
             </td>
             <td align="center" valign="middle">
-                <a href="/index.php">
+                <a href="@Url.Action(MVC.Home.Welcome())">
                     <img src='@Url.Content("~/Content/imdtlogo.png")'></a><br>
-                Welcome Guest! ( <a href="/index.php?action=loginpage">Login</a> | <a href="/index.php?action=register_form">Register</a> )
+                Welcome Guest! ( <a href="@Url.Action(MVC.User.SignIn())">Sign In / Sign Up</a> )
                 <br>
             </td>
         </tr>
@@ -72,5 +72,10 @@
 	<hr>	
         @RenderBody()
     <table align=center><tr><td align=center valign=middle>Copyright @DateTime.Now.Year Friends of Dramatech</td></tr></table>
+    <script type="text/javascript">
+        if (window.location.hash == "#_=_") {
+            window.location.hash = "";
+        }
+    </script>
 </body>
 </html>

@@ -213,3 +213,42 @@ CREATE TABLE [imdt].[PersonClubPosition] (
 		REFERENCES [imdt].[Person],
 );
 GO
+
+CREATE SCHEMA [fodt] AUTHORIZATION [dbo]
+GO
+
+CREATE TABLE [fodt].[UserAccount] (
+	[UserAccountId] [varchar](50) NOT NULL,
+	[Email] [nvarchar](300) NOT NULL,
+	[Name] [nvarchar](300) NOT NULL,
+	[FirstName] [nvarchar](100) NOT NULL,
+	[MiddleName] [nvarchar](100) NOT NULL,
+	[LastName] [nvarchar](100) NOT NULL,
+	[Gender] [nvarchar](10) NOT NULL,
+	[Locale] [nvarchar](10) NOT NULL,
+	[FacebookURL] [nvarchar](300) NOT NULL,
+	[FacebookUsername] [nvarchar](300) NOT NULL,
+	[FacebookPictureURL] [nvarchar](300) NOT NULL,
+    [InsertedDateTime] [datetime2] NOT NULL,
+	[LastModifiedDateTime] [datetime2] NOT NULL,
+	CONSTRAINT [PK_UserAccount] PRIMARY KEY CLUSTERED 
+    (
+	    [UserAccountId] ASC
+    ),
+);
+GO
+
+CREATE TABLE [fodt].[UserAccessToken] (
+	[AccessToken] [varchar](255) NOT NULL,
+	[UserAccountId] [varchar](50) NOT NULL,
+	[InsertedDateTime] [datetime2] NOT NULL,
+    [ExpiresDateTime] [datetime2] NOT NULL,
+	CONSTRAINT [PK_AccessToken] PRIMARY KEY CLUSTERED 
+    (
+	    [AccessToken] ASC
+    ),
+	CONSTRAINT [FK_UserAccessToken_UserAccount]
+		FOREIGN KEY ([UserAccountId])
+		REFERENCES [fodt].[UserAccount],
+);
+GO

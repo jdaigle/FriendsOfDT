@@ -31,6 +31,7 @@ public static class MVC {
     public static FODT.Controllers.ShowController Show = new FODT.Controllers.T4MVC_ShowController();
     public static FODT.Controllers.ShowsController Shows = new FODT.Controllers.T4MVC_ShowsController();
     public static FODT.Controllers.ToasterController Toaster = new FODT.Controllers.T4MVC_ToasterController();
+    public static FODT.Controllers.UserController User = new FODT.Controllers.T4MVC_UserController();
     public static T4MVC.SharedController Shared = new T4MVC.SharedController();
 }
 
@@ -452,6 +453,7 @@ namespace FODT.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
+            public readonly string Index = "~/Views/Home/Index.cshtml";
             public readonly string Welcome = "~/Views/Home/Welcome.cshtml";
         }
     }
@@ -1047,6 +1049,9 @@ namespace FODT.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
+            public readonly string SortByTitle = "~/Views/Shows/SortByTitle.cshtml";
+            public readonly string SortByYear = "~/Views/Shows/SortByYear.cshtml";
+            public readonly string SortedShowsViewModel = "~/Views/Shows/SortedShowsViewModel.cs";
         }
     }
 
@@ -1127,6 +1132,113 @@ namespace FODT.Controllers {
 
         public override System.Web.Mvc.ActionResult Hunt() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Hunt);
+            return callInfo;
+        }
+
+    }
+}
+
+namespace FODT.Controllers {
+    public partial class UserController {
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public UserController() { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected UserController(Dummy d) { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToAction(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoute(callInfo.RouteValueDictionary);
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToActionPermanent(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
+        }
+
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult SignIn() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.SignIn);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult HandleFacebookOAuthCallback() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.HandleFacebookOAuthCallback);
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public UserController Actions { get { return MVC.User; } }
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Area = "";
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Name = "User";
+        [GeneratedCode("T4MVC", "2.0")]
+        public const string NameConst = "User";
+
+        static readonly ActionNamesClass s_actions = new ActionNamesClass();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionNamesClass ActionNames { get { return s_actions; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNamesClass {
+            public readonly string SignIn = "SignIn";
+            public readonly string HandleFacebookOAuthCallback = "HandleFacebookOAuthCallback";
+            public readonly string Welcome = "Welcome";
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNameConstants {
+            public const string SignIn = "SignIn";
+            public const string HandleFacebookOAuthCallback = "HandleFacebookOAuthCallback";
+            public const string Welcome = "Welcome";
+        }
+
+
+        static readonly ActionParamsClass_SignIn s_params_SignIn = new ActionParamsClass_SignIn();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_SignIn SignInParams { get { return s_params_SignIn; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_SignIn {
+            public readonly string redirectUrl = "redirectUrl";
+        }
+        static readonly ActionParamsClass_HandleFacebookOAuthCallback s_params_HandleFacebookOAuthCallback = new ActionParamsClass_HandleFacebookOAuthCallback();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_HandleFacebookOAuthCallback HandleFacebookOAuthCallbackParams { get { return s_params_HandleFacebookOAuthCallback; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_HandleFacebookOAuthCallback {
+            public readonly string code = "code";
+            public readonly string state = "state";
+        }
+        static readonly ViewNames s_views = new ViewNames();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ViewNames Views { get { return s_views; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ViewNames {
+            public readonly string Welcome = "~/Views/User/Welcome.cshtml";
+        }
+    }
+
+    [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+    public class T4MVC_UserController: FODT.Controllers.UserController {
+        public T4MVC_UserController() : base(Dummy.Instance) { }
+
+        public override System.Web.Mvc.ActionResult SignIn(string redirectUrl) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.SignIn);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "redirectUrl", redirectUrl);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult HandleFacebookOAuthCallback(string code, string state) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.HandleFacebookOAuthCallback);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "code", code);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "state", state);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Welcome() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Welcome);
             return callInfo;
         }
 
