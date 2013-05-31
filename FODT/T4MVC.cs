@@ -1184,6 +1184,7 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
             public readonly string SignIn = "SignIn";
+            public readonly string SignOut = "SignOut";
             public readonly string HandleFacebookOAuthCallback = "HandleFacebookOAuthCallback";
             public readonly string Welcome = "Welcome";
         }
@@ -1191,6 +1192,7 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants {
             public const string SignIn = "SignIn";
+            public const string SignOut = "SignOut";
             public const string HandleFacebookOAuthCallback = "HandleFacebookOAuthCallback";
             public const string Welcome = "Welcome";
         }
@@ -1227,6 +1229,11 @@ namespace FODT.Controllers {
         public override System.Web.Mvc.ActionResult SignIn(string redirectUrl) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.SignIn);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "redirectUrl", redirectUrl);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult SignOut() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.SignOut);
             return callInfo;
         }
 

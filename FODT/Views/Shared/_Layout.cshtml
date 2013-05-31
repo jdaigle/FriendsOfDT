@@ -21,7 +21,14 @@
             <td align="center" valign="middle">
                 <a href="@Url.Action(MVC.Home.Welcome())">
                     <img src='@Url.Content("~/Content/imdtlogo.png")'></a><br>
-                Welcome Guest! ( <a href="@Url.Action(MVC.User.SignIn())">Sign In / Sign Up</a> )
+                Welcome @ViewBag.UserName!
+                (
+                @if (!ViewBag.IsAuthenticated) {
+                <a href="@Url.Action(MVC.User.SignIn())">Sign In / Sign Up</a>
+                } else {
+                <a href="@Url.Action(MVC.User.SignOut())">Sign Out</a>
+                }
+                )
                 <br>
             </td>
         </tr>

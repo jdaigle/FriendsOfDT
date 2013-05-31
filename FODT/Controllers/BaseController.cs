@@ -55,6 +55,9 @@ namespace FODT.Controllers
                 }
             }
             base.OnActionExecuted(filterContext);
+
+            ViewBag.IsAuthenticated = this.User.Identity.IsAuthenticated;
+            ViewBag.UserName = this.User.Identity.Name;
         }
 
         protected override void OnException(ExceptionContext filterContext)

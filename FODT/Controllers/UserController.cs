@@ -1,23 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using AttributeRouting;
 using AttributeRouting.Web.Mvc;
+using FODT.Database;
 using FODT.Models;
 using FODT.Models.FODT;
+using FODT.Security;
 using Newtonsoft.Json;
-using FODT.Database;
 
 namespace FODT.Controllers
 {
     [RoutePrefix("User")]
     public partial class UserController : BaseController
     {
+        private IAuthenticationTokenContext authenticationTokenContext;
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            authenticationTokenContext = new HttpAuthenticationTokenContext(this.HttpContext, new HttpCookieCollectionWrapper(this.HttpContext));
+            base.OnActionExecuting(filterContext);
+        }
+
         [GET("SignIn")]
         public virtual ActionResult SignIn(string redirectUrl)
         {
@@ -27,6 +34,13 @@ namespace FODT.Controllers
                 GenerateFacbookOAuthResponseURL(),
                 HttpUtility.UrlEncode(redirectUrl ?? string.Empty));
             return Redirect(url);
+        }
+
+        [GET("SignOut")]
+        public virtual ActionResult SignOut()
+        {
+            authenticationTokenContext.RevokeAuthenticationToken();
+            return RedirectToAction(MVC.Home.Welcome());
         }
 
         private string GenerateFacbookOAuthResponseURL()
@@ -90,6 +104,9 @@ namespace FODT.Controllers
             DatabaseSession.Save(_accessToken);
 
             DatabaseSession.CommitTransaction();
+
+            authenticationTokenContext.IssueAuthenticationToken(accessToken, profile.name, "oauth/facebook", expires);
+
             return result;
         }
 
