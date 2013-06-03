@@ -9,6 +9,8 @@ namespace FODT.Models.IMDT
 {
     public class MediaItem
     {
+        public const int NoPic = 1;
+
         public virtual int MediaItemId { get; set; }
         public virtual string Path { get; set; }
         public virtual string ThumbnailPath { get; set; }

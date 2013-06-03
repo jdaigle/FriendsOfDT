@@ -7,8 +7,28 @@ namespace FODT.Views.Person
 {
     public class EditViewModel
     {
-        public int PersonId { get; set; }
-        public string Name { get; set; }
+        public static EditViewModel Empty()
+        {
+            return new EditViewModel() { RelatedMedia = new List<Media>() };
+        }
+
+        public int? PersonId { get; set; }
+
+        public string Honorific { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string Suffix { get; set; }
+        public string Nickname { get; set; }
         public string Biography { get; set; }
+
+        public int? DefaultMediaItemId { get; set; }
+
+        public List<Media> RelatedMedia { get; set; }
+
+        public class Media
+        {
+            public int MediaItemId { get; set; }
+        }
     }
 }

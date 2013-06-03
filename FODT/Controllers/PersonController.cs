@@ -129,38 +129,116 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
+        [GET("New", ActionPrecedence=0)]
+        public virtual ActionResult New()
+        {
+            var viewModel = EditViewModel.Empty();
+            return View("Edit", viewModel);
+        }
+
+        [POST("New", ActionPrecedence = 0)]
+        public virtual ActionResult SaveNew(SaveEditParameters param)
+        {
+            if (string.IsNullOrWhiteSpace(param.FirstName) ||
+                string.IsNullOrWhiteSpace(param.LastName))
+            {
+                throw new Exception("Name is required");
+            }
+
+            var person = new Person();
+            person.FirstName = (param.FirstName ?? string.Empty).Trim();
+            person.LastName = (param.LastName ?? string.Empty).Trim();
+            person.MiddleName = (param.MiddleName ?? string.Empty).Trim();
+            person.Honorific = (param.Honorific ?? string.Empty).Trim();
+            person.Suffix = (param.Suffix ?? string.Empty).Trim();
+            person.Nickname = (param.Nickname ?? string.Empty).Trim();
+            person.Biography = (param.Biography ?? string.Empty).Trim();
+            person.MediaItem = DatabaseSession.Load<MediaItem>(MediaItem.NoPic);
+            // TODO: build in auditing
+            person.InsertedDateTime = DateTime.UtcNow;
+            person.LastModifiedDateTime = DateTime.UtcNow;
+            DatabaseSession.Save(person);
+            DatabaseSession.CommitTransaction();
+
+            return RedirectToAction(Actions.Get(person.PersonId));
+        }
+
         [GET("{personId}/Edit")]
         public virtual ActionResult Edit(int personId)
         {
             var person = DatabaseSession.Get<Person>(personId);
+            var relatedMedia = DatabaseSession.Query<PersonMedia>().Where(x => x.Person == person).Fetch(x => x.MediaItem).ToList();
 
             var viewModel = new EditViewModel();
             viewModel.PersonId = personId;
-            viewModel.Name = person.FirstName;
+            viewModel.FirstName = person.FirstName;
+            viewModel.LastName = person.LastName;
+            viewModel.MiddleName = person.MiddleName;
+            viewModel.Honorific = person.Honorific;
+            viewModel.Suffix = person.Suffix;
+            viewModel.Nickname = person.Nickname;
             viewModel.Biography = person.Biography;
+            viewModel.DefaultMediaItemId = person.MediaItem.MediaItemId;
+            viewModel.RelatedMedia = relatedMedia.OrderBy(x => x.MediaItem.InsertedDateTime).ThenBy(x => x.MediaItem.MediaItemId).Select(x => new EditViewModel.Media
+            {
+                MediaItemId = x.MediaItem.MediaItemId,
+            }).ToList();
             return View(viewModel);
         }
 
         [POST("{personId}/Edit")]
         public virtual ActionResult SaveEdit(int personId, SaveEditParameters param)
         {
-            var person = DatabaseSession.Get<Person>(personId);
-            if (string.IsNullOrWhiteSpace(param.Name))
+            if (string.IsNullOrWhiteSpace(param.FirstName) ||
+                string.IsNullOrWhiteSpace(param.LastName))
             {
                 throw new Exception("Name is required");
             }
-            //person.Name = model.Name.Trim();
-            person.Biography = (param.Biography ?? string.Empty).Trim();
 
+            var person = DatabaseSession.Get<Person>(personId);
+            person.FirstName = (param.FirstName ?? string.Empty).Trim();
+            person.LastName = (param.LastName ?? string.Empty).Trim();
+            person.MiddleName = (param.MiddleName ?? string.Empty).Trim();
+            person.Honorific = (param.Honorific ?? string.Empty).Trim();
+            person.Suffix = (param.Suffix ?? string.Empty).Trim();
+            person.Nickname = (param.Nickname ?? string.Empty).Trim();
+            person.Biography = (param.Biography ?? string.Empty).Trim();
+            if (DatabaseSession.IsDirtyEntity(person))
+            {
+                // TODO: build in auditing
+                person.LastModifiedDateTime = DateTime.UtcNow;
+            }
             DatabaseSession.CommitTransaction();
+
+            return RedirectToAction(Actions.Get(personId));
+        }
+
+        [POST("{personId}/ChangeDefaultMediaItem")]
+        public virtual ActionResult ChangeDefaultMediaItem(int personId, int mediaItemId)
+        {
+            var person = DatabaseSession.Get<Person>(personId);
+            person.MediaItem = DatabaseSession.Load<MediaItem>(mediaItemId);
+            if (DatabaseSession.IsDirtyEntity(person))
+            {
+                // TODO: build in auditing
+                person.LastModifiedDateTime = DateTime.UtcNow;
+            }
+            DatabaseSession.CommitTransaction();
+
             return RedirectToAction(Actions.Get(personId));
         }
 
         public class SaveEditParameters
         {
+            public string Honorific { get; set; }
             [Required]
-            public string Name { get; set; }
-            [AllowHtml]
+            public string FirstName { get; set; }
+            public string MiddleName { get; set; }
+            [Required]
+            public string LastName { get; set; }
+            public string Suffix { get; set; }
+            public string Nickname { get; set; }
+            [AllowHtml()]
             public string Biography { get; set; }
         }
     }

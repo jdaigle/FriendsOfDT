@@ -660,6 +660,11 @@ namespace FODT.Controllers {
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult SaveNew() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.SaveNew);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public System.Web.Mvc.ActionResult Edit() {
             return new T4MVC_ActionResult(Area, Name, ActionNames.Edit);
         }
@@ -667,6 +672,11 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public System.Web.Mvc.ActionResult SaveEdit() {
             return new T4MVC_ActionResult(Area, Name, ActionNames.SaveEdit);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult ChangeDefaultMediaItem() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.ChangeDefaultMediaItem);
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -686,8 +696,11 @@ namespace FODT.Controllers {
             public readonly string Get = "Get";
             public readonly string ListPersonMedia = "ListPersonMedia";
             public readonly string GetPersonMedia = "GetPersonMedia";
+            public readonly string New = "New";
+            public readonly string SaveNew = "SaveNew";
             public readonly string Edit = "Edit";
             public readonly string SaveEdit = "SaveEdit";
+            public readonly string ChangeDefaultMediaItem = "ChangeDefaultMediaItem";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -695,8 +708,11 @@ namespace FODT.Controllers {
             public const string Get = "Get";
             public const string ListPersonMedia = "ListPersonMedia";
             public const string GetPersonMedia = "GetPersonMedia";
+            public const string New = "New";
+            public const string SaveNew = "SaveNew";
             public const string Edit = "Edit";
             public const string SaveEdit = "SaveEdit";
+            public const string ChangeDefaultMediaItem = "ChangeDefaultMediaItem";
         }
 
 
@@ -722,6 +738,13 @@ namespace FODT.Controllers {
             public readonly string personId = "personId";
             public readonly string mediaItemId = "mediaItemId";
         }
+        static readonly ActionParamsClass_SaveNew s_params_SaveNew = new ActionParamsClass_SaveNew();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_SaveNew SaveNewParams { get { return s_params_SaveNew; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_SaveNew {
+            public readonly string param = "param";
+        }
         static readonly ActionParamsClass_Edit s_params_Edit = new ActionParamsClass_Edit();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_Edit EditParams { get { return s_params_Edit; } }
@@ -736,6 +759,14 @@ namespace FODT.Controllers {
         public class ActionParamsClass_SaveEdit {
             public readonly string personId = "personId";
             public readonly string param = "param";
+        }
+        static readonly ActionParamsClass_ChangeDefaultMediaItem s_params_ChangeDefaultMediaItem = new ActionParamsClass_ChangeDefaultMediaItem();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_ChangeDefaultMediaItem ChangeDefaultMediaItemParams { get { return s_params_ChangeDefaultMediaItem; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_ChangeDefaultMediaItem {
+            public readonly string personId = "personId";
+            public readonly string mediaItemId = "mediaItemId";
         }
         static readonly ViewNames s_views = new ViewNames();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -776,6 +807,17 @@ namespace FODT.Controllers {
             return callInfo;
         }
 
+        public override System.Web.Mvc.ActionResult New() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.New);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult SaveNew(FODT.Controllers.PersonController.SaveEditParameters param) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.SaveNew);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "param", param);
+            return callInfo;
+        }
+
         public override System.Web.Mvc.ActionResult Edit(int personId) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Edit);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
@@ -786,6 +828,13 @@ namespace FODT.Controllers {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.SaveEdit);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "param", param);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult ChangeDefaultMediaItem(int personId, int mediaItemId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.ChangeDefaultMediaItem);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "mediaItemId", mediaItemId);
             return callInfo;
         }
 

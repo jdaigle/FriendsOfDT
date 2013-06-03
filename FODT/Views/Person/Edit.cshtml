@@ -1,18 +1,138 @@
 ﻿@model FODT.Views.Person.EditViewModel
-<h2>Editing Information For: @Model.Name</h2>
+<table align="center" frame="1" width="40%">
+    <form method="POST">
+    <tbody>
+        <tr valign="middle">
+            <td colspan="2" align="center">
+                <b><font size="+2">Add/Edit a Name in IMDT</font></b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">When editing names, please observe the following style rules: Initials should not be followed by a period, nicknames do not require quotes around them (they will be added later).</td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <th align="right">Honorific</th>
+            <td>
+                <input type="text" name="Honorific" size="40" value="@Model.Honorific">
+            </td>
+        </tr>
+        <tr>
+            <th align="right">First Name</th>
+            <td>
+                <input type="text" name="FirstName" size="40" value="@Model.FirstName">
+            </td>
+        </tr>
+        <tr>
+            <th align="right">Middle Name</th>
+            <td>
+                <input type="text" name="MiddleName" size="40" value="@Model.MiddleName">
+            </td>
+        </tr>
+        <tr>
+            <th align="right">Nickname</th>
+            <td>
+                <input type="text" name="Nickname" size="40" value="@Model.Nickname">
+            </td>
+        </tr>
+        <tr>
+            <th align="right">Last Name</th>
+            <td>
+                <input type="text" name="LastName" size="40" value="@Model.LastName">
+            </td>
+        </tr>
+        <tr>
+            <th align="right">Suffix</th>
+            <td>
+                <input type="text" name="Suffix" size="40" value="@Model.Suffix">
+            </td>
+        </tr>
+        <tr>
+            <th align="right">E-mail</th>
+            <td>
+                <input type="text" name="email" size="40" value="TODO:">
+            </td>
+        </tr>
+        <tr>
+            <th align="right">Biographical Data</th>
+            <td>
+                <textarea name="Biography" rows="5" cols="30">@Html.Raw(Model.Biography)</textarea>
 
-<form method="post" action="@Url.Action(MVC.People.SaveEditBiography(Model.PersonId, null))">
-    <div>
-        <label>Name</label>
-        <input type="text" name="name" value="@Model.Name" />
-    </div>
-    <div>
-        <label>Biography</label>
-        <textarea cols="40" rows="10" name="biography">@Model.Biography</textarea>        
-    </div>
-    <div>
-        <a href="@Url.Action(MVC.People.Display(Model.PersonId))">Back</a>
-        <input type="reset" />
-        <input type="submit" />
-    </div> 
-</form>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr align="center" valign="middle">
+            <td colspan="2" align="center">
+                <input type="submit" value="Edit Person">
+            </td>
+        </tr>
+    </tbody>
+    </form>
+</table>
+
+<br /><br />
+
+<table align="center" frame="1" width="60%">
+    <tbody>
+        <tr valign="middle">
+            <td align="center">
+                <font size="+2">Set default picture for this record</font>
+                <br>
+                If you do not see a picture you want to associate, please 
+                <a href="?action=media_upload&amp;IDtype=people&amp;ID=140">upload one!</a>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <form action="@Url.Action(MVC.Person.ChangeDefaultMediaItem())" method="POST">
+                <table align="center" width="100%">
+                    <tbody>
+                        @{
+                            var rowCount = Math.Ceiling((double)Model.RelatedMedia.Count / 7d);
+                        }
+                        @for (int i = 0; i < rowCount; i++)
+			            {
+                        <tr>
+                            @foreach (var item in Model.RelatedMedia.Skip(i * 7).Take(7))
+                            {
+                            <td>
+                                <center>
+                                    <a class="thumbnail" href="#thumb">
+                                        <img src="@Url.Action(MVC.Media.GetItemTiny(item.MediaItemId))" border="0" />
+                                        <span><img src="@Url.Action(MVC.Media.GetItemThumbnail(item.MediaItemId))"><br></span>
+                                    </a>
+                                    <br>
+                                    <input type="radio" name="mediaItemId" value="@item.MediaItemId" @(item.MediaItemId == Model.DefaultMediaItemId ? "checked='checked'" : "")>
+                                </center>
+                            </td>
+                            }
+                        </tr>
+			            }
+                        <tr>
+                        @if (Model.RelatedMedia.Any()) {
+                            <td colspan="@Math.Min(7, Model.RelatedMedia.Count)" align="center">
+                                <input type="submit" value="Change Default Picture" />
+                            </td>
+                        } else {
+                            <td align="center">
+                                <font size="+2">No media associated!</font>
+                                <br>
+                                Before you can choose a default picture, one must be uploaded to the media center and associated with this record.<br>
+                                You can do that at the <a href="?action=media_upload&amp;type=people&amp;ID=2018">Media Upload Page</a>
+                            </td>
+                        }
+                        </tr>
+                    </tbody>
+                </table>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
