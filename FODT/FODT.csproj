@@ -139,6 +139,7 @@
     <Compile Include="Models\FacebookProfile.cs" />
     <Compile Include="Models\FODT\UserAccessToken.cs" />
     <Compile Include="Models\FODT\UserAccount.cs" />
+    <Compile Include="Models\ImageUtilities.cs" />
     <Compile Include="Models\IMDT\Award.cs" />
     <Compile Include="Models\IMDT\PersonMedia.cs" />
     <Compile Include="Models\IMDT\ShowMedia.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="TimeZoneCode.cs" />
     <Compile Include="Views\Media\GetItemDetailViewModel.cs" />
     <Compile Include="Views\Media\IndexViewModel.cs" />
+    <Compile Include="Views\Media\UploadViewModel.cs" />
     <Compile Include="Views\Person\EditViewModel.cs" />
     <Compile Include="Views\Person\GetPersonMediaViewModel.cs" />
     <Compile Include="Views\Person\ListPersonMediaViewModel.cs" />
@@ -254,6 +256,7 @@
     <Content Include="Views\Shows\SortByYear.cshtml" />
     <Content Include="Views\Shows\SortByTitle.cshtml" />
     <Content Include="Views\User\Welcome.cshtml" />
+    <Content Include="Views\Media\Upload.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

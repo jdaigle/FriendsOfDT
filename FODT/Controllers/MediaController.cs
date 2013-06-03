@@ -11,12 +11,120 @@ using FODT.Models.IMDT;
 using FODT.Views.Media;
 using FODT.Views.Shared;
 using NHibernate.Linq;
+using FODT.Database;
 
 namespace FODT.Controllers
 {
     [RoutePrefix("Media")]
     public partial class MediaController : BaseController
     {
+        [GET("Upload")]
+        public virtual ActionResult Upload()
+        {
+            var people = DatabaseSession.Query<Person>().ToList();
+            var shows = DatabaseSession.Query<Show>().ToList();
+
+            var viewModel = new UploadViewModel();
+            viewModel.People = people.Select(x => new UploadViewModel.Person
+            {
+                PersonId = x.PersonId,
+                PersonLastName = x.LastName,
+                PersonFirstName = x.FirstName,
+                PersonFullname = x.Fullname,
+            }).ToList();
+            viewModel.Shows = shows.Select(x => new UploadViewModel.Show
+            {
+                ShowId = x.ShowId,
+                ShowQuarter = x.Quarter,
+                ShowYear = x.Year,
+                ShowTitle = x.Title,
+            }).ToList();
+
+            return View(viewModel);
+        }
+
+        [POST("Upload")]
+        public virtual ActionResult Upload(UploadPOSTParameters param)
+        {
+            if (!param.PersonId.HasValue && !param.ShowId.HasValue)
+            {
+                throw new InvalidOperationException("PersonId or ShowId must have a value");
+            }
+
+            if (param.UploadedFile == null || param.UploadedFile.ContentLength == 0)
+            {
+                throw new InvalidOperationException("Missing File");
+            }
+
+            if (param.UploadedFile.ContentLength > 1024d * 1024d * 1.5d)
+            {
+                throw new InvalidOperationException("File too big: " + param.UploadedFile.ContentLength);
+            }
+
+            var unique_file_name = Guid.NewGuid().ToString();
+
+            var mediaItem = new MediaItem();
+            mediaItem.Path = string.Empty;
+            mediaItem.ThumbnailPath = string.Empty;
+            mediaItem.TinyPath = string.Empty;
+            mediaItem.InsertedDateTime = DateTime.UtcNow;
+            DatabaseSession.Save(mediaItem);
+            DatabaseSession.Flush(); // to get the ID
+
+            var unique_id = mediaItem.MediaItemId.ToString();
+            mediaItem.Path = string.Format("./media/{0}.jpg", unique_id);
+            mediaItem.ThumbnailPath = string.Format("./media/{0}-thumb.jpg", unique_id);
+            mediaItem.TinyPath = string.Format("./media/{0}-tiny.jpg", unique_id);
+
+            var buffer = new byte[param.UploadedFile.ContentLength];
+            param.UploadedFile.InputStream.Read(buffer, 0, param.UploadedFile.ContentLength);
+            using (var fullSize = ImageUtilities.LoadBitmap(buffer))
+            {
+                fullSize.Save(Path.Combine(@"C:\temp\imdt", mediaItem.Path), System.Drawing.Imaging.ImageFormat.Jpeg);
+                using (var thumbnail = ImageUtilities.Resize(fullSize, 240, 240))
+                {
+                    thumbnail.Save(Path.Combine(@"C:\temp\imdt", mediaItem.ThumbnailPath), System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
+                using (var tiny = ImageUtilities.Resize(fullSize, 50, 50))
+                {
+                    tiny.Save(Path.Combine(@"C:\temp\imdt", mediaItem.TinyPath), System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
+            }
+
+            PersonMedia personMedia = null;
+            if (param.PersonId.HasValue)
+            {
+                personMedia = new PersonMedia();
+                personMedia.Person = DatabaseSession.Load<Person>(param.PersonId.Value);
+                personMedia.MediaItem = mediaItem;
+                personMedia.InsertedDateTime = DateTime.UtcNow;
+                DatabaseSession.Save(personMedia);
+            }
+
+            ShowMedia showMedia = null;
+            if (param.ShowId.HasValue)
+            {
+                showMedia = new ShowMedia();
+                showMedia.Show = DatabaseSession.Load<Show>(param.ShowId.Value);
+                showMedia.MediaItem = mediaItem;
+                showMedia.InsertedDateTime = DateTime.UtcNow;
+                DatabaseSession.Save(showMedia);
+            }
+
+            DatabaseSession.CommitTransaction();
+
+            return showMedia != null
+                ? RedirectToAction(MVC.Show.GetShowMedia(showMedia.Show.ShowId, showMedia.MediaItem.MediaItemId))
+                : RedirectToAction(MVC.Person.GetPersonMedia(personMedia.Person.PersonId, personMedia.MediaItem.MediaItemId));
+        }
+
+        public class UploadPOSTParameters
+        {
+            public int? PersonId { get; set; }
+            public int? ShowId { get; set; }
+            public HttpPostedFileBase UploadedFile { get; set; }
+        }
+
         [GET("{id}")]
         public virtual ActionResult GetItem(int id)
         {

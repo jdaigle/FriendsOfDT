@@ -535,6 +535,7 @@ namespace FODT.Controllers {
             public readonly string GetItemThumbnail = "GetItemThumbnail";
             public readonly string GetItemDetail = "GetItemDetail";
             public readonly string Index = "Index";
+            public readonly string Upload = "Upload";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -544,6 +545,7 @@ namespace FODT.Controllers {
             public const string GetItemThumbnail = "GetItemThumbnail";
             public const string GetItemDetail = "GetItemDetail";
             public const string Index = "Index";
+            public const string Upload = "Upload";
         }
 
 
@@ -584,6 +586,8 @@ namespace FODT.Controllers {
             public readonly string GetItemDetailViewModel = "~/Views/Media/GetItemDetailViewModel.cs";
             public readonly string Index = "~/Views/Media/Index.cshtml";
             public readonly string IndexViewModel = "~/Views/Media/IndexViewModel.cs";
+            public readonly string Upload = "~/Views/Media/Upload.cshtml";
+            public readonly string UploadViewModel = "~/Views/Media/UploadViewModel.cs";
         }
     }
 
@@ -617,6 +621,11 @@ namespace FODT.Controllers {
 
         public override System.Web.Mvc.ActionResult Index() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Upload() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Upload);
             return callInfo;
         }
 

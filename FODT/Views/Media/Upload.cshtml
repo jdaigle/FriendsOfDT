@@ -1,0 +1,49 @@
+﻿@model FODT.Views.Media.UploadViewModel
+
+<form enctype="multipart/form-data" method="POST">
+<table align="center" width="40%">
+    <tbody>
+        <tr valign="middle">
+            <td colspan="2" align="center">
+                <center><font size="+2">Upload picture to the Media Center</font></center>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                N.B.: We are currently only accepting pictures less than 1.5Mb in size, JPEG format with ".jpg" extension.  Anything else will be rejected.
+    All uploaded pictures must be associated with at least one show or person already in the database.
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                Person:
+                <select name="PersonId">
+                    <option value=""></option>
+                    @foreach (var item in Model.People.OrderBy(x => x.PersonLastName))
+                    {
+                    <option value="@item.PersonId">@item.PersonLastName, @item.PersonFirstName</option>
+                    }
+                </select>
+            </td>
+            <td align="center">
+                Show:
+                <select name="ShowId">
+                    <option value=""></option>
+                    @foreach (var item in Model.Shows.OrderBy(x => x.ShowTitle))
+                    {
+                    <option value="@item.ShowId">@item.ShowTitle (@item.ShowYear)</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" colspan="2">
+                Choose a file to upload:
+                <input name="UploadedFile" type="file"><br>
+                <br>
+                <input type="submit" value="Upload">
+            </td>
+        </tr>
+    </tbody>
+</table>
+</form>
