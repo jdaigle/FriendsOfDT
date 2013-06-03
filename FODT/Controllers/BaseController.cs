@@ -43,7 +43,14 @@ namespace FODT.Controllers
                     {
                         if (databaseSession.Transaction.IsActive)
                         {
-                            databaseSession.CommitTransaction();
+                            if (filterContext.Exception != null)
+                            {
+                                databaseSession.RollbackTransaction();
+                            }
+                            else
+                            {
+                                databaseSession.CommitTransaction();
+                            }
                         }
                         databaseSession.Close();
                     }
