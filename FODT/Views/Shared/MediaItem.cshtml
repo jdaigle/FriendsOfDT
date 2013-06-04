@@ -29,7 +29,7 @@
     See someone in the picture not listed above? Should it be tied to a show? Tie them in!<br>
 	<center></center>
     <table align="center" frame="1" width="50%">
-        <form method="POST" action="/index.php"></form>
+        <form method="POST" action="@Url.Action(MVC.Media.Tag(Model.Id, 0, 0))">
         <tbody>
             <tr align="center" valign="middle">
                 <td colspan="2" align="center">
@@ -42,19 +42,21 @@
             </tr>
             <tr>
                 <td align="center">
-                    <select name="peep_id">
+                    <select name="PersonId">
                         <option value=""></option>
-	                    <option value="605">, Jerred</option>
-	                    <option value="1095">, Sparky</option>
-	                    <option value="2194"> Babaie, Anna</option>
+                        @foreach (var item in Model.AllPeople.OrderBy(x => x.PersonLastName))
+                        {
+                        <option value="@item.PersonId">@item.PersonLastName, @item.PersonFirstName</option>
+                        }
                     </select>
                 </td>
                 <td align="center">
-                    <select name="show_id">
+                    <select name="ShowId">
                         <option value=""></option>
-                        <option value="192">1984 (1997)</option>
-                        <option value="36">Abie's Irish Rose (1958)</option>
-                        <option value="115">Act Without Words II (1981)</option>
+                        @foreach (var item in Model.AllShows.OrderBy(x => x.ShowTitle))
+                        {
+                        <option value="@item.ShowId">@item.ShowTitle (@item.ShowYear)</option>
+                        }
                     </select>
 	            </td>
             </tr>
@@ -66,5 +68,6 @@
                 </td>
             </tr>
         </tbody>
+        </form>
     </table>
 </center>

@@ -11,7 +11,7 @@
                 }
             </td>
             <td align="center">
-                <center><font size="+2">Media for <a href="@Url.Action(MVC.Person.Get(Model.PersonId))">@Model.PersonFullname</a></font><br><br><a href="?action=media_upload">Upload more pictures for this person</a></center>
+                <center><font size="+2">Media for <a href="@Url.Action(MVC.Person.Get(Model.PersonId))">@Model.PersonFullname</a></font><br><br><a href="@Url.Action(MVC.Media.Upload())">Upload more pictures for this person</a></center>
                 <br>
                 <br>
             </td>

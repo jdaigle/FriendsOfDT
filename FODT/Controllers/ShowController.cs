@@ -44,7 +44,7 @@ namespace FODT.Controllers
             var awards = DatabaseSession.Query<ShowAward>().Where(x => x.Show == show).Fetch(x => x.Person).Fetch(x => x.Award).ToList();
 
             var otherPerformances = DatabaseSession.Query<Show>()
-                .Where(x => x.Title == show.Title && 
+                .Where(x => x.Title == show.Title &&
                             x.ShowId != show.ShowId)
                 .ToList();
 
@@ -125,9 +125,6 @@ namespace FODT.Controllers
             var previousId = index > 0 ? relatedMedia[index - 1].MediaItem.MediaItemId : (int?)null;
             var nextId = index < relatedMedia.Count - 1 ? relatedMedia[index + 1].MediaItem.MediaItemId : (int?)null;
 
-            var relatedPeople = DatabaseSession.Query<PersonMedia>().Where(x => x.MediaItem == media.MediaItem).Fetch(x => x.Person).ToList();
-            var relatedshows = DatabaseSession.Query<ShowMedia>().Where(x => x.MediaItem == media.MediaItem).Fetch(x => x.Show).ToList();
-
             var viewModel = new GetShowMediaViewModel();
             viewModel.ShowId = showId;
             viewModel.ShowTitle = show.Title;
@@ -136,20 +133,8 @@ namespace FODT.Controllers
             viewModel.NextId = nextId;
             viewModel.MediaItemId = media.MediaItem.MediaItemId;
             viewModel.MediaItemViewModel = new MediaItemViewModel();
-            viewModel.MediaItemViewModel.Id = media.MediaItem.MediaItemId;
-            viewModel.MediaItemViewModel.RelatedShows = relatedshows.Select(x => new MediaItemViewModel.RelatedShow
-            {
-                ShowId = x.Show.ShowId,
-                ShowQuarter = x.Show.Quarter,
-                ShowYear = x.Show.Year,
-                ShowTitle = x.Show.Title,
-            }).ToList();
-            viewModel.MediaItemViewModel.RelatedPeople = relatedPeople.Select(x => new MediaItemViewModel.RelatedPerson
-            {
-                PersonId = x.Person.PersonId,
-                PersonLastName = x.Person.LastName,
-                PersonFullname = x.Person.Fullname,
-            }).ToList();
+            viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, mediaItemId);
+
             return View(viewModel);
         }
     }

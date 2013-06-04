@@ -125,6 +125,36 @@ namespace FODT.Controllers
             public HttpPostedFileBase UploadedFile { get; set; }
         }
 
+        [POST("{id}/tag")]
+        public virtual ActionResult Tag(int id, int? personId, int? showId)
+        {
+            if (personId.HasValue)
+            {
+                var personMedia = new PersonMedia();
+                personMedia.Person = DatabaseSession.Load<Person>(personId.Value);
+                personMedia.MediaItem = DatabaseSession.Load<MediaItem>(id);
+                personMedia.InsertedDateTime = DateTime.UtcNow;
+                DatabaseSession.Save(personMedia);
+            }
+            if (showId.HasValue)
+            {
+                var showMedia = new ShowMedia();
+                showMedia.Show = DatabaseSession.Load<Show>(showId.Value);
+                showMedia.MediaItem = DatabaseSession.Load<MediaItem>(id);
+                showMedia.InsertedDateTime = DateTime.UtcNow;
+                DatabaseSession.Save(showMedia);
+            }
+            DatabaseSession.CommitTransaction();
+
+            if (Request.UrlReferrer == null ||
+                string.IsNullOrWhiteSpace(Request.UrlReferrer.PathAndQuery))
+            {
+                return RedirectToAction(Actions.GetItemDetail(id));
+            }
+
+            return Redirect(Request.UrlReferrer.PathAndQuery);
+        }
+
         [GET("{id}")]
         public virtual ActionResult GetItem(int id)
         {
@@ -175,28 +205,12 @@ namespace FODT.Controllers
             var previousId = index > 0 ? mediaItems[index - 1].MediaItemId : (int?)null;
             var nextId = index < mediaItems.Count - 1 ? mediaItems[index + 1].MediaItemId : (int?)null;
 
-            var relatedPeople = DatabaseSession.Query<PersonMedia>().Where(x => x.MediaItem == DatabaseSession.Load<MediaItem>(id)).Fetch(x => x.Person).ToList();
-            var relatedshows = DatabaseSession.Query<ShowMedia>().Where(x => x.MediaItem == DatabaseSession.Load<MediaItem>(id)).Fetch(x => x.Show).ToList();
-
             var viewModel = new GetItemDetailViewModel();
             viewModel.Id = id;
             viewModel.PreviousId = previousId;
             viewModel.NextId = nextId;
             viewModel.MediaItemViewModel = new MediaItemViewModel();
-            viewModel.MediaItemViewModel.Id = id;
-            viewModel.MediaItemViewModel.RelatedShows = relatedshows.Select(x => new MediaItemViewModel.RelatedShow
-            {
-                ShowId = x.Show.ShowId,
-                ShowQuarter = x.Show.Quarter,
-                ShowYear = x.Show.Year,
-                ShowTitle = x.Show.Title,
-            }).ToList();
-            viewModel.MediaItemViewModel.RelatedPeople = relatedPeople.Select(x => new MediaItemViewModel.RelatedPerson
-            {
-                PersonId = x.Person.PersonId,
-                PersonLastName = x.Person.LastName,
-                PersonFullname = x.Person.Fullname,
-            }).ToList();
+            viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, id);
             return View(viewModel);
         }
 

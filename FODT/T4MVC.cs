@@ -497,6 +497,11 @@ namespace FODT.Controllers {
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult Tag() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.Tag);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public System.Web.Mvc.ActionResult GetItem() {
             return new T4MVC_ActionResult(Area, Name, ActionNames.GetItem);
         }
@@ -530,25 +535,36 @@ namespace FODT.Controllers {
         public ActionNamesClass ActionNames { get { return s_actions; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
+            public readonly string Upload = "Upload";
+            public readonly string Tag = "Tag";
             public readonly string GetItem = "GetItem";
             public readonly string GetItemTiny = "GetItemTiny";
             public readonly string GetItemThumbnail = "GetItemThumbnail";
             public readonly string GetItemDetail = "GetItemDetail";
             public readonly string Index = "Index";
-            public readonly string Upload = "Upload";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants {
+            public const string Upload = "Upload";
+            public const string Tag = "Tag";
             public const string GetItem = "GetItem";
             public const string GetItemTiny = "GetItemTiny";
             public const string GetItemThumbnail = "GetItemThumbnail";
             public const string GetItemDetail = "GetItemDetail";
             public const string Index = "Index";
-            public const string Upload = "Upload";
         }
 
 
+        static readonly ActionParamsClass_Tag s_params_Tag = new ActionParamsClass_Tag();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_Tag TagParams { get { return s_params_Tag; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_Tag {
+            public readonly string id = "id";
+            public readonly string personId = "personId";
+            public readonly string showId = "showId";
+        }
         static readonly ActionParamsClass_GetItem s_params_GetItem = new ActionParamsClass_GetItem();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_GetItem GetItemParams { get { return s_params_GetItem; } }
@@ -595,6 +611,25 @@ namespace FODT.Controllers {
     public class T4MVC_MediaController: FODT.Controllers.MediaController {
         public T4MVC_MediaController() : base(Dummy.Instance) { }
 
+        public override System.Web.Mvc.ActionResult Upload() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Upload);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Upload(FODT.Controllers.MediaController.UploadPOSTParameters param) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Upload);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "param", param);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Tag(int id, int? personId, int? showId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Tag);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showId", showId);
+            return callInfo;
+        }
+
         public override System.Web.Mvc.ActionResult GetItem(int id) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetItem);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
@@ -621,11 +656,6 @@ namespace FODT.Controllers {
 
         public override System.Web.Mvc.ActionResult Index() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
-            return callInfo;
-        }
-
-        public override System.Web.Mvc.ActionResult Upload() {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Upload);
             return callInfo;
         }
 

@@ -3,7 +3,7 @@
 <center>
     <font size="+2">Media for <a href="@Url.Action(MVC.Person.Get(Model.PersonId))">@Model.PersonFullname</a></font>
     <br><br>
-    <a href="?action=media_upload&amp;IDtype=shows&amp;ID=168">Upload more pictures for this person</a>
+    <a href="@Url.Action(MVC.Media.Upload())">Upload more pictures for this person</a>
 </center>
 <br />
 <br />
@@ -33,5 +33,5 @@
 
 @if (Model.RelatedMedia.Count == 0)
 {
-    <center><h1>No associated media found!<br> Would you like to <a href="?action=media_upload&amp;IDtype=shows&amp;ID=171">upload some</a>?</h1><br><br></center>
+    <center><h1>No associated media found!<br> Would you like to <a href="@Url.Action(MVC.Media.Upload())">upload some</a>?</h1><br><br></center>
 }
