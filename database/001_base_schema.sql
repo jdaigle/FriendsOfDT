@@ -1,10 +1,7 @@
 USE fodt;
 GO
 
-CREATE SCHEMA [imdt] AUTHORIZATION [dbo]
-GO
-
-CREATE TABLE [imdt].[MediaItem] (
+CREATE TABLE [dbo].[MediaItem] (
 	[MediaItemId] [int] IDENTITY(1,1) NOT NULL,
 	[Path] [varchar](100) NOT NULL,
 	[ThumbnailPath] [varchar](100) NOT NULL,
@@ -17,7 +14,7 @@ CREATE TABLE [imdt].[MediaItem] (
 );
 GO
 
-CREATE TABLE [imdt].[Person] (
+CREATE TABLE [dbo].[Person] (
 	[PersonId] [int] IDENTITY(1,1) NOT NULL,
 	[Honorific] [nvarchar](50) NOT NULL,
 	[FirstName] [nvarchar](50) NOT NULL,
@@ -35,7 +32,7 @@ CREATE TABLE [imdt].[Person] (
     ),
     CONSTRAINT [FK_Person_MediaItem]
 		FOREIGN KEY ([MediaItemId])
-		REFERENCES [imdt].[MediaItem],
+		REFERENCES [dbo].[MediaItem],
  -- `username` nvarchar(25) DEFAULT NULL,
  -- `password` nvarchar(32) DEFAULT NULL,
  -- `email` nvarchar(50) DEFAULT NULL,
@@ -43,7 +40,7 @@ CREATE TABLE [imdt].[Person] (
 );
 GO
 
-CREATE TABLE [imdt].[PersonMedia] (
+CREATE TABLE [dbo].[PersonMedia] (
 	[PersonMediaId] [int] IDENTITY(1,1) NOT NULL,
 	[PersonId] [int] NOT NULL,
 	[MediaItemId] [int] NOT NULL,
@@ -54,14 +51,14 @@ CREATE TABLE [imdt].[PersonMedia] (
     ),
     CONSTRAINT [FK_PersonMedia_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [imdt].[Person],
+		REFERENCES [dbo].[Person],
     CONSTRAINT [FK_PersonMedia_MediaItem]
 		FOREIGN KEY ([MediaItemId])
-		REFERENCES [imdt].[MediaItem],
+		REFERENCES [dbo].[MediaItem],
 );
 GO
 
-CREATE TABLE [imdt].[Show] (
+CREATE TABLE [dbo].[Show] (
 	[ShowId] [int] IDENTITY(1,1) NOT NULL,
 	[Title] [nvarchar](150) NOT NULL,
 	[Author] [nvarchar](150) NOT NULL,
@@ -79,11 +76,11 @@ CREATE TABLE [imdt].[Show] (
     ),
     CONSTRAINT [FK_Show_MediaItem]
 		FOREIGN KEY ([MediaItemId])
-		REFERENCES [imdt].[MediaItem],
+		REFERENCES [dbo].[MediaItem],
 );
 GO
 
-CREATE TABLE [imdt].[ShowMedia] (
+CREATE TABLE [dbo].[ShowMedia] (
 	[ShowMediaId] [int] IDENTITY(1,1) NOT NULL,
 	[ShowId] [int] NOT NULL,
 	[MediaItemId] [int] NOT NULL,
@@ -94,14 +91,14 @@ CREATE TABLE [imdt].[ShowMedia] (
     ),
     CONSTRAINT [FK_ShowMedia_Show]
 		FOREIGN KEY ([ShowId])
-		REFERENCES [imdt].[Show],
+		REFERENCES [dbo].[Show],
     CONSTRAINT [FK_ShowMedia_MediaItem]
 		FOREIGN KEY ([MediaItemId])
-		REFERENCES [imdt].[MediaItem],
+		REFERENCES [dbo].[MediaItem],
 );
 GO
 
-CREATE TABLE [imdt].[Award] (
+CREATE TABLE [dbo].[Award] (
 	[AwardId] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](50) NOT NULL,
 	CONSTRAINT [PK_Award] PRIMARY KEY CLUSTERED 
@@ -111,7 +108,7 @@ CREATE TABLE [imdt].[Award] (
 );
 GO
 
-CREATE TABLE [imdt].[ShowAward] (
+CREATE TABLE [dbo].[ShowAward] (
 	[ShowAwardId] [int] IDENTITY(1,1) NOT NULL,
 	[ShowId] [int] NOT NULL,
 	[PersonId] [int] NULL,
@@ -125,17 +122,17 @@ CREATE TABLE [imdt].[ShowAward] (
     ),
 	CONSTRAINT [FK_ShowAward_Award]
 		FOREIGN KEY ([AwardId])
-		REFERENCES [imdt].[Award],
+		REFERENCES [dbo].[Award],
 	CONSTRAINT [FK_ShowAward_Show]
 		FOREIGN KEY ([ShowId])
-		REFERENCES [imdt].[Show],
+		REFERENCES [dbo].[Show],
 	CONSTRAINT [FK_ShowAward_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [imdt].[Person],
+		REFERENCES [dbo].[Person],
 );
 GO
 
-CREATE TABLE [imdt].[PersonAward] (
+CREATE TABLE [dbo].[PersonAward] (
 	[PersonAwardId] [int] IDENTITY(1,1) NOT NULL,
 	[PersonId] [int] NOT NULL,
 	[AwardId] [int] NOT NULL,
@@ -148,14 +145,14 @@ CREATE TABLE [imdt].[PersonAward] (
     ),
 	CONSTRAINT [FK_PersonAward_Award]
 		FOREIGN KEY ([AwardId])
-		REFERENCES [imdt].[Award],
+		REFERENCES [dbo].[Award],
 	CONSTRAINT [FK_PersonAward_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [imdt].[Person],
+		REFERENCES [dbo].[Person],
 );
 GO
 
-CREATE TABLE [imdt].[ShowCast] (
+CREATE TABLE [dbo].[ShowCast] (
 	[ShowCastId] [int] IDENTITY(1,1) NOT NULL,
 	[ShowId] [int] NOT NULL,
 	[PersonId] [int] NOT NULL,
@@ -168,14 +165,14 @@ CREATE TABLE [imdt].[ShowCast] (
     ),
 	CONSTRAINT [FK_ShowCast_Show]
 		FOREIGN KEY ([ShowId])
-		REFERENCES [imdt].[Show],
+		REFERENCES [dbo].[Show],
 	CONSTRAINT [FK_ShowCast_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [imdt].[Person],
+		REFERENCES [dbo].[Person],
 );
 GO
 
-CREATE TABLE [imdt].[ShowCrew] (
+CREATE TABLE [dbo].[ShowCrew] (
 	[ShowCrewId] [int] IDENTITY(1,1) NOT NULL,
 	[ShowId] [int] NOT NULL,
 	[PersonId] [int] NOT NULL,
@@ -189,14 +186,14 @@ CREATE TABLE [imdt].[ShowCrew] (
     ),
 	CONSTRAINT [FK_ShowCrew_Show]
 		FOREIGN KEY ([ShowId])
-		REFERENCES [imdt].[Show],
+		REFERENCES [dbo].[Show],
 	CONSTRAINT [FK_ShowCrew_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [imdt].[Person],
+		REFERENCES [dbo].[Person],
 );
 GO
 
-CREATE TABLE [imdt].[PersonClubPosition] (
+CREATE TABLE [dbo].[PersonClubPosition] (
 	[PersonClubPositionId] [int] IDENTITY(1,1) NOT NULL,
 	[PersonId] [int] NOT NULL,
 	[Position] [nvarchar](75) NOT NULL,
@@ -210,14 +207,11 @@ CREATE TABLE [imdt].[PersonClubPosition] (
     ),
 	CONSTRAINT [FK_PersonClubPosition_Person]
 		FOREIGN KEY ([PersonId])
-		REFERENCES [imdt].[Person],
+		REFERENCES [dbo].[Person],
 );
 GO
 
-CREATE SCHEMA [fodt] AUTHORIZATION [dbo]
-GO
-
-CREATE TABLE [fodt].[UserAccount] (
+CREATE TABLE [dbo].[UserAccount] (
 	[UserAccountId] [varchar](50) NOT NULL,
 	[Email] [nvarchar](300) NOT NULL,
 	[Name] [nvarchar](300) NOT NULL,
@@ -238,7 +232,7 @@ CREATE TABLE [fodt].[UserAccount] (
 );
 GO
 
-CREATE TABLE [fodt].[UserAccessToken] (
+CREATE TABLE [dbo].[UserAccessToken] (
 	[AccessToken] [varchar](255) NOT NULL,
 	[UserAccountId] [varchar](50) NOT NULL,
 	[InsertedDateTime] [datetime2] NOT NULL,
@@ -249,6 +243,6 @@ CREATE TABLE [fodt].[UserAccessToken] (
     ),
 	CONSTRAINT [FK_UserAccessToken_UserAccount]
 		FOREIGN KEY ([UserAccountId])
-		REFERENCES [fodt].[UserAccount],
+		REFERENCES [dbo].[UserAccount],
 );
 GO

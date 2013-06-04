@@ -19,7 +19,6 @@ namespace FODT.Models.IMDT
     {
         public ShowMediaClassMap()
         {
-            Schema("imdt");
             Id(x => x.ShowMediaId).GeneratedBy.Identity();
             References(x => x.Show, "ShowId").Not.Nullable();
             References(x => x.MediaItem, "MediaItemId").Not.Nullable();

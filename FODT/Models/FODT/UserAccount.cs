@@ -59,7 +59,6 @@ namespace FODT.Models.FODT
     {
         public UserAccountClassMap()
         {
-            Schema("fodt");
             Id(x => x.UserAccountId).GeneratedBy.Assigned().CustomType("AnsiString").Length(50);
             Map(x => x.Email).Not.Nullable().Length(300);
             Map(x => x.Name).Not.Nullable().Length(300);

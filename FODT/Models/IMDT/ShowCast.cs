@@ -18,7 +18,6 @@ namespace FODT.Models.IMDT
     {
         public CastClassMap()
         {
-            Schema("imdt");
             Id(x => x.ShowCastId).GeneratedBy.Identity();
             References(x => x.Show, "ShowId").Not.Nullable();
             References(x => x.Person, "PersonId").Not.Nullable();

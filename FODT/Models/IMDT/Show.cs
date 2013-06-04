@@ -26,7 +26,6 @@ namespace FODT.Models.IMDT
     {
         public ShowClassMap()
         {
-            Schema("imdt");
             Id(x => x.ShowId).GeneratedBy.Identity();
             Map(x => x.Title).Not.Nullable().Length(50);
             Map(x => x.Author).Not.Nullable().Length(50);

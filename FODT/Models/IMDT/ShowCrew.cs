@@ -19,7 +19,6 @@ namespace FODT.Models.IMDT
     {
         public CrewClassMap()
         {
-            Schema("imdt");
             Id(x => x.ShowCrewId).GeneratedBy.Identity();
             References(x => x.Show, "ShowId").Not.Nullable();
             References(x => x.Person, "PersonId").Not.Nullable();

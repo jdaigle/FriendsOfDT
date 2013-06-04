@@ -16,7 +16,6 @@ namespace FODT.Models.FODT
     {
         public UserAccessTokenClassMap()
         {
-            Schema("fodt");
             Id(x => x.AccessToken).GeneratedBy.Assigned().CustomType("AnsiString").Length(255);
             Map(x => x.UserAccountId).CustomType("AnsiString").Length(50);
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();

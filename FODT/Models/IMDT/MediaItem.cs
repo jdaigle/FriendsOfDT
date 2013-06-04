@@ -22,7 +22,6 @@ namespace FODT.Models.IMDT
     {
         public MediaItemClassMap()
         {
-            Schema("imdt");
             Id(x => x.MediaItemId).GeneratedBy.Identity();
             Map(x => x.Path).Not.Nullable().CustomType("AnsiString").Length(100);
             Map(x => x.ThumbnailPath).Not.Nullable().CustomType("AnsiString").Length(100);

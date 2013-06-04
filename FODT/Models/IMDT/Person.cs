@@ -52,7 +52,6 @@ namespace FODT.Models.IMDT
     {
         public PersonClassMap()
         {
-            Schema("imdt");
             Id(x => x.PersonId).GeneratedBy.Identity();
             Map(x => x.FirstName).Not.Nullable().Length(50);
             Map(x => x.MiddleName).Not.Nullable().Length(50);

@@ -19,7 +19,6 @@ namespace FODT.Models.IMDT
     {
         public PersonClubPositionClassMap()
         {
-            Schema("imdt");
             Id(x => x.PersonClubPositionId).GeneratedBy.Identity();
             References(x => x.Person, "PersonId").Not.Nullable();
             Map(x => x.Position).Not.Nullable().Length(75);
