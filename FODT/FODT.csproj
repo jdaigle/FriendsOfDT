@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PublishDatabases>false</PublishDatabases>
+    <DeployIisAppPath>friendsofdt.org</DeployIisAppPath>
+    <DesktopBuildPackageLocation>..\deploy\FODT.zip</DesktopBuildPackageLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,6 +43,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PublishDatabases>false</PublishDatabases>
+    <DesktopBuildPackageLocation>..\deploy\FODT.zip</DesktopBuildPackageLocation>
+    <DeployIisAppPath>friendsofdt.org</DeployIisAppPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AttributeRouting">
@@ -277,7 +283,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>16680</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:10289/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
