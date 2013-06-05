@@ -57,6 +57,9 @@
     <Reference Include="AttributeRouting.Web.Mvc">
       <HintPath>..\external-bin\AttributeRouting.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="dotless.Core">
+      <HintPath>..\external-bin\dotless\dotless.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\external-bin\Elmah.dll</HintPath>
     </Reference>
@@ -199,22 +202,44 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Content Include="Content\bkup.imdtlogo.png" />
-    <Content Include="Content\dtlogo.png" />
-    <Content Include="Content\dtstyle.css" />
-    <Content Include="Content\dttitle.png" />
-    <Content Include="Content\greg_abbott.jpg" />
-    <Content Include="Content\header.png" />
-    <Content Include="Content\imdtlogo.png" />
-    <Content Include="Content\imdtlogosmall.png" />
-    <Content Include="Content\imdtlogotrans.png" />
-    <Content Include="Content\IMG_0001.JPG" />
-    <Content Include="Content\nopic.gif" />
-    <Content Include="Content\nopicind.gif" />
-    <Content Include="Content\noposter.gif" />
-    <Content Include="Content\peep.1049.jpg" />
-    <Content Include="Content\thumbnail.jpg" />
-    <Content Include="Content\tinyposter.gif" />
+    <Content Include="Assets\css\cssfonts-min.css" />
+    <Content Include="Assets\css\cssnormalize-min.css" />
+    <Content Include="Assets\img\ajax-loader.gif" />
+    <Content Include="Assets\img\bulletRelatedLinks.gif" />
+    <Content Include="Assets\img\facebook_16.png" />
+    <Content Include="Assets\img\facebook_32.png" />
+    <Content Include="Assets\img\facebook_signin.png" />
+    <Content Include="Assets\img\fb-icon.gif" />
+    <Content Include="Assets\img\bkup.imdtlogo.png" />
+    <Content Include="Assets\css\bootstrap.css" />
+    <Content Include="Assets\img\dtlogo.png" />
+    <Content Include="Assets\dtstyle.css" />
+    <Content Include="Assets\img\dttitle.png" />
+    <Content Include="Assets\css\fodt-forms.css" />
+    <Content Include="Assets\css\fodt-main.css" />
+    <Content Include="Assets\css\fodt-slideshow.css" />
+    <Content Include="Assets\css\fodt-tables.css" />
+    <Content Include="Assets\img\greg_abbott.jpg" />
+    <Content Include="Assets\img\header.png" />
+    <Content Include="Assets\img\imdtlogo.png" />
+    <Content Include="Assets\img\imdtlogosmall.png" />
+    <Content Include="Assets\img\imdtlogotrans.png" />
+    <Content Include="Assets\img\glyphicons-halflings-white.png" />
+    <Content Include="Assets\img\glyphicons-halflings.png" />
+    <Content Include="Assets\img\nopic.gif" />
+    <Content Include="Assets\img\nopicind.gif" />
+    <Content Include="Assets\img\noposter.gif" />
+    <Content Include="Assets\img\showall.png" />
+    <Content Include="Assets\img\tinyposter.gif" />
+    <Content Include="Assets\img\layout\home-bg.jpg" />
+    <Content Include="Assets\img\layout\home-header.png" />
+    <Content Include="Assets\img\layout\inside-bg.jpg" />
+    <Content Include="Assets\img\layout\inside-header.png" />
+    <Content Include="Assets\img\layout\logo.png" />
+    <Content Include="Assets\img\rss-icon.gif" />
+    <Content Include="Assets\img\slider\slider-fodt.jpg" />
+    <Content Include="Assets\img\slider\slider-football.jpg" />
+    <Content Include="Assets\img\twitter-icon.gif" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />

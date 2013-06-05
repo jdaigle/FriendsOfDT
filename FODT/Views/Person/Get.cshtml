@@ -1,148 +1,116 @@
 ﻿@model FODT.Views.Person.GetViewModel
-<table align="center" border="0">
-    <tbody>
-        <tr>
-            <td></td>
-            <td>
-                <center>
-                    <font size="+3"><b>@Model.FullName</b></font>
-                    <br><br>
-                </center>
-            </td>
-        </tr>
-        <tr>
-            <td align="center" valign="top" rowspan="3" width="30%">
-                @if (Model.MediaItemId != 1){
-                <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))">
-                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
-                </a>
-                } else {
-                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
+
+@section endOfHead {
+    <style type="text/css">
+        ul.media-banner {
+        	margin-top: 15px;
+        	margin-left: 0px;
+        }
+        ul.media-banner li {
+        	list-style: none;
+        	display: inline-block;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="span3">
+        @if (Model.MediaItemId != 1){
+            <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))">
+                <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
+            </a>
+        } else {
+            <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
+        }
+        <hr />
+        <img src="@Url.Content("~/assets/img/showall.png")" />
+        <span>|</span>
+        <a href="@Url.Action(MVC.Person.ListPersonMedia(Model.PersonId))">92 Images</a>
+        »
+        <ul class="media-banner">
+            <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))"><img src="@Url.Action(MVC.Media.GetItemTiny(Model.MediaItemId))" alt="@Model.FullName"></a></li>
+            <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))"><img src="@Url.Action(MVC.Media.GetItemTiny(Model.MediaItemId))" alt="@Model.FullName"></a></li>
+            <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))"><img src="@Url.Action(MVC.Media.GetItemTiny(Model.MediaItemId))" alt="@Model.FullName"></a></li>
+            <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))"><img src="@Url.Action(MVC.Media.GetItemTiny(Model.MediaItemId))" alt="@Model.FullName"></a></li>
+        </ul>
+    </div>
+    <div class="span6">
+        <h1>@Model.FullName</h1>
+        <h6>Put Something Here?</h6>
+        <hr />
+        <p>
+            @Html.Raw(Model.Biography)... <a href="#">See full bio</a> »
+        </p>
+
+        <hr />
+
+        @if (Model.Awards.Any())
+        {
+        <h4>Awards</h4>
+        <table class="table table-striped table-condensed">
+            <tbody>
+                @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
+                {
+                <tr>
+                    <td><a href="@Url.Action(MVC.Awards.ByYear(item.Year))">@item.Year</a></td>
+                    <td>
+                        @item.Name
+                        @if (item.ShowId.HasValue)
+                        {
+                            @: for <a href="@Url.Action(MVC.Show.Get(item.ShowId.Value))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a>
+                        }
+                    </td>
+                </tr>
                 }
-                <br>
-                Click picture to see original size<br>
-                <br>
-                <a href="@Url.Action(MVC.Person.ListPersonMedia(Model.PersonId))">See all media associated with this person</a>
-                <br>
-                <br>
-                <a href="@Url.Action(MVC.Person.Edit(Model.PersonId))">Edit Personal details</a>
-                <br>
-                <a href="#">Printable Resume</a>
-                <br>
-                <a href="#">Add EC Position</a>
-                <br>
-                <a href="#">Add Award</a>
-                <br>
-                <a href="#">Shoe Edit View</a>
-                <br>
-            </td>
-            <td valign="top">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                    <tbody>
-                        @if (!string.IsNullOrWhiteSpace(Model.Biography)) {
-                        <tr align="center">
-                            <td colspan="5">
-                                <b><u>Biographical Data</u></b>
-                                <br>
-                                <br>
-                                @Html.Raw(Model.Biography)
-                                <br>
-                            </td>
-                        </tr>
-                        }
-                        @if (Model.ClubPositions.Any()) {
-                            <tr align="center">
-                                <td colspan="5"><b><u>Positions Held</u></b><br>
-                                    <br>
-                                </td>
-                            </tr>
-                            foreach (var item in Model.ClubPositions)
-                            {
-                            <tr>
-                                <td align="center" valign="middle" colspan="5">@item.Year&nbsp; - &nbsp;@item.Name</td>
-                            </tr>   
-                            }
-                        }
-                        @if (Model.Awards.Any()) {
-                        <tr align="center">
-                            <td colspan="5">
-                                <br>
-                                <b><u>Awards</u></b><br>
-                                <br>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center" colspan="5">
-                                <table>
-                                    <tbody>
-                                        @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
-                                        {
-                                        <tr>
-                                            <td align="center"><a href="@Url.Action(MVC.Awards.ByYear(item.Year))">@item.Year</a></td>
-                                            <td>&nbsp; - &nbsp; </td>
-                                            <td align="center">@item.Name</td>
-                                            @if (item.ShowId.HasValue)
-                                            {
-                                                <td>&nbsp; - &nbsp; </td>
-                                                <td align="left"><a href="@Url.Action(MVC.Show.Get(item.ShowId.Value))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
-                                            }
-                                            else
-                                            {
-                                                <td>&nbsp;</td>
-                                            }
-                                        </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        }
-                        @if (Model.CastRoles.Any()) {
-                            <tr align="center">
-                                <td colspan="2"></td>
-                                <td>
-                                    <br>
-                                    <b><u>Acting Credits</u></b><br>
-                                    <br>
-                                </td>
-                                <td colspan="2"></td>
-                            </tr>
-                            foreach (var item in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
-                            {
-                            <tr align="center">
-                                <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
-                                <td>&nbsp; - &nbsp;</td>
-                                <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
-                                <td>&nbsp; - &nbsp;</td>
-                                <td align="left">@item.Role</td>
-                            </tr>
-                            }
-                        }
-                        @if (Model.CrewPositions.Any()) {
-                            <tr align="center">
-                                <td colspan="2"></td>
-                                <td align="center">
-                                    <br>
-                                    <br>
-                                    <b><u>Production Credits</u></b><br>
-                                    <br>
-                                </td>
-                                <td colspan="2"></td>
-                            </tr>
-                            foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
-                            {
-                            <tr align="center">
-                                <td align="right">@item.ShowQuarter.ToString() @item.ShowYear</td>
-                                <td>&nbsp; - &nbsp;</td>
-                                <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
-                                <td>&nbsp; - &nbsp;</td>
-                                <td align="left">@item.Name</td>
-                            </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table>
+            </tbody>
+        </table>
+        }
+
+        @if (Model.ClubPositions.Any())
+        {
+        <h4>EC and Club Responsibilities</h4>
+        <table class="table table-striped table-condensed">
+            <tbody>
+                @foreach (var item in Model.ClubPositions)
+                {
+                    <tr><td><a href="#">@item.Year</a></td><td>@item.Name</td></tr>
+                }
+            </tbody>
+        </table>
+        }
+
+        @if (Model.CastRoles.Any())
+        {
+        <h4>Cast Credits</h4>
+        <table class="table table-striped table-condensed">
+            <tbody>
+                @foreach (var item in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
+                {
+                    <tr>
+                        <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
+                        <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                        <td>@item.Role</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+
+        @if (Model.CrewPositions.Any())
+        {
+        <h4>Crew Credits</h4>
+        <table class="table table-striped table-condensed">
+            <tbody>
+                @foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
+                {
+                    <tr>
+                        <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
+                        <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                        <td>@item.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </div>
+</div>

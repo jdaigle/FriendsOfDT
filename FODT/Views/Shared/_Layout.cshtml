@@ -4,86 +4,81 @@
     <title>Friends of Dramatech Online Database</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/dtstyle.css")" />
+    @System.Web.Optimization.Styles.Render("~/Assets/css/site")
+    @RenderSection("endOfHead", false)
 </head>
 <body>
-    <table border="0" width="100%" bgcolor='#b6b6f2'>
-        <tr>
-            <td align="center" valign="middle">
-                <a href="@Url.Action(MVC.Home.Welcome())"><img src='@Url.Content("~/Content/dtlogo.png")'></a>
-            </td>
-            <td align="center" valign="middle">
-                <img src="@Url.Content("~/Content/dttitle.png")" border="0" usemap='#toaster'>
-                <map name="toaster">
-                    <area shape='RECT' coords='261,7,351,92' href='@Url.Action(MVC.Toaster.Hunt())'>
-                    <area shape='RECT' coords='64,0,381,136' href='@Url.Action(MVC.Home.Welcome())'>
-                </map>
-            </td>
-            <td align="center" valign="middle">
-                <a href="@Url.Action(MVC.Home.Welcome())">
-                    <img src='@Url.Content("~/Content/imdtlogo.png")'></a><br>
-                Welcome @ViewBag.UserName!
-                (
-                @if (!ViewBag.IsAuthenticated) {
-                    <a href="@Url.Action(MVC.User.SignIn())">Sign In / Sign Up</a>
-                } else {
-                    <a href="@Url.Action(MVC.User.SignOut())">Sign Out</a>
-                    @:| <a href="@Url.Action(MVC.Home.Admin())">Admin</a>
-                }
-                )
-                <br>
-            </td>
-        </tr>
-    </table>
-    <basefont face="verdana">
-    <table border=0 width=100%>
-	    <tr>
-            <td align=center valign='middle'>
-	            <br />
-                <b><a title="See what has changed in the last few days." href="?action=whats_new">Latest Updates</a></b>
-	        </td>
-            <td align=center valign='middle'>
-		        <br />
-                <b><a title="Top Ten Lists, Quick Show Lists, and more!" href="@Url.Action(MVC.Home.Index())">IMDT Stats</a></b>
-	        </td>
-            <td rowspan=2 align=center valign='middle'>
-		        <form method=GET action='@Url.Action(MVC.Search.Search())' STYLE="DISPLAY:INLINE;">
-		            <b>Search: </b>
-		            <input type='hidden' name='action' value='search' />
-		            <input type='text' name='searchfield' size='40' value='@ViewBag.SearchTerm' />
-		            <select name='searchtype'>
-		                <option value='all'>All</option>
-		                <option value='show'>Shows</option>
-		                <option value='peep'>People</option>
-		            </select>
-		            <input type=submit value='Search' />
-	            </form>
-	        </td>
-	        <td rowspan=2 align=center valign='middle'>
-	            <br>
-	            <iframe src="https://www.facebook.com/plugins/like.php?href=http://imdt.friendsofdt.org/"
-                       scrolling="no" frameborder="0"
-                       style="border:none; width:300px; height:100px;">
-	            </iframe>
-	        </td>
-            <td align=center rowspan=2 valign=middle>
-            </td>
-	    </tr>
-	    <tr>
-            <td align=center valign=middle>
-	            <b><a title="Show pictures, posters, and programs" href="@Url.Action(MVC.Media.Index())">Media Center</a></b>
-            </td>
-	        <td align=center valign='middle'>
-	            <b><a title="How are people connected to each other?" href="?action=six_degrees">6 Degrees of DT</a></b>
-	        </td>
-	    </tr>
-    </table>
-	<hr>	
-        @RenderBody()
-    <table align=center><tr><td align=center valign=middle>Copyright @DateTime.Now.Year Friends of Dramatech</td></tr></table>
+    <div class="main">
+        <div class="head">
+            <div class="navigation">
+                <ul>
+                    <li class="active">// <a href="#" title="home">Home</a></li>
+                    <li>// <a href="#" title="about us">About Us</a></li>
+                    <li class="active">// <a href="#" title="about us">Directory</a></li>
+                    <li>// <a href="#" title="show archive">Show Archive</a></li>        
+                    @*<li>// <a href="#">Active</a></li>
+                    <li>// <a href="#">About Us</a></li>*@
+                </ul>
+            </div>
+            <div class="title">Title</div>
+        </div>
+        <div class="container body">
+            <div class="row">
+                <div class="content span9">
+                    @RenderBody()
+                </div>
+                <div class="sidebar span3">
+                    <ul>
+                        <li>
+                            @if (!ViewBag.IsAuthenticated) {
+                            <h1>Sign In / Sign Up</h1>
+                            <a class="sign-in-facebook" href="@Url.Action(MVC.User.SignIn())"></a>
+                            } else {
+                            <h1>Welcome @ViewBag.UserName!</h1>   
+                            <a href="@Url.Action(MVC.User.SignOut())">Sign Out</a>
+                            }
+                        </li>
+                        <li>
+                            <h1>Upcoming Events</h1>
+                            <p>Come out and support our shows! More info here.</p>
+                        </li>
+                        <li class="icon rss">
+                            <h1>Subscribe RSS</h1>
+                            <p>Keep in touch with us.</p>
+                        </li>
+                        <li>
+                            <h1>History Tidbit</h1>
+                            <p>DramaTech is a Theater.</p>
+                        </li>
+                        <li>
+                            <h1>Other Links</h1>
+                            <ul class="links">
+                                <li><a target="_blank" href="http://dramatech.org">DramaTech</a></li>
+                                <li><a target="_blank" href="http://imdt.friendsofdt.org/">IMDT</a></li>
+                                <li><a target="_blank" href="http://gt.entertainmentalumni.org/">GTEN</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h1>Social Networking</h1>
+                            <ul class="links list-icon">
+                                <li><a class="icon twitter" target="_blank" href="http://twitter.com/gtdramatech"></a></li>
+                                <li><a class="icon fb" target="_blank" href="http://facebook.com/group.php?gid=5944506425"></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="foot">
+            <p>&copy; @DateTime.Now.Year Friends Of DramaTech</p>
+            <p>Contact the <a href="mailto:fodtadmin@cridion.com">webmaster</a></p>
+        </div>
+    </div>
     <script type="text/javascript">
         if (window.location.hash == "#_=_") {
             window.location.hash = "";
         }
     </script>
+    @RenderSection("endOfBody", false)
 </body>
 </html>
