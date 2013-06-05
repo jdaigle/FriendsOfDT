@@ -18,6 +18,12 @@
                     <li>// <a href="#" title="show archive">Show Archive</a></li>        
                     @*<li>// <a href="#">Active</a></li>
                     <li>// <a href="#">About Us</a></li>*@
+                    <li>
+                        <form method="get" action="@Url.Action(MVC.Search.Search())">
+                            <input name="searchField" />
+                            <button type="submit">Search</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
             <div class="title">Title</div>
