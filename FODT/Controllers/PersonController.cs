@@ -31,7 +31,7 @@ namespace FODT.Controllers
             viewModel.FullName = person.Fullname;
             viewModel.Biography = person.Biography;
             viewModel.MediaItemId = person.MediaItem.MediaItemId;
-            viewModel.ClubPositions = clubPositions.Select(x => new GetViewModel.ClubPosition
+            viewModel.ClubPositions = clubPositions.OrderBy(x => x.DisplayOrder).ThenByDescending(x => x.Year).Select(x => new GetViewModel.ClubPosition
             {
                 Year = x.Year,
                 Name = x.Position,
