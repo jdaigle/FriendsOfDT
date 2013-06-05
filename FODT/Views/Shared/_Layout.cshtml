@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>DramaTech Theatre Cast and Crew Database - IMDT</title>
+    <title>Friends of Dramatech Online Database</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/dtstyle.css")" />
 </head>
@@ -24,9 +24,10 @@
                 Welcome @ViewBag.UserName!
                 (
                 @if (!ViewBag.IsAuthenticated) {
-                <a href="@Url.Action(MVC.User.SignIn())">Sign In / Sign Up</a>
+                    <a href="@Url.Action(MVC.User.SignIn())">Sign In / Sign Up</a>
                 } else {
-                <a href="@Url.Action(MVC.User.SignOut())">Sign Out</a>
+                    <a href="@Url.Action(MVC.User.SignOut())">Sign Out</a>
+                    @:| <a href="@Url.Action(MVC.Home.Admin())">Admin</a>
                 }
                 )
                 <br>

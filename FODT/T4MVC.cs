@@ -393,6 +393,7 @@ namespace FODT.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
+            public readonly string ByYear = "~/Views/Awards/ByYear.cshtml";
             public readonly string ByYearViewModel = "~/Views/Awards/ByYearViewModel.cs";
         }
     }
@@ -430,6 +431,16 @@ namespace FODT.Controllers {
             return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
         }
 
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult Admin_EditPerson() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.Admin_EditPerson);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult Admin_ShowPerson() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.Admin_ShowPerson);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public HomeController Actions { get { return MVC.Home; } }
@@ -447,20 +458,41 @@ namespace FODT.Controllers {
         public class ActionNamesClass {
             public readonly string Welcome = "Welcome";
             public readonly string Index = "Index";
+            public readonly string Admin = "Admin";
+            public readonly string Admin_EditPerson = "Admin_EditPerson";
+            public readonly string Admin_ShowPerson = "Admin_ShowPerson";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants {
             public const string Welcome = "Welcome";
             public const string Index = "Index";
+            public const string Admin = "Admin";
+            public const string Admin_EditPerson = "Admin_EditPerson";
+            public const string Admin_ShowPerson = "Admin_ShowPerson";
         }
 
 
+        static readonly ActionParamsClass_Admin_EditPerson s_params_Admin_EditPerson = new ActionParamsClass_Admin_EditPerson();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_Admin_EditPerson Admin_EditPersonParams { get { return s_params_Admin_EditPerson; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_Admin_EditPerson {
+            public readonly string personId = "personId";
+        }
+        static readonly ActionParamsClass_Admin_ShowPerson s_params_Admin_ShowPerson = new ActionParamsClass_Admin_ShowPerson();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_Admin_ShowPerson Admin_ShowPersonParams { get { return s_params_Admin_ShowPerson; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_Admin_ShowPerson {
+            public readonly string showId = "showId";
+        }
         static readonly ViewNames s_views = new ViewNames();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
+            public readonly string Admin = "~/Views/Home/Admin.cshtml";
             public readonly string Index = "~/Views/Home/Index.cshtml";
             public readonly string Welcome = "~/Views/Home/Welcome.cshtml";
         }
@@ -477,6 +509,23 @@ namespace FODT.Controllers {
 
         public override System.Web.Mvc.ActionResult Index() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Admin() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Admin);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Admin_EditPerson(int personId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Admin_EditPerson);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Admin_ShowPerson(int showId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Admin_ShowPerson);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showId", showId);
             return callInfo;
         }
 

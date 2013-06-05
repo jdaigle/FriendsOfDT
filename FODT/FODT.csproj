@@ -180,6 +180,7 @@
     </Compile>
     <Compile Include="TimeZoneCode.cs" />
     <Compile Include="Views\Awards\ByYearViewModel.cs" />
+    <Compile Include="Views\Home\AdminViewModel.cs" />
     <Compile Include="Views\Media\GetItemDetailViewModel.cs" />
     <Compile Include="Views\Media\IndexViewModel.cs" />
     <Compile Include="Views\Media\UploadViewModel.cs" />
@@ -267,6 +268,7 @@
     <Content Include="Views\User\Welcome.cshtml" />
     <Content Include="Views\Media\Upload.cshtml" />
     <Content Include="Views\Awards\ByYear.cshtml" />
+    <Content Include="Views\Home\Admin.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
