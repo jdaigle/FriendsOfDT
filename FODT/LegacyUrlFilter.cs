@@ -14,19 +14,26 @@ namespace FODT
             {
                 return;
             }
-            var param = filterContext.HttpContext.Request.Params;
-            var action = param["action"];
-            if (!string.IsNullOrWhiteSpace(action))
+            try
             {
-                switch (action.ToLowerInvariant())
+                var param = filterContext.HttpContext.Request.Params;
+                var action = param["action"];
+                if (!string.IsNullOrWhiteSpace(action))
                 {
-                    case "peep_detail":
-                        filterContext.Result = RedirectToAction(MVC.Person.Get(int.Parse(param["peep_id"])));
-                        break;
-                    case "show_detail":
-                        filterContext.Result = RedirectToAction(MVC.Person.Get(int.Parse(param["show_id"])));
-                        break;
+                    switch (action.ToLowerInvariant())
+                    {
+                        case "peep_detail":
+                            filterContext.Result = RedirectToAction(MVC.Person.Get(int.Parse(param["peep_id"])));
+                            break;
+                        case "show_detail":
+                            filterContext.Result = RedirectToAction(MVC.Person.Get(int.Parse(param["show_id"])));
+                            break;
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Elmah.ErrorSignal.FromCurrentContext().Raise(e);
             }
         }
 
