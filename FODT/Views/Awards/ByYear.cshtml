@@ -1,0 +1,39 @@
+﻿@model FODT.Views.Awards.ByYearViewModel
+
+<table width="80%" align="center">
+    <tbody>
+        <tr>
+            <td width="25%"><a href="@Url.Action(MVC.Awards.ByYear(Model.PreviousYear))">&lt;--- Previous Year</a></td>
+            <td>
+                <center><h1>DT Banquet - Awards for @Model.Year</h1></center>
+            </td>
+            @if (Model.NextYear.HasValue)
+            {
+            <td width="25%" align="right"><a href="@Url.Action(MVC.Awards.ByYear(Model.NextYear.Value))">Next Year ---&gt;</td>
+            }
+            else
+            {
+            <td width="25%" align="right">Next Year ---&gt;</td>
+            }
+        </tr>
+    </tbody>
+</table>
+
+
+<center>
+    @foreach (var item in Model.Awards)
+	{
+        <span>
+            @item.Name
+            @if (item.ShowId.HasValue)
+            {
+                @:- <a href="@Url.Action(MVC.Show.Get(item.ShowId.Value))">@item.ShowTitle</a>
+            }
+            @if (item.PersonId.HasValue)
+            {
+                @:- <a href="@Url.Action(MVC.Person.Get(item.PersonId.Value))">@item.PersonName</a>
+            }
+        </span>
+        <br />
+	}
+</center>

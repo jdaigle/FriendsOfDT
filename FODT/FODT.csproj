@@ -179,6 +179,7 @@
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="TimeZoneCode.cs" />
+    <Compile Include="Views\Awards\ByYearViewModel.cs" />
     <Compile Include="Views\Media\GetItemDetailViewModel.cs" />
     <Compile Include="Views\Media\IndexViewModel.cs" />
     <Compile Include="Views\Media\UploadViewModel.cs" />
@@ -213,6 +214,7 @@
     <Content Include="Content\peep.1049.jpg" />
     <Content Include="Content\thumbnail.jpg" />
     <Content Include="Content\tinyposter.gif" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="Views\Web.config" />
@@ -264,6 +266,7 @@
     <Content Include="Views\Shows\SortByTitle.cshtml" />
     <Content Include="Views\User\Welcome.cshtml" />
     <Content Include="Views\Media\Upload.cshtml" />
+    <Content Include="Views\Awards\ByYear.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

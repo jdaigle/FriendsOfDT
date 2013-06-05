@@ -352,6 +352,11 @@ namespace FODT.Controllers {
             return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
         }
 
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult ByYear() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.ByYear);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public AwardsController Actions { get { return MVC.Awards; } }
@@ -376,11 +381,19 @@ namespace FODT.Controllers {
         }
 
 
+        static readonly ActionParamsClass_ByYear s_params_ByYear = new ActionParamsClass_ByYear();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_ByYear ByYearParams { get { return s_params_ByYear; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_ByYear {
+            public readonly string year = "year";
+        }
         static readonly ViewNames s_views = new ViewNames();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
+            public readonly string ByYearViewModel = "~/Views/Awards/ByYearViewModel.cs";
         }
     }
 
@@ -388,12 +401,7 @@ namespace FODT.Controllers {
     public class T4MVC_AwardsController: FODT.Controllers.AwardsController {
         public T4MVC_AwardsController() : base(Dummy.Instance) { }
 
-        public override System.Web.Mvc.ActionResult ByYear() {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.ByYear);
-            return callInfo;
-        }
-
-        public override System.Web.Mvc.ActionResult ByYear(short year) {
+        public override System.Web.Mvc.ActionResult ByYear(short? year) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.ByYear);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "year", year);
             return callInfo;
