@@ -142,6 +142,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HttpHeadersCleanupModule.cs" />
+    <Compile Include="LegacyUrlFilter.cs" />
     <Compile Include="Models\FacebookProfile.cs" />
     <Compile Include="Models\FODT\UserAccessToken.cs" />
     <Compile Include="Models\FODT\UserAccount.cs" />

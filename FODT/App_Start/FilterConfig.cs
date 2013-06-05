@@ -12,6 +12,7 @@ namespace FODT
         {
             //filters.Add(new HandleErrorAttribute());
             filters.Add(new LoadPrincipalAttribute(LookupPrincipal));
+            filters.Add(new LegacyUrlFilter());
         }
 
         public static IPrincipal LookupPrincipal(ControllerContext controllerContext, AuthenticationTokenIdentity identity, IPrincipal unknownPrincipal)
