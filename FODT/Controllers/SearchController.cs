@@ -23,7 +23,7 @@ namespace FODT.Controllers
                 return RedirectToAction(MVC.Home.Welcome());
             }
 
-            searchType = searchType.ToLower() ?? "all";
+            searchType = (searchType ?? "all").ToLower();
 
             var viewModel = new SearchResultsViewModel();
             viewModel.SearchTerm = searchField;
