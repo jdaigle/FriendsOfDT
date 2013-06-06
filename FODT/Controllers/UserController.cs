@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -11,6 +12,7 @@ using FODT.Models;
 using FODT.Models.FODT;
 using FODT.Security;
 using Newtonsoft.Json;
+using NHibernate.Linq;
 
 namespace FODT.Controllers
 {
@@ -72,7 +74,7 @@ namespace FODT.Controllers
 
             var profile = GetFacebookProfile(accessToken);
             ActionResult result = null;
-            var user = DatabaseSession.Get<UserAccount>(profile.id);
+            var user = DatabaseSession.Query<UserAccount>().Where(x => x.FacebookId == profile.id).SingleOrDefault();
             if (user == null)
             {
                 user = new UserAccount(profile);

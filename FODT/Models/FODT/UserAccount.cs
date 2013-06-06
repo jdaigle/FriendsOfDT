@@ -13,7 +13,7 @@ namespace FODT.Models.FODT
 
         public UserAccount(FacebookProfile profile)
         {
-            this.UserAccountId = profile.id;
+            this.FacebookId = profile.id;
             this.InsertedDateTime = DateTime.UtcNow;
             this.LastModifiedDateTime = DateTime.UtcNow;
             Update(profile);
@@ -40,7 +40,7 @@ namespace FODT.Models.FODT
             }
         }
 
-        public virtual string UserAccountId { get; set; }
+        public virtual int UserAccountId { get; set; }
         public virtual string Email { get; set; }
         public virtual string Name { get; set; }
         public virtual string FirstName { get; set; }
@@ -48,6 +48,7 @@ namespace FODT.Models.FODT
         public virtual string LastName { get; set; }
         public virtual string Gender { get; set; }
         public virtual string Locale { get; set; }
+        public virtual string FacebookId { get; set; }
         public virtual string FacebookURL { get; set; }
         public virtual string FacebookUsername { get; set; }
         public virtual string FacebookPictureURL { get; set; }
@@ -59,7 +60,7 @@ namespace FODT.Models.FODT
     {
         public UserAccountClassMap()
         {
-            Id(x => x.UserAccountId).GeneratedBy.Assigned().CustomType("AnsiString").Length(50);
+            Id(x => x.UserAccountId).GeneratedBy.Identity();
             Map(x => x.Email).Not.Nullable().Length(300);
             Map(x => x.Name).Not.Nullable().Length(300);
             Map(x => x.FirstName).Not.Nullable().Length(100);
@@ -67,6 +68,7 @@ namespace FODT.Models.FODT
             Map(x => x.LastName).Not.Nullable().Length(100);
             Map(x => x.Gender).Not.Nullable().Length(10);
             Map(x => x.Locale).Not.Nullable().Length(10);
+            Map(x => x.FacebookId).Not.Nullable().CustomType("AnsiString").Length(50);
             Map(x => x.FacebookURL).Not.Nullable().Length(300);
             Map(x => x.FacebookUsername).Not.Nullable().Length(300);
             Map(x => x.FacebookPictureURL).Not.Nullable().Length(300);

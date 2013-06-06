@@ -55,5 +55,8 @@ namespace FODT.Views.Person
             public short ShowYear { get; set; }
             public string Name { get; set; }
         }
+
+        public int RelatedMediaCount { get; set; }
+        public List<int> NewRelatedMedia { get; set; }
     }
 }

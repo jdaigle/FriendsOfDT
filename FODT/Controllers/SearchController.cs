@@ -16,9 +16,9 @@ namespace FODT.Controllers
     public partial class SearchController : BaseController
     {
         [GET("search")]
-        public virtual ActionResult Search(string searchField, string searchType)
+        public virtual ActionResult Search(string searchTerm, string searchType)
         {
-            if (string.IsNullOrWhiteSpace(searchField))
+            if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 return RedirectToAction(MVC.Home.Welcome());
             }
@@ -26,16 +26,16 @@ namespace FODT.Controllers
             searchType = (searchType ?? "all").ToLower();
 
             var viewModel = new SearchResultsViewModel();
-            viewModel.SearchTerm = searchField;
+            viewModel.SearchTerm = searchTerm;
 
-            var searchTerms = searchField.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var searchTerms = searchTerm.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
             if (searchType == "all" || searchType == "show")
             {
                 var query = DatabaseSession.Query<Show>();
-                foreach (var searchTerm in searchTerms)
+                foreach (var term in searchTerms)
                 {
-                    query = query.Where(x => x.Title.Contains(searchTerm));
+                    query = query.Where(x => x.Title.Contains(term));
                 }
                 var shows = query.ToList();
                 viewModel.Results.AddRange(shows.Select(x => new SearchResultsViewModel.SearchResult
@@ -51,11 +51,11 @@ namespace FODT.Controllers
             if (searchType == "all" || searchType == "peep")
             {
                 var query = DatabaseSession.Query<Person>();
-                foreach (var searchTerm in searchTerms)
+                foreach (var term in searchTerms)
                 {
-                    query = query.Where(x => x.LastName.Contains(searchTerm) ||
-                                             x.FirstName.Contains(searchTerm) ||
-                                             x.Nickname.Contains(searchTerm));
+                    query = query.Where(x => x.LastName.Contains(term) ||
+                                             x.FirstName.Contains(term) ||
+                                             x.Nickname.Contains(term));
                 }
                 var people = query.ToList();
                 viewModel.Results.AddRange(people.Select(x => new SearchResultsViewModel.SearchResult
@@ -72,7 +72,7 @@ namespace FODT.Controllers
                 return Redirect(viewModel.Results[0].LinkUrl);
             }
 
-            ViewBag.SearchTerm = searchField;
+            ViewBag.SearchTerm = searchTerm;
             return View("SearchResults", viewModel);
         }
     }

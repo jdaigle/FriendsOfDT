@@ -25,6 +25,7 @@ namespace FODT.Controllers
             var cast = DatabaseSession.Query<ShowCast>().Where(x => x.Person == person).Fetch(x => x.Show).ToList();
             var showAwards = DatabaseSession.Query<ShowAward>().Where(x => x.Person == person).Fetch(x => x.Show).Fetch(x => x.Award).ToList();
             var myAwards = DatabaseSession.Query<PersonAward>().Where(x => x.Person == person).Fetch(x => x.Award).ToList();
+            var relatedMedia = DatabaseSession.Query<PersonMedia>().Where(x => x.Person == person).Fetch(x => x.MediaItem).ToList();
 
             var viewModel = new GetViewModel();
             viewModel.PersonId = personId;
@@ -68,6 +69,8 @@ namespace FODT.Controllers
                 ShowYear = x.Show.Year,
                 Name = x.Position,
             }).ToList();
+            viewModel.RelatedMediaCount = relatedMedia.Count;
+            viewModel.NewRelatedMedia = relatedMedia.OrderByDescending(x => x.InsertedDateTime).Select(x => x.MediaItem.MediaItemId).Where(x => x != person.MediaItem.MediaItemId).Take(4).ToList();
             return View(viewModel);
         }
 

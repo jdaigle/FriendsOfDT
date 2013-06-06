@@ -23,31 +23,36 @@
             <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
         }
         <hr />
-        <img src="@Url.Content("~/assets/img/showall.png")" />
+        <i class="icon-th"></i>
         <span>|</span>
-        <a href="@Url.Action(MVC.Person.ListPersonMedia(Model.PersonId))">92 Images</a>
-        »
+        <a href="@Url.Action(MVC.Person.ListPersonMedia(Model.PersonId))">@Model.RelatedMediaCount Images</a>
+        &raquo; 
         <ul class="media-banner">
-            <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))"><img src="@Url.Action(MVC.Media.GetItemTiny(Model.MediaItemId))" alt="@Model.FullName"></a></li>
-            <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))"><img src="@Url.Action(MVC.Media.GetItemTiny(Model.MediaItemId))" alt="@Model.FullName"></a></li>
-            <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))"><img src="@Url.Action(MVC.Media.GetItemTiny(Model.MediaItemId))" alt="@Model.FullName"></a></li>
-            <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))"><img src="@Url.Action(MVC.Media.GetItemTiny(Model.MediaItemId))" alt="@Model.FullName"></a></li>
+            @foreach (var item in Model.NewRelatedMedia)
+            {
+                <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, item))"><img src="@Url.Action(MVC.Media.GetItemTiny(item))" alt="@Model.FullName"></a></li>    
+            }
         </ul>
+        <a href="@Url.Action(MVC.Media.Upload())"><i class="icon-upload"></i> Upload an Image</a>
     </div>
     <div class="span6">
         <h1>@Model.FullName</h1>
-        <h6>Put Something Here?</h6>
+        <h6><i class="icon-edit"></i> <a href="@Url.Action(MVC.Person.Edit())">Edit Person</a></h6>
+        <h6><i class="icon-user"></i> Is this you? <a href="#" title="Claim this person so that you can edit so that you can edit the entry.">Claim this Person</a></h6>
         <hr />
-        <p>
-            @Html.Raw(Model.Biography)... <a href="#">See full bio</a> »
-        </p>
-
-        <hr />
+        @if (!string.IsNullOrWhiteSpace(Model.Biography))
+        {
+            <p>
+                @Html.Raw(Model.Biography)... <a href="#">See full bio</a> &raquo;
+            </p>
+            <hr />
+        }
 
         @if (Model.Awards.Any())
         {
-        <h4>Awards</h4>
-        <table class="table table-striped table-condensed">
+        <h4>Awards <small style="float:right;"><a href="#"><i class="icon-plus-sign"></i> Add Award</a></small></h4>
+        
+        <table class="table table-striped table-condensed table-hover">
             <tbody>
                 @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
                 {
@@ -60,6 +65,10 @@
                             @: for <a href="@Url.Action(MVC.Show.Get(item.ShowId.Value))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a>
                         }
                     </td>
+                    <td style="text-align: right;">
+                            <a href="#" title="Edit"><i class="icon-edit"></i></a>
+                            <a href="#" title="Remove"><i class="icon-remove-sign"></i></a>
+                    </td>
                 </tr>
                 }
             </tbody>
@@ -69,11 +78,18 @@
         @if (Model.ClubPositions.Any())
         {
         <h4>EC and Club Responsibilities</h4>
-        <table class="table table-striped table-condensed">
+        <table class="table table-striped table-condensed table-hover">
             <tbody>
                 @foreach (var item in Model.ClubPositions)
                 {
-                    <tr><td><a href="#">@item.Year</a></td><td>@item.Name</td></tr>
+                    <tr>
+                        <td><a href="#">@item.Year</a></td>
+                        <td>@item.Name</td>
+                        <td style="text-align: right;">
+                            <a href="#" title="Edit"><i class="icon-edit"></i></a>
+                            <a href="#" title="Remove"><i class="icon-remove-sign"></i></a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -82,7 +98,7 @@
         @if (Model.CastRoles.Any())
         {
         <h4>Cast Credits</h4>
-        <table class="table table-striped table-condensed">
+        <table class="table table-striped table-condensed table-hover">
             <tbody>
                 @foreach (var item in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
                 {
@@ -90,6 +106,10 @@
                         <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
                         <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                         <td>@item.Role</td>
+                        <td style="text-align: right;">
+                            <a href="#" title="Edit"><i class="icon-edit"></i></a>
+                            <a href="#" title="Remove"><i class="icon-remove-sign"></i></a>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -99,7 +119,7 @@
         @if (Model.CrewPositions.Any())
         {
         <h4>Crew Credits</h4>
-        <table class="table table-striped table-condensed">
+        <table class="table table-striped table-condensed table-hover">
             <tbody>
                 @foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
                 {
@@ -107,6 +127,10 @@
                         <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
                         <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                         <td>@item.Name</td>
+                        <td style="text-align: right;">
+                            <a href="#" title="Edit"><i class="icon-edit"></i></a>
+                            <a href="#" title="Remove"><i class="icon-remove-sign"></i></a>
+                        </td>
                     </tr>
                 }
             </tbody>

@@ -3,7 +3,6 @@
 <head>
     <title>Friends of Dramatech Online Database</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/dtstyle.css")" />
     @System.Web.Optimization.Styles.Render("~/Assets/css/site")
     @RenderSection("endOfHead", false)
 </head>
@@ -18,19 +17,19 @@
                     <li>// <a href="#" title="show archive">Show Archive</a></li>        
                     @*<li>// <a href="#">Active</a></li>
                     <li>// <a href="#">About Us</a></li>*@
-                    <li>
-                        <form method="get" action="@Url.Action(MVC.Search.Search())">
-                            <input name="searchField" />
-                            <button type="submit">Search</button>
-                        </form>
-                    </li>
                 </ul>
             </div>
-            <div class="title">Title</div>
+            <div class="title">@ViewBag.PageTitle</div>
         </div>
         <div class="container body">
             <div class="row">
                 <div class="content span9">
+                    <div style="text-align: center;">
+                        <form method="get" action="@Url.Action(MVC.Search.Search())" class="form-search">
+                            <input name="searchTerm" type="text" class="input span5 search-query" value="@ViewBag.SearchTerm" />
+                            <button type="submit" class="btn">Search</button>
+                        </form>
+                    </div>
                     @RenderBody()
                 </div>
                 <div class="sidebar span3">

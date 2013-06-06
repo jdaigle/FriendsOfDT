@@ -307,6 +307,87 @@ public class T4MVC_ActionResult : System.Web.Mvc.ActionResult, IT4MVCActionResul
 
 
 namespace Links {
+    [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+    public static class Assets {
+        private const string URLPATH = "~/Assets";
+        public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+        public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class css {
+            private const string URLPATH = "~/Assets/css";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string bootstrap_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap.min.css") ? Url("bootstrap.min.css") : Url("bootstrap.css");
+                 
+            public static readonly string cssfonts_min_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/cssfonts-min.min.css") ? Url("cssfonts-min.min.css") : Url("cssfonts-min.css");
+                 
+            public static readonly string cssnormalize_min_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/cssnormalize-min.min.css") ? Url("cssnormalize-min.min.css") : Url("cssnormalize-min.css");
+                 
+            public static readonly string fodt_forms_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt-forms.min.css") ? Url("fodt-forms.min.css") : Url("fodt-forms.css");
+                 
+            public static readonly string fodt_main_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt-main.min.css") ? Url("fodt-main.min.css") : Url("fodt-main.css");
+                 
+            public static readonly string fodt_slideshow_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt-slideshow.min.css") ? Url("fodt-slideshow.min.css") : Url("fodt-slideshow.css");
+                 
+            public static readonly string fodt_tables_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt-tables.min.css") ? Url("fodt-tables.min.css") : Url("fodt-tables.css");
+                 
+        }
+    
+        public static readonly string dtstyle_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/dtstyle.min.css") ? Url("dtstyle.min.css") : Url("dtstyle.css");
+             
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class img {
+            private const string URLPATH = "~/Assets/img";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string ajax_loader_gif = Url("ajax-loader.gif");
+            public static readonly string bkup_imdtlogo_png = Url("bkup.imdtlogo.png");
+            public static readonly string bulletRelatedLinks_gif = Url("bulletRelatedLinks.gif");
+            public static readonly string dtlogo_png = Url("dtlogo.png");
+            public static readonly string dttitle_png = Url("dttitle.png");
+            public static readonly string facebook_16_png = Url("facebook_16.png");
+            public static readonly string facebook_32_png = Url("facebook_32.png");
+            public static readonly string facebook_signin_png = Url("facebook_signin.png");
+            public static readonly string fb_icon_gif = Url("fb-icon.gif");
+            public static readonly string glyphicons_halflings_white_png = Url("glyphicons-halflings-white.png");
+            public static readonly string glyphicons_halflings_png = Url("glyphicons-halflings.png");
+            public static readonly string greg_abbott_jpg = Url("greg_abbott.jpg");
+            public static readonly string header_png = Url("header.png");
+            public static readonly string imdtlogo_png = Url("imdtlogo.png");
+            public static readonly string imdtlogosmall_png = Url("imdtlogosmall.png");
+            public static readonly string imdtlogotrans_png = Url("imdtlogotrans.png");
+            [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+            public static class layout {
+                private const string URLPATH = "~/Assets/img/layout";
+                public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+                public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+                public static readonly string home_bg_jpg = Url("home-bg.jpg");
+                public static readonly string home_header_png = Url("home-header.png");
+                public static readonly string inside_bg_jpg = Url("inside-bg.jpg");
+                public static readonly string inside_header_png = Url("inside-header.png");
+                public static readonly string logo_png = Url("logo.png");
+            }
+        
+            public static readonly string nopic_gif = Url("nopic.gif");
+            public static readonly string nopicind_gif = Url("nopicind.gif");
+            public static readonly string noposter_gif = Url("noposter.gif");
+            public static readonly string rss_icon_gif = Url("rss-icon.gif");
+            public static readonly string showall_png = Url("showall.png");
+            [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+            public static class slider {
+                private const string URLPATH = "~/Assets/img/slider";
+                public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+                public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+                public static readonly string slider_fodt_jpg = Url("slider-fodt.jpg");
+                public static readonly string slider_football_jpg = Url("slider-football.jpg");
+            }
+        
+            public static readonly string tinyposter_gif = Url("tinyposter.gif");
+            public static readonly string twitter_icon_gif = Url("twitter-icon.gif");
+        }
+    
+    }
+
 }
 
 public static class T4MVCHelpers {
@@ -493,6 +574,7 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
             public readonly string Admin = "~/Views/Home/Admin.cshtml";
+            public readonly string AdminViewModel = "~/Views/Home/AdminViewModel.cs";
             public readonly string Index = "~/Views/Home/Index.cshtml";
             public readonly string Welcome = "~/Views/Home/Welcome.cshtml";
         }
@@ -991,7 +1073,7 @@ namespace FODT.Controllers {
         public ActionParamsClass_Search SearchParams { get { return s_params_Search; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionParamsClass_Search {
-            public readonly string searchField = "searchField";
+            public readonly string searchTerm = "searchTerm";
             public readonly string searchType = "searchType";
         }
         static readonly ViewNames s_views = new ViewNames();
@@ -1008,9 +1090,9 @@ namespace FODT.Controllers {
     public class T4MVC_SearchController: FODT.Controllers.SearchController {
         public T4MVC_SearchController() : base(Dummy.Instance) { }
 
-        public override System.Web.Mvc.ActionResult Search(string searchField, string searchType) {
+        public override System.Web.Mvc.ActionResult Search(string searchTerm, string searchType) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Search);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "searchField", searchField);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "searchTerm", searchTerm);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "searchType", searchType);
             return callInfo;
         }

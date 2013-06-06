@@ -212,7 +212,7 @@ CREATE TABLE [dbo].[PersonClubPosition] (
 GO
 
 CREATE TABLE [dbo].[UserAccount] (
-	[UserAccountId] [varchar](50) NOT NULL,
+	[UserAccountId] [int] IDENTITY(1,1) NOT NULL,
 	[Email] [nvarchar](300) NOT NULL,
 	[Name] [nvarchar](300) NOT NULL,
 	[FirstName] [nvarchar](100) NOT NULL,
@@ -220,6 +220,7 @@ CREATE TABLE [dbo].[UserAccount] (
 	[LastName] [nvarchar](100) NOT NULL,
 	[Gender] [nvarchar](10) NOT NULL,
 	[Locale] [nvarchar](10) NOT NULL,
+    [FacebookId] [varchar](50) NOT NULL,
 	[FacebookURL] [nvarchar](300) NOT NULL,
 	[FacebookUsername] [nvarchar](300) NOT NULL,
 	[FacebookPictureURL] [nvarchar](300) NOT NULL,
@@ -229,12 +230,16 @@ CREATE TABLE [dbo].[UserAccount] (
     (
 	    [UserAccountId] ASC
     ),
+    CONSTRAINT [UC_FacebookId] UNIQUE NONCLUSTERED
+    (
+        [FacebookId]
+    ),
 );
 GO
 
 CREATE TABLE [dbo].[UserAccessToken] (
 	[AccessToken] [varchar](255) NOT NULL,
-	[UserAccountId] [varchar](50) NOT NULL,
+	[UserAccountId] [int] NOT NULL,
 	[InsertedDateTime] [datetime2] NOT NULL,
     [ExpiresDateTime] [datetime2] NOT NULL,
 	CONSTRAINT [PK_AccessToken] PRIMARY KEY CLUSTERED 
