@@ -43,7 +43,7 @@
         @if (!string.IsNullOrWhiteSpace(Model.Biography))
         {
             <p>
-                @Html.Raw(Model.Biography)... <a href="#">See full bio</a> &raquo;
+                @Html.Raw(MarkdownSharp.Markdown.Default.Transform(Model.Biography))... <a href="#">See full bio</a> &raquo;
             </p>
             <hr />
         }
@@ -51,7 +51,6 @@
         @if (Model.Awards.Any())
         {
         <h4>Awards <small style="float:right;"><a href="#"><i class="icon-plus-sign"></i> Add Award</a></small></h4>
-        
         <table class="table table-striped table-condensed table-hover">
             <tbody>
                 @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
@@ -66,18 +65,29 @@
                         }
                     </td>
                     <td style="text-align: right;">
-                            <a href="#" title="Edit"><i class="icon-edit"></i></a>
-                            <a href="#" title="Remove"><i class="icon-remove-sign"></i></a>
+                        <a href="#" title="Edit"><i class="icon-edit"></i></a>
+                        @if (item.ShowId.HasValue)
+                        {
+                        <a href="@Url.Action(MVC.Person.DeleteShowAward(Model.PersonId, item.AwardId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
+                        }
+                        else
+                        {
+                        <a href="@Url.Action(MVC.Person.DeletePersonAward(Model.PersonId, item.AwardId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
+                        }
                     </td>
                 </tr>
                 }
             </tbody>
         </table>
         }
+        else
+        {
+            <h4>Awards <small style="float:right;"><a href="#"><i class="icon-plus-sign"></i> Add Award</a></small></h4>
+        }
 
         @if (Model.ClubPositions.Any())
         {
-        <h4>EC and Club Responsibilities</h4>
+        <h4>EC and Club Responsibilities <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Position</a></small></h4>
         <table class="table table-striped table-condensed table-hover">
             <tbody>
                 @foreach (var item in Model.ClubPositions)
@@ -87,17 +97,21 @@
                         <td>@item.Name</td>
                         <td style="text-align: right;">
                             <a href="#" title="Edit"><i class="icon-edit"></i></a>
-                            <a href="#" title="Remove"><i class="icon-remove-sign"></i></a>
+                            <a href="@Url.Action(MVC.Person.DeletePersonClubPosition(Model.PersonId, item.ClubPositionId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
         }
+        else
+        {
+            <h4>EC and Club Responsibilities <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Position</a></small></h4>
+        }
 
         @if (Model.CastRoles.Any())
         {
-        <h4>Cast Credits</h4>
+        <h4>Cast Credits <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Credit</a></small></h4>
         <table class="table table-striped table-condensed table-hover">
             <tbody>
                 @foreach (var item in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
@@ -108,17 +122,21 @@
                         <td>@item.Role</td>
                         <td style="text-align: right;">
                             <a href="#" title="Edit"><i class="icon-edit"></i></a>
-                            <a href="#" title="Remove"><i class="icon-remove-sign"></i></a>
+                            <a href="@Url.Action(MVC.Person.DeleteShowCast(Model.PersonId, item.ShowCastId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
         }
+        else
+        {
+            <h4>Cast Credits <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Credit</a></small></h4>
+        }
 
         @if (Model.CrewPositions.Any())
         {
-        <h4>Crew Credits</h4>
+        <h4>Crew Credits <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Credit</a></small></h4>
         <table class="table table-striped table-condensed table-hover">
             <tbody>
                 @foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
@@ -129,12 +147,16 @@
                         <td>@item.Name</td>
                         <td style="text-align: right;">
                             <a href="#" title="Edit"><i class="icon-edit"></i></a>
-                            <a href="#" title="Remove"><i class="icon-remove-sign"></i></a>
+                            <a href="@Url.Action(MVC.Person.DeleteShowCrew(Model.PersonId, item.ShowCrewId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+        }
+        else
+        {
+            <h4>Crew Credits <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Credit</a></small></h4>
         }
     </div>
 </div>

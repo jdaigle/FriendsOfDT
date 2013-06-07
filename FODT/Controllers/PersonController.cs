@@ -36,6 +36,7 @@ namespace FODT.Controllers
             {
                 Year = x.Year,
                 Name = x.Position,
+                ClubPositionId = x.PersonClubPositionId,
             }).ToList();
             viewModel.Awards = showAwards.Select(x => new GetViewModel.Award
             {
@@ -55,6 +56,7 @@ namespace FODT.Controllers
             })).ToList();
             viewModel.CastRoles = cast.Select(x => new GetViewModel.CastRole
             {
+                ShowCastId = x.ShowCastId,
                 ShowId = x.Show.ShowId,
                 ShowName = x.Show.Title,
                 ShowQuarter = x.Show.Quarter,
@@ -63,6 +65,7 @@ namespace FODT.Controllers
             }).ToList();
             viewModel.CrewPositions = crew.Select(x => new GetViewModel.CrewPosition
             {
+                ShowCrewId = x.ShowCrewId,
                 ShowId = x.Show.ShowId,
                 ShowName = x.Show.Title,
                 ShowQuarter = x.Show.Quarter,
@@ -228,6 +231,56 @@ namespace FODT.Controllers
             public string Nickname { get; set; }
             [AllowHtml()]
             public string Biography { get; set; }
+        }
+
+        [POST("{personId}/DeletePersonAward/{personAwardId}")]
+        public virtual ActionResult DeletePersonAward(int personId, int personAwardId)
+        {
+            var award = DatabaseSession.Get<PersonAward>(personAwardId);
+            DatabaseSession.Delete(award);
+            DatabaseSession.CommitTransaction();
+
+            return RedirectToAction(Actions.Get(personId));
+        }
+
+        [POST("{personId}/DeleteShowAward/{showAwardId}")]
+        public virtual ActionResult DeleteShowAward(int personId, int showAwardId)
+        {
+            var award = DatabaseSession.Get<ShowAward>(showAwardId);
+            DatabaseSession.Delete(award);
+            DatabaseSession.CommitTransaction();
+
+            return RedirectToAction(Actions.Get(personId));
+        }
+
+        [POST("{personId}/DeletePersonClubPosition/{personClubPositionId}")]
+        public virtual ActionResult DeletePersonClubPosition(int personId, int personClubPositionId)
+        {
+            var entity = DatabaseSession.Get<PersonClubPosition>(personClubPositionId);
+            DatabaseSession.Delete(entity);
+            DatabaseSession.CommitTransaction();
+
+            return RedirectToAction(Actions.Get(personId));
+        }
+
+        [POST("{personId}/DeleteShowCast/{showCastId}")]
+        public virtual ActionResult DeleteShowCast(int personId, int showCastId)
+        {
+            var entity = DatabaseSession.Get<ShowCast>(showCastId);
+            DatabaseSession.Delete(entity);
+            DatabaseSession.CommitTransaction();
+
+            return RedirectToAction(Actions.Get(personId));
+        }
+
+        [POST("{personId}/DeleteShowCrew/{showCrewId}")]
+        public virtual ActionResult DeleteShowCrew(int personId, int showCrewId)
+        {
+            var entity = DatabaseSession.Get<ShowCrew>(showCrewId);
+            DatabaseSession.Delete(entity);
+            DatabaseSession.CommitTransaction();
+
+            return RedirectToAction(Actions.Get(personId));
         }
     }
 }

@@ -146,6 +146,7 @@
     </Compile>
     <Compile Include="HttpHeadersCleanupModule.cs" />
     <Compile Include="LegacyUrlFilter.cs" />
+    <Compile Include="Markdown.cs" />
     <Compile Include="Models\FacebookProfile.cs" />
     <Compile Include="Models\FODT\UserAccessToken.cs" />
     <Compile Include="Models\FODT\UserAccount.cs" />
@@ -202,8 +203,6 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Content Include="Assets\css\cssfonts-min.css" />
-    <Content Include="Assets\css\cssnormalize-min.css" />
     <Content Include="Assets\img\ajax-loader.gif" />
     <Content Include="Assets\img\bulletRelatedLinks.gif" />
     <Content Include="Assets\img\facebook_16.png" />
@@ -240,6 +239,9 @@
     <Content Include="Assets\img\slider\slider-fodt.jpg" />
     <Content Include="Assets\img\slider\slider-football.jpg" />
     <Content Include="Assets\img\twitter-icon.gif" />
+    <Content Include="Assets\js\fodt.polyfill.js" />
+    <Content Include="Assets\js\fodt.common.js" />
+    <Content Include="Assets\js\lib\jquery-2.0.2.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">

@@ -1,73 +1,50 @@
 ﻿@model FODT.Views.Shared.MediaItemViewModel
-<center>
-    <a href="@Url.Action(MVC.Media.GetItem(Model.Id))" target="_blank"><img src="@Url.Action(MVC.Media.GetItem(Model.Id))" style="max-width: 600px;" /></a>
-    <br><br>
-    This picture is associated with
-    @{
-        var first = true;
-    }
-    @foreach (var item in Model.RelatedShows)
-    {
-        if (!first) {
-        @:,   
+<div style="text-align: center;">
+    <p>
+        <a href="@Url.Action(MVC.Media.GetItem(Model.Id))" target="_blank"><img src="@Url.Action(MVC.Media.GetItem(Model.Id))" style="max-width: 600px;" /></a>
+    </p>
+</div>
+<div style="text-align: center;">
+    <p>
+        This image is tagged with:
+    </p>
+    <ul style="list-style: none;">
+        @foreach (var item in Model.RelatedShows)
+        {
+            <li><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowTitle) (@item.ShowYear)</a></li>
         }
-        <a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowTitle) (@item.ShowYear)</a>
-        first = false;
-    }
-    @{
-        first = true;
-    }
-    @foreach (var item in Model.RelatedPeople)
-    {
-        if (!first || Model.RelatedShows.Any()) {
-        @:,   
+        @foreach (var item in Model.RelatedPeople)
+        {
+            <li><a href="@Url.Action(MVC.Person.Get(item.PersonId))">@item.PersonFullname</a></li>
         }
-        <a href="@Url.Action(MVC.Person.Get(item.PersonId))">@item.PersonFullname</a>
-        first = false;
-    }
-    <br><br>
-    See someone in the picture not listed above? Should it be tied to a show? Tie them in!<br>
-	<center></center>
-    <table align="center" frame="1" width="50%">
-        <form method="POST" action="@Url.Action(MVC.Media.Tag(Model.Id, 0, 0))">
-        <tbody>
-            <tr align="center" valign="middle">
-                <td colspan="2" align="center">
-                    <font size="+2"><b>Tie a Person or Show to Media</b></font>
-                </td>
-            </tr>
-            <tr align="center" valign="middle">
-                <th align="center">Person</th>
-                <th align="center">Show</th>
-            </tr>
-            <tr>
-                <td align="center">
-                    <select name="PersonId">
-                        <option value=""></option>
-                        @foreach (var item in Model.AllPeople.OrderBy(x => x.PersonLastName))
-                        {
-                        <option value="@item.PersonId">@item.PersonLastName, @item.PersonFirstName</option>
-                        }
-                    </select>
-                </td>
-                <td align="center">
-                    <select name="ShowId">
-                        <option value=""></option>
-                        @foreach (var item in Model.AllShows.OrderBy(x => x.ShowTitle))
-                        {
-                        <option value="@item.ShowId">@item.ShowTitle (@item.ShowYear)</option>
-                        }
-                    </select>
-	            </td>
-            </tr>
-            <tr>
-                <td align="center" colspan="2">
-                    <input type="hidden" name="action" value="tie_media">
-                    <input type="hidden" name="item_id" value="2027">
-                    <input type="submit" value="Tie to Media">
-                </td>
-            </tr>
-        </tbody>
-        </form>
-    </table>
-</center>
+    </ul>
+</div>
+<div style="text-align: center;">
+    <p>
+        See someone in the image not listed above? Should it be tied to a show? Tie them in!
+    </p>
+    <form class="form-inline" method="POST" action="@Url.Action(MVC.Media.Tag(Model.Id, 0, 0))">
+    <fieldset>
+        <legend>Tag Image to Person or Show</legend>
+
+    </fieldset>
+
+    Person:
+    <select name="PersonId">
+        <option value=""></option>
+        @foreach (var item in Model.AllPeople.OrderBy(x => x.PersonLastName))
+        {
+            <option value="@item.PersonId">@item.PersonLastName, @item.PersonFirstName</option>
+        }
+    </select>
+    Show:
+    <select name="ShowId">
+        <option value=""></option>
+        @foreach (var item in Model.AllShows.OrderBy(x => x.ShowTitle))
+        {
+            <option value="@item.ShowId">@item.ShowTitle (@item.ShowYear)</option>
+        }
+    </select>
+    <input type="submit" class="btn" value="Tag Image">
+    </form>
+</div>

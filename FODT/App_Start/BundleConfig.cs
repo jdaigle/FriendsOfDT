@@ -18,6 +18,13 @@ namespace FODT
                         );
             css.Transforms.Add(new LessTransform());
             bundles.Add(css);
+
+
+            bundles.Add(new ScriptBundle("~/Assets/js/site").Include(
+                        "~/assets/js/lib/jquery-2.0.2.js",
+                        "~/assets/js/fodt.polyfill.js",
+                        "~/assets/js/fodt.common.js"
+                        ));
         }
 
         public class LessTransform : IBundleTransform

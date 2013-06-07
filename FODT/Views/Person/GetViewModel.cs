@@ -19,6 +19,7 @@ namespace FODT.Views.Person
         {
             public short Year { get; set; }
             public string Name { get; set; }
+            public int ClubPositionId { get; set; }
         }
 
         public IEnumerable<Award> Awards { get; set; }
@@ -43,6 +44,7 @@ namespace FODT.Views.Person
             public Quarter ShowQuarter { get; set; }
             public short ShowYear { get; set; }
             public string Role { get; set; }
+            public int ShowCastId { get; set; }
         }
 
         public IEnumerable<CrewPosition> CrewPositions { get; set; }
@@ -54,6 +56,8 @@ namespace FODT.Views.Person
             public Quarter ShowQuarter { get; set; }
             public short ShowYear { get; set; }
             public string Name { get; set; }
+
+            public int ShowCrewId { get; set; }
         }
 
         public int RelatedMediaCount { get; set; }

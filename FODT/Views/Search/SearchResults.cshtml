@@ -1,7 +1,6 @@
 ﻿@model FODT.Views.Search.SearchResultsViewModel
 
 <h1>Possible Matches for '@Model.SearchTerm':</h1>
-<br>
 
 @if (Model.Results.Count == 0)
 {
@@ -10,29 +9,23 @@
 
 @if (Model.Results.Count >= 1)
 { 
-    var rowCount = Math.Ceiling((double)Model.Results.Count / 4d);
-    <table align="center" border="1">
-        @for (int i = 0; i < rowCount; i++)
-        {
-            <tr>
-                @foreach (var item in Model.Results.OrderBy(x => x.SortField).ThenBy(x => x.Name).Skip(i * 4).Take(4))
-	            {
-                    <td align="center" valign="middle">
-	                    <div class="rollover">
-	                        <a href="@item.LinkUrl">
-	                            <img src="@item.ImageUrl">
-                                <br>@item.Name
-                                @if (!string.IsNullOrWhiteSpace(item.Year))
-                                {
-                                    @:(@item.Year)
+    <table class="table table-striped">
+        <tbody>
+            @foreach (var item in Model.Results.OrderBy(x => x.SortField).ThenBy(x => x.Name))
+            {
+                <tr>
+                    <td>
+                        <a href="@item.LinkUrl">
+                            <img src="@item.ImageUrl">
+                            @item.Name
+                            @if (!string.IsNullOrWhiteSpace(item.Year))
+                            {
+                                @:(@item.Year)
                                 }
-	                        </a>
-	                    </div>
+                        </a>
                     </td>
-	            }
-            </tr>
-        }
-        <tr>
-        </tr>
+                </tr>
+            }
+        </tbody>
     </table>
 }

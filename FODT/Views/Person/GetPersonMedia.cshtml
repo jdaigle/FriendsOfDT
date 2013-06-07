@@ -1,30 +1,19 @@
 ﻿@model FODT.Views.Person.GetPersonMediaViewModel
-<table align="center" width="100%">
-    <tbody>
-        <tr align="center">
-            <td align="left" valign="top">
-                @if (Model.PreviousId.HasValue)
-                {
-                    <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.PreviousId.Value))">&lt;--- Previous Item</a>
-                } else {
-                    @:&lt;--- Previous Item
-                }
-            </td>
-            <td align="center">
-                <center><font size="+2">Media for <a href="@Url.Action(MVC.Person.Get(Model.PersonId))">@Model.PersonFullname</a></font><br><br><a href="@Url.Action(MVC.Media.Upload())">Upload more pictures for this person</a></center>
-                <br>
-                <br>
-            </td>
-            <td align="right" valign="top">
-                @if (Model.NextId.HasValue)
-                {
-                    <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.NextId.Value))">Next Item ---&gt;</a>
-                } else {
-                    @:Next Item ---&gt;
-                }
-            </td>
-        </tr>
-    </tbody>
-</table>
+
+<div style="text-align: center;">
+    <h3>Media for <a href="@Url.Action(MVC.Person.Get(Model.PersonId))">@Model.PersonFullname</a></h3>
+    <p>
+        <a href="@Url.Action(MVC.Media.Upload())">Upload more images for this person</a>
+    </p>
+</div>
+
+<ul class="pager">
+    <li class="previous @(Model.PreviousId.HasValue ? "" : "disabled")">
+        <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.PreviousId ?? Model.MediaItemId))">&larr; Previous</a>
+    </li>
+    <li class="next @(Model.NextId.HasValue ? "" : "disabled")">
+        <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.NextId ?? Model.MediaItemId))">Next &rarr;</a>
+    </li>
+</ul>
 
 @Html.Partial("MediaItem", Model.MediaItemViewModel)
