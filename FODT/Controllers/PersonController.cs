@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using AttributeRouting;
 using AttributeRouting.Web.Mvc;
 using FODT.Database;
-using FODT.Models;
 using FODT.Models.IMDT;
 using FODT.Views.Person;
 using FODT.Views.Shared;
@@ -74,6 +73,23 @@ namespace FODT.Controllers
             }).ToList();
             viewModel.RelatedMediaCount = relatedMedia.Count;
             viewModel.NewRelatedMedia = relatedMedia.OrderByDescending(x => x.InsertedDateTime).Select(x => x.MediaItem.MediaItemId).Where(x => x != person.MediaItem.MediaItemId).Take(4).ToList();
+
+            // for editing -- TODO: only query when the current user can edit this person
+            viewModel.AllAwards = DatabaseSession.Query<Award>().Select(x => new GetViewModel.Award
+            {
+                AwardId = x.AwardId,
+                Name = x.Name,
+            }).ToList();
+            viewModel.AllShows = DatabaseSession.Query<Show>().Select(x => new GetViewModel.Show
+            {
+                ShowId = x.ShowId,
+                ShowTitle = x.Title,
+                ShowQuarter = x.Quarter,
+                ShowYear = x.Year,
+            }).ToList();
+            viewModel.UniqueCrewPositions = DatabaseSession.Query<ShowCrew>().Select(x => x.Position).Distinct().ToList();
+            viewModel.UniqueClubPositions = DatabaseSession.Query<PersonClubPosition>().Select(x => x.Position).Distinct().ToList();
+
             return View(viewModel);
         }
 
@@ -120,7 +136,7 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [GET("New", ActionPrecedence=0)]
+        [GET("New", ActionPrecedence = 0)]
         public virtual ActionResult New()
         {
             var viewModel = EditViewModel.Empty();

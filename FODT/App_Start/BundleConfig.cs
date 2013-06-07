@@ -22,6 +22,8 @@ namespace FODT
 
             bundles.Add(new ScriptBundle("~/Assets/js/site").Include(
                         "~/assets/js/lib/jquery-2.0.2.js",
+                        "~/assets/js/lib/bootstrap.js",
+                        "~/assets/js/lib/jsrender.js",
                         "~/assets/js/fodt.polyfill.js",
                         "~/assets/js/fodt.common.js"
                         ));

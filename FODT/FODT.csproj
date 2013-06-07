@@ -241,7 +241,9 @@
     <Content Include="Assets\img\twitter-icon.gif" />
     <Content Include="Assets\js\fodt.polyfill.js" />
     <Content Include="Assets\js\fodt.common.js" />
+    <Content Include="Assets\js\lib\bootstrap.js" />
     <Content Include="Assets\js\lib\jquery-2.0.2.js" />
+    <Content Include="Assets\js\lib\jsrender.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">

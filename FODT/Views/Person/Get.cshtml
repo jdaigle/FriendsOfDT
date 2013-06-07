@@ -141,12 +141,12 @@
             <tbody>
                 @foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
                 {
-                    <tr>
+                    <tr data-showid="@item.ShowId" data-name="@item.Name">
                         <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
                         <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                         <td>@item.Name</td>
                         <td style="text-align: right;">
-                            <a href="#" title="Edit"><i class="icon-edit"></i></a>
+                            <a href="#" class="js-edit-crew" title="Edit"><i class="icon-edit"></i></a>
                             <a href="@Url.Action(MVC.Person.DeleteShowCrew(Model.PersonId, item.ShowCrewId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
                         </td>
                     </tr>
@@ -160,3 +160,55 @@
         }
     </div>
 </div>
+
+
+
+<script id="editCrewTemplate" type="text/x-jsrender">
+    <tr class="warning editor">
+        <td colspan="4" style="text-align: right;">
+            <form class="form-inline" autocomplete="off" method="post" action=".">
+            <select style="max-width: 200px;">
+                <option value=""></option>
+                @foreach (var item in Model.AllShows.OrderBy(x => x.ShowTitle))
+                {
+                    <option value="@item.ShowId" {{if (showId == '@item.ShowId')}} selected="selected" {{/if}}>@item.ShowTitle (@item.ShowYear)</option>
+                }
+            </select>
+            <input type="text" class="input input-medium" data-provide="typeahead" data-source='@asJavscriptArray(Model.UniqueCrewPositions)' value="{{>name}}" />
+            <button class="btn btn-primary btn-mini" type="submit" title="Save"><i class="icon-ok icon-white"></i></button>
+            <button class="btn btn-danger btn-mini js-edit-crew-cancel" type="button" title="Cancel"><i class="icon-remove icon-white"></i></button>
+            </form>
+        </td>
+    </tr>
+</script>
+
+@helper asJavscriptArray(List<string> input) {
+    @Html.Raw(input.Aggregate("[", (a, i) => a += "\"" + Html.Encode(i) + "\"" + ",", x => x.Trim(',') + "]"))
+}
+
+@section endOfBody {
+    <script type="text/javascript">
+        $(function () {
+            $(document).on("click", ".js-edit-crew", function (e) {
+                e.preventDefault();
+                var $parentRow = $(this).closest("tr");
+                var $parentTable = $(this).closest("table");
+                // close any existing editor and show hidden rows
+                $parentTable.find("tr.editor").remove();
+                $parentTable.find("tr").show();
+                // render the editor
+                var editor = $("#editCrewTemplate").render({ name: $parentRow.data("name"), showId: $parentRow.data("showid") })
+                // add editor next to row to edit, and hide row to edit
+                $parentRow.after(editor);
+                $parentRow.hide();
+            });
+            $(document).on("click", ".js-edit-crew-cancel", function (e) {
+                e.preventDefault();
+                var $parentTable = $(this).closest("table");
+                // close any existing editor and show hidden rows
+                $parentTable.find("tr.editor").remove();
+                $parentTable.find("tr").show();
+            });
+        });
+    </script>
+}
