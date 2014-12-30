@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using AttributeRouting;
-using AttributeRouting.Web.Mvc;
 using FODT.Models;
 using FODT.Models.IMDT;
 using FODT.Views.Media;
@@ -18,7 +16,7 @@ namespace FODT.Controllers
     [RoutePrefix("Media")]
     public partial class MediaController : BaseController
     {
-        [GET("Upload")]
+        [HttpGet, Route("Upload")]
         public virtual ActionResult Upload()
         {
             var people = DatabaseSession.Query<Person>().ToList();
@@ -43,7 +41,7 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [POST("Upload")]
+        [HttpPost, Route("Upload")]
         public virtual ActionResult Upload(UploadPOSTParameters param)
         {
             if (!param.PersonId.HasValue && !param.ShowId.HasValue)
@@ -125,7 +123,7 @@ namespace FODT.Controllers
             public HttpPostedFileBase UploadedFile { get; set; }
         }
 
-        [POST("{id}/tag")]
+        [HttpPost, Route("{id}/tag")]
         public virtual ActionResult Tag(int id, int? personId, int? showId)
         {
             if (personId.HasValue)
@@ -155,7 +153,7 @@ namespace FODT.Controllers
             return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
-        [GET("{id}")]
+        [HttpGet, Route("{id}")]
         public virtual ActionResult GetItem(int id)
         {
             var mediaItem = DatabaseSession.Get<MediaItem>(id);
@@ -166,7 +164,7 @@ namespace FODT.Controllers
             return new FilePathResult(Path.Combine(@"C:\temp\imdt", mediaItem.Path), "image/jpg");
         }
 
-        [GET("{id}/tiny")]
+        [HttpGet, Route("{id}/tiny")]
         public virtual ActionResult GetItemTiny(int id)
         {
             var mediaItem = DatabaseSession.Get<MediaItem>(id);
@@ -177,7 +175,7 @@ namespace FODT.Controllers
             return new FilePathResult(Path.Combine(@"C:\temp\imdt", mediaItem.TinyPath), "image/jpg");
         }
 
-        [GET("{id}/thumbnail")]
+        [HttpGet, Route("{id}/thumbnail")]
         public virtual ActionResult GetItemThumbnail(int id)
         {
             var mediaItem = DatabaseSession.Get<MediaItem>(id);
@@ -188,7 +186,7 @@ namespace FODT.Controllers
             return new FilePathResult(Path.Combine(@"C:\temp\imdt", mediaItem.ThumbnailPath), "image/jpg");
         }
 
-        [GET("{id}/detail")]
+        [HttpGet, Route("{id}/detail")]
         public virtual ActionResult GetItemDetail(int id)
         {
             var mediaItems = DatabaseSession
@@ -220,7 +218,7 @@ namespace FODT.Controllers
             public DateTime InsertedDateTime { get; set; }
         }
 
-        [GET("")]
+        [HttpGet, Route("")]
         public virtual ActionResult Index()
         {
             var mediaItems = DatabaseSession

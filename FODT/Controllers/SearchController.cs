@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using AttributeRouting;
-using AttributeRouting.Web.Mvc;
 using FODT.Models.IMDT;
 using FODT.Views.Search;
 using NHibernate.Linq;
@@ -15,7 +13,7 @@ namespace FODT.Controllers
     [RoutePrefix("")]
     public partial class SearchController : BaseController
     {
-        [GET("search")]
+        [HttpGet, Route("search")]
         public virtual ActionResult Search(string searchTerm, string searchType)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))

@@ -2,8 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
-using AttributeRouting;
-using AttributeRouting.Web.Mvc;
 using FODT.Database;
 using FODT.Models.IMDT;
 using FODT.Views.Person;
@@ -15,7 +13,7 @@ namespace FODT.Controllers
     [RoutePrefix("Person")]
     public partial class PersonController : BaseController
     {
-        [GET("{personId}")]
+        [HttpGet, Route("{personId}")]
         public virtual ActionResult Get(int personId)
         {
             var person = DatabaseSession.Get<Person>(personId);
@@ -93,7 +91,7 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [GET("{personId}/Media")]
+        [HttpGet, Route("{personId}/Media")]
         public virtual ActionResult ListPersonMedia(int personId)
         {
             var person = DatabaseSession.Get<Person>(personId);
@@ -109,7 +107,7 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [GET("{personId}/Media/{mediaItemId}")]
+        [HttpGet, Route("{personId}/Media/{mediaItemId}")]
         public virtual ActionResult GetPersonMedia(int personId, int mediaItemId)
         {
             var person = DatabaseSession.Get<Person>(personId);
@@ -136,14 +134,14 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [GET("New", ActionPrecedence = 0)]
+        [HttpGet, Route("New", Order = 0)]
         public virtual ActionResult New()
         {
             var viewModel = EditViewModel.Empty();
             return View("Edit", viewModel);
         }
 
-        [POST("New", ActionPrecedence = 0)]
+        [HttpPost, Route("New", Order = 0)]
         public virtual ActionResult SaveNew(SaveEditParameters param)
         {
             if (string.IsNullOrWhiteSpace(param.FirstName) ||
@@ -170,7 +168,7 @@ namespace FODT.Controllers
             return RedirectToAction(Actions.Get(person.PersonId));
         }
 
-        [GET("{personId}/Edit")]
+        [HttpGet, Route("{personId}/Edit")]
         public virtual ActionResult Edit(int personId)
         {
             var person = DatabaseSession.Get<Person>(personId);
@@ -193,7 +191,7 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [POST("{personId}/Edit")]
+        [HttpPost, Route("{personId}/Edit")]
         public virtual ActionResult SaveEdit(int personId, SaveEditParameters param)
         {
             if (string.IsNullOrWhiteSpace(param.FirstName) ||
@@ -220,7 +218,7 @@ namespace FODT.Controllers
             return RedirectToAction(Actions.Get(personId));
         }
 
-        [POST("{personId}/ChangeDefaultMediaItem")]
+        [HttpPost, Route("{personId}/ChangeDefaultMediaItem")]
         public virtual ActionResult ChangeDefaultMediaItem(int personId, int mediaItemId)
         {
             var person = DatabaseSession.Get<Person>(personId);
@@ -249,7 +247,7 @@ namespace FODT.Controllers
             public string Biography { get; set; }
         }
 
-        [POST("{personId}/DeletePersonAward/{personAwardId}")]
+        [HttpPost, Route("{personId}/DeletePersonAward/{personAwardId}")]
         public virtual ActionResult DeletePersonAward(int personId, int personAwardId)
         {
             var award = DatabaseSession.Get<PersonAward>(personAwardId);
@@ -259,7 +257,7 @@ namespace FODT.Controllers
             return RedirectToAction(Actions.Get(personId));
         }
 
-        [POST("{personId}/DeleteShowAward/{showAwardId}")]
+        [HttpPost, Route("{personId}/DeleteShowAward/{showAwardId}")]
         public virtual ActionResult DeleteShowAward(int personId, int showAwardId)
         {
             var award = DatabaseSession.Get<ShowAward>(showAwardId);
@@ -269,7 +267,7 @@ namespace FODT.Controllers
             return RedirectToAction(Actions.Get(personId));
         }
 
-        [POST("{personId}/DeletePersonClubPosition/{personClubPositionId}")]
+        [HttpPost, Route("{personId}/DeletePersonClubPosition/{personClubPositionId}")]
         public virtual ActionResult DeletePersonClubPosition(int personId, int personClubPositionId)
         {
             var entity = DatabaseSession.Get<PersonClubPosition>(personClubPositionId);
@@ -279,7 +277,7 @@ namespace FODT.Controllers
             return RedirectToAction(Actions.Get(personId));
         }
 
-        [POST("{personId}/DeleteShowCast/{showCastId}")]
+        [HttpPost, Route("{personId}/DeleteShowCast/{showCastId}")]
         public virtual ActionResult DeleteShowCast(int personId, int showCastId)
         {
             var entity = DatabaseSession.Get<ShowCast>(showCastId);
@@ -289,7 +287,7 @@ namespace FODT.Controllers
             return RedirectToAction(Actions.Get(personId));
         }
 
-        [POST("{personId}/DeleteShowCrew/{showCrewId}")]
+        [HttpPost, Route("{personId}/DeleteShowCrew/{showCrewId}")]
         public virtual ActionResult DeleteShowCrew(int personId, int showCrewId)
         {
             var entity = DatabaseSession.Get<ShowCrew>(showCrewId);

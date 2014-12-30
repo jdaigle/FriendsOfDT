@@ -5,8 +5,6 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using AttributeRouting;
-using AttributeRouting.Web.Mvc;
 using FODT.Database;
 using FODT.Models;
 using FODT.Models.FODT;
@@ -27,7 +25,7 @@ namespace FODT.Controllers
             base.OnActionExecuting(filterContext);
         }
 
-        [GET("SignIn")]
+        [HttpGet, Route("SignIn")]
         public virtual ActionResult SignIn(string redirectUrl)
         {
             var url =
@@ -38,7 +36,7 @@ namespace FODT.Controllers
             return Redirect(url);
         }
 
-        [GET("SignOut")]
+        [HttpGet, Route("SignOut")]
         public virtual ActionResult SignOut()
         {
             authenticationTokenContext.RevokeAuthenticationToken();
@@ -50,7 +48,7 @@ namespace FODT.Controllers
             return Settings.Facebook_Login_SiteURL + Url.Action(Actions.HandleFacebookOAuthCallback());
         }
 
-        [GET("oauth/facebook")]
+        [HttpGet, Route("oauth/facebook")]
         public virtual ActionResult HandleFacebookOAuthCallback(string code, string state)
         {
             var redirectURL = string.Empty;
@@ -112,7 +110,7 @@ namespace FODT.Controllers
             return result;
         }
 
-        [GET("Welcome")]
+        [HttpGet, Route("Welcome")]
         public virtual ActionResult Welcome()
         {
             return View();

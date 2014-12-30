@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using AttributeRouting;
-using AttributeRouting.Web.Mvc;
 using FODT.Views.Home;
 
 namespace FODT.Controllers
@@ -12,19 +10,19 @@ namespace FODT.Controllers
     [RoutePrefix("")]
     public partial class HomeController : BaseController
     {
-        [GET("")]
+        [HttpGet, Route("")]
         public virtual ActionResult Welcome()
         {
             return View();
         }
 
-        [GET("Index")]
+        [HttpGet, Route("Index")]
         public virtual ActionResult Index()
         {
             return View();
         }
 
-        [GET("Admin")]
+        [HttpGet, Route("Admin")]
         public virtual ActionResult Admin()
         {
             var viewModel = new AdminViewModel();
@@ -32,12 +30,12 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [GET("Admin/EditPerson")]
+        [HttpGet, Route("Admin/EditPerson")]
         public virtual ActionResult Admin_EditPerson(int personId)
         {
             return RedirectToAction(MVC.Person.Edit(personId));
         }
-        [GET("Admin/ShowPerson")]
+        [HttpGet, Route("Admin/ShowPerson")]
         public virtual ActionResult Admin_ShowPerson(int showId)
         {
             //return RedirectToAction(MVC.Person.Edit(personId));

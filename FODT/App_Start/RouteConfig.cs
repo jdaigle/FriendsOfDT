@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
-using AttributeRouting.Web.Mvc;
 
 namespace FODT
 {
@@ -14,11 +13,7 @@ namespace FODT
             routes.IgnoreRoute("elmah.axd");
             routes.IgnoreRoute("routes.axd");
             routes.IgnoreRoute("robots.txt");
-            routes.MapAttributeRoutes(x =>
-            {
-                x.AddRoutesFromAssembly(typeof(MvcApplication).Assembly);
-                x.UseLowercaseRoutes = true;
-            });
+            routes.MapMvcAttributeRoutes();
         }
     }
 }

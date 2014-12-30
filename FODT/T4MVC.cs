@@ -391,6 +391,19 @@ namespace Links {
                           
             public static readonly string fodt_polyfill_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt.polyfill.min.js") ? Url("fodt.polyfill.min.js") : Url("fodt.polyfill.js");
                           
+            [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+            public static class lib {
+                private const string URLPATH = "~/Assets/js/lib";
+                public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+                public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+                public static readonly string bootstrap_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap.min.js") ? Url("bootstrap.min.js") : Url("bootstrap.js");
+                              
+                public static readonly string jquery_2_0_2_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-2.0.2.min.js") ? Url("jquery-2.0.2.min.js") : Url("jquery-2.0.2.js");
+                              
+                public static readonly string jsrender_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jsrender.min.js") ? Url("jsrender.min.js") : Url("jsrender.js");
+                              
+            }
+        
         }
     
     }

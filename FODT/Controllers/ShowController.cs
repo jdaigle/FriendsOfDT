@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using AttributeRouting;
-using AttributeRouting.Web.Mvc;
 using FODT.Database;
 using FODT.Models;
 using FODT.Models.IMDT;
@@ -23,7 +21,7 @@ namespace FODT.Controllers
             public virtual short Year { get; set; }
         }
 
-        [GET("{showId}")]
+        [HttpGet, Route("{showId}")]
         public virtual ActionResult Get(int showId)
         {
             var orderedShows = DatabaseSession.Query<Show>().Select(x => new ShowOrderDto()
@@ -93,7 +91,7 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [GET("{showId}/Media")]
+        [HttpGet, Route("{showId}/Media")]
         public virtual ActionResult ListShowMedia(int showId)
         {
             var show = DatabaseSession.Get<Show>(showId);
@@ -110,7 +108,7 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [GET("{showId}/Media/{mediaItemId}")]
+        [HttpGet, Route("{showId}/Media/{mediaItemId}")]
         public virtual ActionResult GetShowMedia(int showId, int mediaItemId)
         {
             var show = DatabaseSession.Get<Show>(showId);

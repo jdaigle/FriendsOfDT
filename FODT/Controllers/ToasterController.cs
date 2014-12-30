@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using AttributeRouting;
-using AttributeRouting.Web.Mvc;
 using FODT.Models;
 using FODT.Models.IMDT;
 using FODT.Views.Toaster;
@@ -15,7 +13,7 @@ namespace FODT.Controllers
     [RoutePrefix("Toaster")]
     public partial class ToasterController : BaseController
     {
-        [GET("Hunt")]
+        [HttpGet, Route("Hunt")]
         public virtual ActionResult Hunt()
         {
             var shows = DatabaseSession.Query<Show>().Where(x => x.Toaster != string.Empty).ToList();

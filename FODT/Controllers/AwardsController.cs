@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using AttributeRouting;
-using AttributeRouting.Web.Mvc;
 using NHibernate.Linq;
 using FODT.Models.IMDT;
 using FODT.Views.Awards;
@@ -14,7 +12,7 @@ namespace FODT.Controllers
     [RoutePrefix("awards")]
     public partial class AwardsController : BaseController
     {
-        [GET("year/{year?}")]
+        [HttpGet, Route("year/{year?}")]
         public virtual ActionResult ByYear(short? year)
         {
             if (!year.HasValue || year > DateTime.Now.Year)
