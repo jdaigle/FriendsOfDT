@@ -52,9 +52,8 @@ namespace FODT.Security
                 {
                     CachedAuthenticationToken = AuthenticationToken.Decrpyt(authenticationTokenCookie.Value);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    log4net.LogManager.GetLogger(GetType()).Error("Decryption failed for security token cookie", e);
                     return null;
                 }
             }
