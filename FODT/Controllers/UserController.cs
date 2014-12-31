@@ -96,16 +96,9 @@ namespace FODT.Controllers
                     result = RedirectToAction(MVC.Home.Welcome());
                 }
             }
-            var _accessToken = new UserAccessToken();
-            _accessToken.UserAccountId = user.UserAccountId;
-            _accessToken.AccessToken = accessToken;
-            _accessToken.InsertedDateTime = DateTime.UtcNow;
-            _accessToken.ExpiresDateTime = DateTime.UtcNow.AddSeconds(expires);
-            DatabaseSession.Save(_accessToken);
-
             DatabaseSession.CommitTransaction();
 
-            authenticationTokenContext.IssueAuthenticationToken(accessToken, profile.name, "oauth/facebook", expires);
+            authenticationTokenContext.IssueAuthenticationToken(user.UserAccountId, accessToken, profile.name, "oauth/facebook", expires);
 
             return result;
         }

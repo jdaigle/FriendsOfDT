@@ -3,160 +3,191 @@
 @section endOfHead {
     <style type="text/css">
         ul.media-banner {
-        	margin-top: 15px;
-        	margin-left: 0px;
+            margin-top: 15px;
+            margin-left: 0;
+            padding: 0;
         }
-        ul.media-banner li {
-        	list-style: none;
-        	display: inline-block;
-        }
+
+            ul.media-banner li {
+                list-style: none;
+                display: inline-block;
+            }
     </style>
 }
 
 <div class="row">
-    <div class="span3">
-        @if (Model.MediaItemId != 1){
+    <div class="col-sm-3">
+        @if (Model.MediaItemId != 1)
+        {
             <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))">
-                <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
+                <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName" class="img-thumbnail">
             </a>
-        } else {
+        }
+        else
+        {
             <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
         }
         <hr />
-        <i class="icon-th"></i>
-        <span>|</span>
-        <a href="@Url.Action(MVC.Person.ListPersonMedia(Model.PersonId))">@Model.RelatedMediaCount Images</a>
-        &raquo; 
+        <a href="@Url.Action(MVC.Person.ListPersonMedia(Model.PersonId))">@Model.RelatedMediaCount Images &raquo;</a>
         <ul class="media-banner">
             @foreach (var item in Model.NewRelatedMedia)
             {
-                <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, item))"><img src="@Url.Action(MVC.Media.GetItemTiny(item))" alt="@Model.FullName"></a></li>    
+                <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, item))"><img class="img-thumbnail" src="@Url.Action(MVC.Media.GetItemTiny(item))" alt="@Model.FullName"></a></li>
             }
         </ul>
-        <a href="@Url.Action(MVC.Media.Upload())"><i class="icon-upload"></i> Upload an Image</a>
+        <a href="@Url.Action(MVC.Media.Upload())"><i class="glyphicon glyphicon-upload"></i> Upload an Image</a>
     </div>
-    <div class="span6">
+    <div class="col-sm-9">
         <h1>@Model.FullName</h1>
-        <h6><i class="icon-edit"></i> <a href="@Url.Action(MVC.Person.Edit())">Edit Person</a></h6>
-        <h6><i class="icon-user"></i> Is this you? <a href="#" title="Claim this person so that you can edit so that you can edit the entry.">Claim this Person</a></h6>
+        <p>Is this you? <a href="#" title="Claim this person so that you can edit so that you can edit the entry.">Claim this Person</a> | <a href="@Url.Action(MVC.Person.Edit())">Edit Person</a></p>
         <hr />
         @if (!string.IsNullOrWhiteSpace(Model.Biography))
         {
             <p>
-                @Html.Raw(MarkdownSharp.Markdown.Default.Transform(Model.Biography))... <a href="#">See full bio</a> &raquo;
+                @Html.Raw(MarkdownSharp.Markdown.Default.Transform(Model.Biography))
             </p>
             <hr />
         }
 
         @if (Model.Awards.Any())
         {
-        <h4>Awards <small style="float:right;"><a href="#"><i class="icon-plus-sign"></i> Add Award</a></small></h4>
-        <table class="table table-striped table-condensed table-hover">
-            <tbody>
-                @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
-                {
-                <tr>
-                    <td><a href="@Url.Action(MVC.Awards.ByYear(item.Year))">@item.Year</a></td>
-                    <td>
-                        @item.Name
-                        @if (item.ShowId.HasValue)
-                        {
-                            @: for <a href="@Url.Action(MVC.Show.Get(item.ShowId.Value))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a>
-                        }
-                    </td>
-                    <td style="text-align: right;">
-                        <a href="#" title="Edit"><i class="icon-edit"></i></a>
-                        @if (item.ShowId.HasValue)
-                        {
-                        <a href="@Url.Action(MVC.Person.DeleteShowAward(Model.PersonId, item.AwardId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
-                        }
-                        else
-                        {
-                        <a href="@Url.Action(MVC.Person.DeletePersonAward(Model.PersonId, item.AwardId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
-                        }
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
+            <h4>Awards <small class="pull-right"><a href="#">Add Award</a></small></h4>
+            <table class="table table-condensed table-hover">
+                <tbody>
+                    @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
+                    {
+                        <tr>
+                            <td><a href="@Url.Action(MVC.Awards.ByYear(item.Year))">@item.Year</a></td>
+                            <td>
+                                @item.Name
+                                @if (item.ShowId.HasValue)
+                                {
+                                    @: for <a href="@Url.Action(MVC.Show.Get(item.ShowId.Value))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a>
+                                }
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="btn-group btn-group-xs">
+                                    <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <li><a href="#" title="Edit"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
+                                        <li>
+                                            @if (item.ShowId.HasValue)
+                                            {
+                                            <a href="@Url.Action(MVC.Person.DeleteShowAward(Model.PersonId, item.AwardId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove-sign"></i> Remove</a>
+                                            }
+                                            else
+                                            {
+                                            <a href="@Url.Action(MVC.Person.DeletePersonAward(Model.PersonId, item.AwardId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove-sign"></i> Remove</a>
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
         else
         {
-            <h4>Awards <small style="float:right;"><a href="#"><i class="icon-plus-sign"></i> Add Award</a></small></h4>
+            <h4>Awards <small style="float:right;"><a href="#">Add Award</a></small></h4>
         }
 
         @if (Model.ClubPositions.Any())
         {
-        <h4>EC and Club Responsibilities <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Position</a></small></h4>
-        <table class="table table-striped table-condensed table-hover">
-            <tbody>
-                @foreach (var item in Model.ClubPositions)
-                {
-                    <tr>
-                        <td><a href="#">@item.Year</a></td>
-                        <td>@item.Name</td>
-                        <td style="text-align: right;">
-                            <a href="#" title="Edit"><i class="icon-edit"></i></a>
-                            <a href="@Url.Action(MVC.Person.DeletePersonClubPosition(Model.PersonId, item.ClubPositionId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            <h4>EC and Club Responsibilities <small style="float: right;"><a href="#">Add Position</a></small></h4>
+            <table class="table table-condensed table-hover">
+                <tbody>
+                    @foreach (var item in Model.ClubPositions)
+                    {
+                        <tr>
+                            <td><a href="#">@item.Year</a></td>
+                            <td>@item.Name</td>
+                            <td style="text-align: right;">
+                                <div class="btn-group btn-group-xs">
+                                    <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <li><a href="#" title="Edit"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
+                                        <li><a href="@Url.Action(MVC.Person.DeletePersonClubPosition(Model.PersonId, item.ClubPositionId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove-sign"></i></a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
         else
         {
-            <h4>EC and Club Responsibilities <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Position</a></small></h4>
+            <h4>EC and Club Responsibilities <small style="float: right;"><a href="#">Add Position</a></small></h4>
         }
 
         @if (Model.CastRoles.Any())
         {
-        <h4>Cast Credits <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Credit</a></small></h4>
-        <table class="table table-striped table-condensed table-hover">
-            <tbody>
-                @foreach (var item in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
-                {
-                    <tr>
-                        <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
-                        <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
-                        <td>@item.Role</td>
-                        <td style="text-align: right;">
-                            <a href="#" title="Edit"><i class="icon-edit"></i></a>
-                            <a href="@Url.Action(MVC.Person.DeleteShowCast(Model.PersonId, item.ShowCastId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            <h4>Cast Credits <small style="float: right;"><a href="#">Add Credit</a></small></h4>
+            <table class="table table-condensed table-hover">
+                <tbody>
+                    @foreach (var item in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
+                    {
+                        <tr>
+                            <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
+                            <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                            <td>@item.Role</td>
+                            <td style="text-align: right;">
+                                <div class="btn-group btn-group-xs">
+                                    <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <li><a href="#" title="Edit"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
+                                        <li><a href="@Url.Action(MVC.Person.DeleteShowCast(Model.PersonId, item.ShowCastId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove-sign"></i></a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
         else
         {
-            <h4>Cast Credits <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Credit</a></small></h4>
+            <h4>Cast Credits <small style="float: right;"><a href="#">Add Credit</a></small></h4>
         }
 
         @if (Model.CrewPositions.Any())
         {
-        <h4>Crew Credits <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Credit</a></small></h4>
-        <table class="table table-striped table-condensed table-hover">
-            <tbody>
-                @foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
-                {
-                    <tr data-showid="@item.ShowId" data-name="@item.Name">
-                        <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
-                        <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
-                        <td>@item.Name</td>
-                        <td style="text-align: right;">
-                            <a href="#" class="js-edit-crew" title="Edit"><i class="icon-edit"></i></a>
-                            <a href="@Url.Action(MVC.Person.DeleteShowCrew(Model.PersonId, item.ShowCrewId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="icon-remove-sign"></i></a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            <h4>Crew Credits <small style="float: right;"><a href="#">Add Credit</a></small></h4>
+            <table class="table table-condensed table-hover">
+                <tbody>
+                    @foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
+                    {
+                        <tr data-showid="@item.ShowId" data-name="@item.Name">
+                            <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
+                            <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                            <td>@item.Name</td>
+                            <td style="text-align: right;">
+                                <div class="btn-group btn-group-xs">
+                                    <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <li><a href="#" class="js-edit-crew" title="Edit"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
+                                        <li><a href="@Url.Action(MVC.Person.DeleteShowCrew(Model.PersonId, item.ShowCrewId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove-sign"></i> Remove</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
         else
         {
-            <h4>Crew Credits <small style="float: right;"><a href="#"><i class="icon-plus-sign"></i>Add Credit</a></small></h4>
+            <h4>Crew Credits <small style="float: right;"><a href="#">Add Credit</a></small></h4>
         }
     </div>
 </div>
@@ -165,24 +196,30 @@
 
 <script id="editCrewTemplate" type="text/x-jsrender">
     <tr class="warning editor">
-        <td colspan="4" style="text-align: right;">
-            <form class="form-inline" autocomplete="off" method="post" action=".">
-            <select style="max-width: 200px;">
-                <option value=""></option>
-                @foreach (var item in Model.AllShows.OrderBy(x => x.ShowTitle))
-                {
-                    <option value="@item.ShowId" {{if (showId == '@item.ShowId')}} selected="selected" {{/if}}>@item.ShowTitle (@item.ShowYear)</option>
-                }
-            </select>
-            <input type="text" class="input input-medium" data-provide="typeahead" data-source='@asJavscriptArray(Model.UniqueCrewPositions)' value="{{>name}}" />
-            <button class="btn btn-primary btn-mini" type="submit" title="Save"><i class="icon-ok icon-white"></i></button>
-            <button class="btn btn-danger btn-mini js-edit-crew-cancel" type="button" title="Cancel"><i class="icon-remove icon-white"></i></button>
-            </form>
-        </td>
+        <form class="form-inline" autocomplete="off" method="post" action=".">
+            <td></td>
+            <td>
+                <select style="max-width: 200px;" id="select-show">
+                    <option value=""></option>
+                    @foreach (var item in Model.AllShows.OrderBy(x => x.ShowTitle))
+                    {
+                        <option value="@item.ShowId">@item.ShowTitle (@item.ShowYear)</option>
+                    }
+                </select>
+
+            <td>
+                <input type="text" class="input input-medium" data-provide="typeahead" data-source='@asJavscriptArray(Model.UniqueCrewPositions)' value="{{>name}}" />
+            </td>
+            <td style="text-align: right;">
+                <button class="btn btn-primary btn-xs" type="submit" title="Save"><i class="glyphicon glyphicon-ok glyphicon-white"></i></button>
+                <button class="btn btn-danger btn-xs js-edit-crew-cancel" type="button" title="Cancel"><i class="glyphicon glyphicon-remove glyphicon-white"></i></button>
+            </td>
+        </form>
     </tr>
 </script>
 
-@helper asJavscriptArray(List<string> input) {
+@helper asJavscriptArray(List<string> input)
+{
     @Html.Raw(input.Aggregate("[", (a, i) => a += "\"" + Html.Encode(i) + "\"" + ",", x => x.Trim(',') + "]"))
 }
 
@@ -201,6 +238,7 @@
                 // add editor next to row to edit, and hide row to edit
                 $parentRow.after(editor);
                 $parentRow.hide();
+                $('#select-show').val($parentRow.data("showid")).change();
             });
             $(document).on("click", ".js-edit-crew-cancel", function (e) {
                 e.preventDefault();

@@ -17,9 +17,9 @@ namespace FODT.Security
             this.cookies = cookies;
         }
 
-        public AuthenticationToken IssueAuthenticationToken(string accessToken, string name, string authenticationType, int expiresInSeconds)
+        public AuthenticationToken IssueAuthenticationToken(int userAccountId, string accessToken, string name, string authenticationType, int expiresInSeconds)
         {
-            var authenticationToken = new AuthenticationToken(accessToken, name, authenticationType, expiresInSeconds);
+            var authenticationToken = new AuthenticationToken(userAccountId, accessToken, name, authenticationType, expiresInSeconds);
             IssueAuthenticationTokenCookie(authenticationToken);
             return authenticationToken;
         }

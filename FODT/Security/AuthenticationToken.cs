@@ -15,22 +15,22 @@ namespace FODT.Security
 
         public AuthenticationToken() { }
 
-        public AuthenticationToken(string accessToken, string name, string authenticationType, int expiresInSeconds)
-            : this(accessToken, name, authenticationType, DateTime.Now.AddSeconds(expiresInSeconds)) { }
+        public AuthenticationToken(int userAccountId, string accessToken, string name, string authenticationType, int expiresInSeconds)
+            : this(userAccountId, accessToken, name, authenticationType, DateTime.Now.AddSeconds(expiresInSeconds)) { }
 
-        private AuthenticationToken(string accessToken, string name, string authenticationType, DateTime expirationDateTime)
+        private AuthenticationToken(int userAccountId, string accessToken, string name, string authenticationType, DateTime expirationDateTime)
         {
+            this.UserAccountId = userAccountId;
             this.AccessToken = accessToken;
             this.Name = name;
             this.AuthenticationType = authenticationType;
             this.ExpirationDateTime = expirationDateTime;
-            this.IssueDateTime = DateTime.Now;
         }
 
+        public int UserAccountId { get; set; }
         public string AccessToken { get; set; }
         public string Name { get; set; }
         public string AuthenticationType { get; set; }
-        public DateTime IssueDateTime { get; set; }
         public DateTime ExpirationDateTime { get; set; }
 
         private AuthenticationTokenIdentity identity;

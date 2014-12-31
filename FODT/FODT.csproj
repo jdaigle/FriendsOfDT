@@ -54,9 +54,6 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="dotless.Core">
-      <HintPath>..\external-bin\dotless\dotless.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\external-bin\Elmah.dll</HintPath>
     </Reference>
@@ -150,7 +147,6 @@
     <Compile Include="LegacyUrlFilter.cs" />
     <Compile Include="Markdown.cs" />
     <Compile Include="Models\FacebookProfile.cs" />
-    <Compile Include="Models\FODT\UserAccessToken.cs" />
     <Compile Include="Models\FODT\UserAccount.cs" />
     <Compile Include="Models\ImageUtilities.cs" />
     <Compile Include="Models\IMDT\Award.cs" />
@@ -219,13 +215,12 @@
     <Content Include="Assets\css\fodt-main.css" />
     <Content Include="Assets\css\fodt-slideshow.css" />
     <Content Include="Assets\css\fodt-tables.css" />
+    <Content Include="Assets\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Assets\img\greg_abbott.jpg" />
     <Content Include="Assets\img\header.png" />
     <Content Include="Assets\img\imdtlogo.png" />
     <Content Include="Assets\img\imdtlogosmall.png" />
     <Content Include="Assets\img\imdtlogotrans.png" />
-    <Content Include="Assets\img\glyphicons-halflings-white.png" />
-    <Content Include="Assets\img\glyphicons-halflings.png" />
     <Content Include="Assets\img\nopic.gif" />
     <Content Include="Assets\img\nopicind.gif" />
     <Content Include="Assets\img\noposter.gif" />
@@ -243,7 +238,7 @@
     <Content Include="Assets\js\fodt.polyfill.js" />
     <Content Include="Assets\js\fodt.common.js" />
     <Content Include="Assets\js\lib\bootstrap.js" />
-    <Content Include="Assets\js\lib\jquery-2.0.2.js" />
+    <Content Include="Assets\js\lib\jquery-2.1.3.min.js" />
     <Content Include="Assets\js\lib\jsrender.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -302,6 +297,9 @@
     <Content Include="Views\Awards\ByYear.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="packages.config" />
+    <Content Include="Assets\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Assets\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Assets\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

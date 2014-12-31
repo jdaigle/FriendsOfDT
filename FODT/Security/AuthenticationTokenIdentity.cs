@@ -10,6 +10,7 @@ namespace FODT.Security
             this.AuthenticationToken = authenticationToken;
         }
 
+        public int UserAccountId { get { return this.AuthenticationToken.UserAccountId; } }
         public string AccessToken { get { return this.AuthenticationToken.AccessToken; } }
         public AuthenticationToken AuthenticationToken { get; private set; }
     }
