@@ -10,13 +10,6 @@ namespace FODT.Database
 {
     public static class DatabaseBootstrapper
     {
-        static DatabaseBootstrapper()
-        {
-#if DEBUG
-            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
-#endif
-        }
-
         public static ISessionFactory SessionFactory;
         public static NHibernate.Cfg.Configuration Cfg;
 
@@ -53,7 +46,6 @@ namespace FODT.Database
 #if DEBUG
                     c.SetProperty(NHibernate.Cfg.Environment.GenerateStatistics, "true");
 #endif
-                    c.SetProperty(NHibernate.Cfg.Environment.ConnectionDriver, typeof(CustomSqlClientDriver).AssemblyQualifiedName);
                 })
                 .BuildConfiguration();
 
