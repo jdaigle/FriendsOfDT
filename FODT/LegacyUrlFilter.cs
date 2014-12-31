@@ -23,10 +23,10 @@ namespace FODT
                     switch (action.ToLowerInvariant())
                     {
                         case "peep_detail":
-                            filterContext.Result = RedirectToAction(MVC.Person.Get(int.Parse(param["peep_id"])));
+                            filterContext.Result = RedirectToAction(MVC.Person.PersonDetails(int.Parse(param["peep_id"])));
                             break;
                         case "show_detail":
-                            filterContext.Result = RedirectToAction(MVC.Person.Get(int.Parse(param["show_id"])));
+                            filterContext.Result = RedirectToAction(MVC.Person.PersonDetails(int.Parse(param["show_id"])));
                             break;
                     }
                 }

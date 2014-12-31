@@ -6,6 +6,25 @@ namespace FODT.Models.IMDT
 {
     public class PersonClubPosition
     {
+        public PersonClubPosition() { }
+        public PersonClubPosition(Person person, string position, short year)
+        {
+            this.Person = person;
+            this.Position = position;
+            if (string.IsNullOrWhiteSpace(position))
+            {
+                throw new ArgumentNullException("position");
+            }
+            this.Year = year;
+            if (year < 1940 || year > (DateTime.Now.Year + 1))
+            {
+                throw new ArgumentOutOfRangeException("year");
+            }
+            this.DisplayOrder = 0;
+            this.InsertedDateTime = DateTime.UtcNow;
+            this.LastModifiedDateTime = DateTime.UtcNow;
+        }
+
         public virtual int PersonClubPositionId { get; set; }
         public virtual Person Person { get; set; }
         public virtual string Position { get; set; }

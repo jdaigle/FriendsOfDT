@@ -76,12 +76,10 @@ namespace FODT.Controllers
             if (user == null)
             {
                 user = new UserAccount(profile);
-                DatabaseSession.Save(user);
                 result = RedirectToAction(Actions.Welcome());
             }
             else
             {
-                user.Update(profile);
                 if (DatabaseSession.IsDirtyEntity(user))
                 {
                     // TODO: audit stuff is built-in?
@@ -96,6 +94,9 @@ namespace FODT.Controllers
                     result = RedirectToAction(MVC.Home.Welcome());
                 }
             }
+            user.Update(profile);
+            user.LastLoginDateTime = DateTime.UtcNow;
+            DatabaseSession.Save(user);
             DatabaseSession.CommitTransaction();
 
             authenticationTokenContext.IssueAuthenticationToken(user.UserAccountId, accessToken, profile.name, "oauth/facebook", expires);

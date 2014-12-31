@@ -61,7 +61,7 @@ namespace FODT.Controllers
                     Name = x.Fullname,
                     SortField = x.LastName,
                     ImageUrl = Url.Action(MVC.Media.GetItemTiny(x.MediaItem.MediaItemId)),
-                    LinkUrl = Url.Action(MVC.Person.Get(x.PersonId)),
+                    LinkUrl = Url.Action(MVC.Person.PersonDetails(x.PersonId)),
                 }));
             }
 

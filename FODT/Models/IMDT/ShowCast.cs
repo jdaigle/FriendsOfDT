@@ -6,6 +6,20 @@ namespace FODT.Models.IMDT
 {
     public class ShowCast
     {
+        public ShowCast() { }
+        public ShowCast(Person person, Show show, string role)
+        {
+            this.Person = person;
+            this.Show = show;
+            this.Role = role;
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                throw new ArgumentNullException("role");
+            }
+            this.InsertedDateTime = DateTime.UtcNow;
+            this.LastModifiedDateTime = DateTime.UtcNow;
+        }
+
         public virtual int ShowCastId { get; set; }
         public virtual Show Show { get; set; }
         public virtual Person Person { get; set; }

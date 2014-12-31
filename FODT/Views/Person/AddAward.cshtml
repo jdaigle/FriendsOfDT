@@ -1,0 +1,43 @@
+﻿<div class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="@Url.Action(MVC.Person.AddAward())">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Award</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit-AwardId">Award</label>
+                        <select class="form-control" name="AwardId" id="edit-AwardId">
+                            <option value="">Select One</option>
+                            @foreach (var award in Model.Awards)
+                            {
+                                <option value="@award.Id">@award.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-ShowId">Show</label>
+                        <select class="form-control" name="ShowId" id="edit-ShowId">
+                            <option value=""></option>
+                            @foreach (var show in Model.Shows)
+                            {
+                                <option value="@show.ShowId">@show.Title (@show.Year)</option>
+                            }
+                        </select>
+                        <span class="help-block">Leave blank for awards that are not show specific.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-Year">Year</label>
+                        <input class="form-control" type="number" name="Year" id="edit-Year" value="@DateTime.Now.Year" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -23,6 +23,7 @@ using T4MVC;
 
 [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
 public static class MVC {
+    public static FODT.Controllers.AdminController Admin = new FODT.Controllers.T4MVC_AdminController();
     public static FODT.Controllers.AwardsController Awards = new FODT.Controllers.T4MVC_AwardsController();
     public static FODT.Controllers.HomeController Home = new FODT.Controllers.T4MVC_HomeController();
     public static FODT.Controllers.MediaController Media = new FODT.Controllers.T4MVC_MediaController();
@@ -319,6 +320,8 @@ namespace Links {
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
             public static readonly string bootstrap_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap.min.css") ? Url("bootstrap.min.css") : Url("bootstrap.css");
                  
+            public static readonly string fodt_components_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt-components.min.css") ? Url("fodt-components.min.css") : Url("fodt-components.css");
+                 
             public static readonly string fodt_forms_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt-forms.min.css") ? Url("fodt-forms.min.css") : Url("fodt-forms.css");
                  
             public static readonly string fodt_main_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fodt-main.min.css") ? Url("fodt-main.min.css") : Url("fodt-main.css");
@@ -331,6 +334,17 @@ namespace Links {
     
         public static readonly string dtstyle_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/dtstyle.min.css") ? Url("dtstyle.min.css") : Url("dtstyle.css");
              
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class fonts {
+            private const string URLPATH = "~/Assets/fonts";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string glyphicons_halflings_regular_eot = Url("glyphicons-halflings-regular.eot");
+            public static readonly string glyphicons_halflings_regular_svg = Url("glyphicons-halflings-regular.svg");
+            public static readonly string glyphicons_halflings_regular_ttf = Url("glyphicons-halflings-regular.ttf");
+            public static readonly string glyphicons_halflings_regular_woff = Url("glyphicons-halflings-regular.woff");
+        }
+    
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public static class img {
             private const string URLPATH = "~/Assets/img";
@@ -345,8 +359,6 @@ namespace Links {
             public static readonly string facebook_32_png = Url("facebook_32.png");
             public static readonly string facebook_signin_png = Url("facebook_signin.png");
             public static readonly string fb_icon_gif = Url("fb-icon.gif");
-            public static readonly string glyphicons_halflings_white_png = Url("glyphicons-halflings-white.png");
-            public static readonly string glyphicons_halflings_png = Url("glyphicons-halflings.png");
             public static readonly string greg_abbott_jpg = Url("greg_abbott.jpg");
             public static readonly string header_png = Url("header.png");
             public static readonly string imdtlogo_png = Url("imdtlogo.png");
@@ -398,9 +410,10 @@ namespace Links {
                 public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
                 public static readonly string bootstrap_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap.min.js") ? Url("bootstrap.min.js") : Url("bootstrap.js");
                               
-                public static readonly string jquery_2_0_2_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-2.0.2.min.js") ? Url("jquery-2.0.2.min.js") : Url("jquery-2.0.2.js");
-                              
+                public static readonly string jquery_2_1_3_min_js = Url("jquery-2.1.3.min.js");
                 public static readonly string jsrender_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jsrender.min.js") ? Url("jsrender.min.js") : Url("jsrender.js");
+                              
+                public static readonly string typeahead_jquery_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/typeahead.jquery.min.js") ? Url("typeahead.jquery.min.js") : Url("typeahead.jquery.js");
                               
             }
         
@@ -432,6 +445,88 @@ public static class T4MVCHelpers {
     }
 }
 
+
+namespace FODT.Controllers {
+    public partial class AdminController {
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public AdminController() { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected AdminController(Dummy d) { }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToAction(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoute(callInfo.RouteValueDictionary);
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToActionPermanent(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
+        }
+
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public AdminController Actions { get { return MVC.Admin; } }
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Area = "";
+        [GeneratedCode("T4MVC", "2.0")]
+        public readonly string Name = "Admin";
+        [GeneratedCode("T4MVC", "2.0")]
+        public const string NameConst = "Admin";
+
+        static readonly ActionNamesClass s_actions = new ActionNamesClass();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionNamesClass ActionNames { get { return s_actions; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNamesClass {
+            public readonly string Index = "Index";
+            public readonly string UsersList = "UsersList";
+            public readonly string PeopleList = "PeopleList";
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNameConstants {
+            public const string Index = "Index";
+            public const string UsersList = "UsersList";
+            public const string PeopleList = "PeopleList";
+        }
+
+
+        static readonly ViewNames s_views = new ViewNames();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ViewNames Views { get { return s_views; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ViewNames {
+            public readonly string _AdminLayout = "~/Views/Admin/_AdminLayout.cshtml";
+            public readonly string Index = "~/Views/Admin/Index.cshtml";
+            public readonly string PeopleList = "~/Views/Admin/PeopleList.cshtml";
+            public readonly string UsersList = "~/Views/Admin/UsersList.cshtml";
+        }
+    }
+
+    [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+    public class T4MVC_AdminController: FODT.Controllers.AdminController {
+        public T4MVC_AdminController() : base(Dummy.Instance) { }
+
+        public override System.Web.Mvc.ActionResult Index() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult UsersList() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.UsersList);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult PeopleList() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.PeopleList);
+            return callInfo;
+        }
+
+    }
+}
 
 namespace FODT.Controllers {
     public partial class AwardsController {
@@ -559,7 +654,6 @@ namespace FODT.Controllers {
         public class ActionNamesClass {
             public readonly string Welcome = "Welcome";
             public readonly string Index = "Index";
-            public readonly string Admin = "Admin";
             public readonly string Admin_EditPerson = "Admin_EditPerson";
             public readonly string Admin_ShowPerson = "Admin_ShowPerson";
         }
@@ -568,7 +662,6 @@ namespace FODT.Controllers {
         public class ActionNameConstants {
             public const string Welcome = "Welcome";
             public const string Index = "Index";
-            public const string Admin = "Admin";
             public const string Admin_EditPerson = "Admin_EditPerson";
             public const string Admin_ShowPerson = "Admin_ShowPerson";
         }
@@ -611,11 +704,6 @@ namespace FODT.Controllers {
 
         public override System.Web.Mvc.ActionResult Index() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
-            return callInfo;
-        }
-
-        public override System.Web.Mvc.ActionResult Admin() {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Admin);
             return callInfo;
         }
 
@@ -843,8 +931,8 @@ namespace FODT.Controllers {
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult Get() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.Get);
+        public System.Web.Mvc.ActionResult PersonDetails() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.PersonDetails);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -863,8 +951,8 @@ namespace FODT.Controllers {
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult Edit() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.Edit);
+        public System.Web.Mvc.ActionResult EditPerson() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.EditPerson);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -878,28 +966,43 @@ namespace FODT.Controllers {
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult DeletePersonAward() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.DeletePersonAward);
+        public System.Web.Mvc.ActionResult AddAward() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.AddAward);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult DeleteShowAward() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.DeleteShowAward);
+        public System.Web.Mvc.ActionResult DeleteAward() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.DeleteAward);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult DeletePersonClubPosition() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.DeletePersonClubPosition);
+        public System.Web.Mvc.ActionResult AddClubPosition() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.AddClubPosition);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult DeleteShowCast() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.DeleteShowCast);
+        public System.Web.Mvc.ActionResult DeleteClubPosition() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.DeleteClubPosition);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult DeleteShowCrew() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.DeleteShowCrew);
+        public System.Web.Mvc.ActionResult AddCast() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.AddCast);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult DeleteCast() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.DeleteCast);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult AddCrew() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.AddCrew);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult DeleteCrew() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.DeleteCrew);
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -916,44 +1019,50 @@ namespace FODT.Controllers {
         public ActionNamesClass ActionNames { get { return s_actions; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
-            public readonly string Get = "Get";
+            public readonly string PersonDetails = "PersonDetails";
             public readonly string ListPersonMedia = "ListPersonMedia";
             public readonly string GetPersonMedia = "GetPersonMedia";
             public readonly string New = "New";
             public readonly string SaveNew = "SaveNew";
-            public readonly string Edit = "Edit";
+            public readonly string EditPerson = "EditPerson";
             public readonly string SaveEdit = "SaveEdit";
             public readonly string ChangeDefaultMediaItem = "ChangeDefaultMediaItem";
-            public readonly string DeletePersonAward = "DeletePersonAward";
-            public readonly string DeleteShowAward = "DeleteShowAward";
-            public readonly string DeletePersonClubPosition = "DeletePersonClubPosition";
-            public readonly string DeleteShowCast = "DeleteShowCast";
-            public readonly string DeleteShowCrew = "DeleteShowCrew";
+            public readonly string AddAward = "AddAward";
+            public readonly string DeleteAward = "DeleteAward";
+            public readonly string AddClubPosition = "AddClubPosition";
+            public readonly string DeleteClubPosition = "DeleteClubPosition";
+            public readonly string AddCast = "AddCast";
+            public readonly string DeleteCast = "DeleteCast";
+            public readonly string AddCrew = "AddCrew";
+            public readonly string DeleteCrew = "DeleteCrew";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants {
-            public const string Get = "Get";
+            public const string PersonDetails = "PersonDetails";
             public const string ListPersonMedia = "ListPersonMedia";
             public const string GetPersonMedia = "GetPersonMedia";
             public const string New = "New";
             public const string SaveNew = "SaveNew";
-            public const string Edit = "Edit";
+            public const string EditPerson = "EditPerson";
             public const string SaveEdit = "SaveEdit";
             public const string ChangeDefaultMediaItem = "ChangeDefaultMediaItem";
-            public const string DeletePersonAward = "DeletePersonAward";
-            public const string DeleteShowAward = "DeleteShowAward";
-            public const string DeletePersonClubPosition = "DeletePersonClubPosition";
-            public const string DeleteShowCast = "DeleteShowCast";
-            public const string DeleteShowCrew = "DeleteShowCrew";
+            public const string AddAward = "AddAward";
+            public const string DeleteAward = "DeleteAward";
+            public const string AddClubPosition = "AddClubPosition";
+            public const string DeleteClubPosition = "DeleteClubPosition";
+            public const string AddCast = "AddCast";
+            public const string DeleteCast = "DeleteCast";
+            public const string AddCrew = "AddCrew";
+            public const string DeleteCrew = "DeleteCrew";
         }
 
 
-        static readonly ActionParamsClass_Get s_params_Get = new ActionParamsClass_Get();
+        static readonly ActionParamsClass_PersonDetails s_params_PersonDetails = new ActionParamsClass_PersonDetails();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_Get GetParams { get { return s_params_Get; } }
+        public ActionParamsClass_PersonDetails PersonDetailsParams { get { return s_params_PersonDetails; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_Get {
+        public class ActionParamsClass_PersonDetails {
             public readonly string personId = "personId";
         }
         static readonly ActionParamsClass_ListPersonMedia s_params_ListPersonMedia = new ActionParamsClass_ListPersonMedia();
@@ -978,11 +1087,11 @@ namespace FODT.Controllers {
         public class ActionParamsClass_SaveNew {
             public readonly string param = "param";
         }
-        static readonly ActionParamsClass_Edit s_params_Edit = new ActionParamsClass_Edit();
+        static readonly ActionParamsClass_EditPerson s_params_EditPerson = new ActionParamsClass_EditPerson();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_Edit EditParams { get { return s_params_Edit; } }
+        public ActionParamsClass_EditPerson EditPersonParams { get { return s_params_EditPerson; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_Edit {
+        public class ActionParamsClass_EditPerson {
             public readonly string personId = "personId";
         }
         static readonly ActionParamsClass_SaveEdit s_params_SaveEdit = new ActionParamsClass_SaveEdit();
@@ -1001,43 +1110,64 @@ namespace FODT.Controllers {
             public readonly string personId = "personId";
             public readonly string mediaItemId = "mediaItemId";
         }
-        static readonly ActionParamsClass_DeletePersonAward s_params_DeletePersonAward = new ActionParamsClass_DeletePersonAward();
+        static readonly ActionParamsClass_AddAward s_params_AddAward = new ActionParamsClass_AddAward();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_DeletePersonAward DeletePersonAwardParams { get { return s_params_DeletePersonAward; } }
+        public ActionParamsClass_AddAward AddAwardParams { get { return s_params_AddAward; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_DeletePersonAward {
+        public class ActionParamsClass_AddAward {
+            public readonly string personId = "personId";
+        }
+        static readonly ActionParamsClass_DeleteAward s_params_DeleteAward = new ActionParamsClass_DeleteAward();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_DeleteAward DeleteAwardParams { get { return s_params_DeleteAward; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_DeleteAward {
             public readonly string personId = "personId";
             public readonly string personAwardId = "personAwardId";
-        }
-        static readonly ActionParamsClass_DeleteShowAward s_params_DeleteShowAward = new ActionParamsClass_DeleteShowAward();
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_DeleteShowAward DeleteShowAwardParams { get { return s_params_DeleteShowAward; } }
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_DeleteShowAward {
-            public readonly string personId = "personId";
             public readonly string showAwardId = "showAwardId";
         }
-        static readonly ActionParamsClass_DeletePersonClubPosition s_params_DeletePersonClubPosition = new ActionParamsClass_DeletePersonClubPosition();
+        static readonly ActionParamsClass_AddClubPosition s_params_AddClubPosition = new ActionParamsClass_AddClubPosition();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_DeletePersonClubPosition DeletePersonClubPositionParams { get { return s_params_DeletePersonClubPosition; } }
+        public ActionParamsClass_AddClubPosition AddClubPositionParams { get { return s_params_AddClubPosition; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_DeletePersonClubPosition {
+        public class ActionParamsClass_AddClubPosition {
+            public readonly string personId = "personId";
+        }
+        static readonly ActionParamsClass_DeleteClubPosition s_params_DeleteClubPosition = new ActionParamsClass_DeleteClubPosition();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_DeleteClubPosition DeleteClubPositionParams { get { return s_params_DeleteClubPosition; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_DeleteClubPosition {
             public readonly string personId = "personId";
             public readonly string personClubPositionId = "personClubPositionId";
         }
-        static readonly ActionParamsClass_DeleteShowCast s_params_DeleteShowCast = new ActionParamsClass_DeleteShowCast();
+        static readonly ActionParamsClass_AddCast s_params_AddCast = new ActionParamsClass_AddCast();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_DeleteShowCast DeleteShowCastParams { get { return s_params_DeleteShowCast; } }
+        public ActionParamsClass_AddCast AddCastParams { get { return s_params_AddCast; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_DeleteShowCast {
+        public class ActionParamsClass_AddCast {
+            public readonly string personId = "personId";
+        }
+        static readonly ActionParamsClass_DeleteCast s_params_DeleteCast = new ActionParamsClass_DeleteCast();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_DeleteCast DeleteCastParams { get { return s_params_DeleteCast; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_DeleteCast {
             public readonly string personId = "personId";
             public readonly string showCastId = "showCastId";
         }
-        static readonly ActionParamsClass_DeleteShowCrew s_params_DeleteShowCrew = new ActionParamsClass_DeleteShowCrew();
+        static readonly ActionParamsClass_AddCrew s_params_AddCrew = new ActionParamsClass_AddCrew();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_DeleteShowCrew DeleteShowCrewParams { get { return s_params_DeleteShowCrew; } }
+        public ActionParamsClass_AddCrew AddCrewParams { get { return s_params_AddCrew; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_DeleteShowCrew {
+        public class ActionParamsClass_AddCrew {
+            public readonly string personId = "personId";
+        }
+        static readonly ActionParamsClass_DeleteCrew s_params_DeleteCrew = new ActionParamsClass_DeleteCrew();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_DeleteCrew DeleteCrewParams { get { return s_params_DeleteCrew; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_DeleteCrew {
             public readonly string personId = "personId";
             public readonly string showCrewId = "showCrewId";
         }
@@ -1046,14 +1176,16 @@ namespace FODT.Controllers {
         public ViewNames Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
-            public readonly string Edit = "~/Views/Person/Edit.cshtml";
-            public readonly string EditViewModel = "~/Views/Person/EditViewModel.cs";
-            public readonly string Get = "~/Views/Person/Get.cshtml";
+            public readonly string AddAward = "~/Views/Person/AddAward.cshtml";
+            public readonly string AddClubPosition = "~/Views/Person/AddClubPosition.cshtml";
+            public readonly string EditPerson = "~/Views/Person/EditPerson.cshtml";
+            public readonly string EditPersonViewModel = "~/Views/Person/EditPersonViewModel.cs";
             public readonly string GetPersonMedia = "~/Views/Person/GetPersonMedia.cshtml";
             public readonly string GetPersonMediaViewModel = "~/Views/Person/GetPersonMediaViewModel.cs";
-            public readonly string GetViewModel = "~/Views/Person/GetViewModel.cs";
             public readonly string ListPersonMedia = "~/Views/Person/ListPersonMedia.cshtml";
             public readonly string ListPersonMediaViewModel = "~/Views/Person/ListPersonMediaViewModel.cs";
+            public readonly string PersonDetails = "~/Views/Person/PersonDetails.cshtml";
+            public readonly string PersonDetailsViewModel = "~/Views/Person/PersonDetailsViewModel.cs";
         }
     }
 
@@ -1061,8 +1193,8 @@ namespace FODT.Controllers {
     public class T4MVC_PersonController: FODT.Controllers.PersonController {
         public T4MVC_PersonController() : base(Dummy.Instance) { }
 
-        public override System.Web.Mvc.ActionResult Get(int personId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Get);
+        public override System.Web.Mvc.ActionResult PersonDetails(int personId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.PersonDetails);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
             return callInfo;
         }
@@ -1091,8 +1223,8 @@ namespace FODT.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult Edit(int personId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Edit);
+        public override System.Web.Mvc.ActionResult EditPerson(int personId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.EditPerson);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
             return callInfo;
         }
@@ -1111,36 +1243,87 @@ namespace FODT.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult DeletePersonAward(int personId, int personAwardId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.DeletePersonAward);
+        public override System.Web.Mvc.ActionResult AddAward(int personId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddAward);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personAwardId", personAwardId);
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult DeleteShowAward(int personId, int showAwardId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.DeleteShowAward);
+        public override System.Web.Mvc.ActionResult AddAward(int personId, int awardId, short year, int? showId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddAward);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "awardId", awardId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "year", year);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showId", showId);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult DeleteAward(int personId, int? personAwardId, int? showAwardId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.DeleteAward);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personAwardId", personAwardId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showAwardId", showAwardId);
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult DeletePersonClubPosition(int personId, int personClubPositionId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.DeletePersonClubPosition);
+        public override System.Web.Mvc.ActionResult AddClubPosition(int personId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddClubPosition);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult AddClubPosition(int personId, string position, short year) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddClubPosition);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "position", position);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "year", year);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult DeleteClubPosition(int personId, int personClubPositionId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.DeleteClubPosition);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personClubPositionId", personClubPositionId);
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult DeleteShowCast(int personId, int showCastId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.DeleteShowCast);
+        public override System.Web.Mvc.ActionResult AddCast(int personId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddCast);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult AddCast(int personId, int showId, string role) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddCast);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showId", showId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "role", role);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult DeleteCast(int personId, int showCastId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.DeleteCast);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showCastId", showCastId);
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult DeleteShowCrew(int personId, int showCrewId) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.DeleteShowCrew);
+        public override System.Web.Mvc.ActionResult AddCrew(int personId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddCrew);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult AddCrew(int personId, int showId, string position) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddCrew);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showId", showId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "position", position);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult DeleteCrew(int personId, int showCrewId) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.DeleteCrew);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showCrewId", showCrewId);
             return callInfo;

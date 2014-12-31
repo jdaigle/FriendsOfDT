@@ -46,6 +46,26 @@ namespace FODT.Models.IMDT
                 return name.Trim();
             }
         }
+
+        /// <summary>
+        /// LastName, FirstName MiddleName
+        /// </summary>
+        public virtual string SortableName
+        {
+            get
+            {
+                var name = FirstName.Trim();
+                if (!string.IsNullOrWhiteSpace(MiddleName))
+                {
+                    name = name + " " + MiddleName.Trim();
+                }
+                if (!string.IsNullOrWhiteSpace(LastName))
+                {
+                    name = LastName.Trim() + ", " + name;
+                }
+                return name.Trim();
+            }
+        }
     }
 
     public class PersonClassMap : ClassMap<Person>

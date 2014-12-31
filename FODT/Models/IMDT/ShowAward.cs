@@ -9,6 +9,21 @@ namespace FODT.Models.IMDT
 {
     public class ShowAward
     {
+        public ShowAward() { }
+        public ShowAward(Show show, Person person, Award award, short year)
+        {
+            this.Show = show;
+            this.Person = person;
+            this.Award = award;
+            this.Year = year;
+            if (year < 1940 || year > (DateTime.Now.Year + 1))
+            {
+                throw new ArgumentOutOfRangeException("year");
+            }
+            this.InsertedDateTime = DateTime.UtcNow;
+            this.LastModifiedDateTime = DateTime.UtcNow;
+        }
+
         public virtual int ShowAwardId { get; set; }
         public virtual Show Show { get; set; }
         public virtual Person Person { get; set; }

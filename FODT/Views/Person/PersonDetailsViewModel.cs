@@ -6,7 +6,7 @@ using FODT.Models;
 
 namespace FODT.Views.Person
 {
-    public class GetViewModel
+    public class PersonDetailsViewModel
     {
         public int PersonId { get; set; }
         public string FullName { get; set; }
@@ -62,18 +62,5 @@ namespace FODT.Views.Person
 
         public int RelatedMediaCount { get; set; }
         public List<int> NewRelatedMedia { get; set; }
-
-        public List<string> UniqueCrewPositions { get; set; }
-        public List<string> UniqueClubPositions { get; set; }
-        public List<Show> AllShows { get; set; }
-        public List<Award> AllAwards { get; set; }
-
-        public class Show
-        {
-            public int ShowId { get; set; }
-            public string ShowTitle { get; set; }
-            public Quarter ShowQuarter { get; set; }
-            public short ShowYear { get; set; }
-        }
     }
 }

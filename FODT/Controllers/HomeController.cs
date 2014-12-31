@@ -22,18 +22,18 @@ namespace FODT.Controllers
             return View();
         }
 
-        [HttpGet, Route("Admin")]
-        public virtual ActionResult Admin()
-        {
-            var viewModel = new AdminViewModel();
-            viewModel.PopulateFromDatabase(DatabaseSession);
-            return View(viewModel);
-        }
+        //[HttpGet, Route("Admin")]
+        //public virtual ActionResult Admin()
+        //{
+        //    var viewModel = new AdminViewModel();
+        //    viewModel.PopulateFromDatabase(DatabaseSession);
+        //    return View(viewModel);
+        //}
 
         [HttpGet, Route("Admin/EditPerson")]
         public virtual ActionResult Admin_EditPerson(int personId)
         {
-            return RedirectToAction(MVC.Person.Edit(personId));
+            return RedirectToAction(MVC.Person.EditPerson(personId));
         }
         [HttpGet, Route("Admin/ShowPerson")]
         public virtual ActionResult Admin_ShowPerson(int showId)

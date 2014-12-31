@@ -1,4 +1,4 @@
-﻿@model FODT.Views.Person.GetViewModel
+﻿@model FODT.Views.Person.PersonDetailsViewModel
 
 @section endOfHead {
     <style type="text/css">
@@ -39,7 +39,10 @@
     </div>
     <div class="col-sm-9">
         <h1>@Model.FullName</h1>
-        <p>Is this you? <a href="#" title="Claim this person so that you can edit so that you can edit the entry.">Claim this Person</a> | <a href="@Url.Action(MVC.Person.Edit())">Edit Person</a></p>
+        <p>
+            Is this you? <a href="#" title="Claim this person so that you can edit so that you can edit the entry.">Claim this Person</a>
+            | <a class="js-edit-modal-link" href="@Url.Action(MVC.Person.EditPerson())">Edit Info</a>
+        </p>
         <hr />
         @if (!string.IsNullOrWhiteSpace(Model.Biography))
         {
@@ -49,9 +52,9 @@
             <hr />
         }
 
+        <h4>Awards <small class="pull-right"><a class="js-edit-modal-link" href="@Url.Action(MVC.Person.AddAward())"><i class="glyphicon glyphicon-plus"></i> Add Award</a></small></h4>
         @if (Model.Awards.Any())
         {
-            <h4>Awards <small class="pull-right"><a href="#">Add Award</a></small></h4>
             <table class="table table-condensed table-hover">
                 <tbody>
                     @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
@@ -71,16 +74,8 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <li><a href="#" title="Edit"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
                                         <li>
-                                            @if (item.ShowId.HasValue)
-                                            {
-                                            <a href="@Url.Action(MVC.Person.DeleteShowAward(Model.PersonId, item.AwardId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove-sign"></i> Remove</a>
-                                            }
-                                            else
-                                            {
-                                            <a href="@Url.Action(MVC.Person.DeletePersonAward(Model.PersonId, item.AwardId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove-sign"></i> Remove</a>
-                                            }
+                                            <a href="@Url.Action(MVC.Person.DeleteAward(Model.PersonId, item.AwardId, item.ShowId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -90,14 +85,10 @@
                 </tbody>
             </table>
         }
-        else
-        {
-            <h4>Awards <small style="float:right;"><a href="#">Add Award</a></small></h4>
-        }
 
+        <h4>EC and Club Responsibilities <small class="pull-right"><a class="js-edit-modal-link" href="@Url.Action(MVC.Person.AddClubPosition())"><i class="glyphicon glyphicon-plus"></i> Add Position</a></small></h4>
         @if (Model.ClubPositions.Any())
         {
-            <h4>EC and Club Responsibilities <small style="float: right;"><a href="#">Add Position</a></small></h4>
             <table class="table table-condensed table-hover">
                 <tbody>
                     @foreach (var item in Model.ClubPositions)
@@ -111,8 +102,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <li><a href="#" title="Edit"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
-                                        <li><a href="@Url.Action(MVC.Person.DeletePersonClubPosition(Model.PersonId, item.ClubPositionId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove-sign"></i></a></li>
+                                        <li><a href="@Url.Action(MVC.Person.DeleteClubPosition(Model.PersonId, item.ClubPositionId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -121,14 +111,10 @@
                 </tbody>
             </table>
         }
-        else
-        {
-            <h4>EC and Club Responsibilities <small style="float: right;"><a href="#">Add Position</a></small></h4>
-        }
 
+        <h4>Cast Credits <small class="pull-right"><a class="js-edit-modal-link" href="@Url.Action(MVC.Person.AddCast())"><i class="glyphicon glyphicon-plus"></i> Add Cast Credit</a></small></h4>
         @if (Model.CastRoles.Any())
         {
-            <h4>Cast Credits <small style="float: right;"><a href="#">Add Credit</a></small></h4>
             <table class="table table-condensed table-hover">
                 <tbody>
                     @foreach (var item in Model.CastRoles.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
@@ -143,8 +129,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <li><a href="#" title="Edit"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
-                                        <li><a href="@Url.Action(MVC.Person.DeleteShowCast(Model.PersonId, item.ShowCastId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove-sign"></i></a></li>
+                                        <li><a href="@Url.Action(MVC.Person.DeleteCast(Model.PersonId, item.ShowCastId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -153,14 +138,10 @@
                 </tbody>
             </table>
         }
-        else
-        {
-            <h4>Cast Credits <small style="float: right;"><a href="#">Add Credit</a></small></h4>
-        }
 
+        <h4>Crew Credits <small class="pull-right"><a class="js-edit-modal-link" href="@Url.Action(MVC.Person.AddCrew())"><i class="glyphicon glyphicon-plus"></i> Add Crew Credit</a></small></h4>
         @if (Model.CrewPositions.Any())
         {
-            <h4>Crew Credits <small style="float: right;"><a href="#">Add Credit</a></small></h4>
             <table class="table table-condensed table-hover">
                 <tbody>
                     @foreach (var item in Model.CrewPositions.OrderByDescending(x => x.ShowYear).ThenByDescending(x => x.ShowQuarter).ThenBy(x => x.ShowName))
@@ -175,8 +156,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <li><a href="#" class="js-edit-crew" title="Edit"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
-                                        <li><a href="@Url.Action(MVC.Person.DeleteShowCrew(Model.PersonId, item.ShowCrewId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove-sign"></i> Remove</a></li>
+                                        <li><a href="@Url.Action(MVC.Person.DeleteCrew(Model.PersonId, item.ShowCrewId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -185,67 +165,19 @@
                 </tbody>
             </table>
         }
-        else
-        {
-            <h4>Crew Credits <small style="float: right;"><a href="#">Add Credit</a></small></h4>
-        }
     </div>
 </div>
 
 
-
-<script id="editCrewTemplate" type="text/x-jsrender">
-    <tr class="warning editor">
-        <form class="form-inline" autocomplete="off" method="post" action=".">
-            <td></td>
-            <td>
-                <select style="max-width: 200px;" id="select-show">
-                    <option value=""></option>
-                    @foreach (var item in Model.AllShows.OrderBy(x => x.ShowTitle))
-                    {
-                        <option value="@item.ShowId">@item.ShowTitle (@item.ShowYear)</option>
-                    }
-                </select>
-
-            <td>
-                <input type="text" class="input input-medium" data-provide="typeahead" data-source='@asJavscriptArray(Model.UniqueCrewPositions)' value="{{>name}}" />
-            </td>
-            <td style="text-align: right;">
-                <button class="btn btn-primary btn-xs" type="submit" title="Save"><i class="glyphicon glyphicon-ok glyphicon-white"></i></button>
-                <button class="btn btn-danger btn-xs js-edit-crew-cancel" type="button" title="Cancel"><i class="glyphicon glyphicon-remove glyphicon-white"></i></button>
-            </td>
-        </form>
-    </tr>
-</script>
-
-@helper asJavscriptArray(List<string> input)
-{
-    @Html.Raw(input.Aggregate("[", (a, i) => a += "\"" + Html.Encode(i) + "\"" + ",", x => x.Trim(',') + "]"))
-}
-
 @section endOfBody {
     <script type="text/javascript">
         $(function () {
-            $(document).on("click", ".js-edit-crew", function (e) {
+            $(document).on('click', '.js-edit-modal-link', function (e) {
                 e.preventDefault();
-                var $parentRow = $(this).closest("tr");
-                var $parentTable = $(this).closest("table");
-                // close any existing editor and show hidden rows
-                $parentTable.find("tr.editor").remove();
-                $parentTable.find("tr").show();
-                // render the editor
-                var editor = $("#editCrewTemplate").render({ name: $parentRow.data("name"), showId: $parentRow.data("showid") })
-                // add editor next to row to edit, and hide row to edit
-                $parentRow.after(editor);
-                $parentRow.hide();
-                $('#select-show').val($parentRow.data("showid")).change();
-            });
-            $(document).on("click", ".js-edit-crew-cancel", function (e) {
-                e.preventDefault();
-                var $parentTable = $(this).closest("table");
-                // close any existing editor and show hidden rows
-                $parentTable.find("tr.editor").remove();
-                $parentTable.find("tr").show();
+                var url = $(this).attr('href');
+                $.get(url, function (html) {
+                    $(html).modal();
+                });
             });
         });
     </script>

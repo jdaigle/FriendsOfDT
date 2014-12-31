@@ -6,6 +6,21 @@ namespace FODT.Models.IMDT
 {
     public class ShowCrew
     {
+        public ShowCrew() { }
+        public ShowCrew(Person person, Show show, string position)
+        {
+            this.Person = person;
+            this.Show = show;
+            this.Position = position;
+            if (string.IsNullOrWhiteSpace(position))
+            {
+                throw new ArgumentNullException("position");
+            }
+            this.DisplayOrder = 0;
+            this.InsertedDateTime = DateTime.UtcNow;
+            this.LastModifiedDateTime = DateTime.UtcNow;
+        }
+
         public virtual int ShowCrewId { get; set; }
         public virtual Show Show { get; set; }
         public virtual Person Person { get; set; }

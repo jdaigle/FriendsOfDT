@@ -33,11 +33,12 @@
                     <li class="active"><a href="#">Home</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#contact">Show Archive</a></li>
+                    <li><a href="~/admin">Admin</a></li>
                 </ul>
                 <form class="navbar-form navbar-right">
                     @if (!ViewBag.IsAuthenticated)
                     {
-                        <a class="btn btn-success sign-in-facebook" href="@Url.Action(MVC.User.SignIn())">Sign In</a>
+                        <a class="btn btn-success sign-in-facebook" href="@Url.Action(MVC.User.SignIn(this.Request.Url.PathAndQuery))">Sign In</a>
                     }
                     else
                     {
@@ -67,8 +68,20 @@
     </div>
     <hr />
     <script type="text/javascript">
-        if (window.location.hash == "#_=_") {
-            window.location.hash = "";
+        if (window.location.hash && window.location.hash === "#_=_") {
+            if (window.history && history.pushState) {
+                window.history.pushState("", document.title, window.location.pathname);
+            } else {
+                // Prevent scrolling by storing the page's current scroll offset
+                var scroll = {
+                    top: document.body.scrollTop,
+                    left: document.body.scrollLeft
+                };
+                window.location.hash = "";
+                // Restore the scroll offset, should be flicker free
+                document.body.scrollTop = scroll.top;
+                document.body.scrollLeft = scroll.left;
+            }
         }
     </script>
     @System.Web.Optimization.Scripts.Render("~/Assets/js/site")

@@ -1,0 +1,73 @@
+﻿<div class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="@Url.Action(MVC.Person.AddCrew())">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Crew Position</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit-Position">Position</label>
+                        <input class="form-control typeahead" type="text" name="Position" id="edit-Position" value="" />
+                        <span class="help-block">Start typing to see previously used position names.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-ShowId">Show</label>
+                        <select class="form-control" name="ShowId" id="edit-ShowId">
+                            <option value="">Select One</option>
+                            @foreach (var show in Model.Shows)
+                            {
+                                <option value="@show.ShowId">@show.Title (@show.Year)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+        <script>
+            var substringMatcher = function (strs) {
+                return function findMatches(q, cb) {
+                    var matches, substrRegex;
+
+                    // an array that will be populated with substring matches
+                    matches = [];
+
+                    // regex used to determine if a string contains the substring `q`
+                    substrRegex = new RegExp(q, 'i');
+
+                    // iterate through the pool of strings and for any string that
+                    // contains the substring `q`, add it to the `matches` array
+                    $.each(strs, function (i, str) {
+                        if (substrRegex.test(str)) {
+                            // the typeahead jQuery plugin expects suggestions to a
+                            // JavaScript object, refer to typeahead docs for more info
+                            matches.push({ value: str });
+                        }
+                    });
+
+                    cb(matches);
+                };
+            };
+
+            var _values = [
+                @Html.Raw(Model.Positions)
+            ];
+
+            $('#edit-Position.typeahead').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 2
+            },
+            {
+                name: '_values',
+                displayKey: 'value',
+                source: substringMatcher(_values)
+            });
+        </script>
+    </div>
+</div>

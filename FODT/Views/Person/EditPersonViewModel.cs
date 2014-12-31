@@ -5,11 +5,11 @@ using System.Web;
 
 namespace FODT.Views.Person
 {
-    public class EditViewModel
+    public class EditPersonViewModel
     {
-        public static EditViewModel Empty()
+        public static EditPersonViewModel Empty()
         {
-            return new EditViewModel() { RelatedMedia = new List<Media>() };
+            return new EditPersonViewModel() { RelatedMedia = new List<Media>() };
         }
 
         public int? PersonId { get; set; }

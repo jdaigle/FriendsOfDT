@@ -54,6 +54,7 @@ namespace FODT.Models.FODT
         public virtual string FacebookPictureURL { get; set; }
         public virtual DateTime InsertedDateTime { get; set; }
         public virtual DateTime LastModifiedDateTime { get; set; }
+        public virtual DateTime LastLoginDateTime { get; set; }
     }
 
     public class UserAccountClassMap : ClassMap<UserAccount>
@@ -74,6 +75,7 @@ namespace FODT.Models.FODT
             Map(x => x.FacebookPictureURL).Not.Nullable().Length(300);
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.LastModifiedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
+            Map(x => x.LastLoginDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }
     }
 }

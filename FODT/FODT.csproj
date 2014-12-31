@@ -166,6 +166,7 @@
     <Compile Include="Models\IMDT\Person.cs" />
     <Compile Include="Models\ExtensionMethods.cs" />
     <Compile Include="ObjectDisposal.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AuthenticationToken.cs" />
     <Compile Include="Security\AuthenticationTokenIdentity.cs" />
@@ -188,7 +189,7 @@
     <Compile Include="Views\Media\GetItemDetailViewModel.cs" />
     <Compile Include="Views\Media\IndexViewModel.cs" />
     <Compile Include="Views\Media\UploadViewModel.cs" />
-    <Compile Include="Views\Person\EditViewModel.cs" />
+    <Compile Include="Views\Person\EditPersonViewModel.cs" />
     <Compile Include="Views\Person\GetPersonMediaViewModel.cs" />
     <Compile Include="Views\Person\ListPersonMediaViewModel.cs" />
     <Compile Include="Views\Search\SearchResultsViewModel.cs" />
@@ -196,13 +197,14 @@
     <Compile Include="Views\Shows\SortedShowsViewModel.cs" />
     <Compile Include="Views\Show\GetShowMediaViewModel.cs" />
     <Compile Include="Views\Show\GetViewModel.cs" />
-    <Compile Include="Views\Person\GetViewModel.cs" />
+    <Compile Include="Views\Person\PersonDetailsViewModel.cs" />
     <Compile Include="Views\Show\ListShowMediaViewModel.cs" />
     <Compile Include="Views\Toaster\HuntViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Content Include="Assets\css\fodt-components.css" />
     <Content Include="Assets\img\ajax-loader.gif" />
     <Content Include="Assets\img\bulletRelatedLinks.gif" />
     <Content Include="Assets\img\facebook_16.png" />
@@ -243,6 +245,7 @@
     <Content Include="Assets\js\lib\bootstrap.js" />
     <Content Include="Assets\js\lib\jquery-2.1.3.min.js" />
     <Content Include="Assets\js\lib\jsrender.js" />
+    <Content Include="Assets\js\lib\typeahead.jquery.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
@@ -251,7 +254,7 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Person\Get.cshtml" />
+    <Content Include="Views\Person\PersonDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -273,7 +276,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Person\Edit.cshtml" />
+    <Content Include="Views\Person\EditPerson.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Welcome.cshtml" />
@@ -304,6 +307,13 @@
     <Content Include="Assets\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\_AdminLayout.cshtml" />
+    <Content Include="Views\Admin\UsersList.cshtml" />
+    <Content Include="Views\Admin\PeopleList.cshtml" />
+    <Content Include="Views\Person\AddAward.cshtml" />
+    <Content Include="Views\Person\AddClubPosition.cshtml" />
+    <Content Include="Views\Person\AddCrew.cshtml" />
+    <Content Include="Views\Person\AddCast.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
