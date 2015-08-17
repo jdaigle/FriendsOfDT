@@ -31,7 +31,7 @@
             }
             @if (item.PersonId.HasValue)
             {
-                @:- <a href="@Url.Action(MVC.Person.Get(item.PersonId.Value))">@item.PersonName</a>
+                @:- <a href="@Url.Action(MVC.Person.PersonDetails(item.PersonId.Value))">@item.PersonName</a>
             }
         </span>
         <br />

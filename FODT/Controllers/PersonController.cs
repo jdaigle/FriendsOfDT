@@ -293,17 +293,17 @@ namespace FODT.Controllers
         }
 
         [HttpPost, Route("{personId}/DeleteAward")]
-        public virtual ActionResult DeleteAward(int personId, int? personAwardId, int? showAwardId)
+        public virtual ActionResult DeleteAward(int personId, int awardId, int? showId)
         {
-            if (personAwardId.HasValue)
+            if (showId.HasValue)
             {
-                var award = DatabaseSession.Get<PersonAward>(personAwardId.Value);
+                var award = DatabaseSession.Get<ShowAward>(awardId);
                 DatabaseSession.Delete(award);
                 DatabaseSession.CommitTransaction();
             }
-            if (showAwardId.HasValue)
+            else
             {
-                var award = DatabaseSession.Get<ShowAward>(showAwardId.Value);
+                var award = DatabaseSession.Get<PersonAward>(awardId);
                 DatabaseSession.Delete(award);
                 DatabaseSession.CommitTransaction();
             }

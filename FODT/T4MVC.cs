@@ -1123,8 +1123,8 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionParamsClass_DeleteAward {
             public readonly string personId = "personId";
-            public readonly string personAwardId = "personAwardId";
-            public readonly string showAwardId = "showAwardId";
+            public readonly string awardId = "awardId";
+            public readonly string showId = "showId";
         }
         static readonly ActionParamsClass_AddClubPosition s_params_AddClubPosition = new ActionParamsClass_AddClubPosition();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -1177,7 +1177,9 @@ namespace FODT.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
             public readonly string AddAward = "~/Views/Person/AddAward.cshtml";
+            public readonly string AddCast = "~/Views/Person/AddCast.cshtml";
             public readonly string AddClubPosition = "~/Views/Person/AddClubPosition.cshtml";
+            public readonly string AddCrew = "~/Views/Person/AddCrew.cshtml";
             public readonly string EditPerson = "~/Views/Person/EditPerson.cshtml";
             public readonly string EditPersonViewModel = "~/Views/Person/EditPersonViewModel.cs";
             public readonly string GetPersonMedia = "~/Views/Person/GetPersonMedia.cshtml";
@@ -1258,11 +1260,11 @@ namespace FODT.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult DeleteAward(int personId, int? personAwardId, int? showAwardId) {
+        public override System.Web.Mvc.ActionResult DeleteAward(int personId, int awardId, int? showId) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.DeleteAward);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personId", personId);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "personAwardId", personAwardId);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showAwardId", showAwardId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "awardId", awardId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "showId", showId);
             return callInfo;
         }
 
