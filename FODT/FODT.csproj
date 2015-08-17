@@ -316,6 +316,7 @@
     <Content Include="Views\Person\AddClubPosition.cshtml" />
     <Content Include="Views\Person\AddCrew.cshtml" />
     <Content Include="Views\Person\AddCast.cshtml" />
+    <Content Include="Assets\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
