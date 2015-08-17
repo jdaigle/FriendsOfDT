@@ -115,7 +115,7 @@ namespace FODT.DataMigration
 
         public void AddField(string data)
         {
-            fieldData.Add(data);
+            fieldData.Add(data.Replace("\\N", ""));
         }
 
         public void ClearFields()
@@ -127,7 +127,7 @@ namespace FODT.DataMigration
 
         public string this[int index]
         {
-            get { return fieldData[index].Replace("\\N", ""); }
+            get { return fieldData[index]; }
         }
 
         public IEnumerator<string> GetEnumerator()
