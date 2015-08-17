@@ -1,3 +1,4 @@
 sed ':a; $!N;s/\n\\n/\\n/;ta;P;D' imdt_people_norm.csv > imdt_people_fixed.csv
 
 sed ':a; $!N;s/\r\\\n/\\n/;ta;P;D' people.txt > people_fixed.txt
+sed ':a; $!N;s/\r\\\n/\\n/;ta;P;D' shows.txt > shows_fixed.txt
