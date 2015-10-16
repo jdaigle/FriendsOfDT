@@ -1,1 +1,0 @@
-.\psake.cmd .\everything.ps1 build

@@ -1,1 +1,1 @@
-.\tools\SqlDeploy.exe -m database -s . -d fodt -i -a -f
+.\tools\SqlMigrate.exe -m database -s . -d fodt -i
