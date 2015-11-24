@@ -6,7 +6,7 @@
 <center>
     <b>
 	This is the home for headshots, posters, programs, and production stills.  We hope to add movies soon as well.<br>
-	If you're logged in, you can <a href="@Url.Action(MVC.Media.Upload())">Upload a Picture</a> or you can just browse below.
+	If you're logged in, you can <a href="@Model.MediaUploadLinkURL">Upload a Picture</a> or you can just browse below.
     </b>
 </center>
 <br>
@@ -21,8 +21,8 @@
             @foreach (var item in Model.RandomPic.Take(5))
             {
             <td align="center">
-                <a href="@Url.Action(MVC.Media.GetItemDetail(item))">
-                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(item))">
+                <a href="@item.MediaLinkURL">
+                    <img src="@item.MediaThumbnailURL">
                 </a>
             </td>
             }
@@ -31,8 +31,8 @@
             @foreach (var item in Model.RandomPic.Skip(5).Take(5))
             {
             <td align="center">
-                <a href="@Url.Action(MVC.Media.GetItemDetail(item))">
-                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(item))">
+                <a href="@item.MediaLinkURL">
+                    <img src="@item.MediaThumbnailURL">
                 </a>
             </td>
             }
@@ -44,8 +44,8 @@
             @foreach (var item in Model.RecentlyUploaded.Take(5))
             {
             <td align="center">
-                <a href="@Url.Action(MVC.Media.GetItemDetail(item))">
-                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(item))">
+                <a href="@item.MediaLinkURL">
+                    <img src="@item.MediaThumbnailURL">
                 </a>
             </td>
             }
@@ -54,8 +54,8 @@
             @foreach (var item in Model.RecentlyUploaded.Skip(5).Take(5))
             {
             <td align="center">
-                <a href="@Url.Action(MVC.Media.GetItemDetail(item))">
-                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(item))">
+                <a href="@item.MediaLinkURL">
+                    <img src="@item.MediaThumbnailURL">
                 </a>
             </td>
             }

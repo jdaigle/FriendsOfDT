@@ -11,10 +11,10 @@ using NHibernate.Linq;
 namespace FODT.Controllers
 {
     [RoutePrefix("Toaster")]
-    public partial class ToasterController : BaseController
+    public class ToasterController : BaseController
     {
         [HttpGet, Route("Hunt")]
-        public virtual ActionResult Hunt()
+        public ActionResult Hunt()
         {
             var shows = DatabaseSession.Query<Show>().Where(x => x.Toaster != string.Empty).ToList();
             var viewModel = new HuntViewModel();

@@ -1,18 +1,18 @@
 ﻿@model FODT.Views.Person.GetPersonMediaViewModel
 
 <div style="text-align: center;">
-    <h3>Media for <a href="@Url.Action(MVC.Person.Get(Model.PersonId))">@Model.PersonFullname</a></h3>
+    <h3>Media for <a href="@Model.PersonLinkURL">@Model.PersonFullname</a></h3>
     <p>
-        <a href="@Url.Action(MVC.Media.Upload())">Upload more images for this person</a>
+        <a href="@Model.MediaUploadLinkURL">Upload more images for this person</a>
     </p>
 </div>
 
 <ul class="pager">
-    <li class="previous @(Model.PreviousId.HasValue ? "" : "disabled")">
-        <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.PreviousId ?? Model.MediaItemId))">&larr; Previous</a>
+    <li class="previous @(Model.HasPreviousMediaLinkURL ? "" : "disabled")">
+        <a href="@Model.PreviousMediaLinkURL">&larr; Previous</a>
     </li>
-    <li class="next @(Model.NextId.HasValue ? "" : "disabled")">
-        <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.NextId ?? Model.MediaItemId))">Next &rarr;</a>
+    <li class="next @(Model.HasNextMediaLinkURL ? "" : "disabled")">
+        <a href="@Model.NextMediaLinkURL">Next &rarr;</a>
     </li>
 </ul>
 

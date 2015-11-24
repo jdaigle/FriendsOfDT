@@ -19,29 +19,29 @@
     <div class="col-sm-3">
         @if (Model.MediaItemId != 1)
         {
-            <a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, Model.MediaItemId))">
-                <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName" class="img-thumbnail">
+            <a href="@Model.MediaLinkURL">
+                <img src="@Model.MediaThumbnailURL" alt="@Model.FullName" class="img-thumbnail">
             </a>
         }
         else
         {
-            <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.FullName">
+            <img src="@Model.MediaThumbnailURL" alt="@Model.FullName">
         }
         <hr />
-        <a href="@Url.Action(MVC.Person.ListPersonMedia(Model.PersonId))">@Model.RelatedMediaCount Images &raquo;</a>
+        <a href="@Model.MediaListLinkURL">@Model.RelatedMediaCount Images &raquo;</a>
         <ul class="media-banner">
             @foreach (var item in Model.NewRelatedMedia)
             {
-                <li><a href="@Url.Action(MVC.Person.GetPersonMedia(Model.PersonId, item))"><img class="img-thumbnail" src="@Url.Action(MVC.Media.GetItemTiny(item))" alt="@Model.FullName"></a></li>
+                <li><a href="@item.MediaLinkURL"><img class="img-thumbnail" src="@item.MediaThumbnailURL" alt="@Model.FullName"></a></li>
             }
         </ul>
-        <a href="@Url.Action(MVC.Media.Upload())"><i class="glyphicon glyphicon-upload"></i> Upload an Image</a>
+        <a href="@Model.MediaUploadLinkURL"><i class="glyphicon glyphicon-upload"></i> Upload an Image</a>
     </div>
     <div class="col-sm-9">
         <h1>@Model.FullName</h1>
         <p>
             Is this you? <a href="#" title="Claim this person so that you can edit so that you can edit the entry.">Claim this Person</a>
-            | <a class="js-edit-modal-link" href="@Url.Action(MVC.Person.EditPerson())">Edit Info</a>
+            | <a class="js-edit-modal-link" href="@Model.EditLinkURL">Edit Info</a>
         </p>
         <hr />
         @if (!string.IsNullOrWhiteSpace(Model.Biography))
@@ -52,7 +52,7 @@
             <hr />
         }
 
-        <h4>Awards <small class="pull-right"><a class="js-edit-modal-link" href="@Url.Action(MVC.Person.AddAward())"><i class="glyphicon glyphicon-plus"></i> Add Award</a></small></h4>
+        <h4>Awards <small class="pull-right"><a class="js-edit-modal-link" href="@Model.AddAwardURL"><i class="glyphicon glyphicon-plus"></i> Add Award</a></small></h4>
         @if (Model.Awards.Any())
         {
             <table class="table table-condensed table-hover">
@@ -60,12 +60,12 @@
                     @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name))
                     {
                         <tr>
-                            <td><a href="@Url.Action(MVC.Awards.ByYear(item.Year))">@item.Year</a></td>
+                            <td><a href="@item.AwardYearLinkURL">@item.Year</a></td>
                             <td>
                                 @item.Name
                                 @if (item.ShowId.HasValue)
                                 {
-                                    @: for <a href="@Url.Action(MVC.Show.Get(item.ShowId.Value))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a>
+                                    @: for <a href="@item.ShowLinkURL">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a>
                                 }
                             </td>
                             <td style="text-align: right;">
@@ -75,7 +75,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
                                         <li>
-                                            <a href="@Url.Action(MVC.Person.DeleteAward(Model.PersonId, item.AwardId, item.ShowId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                                            <a href="@item.DeleteAwardURL" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -86,7 +86,7 @@
             </table>
         }
 
-        <h4>EC and Club Responsibilities <small class="pull-right"><a class="js-edit-modal-link" href="@Url.Action(MVC.Person.AddClubPosition())"><i class="glyphicon glyphicon-plus"></i> Add Position</a></small></h4>
+        <h4>EC and Club Responsibilities <small class="pull-right"><a class="js-edit-modal-link" href="@Model.AddClubPositionURL"><i class="glyphicon glyphicon-plus"></i> Add Position</a></small></h4>
         @if (Model.ClubPositions.Any())
         {
             <table class="table table-condensed table-hover">
@@ -102,7 +102,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <li><a href="@Url.Action(MVC.Person.DeleteClubPosition(Model.PersonId, item.ClubPositionId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
+                                        <li><a href="@item.DeleteClubPositionURL" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -112,7 +112,7 @@
             </table>
         }
 
-        <h4>Cast Credits <small class="pull-right"><a class="js-edit-modal-link" href="@Url.Action(MVC.Person.AddCast())"><i class="glyphicon glyphicon-plus"></i> Add Cast Credit</a></small></h4>
+        <h4>Cast Credits <small class="pull-right"><a class="js-edit-modal-link" href="@Model.AddCastURL"><i class="glyphicon glyphicon-plus"></i> Add Cast Credit</a></small></h4>
         @if (Model.CastRoles.Any())
         {
             <table class="table table-condensed table-hover">
@@ -121,7 +121,7 @@
                     {
                         <tr>
                             <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
-                            <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                            <td><a href="@item.ShowLinkURL">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                             <td>@item.Role</td>
                             <td style="text-align: right;">
                                 <div class="btn-group btn-group-xs">
@@ -129,7 +129,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <li><a href="@Url.Action(MVC.Person.DeleteCast(Model.PersonId, item.ShowCastId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
+                                        <li><a href="@item.DeleteCastURL" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -139,7 +139,7 @@
             </table>
         }
 
-        <h4>Crew Credits <small class="pull-right"><a class="js-edit-modal-link" href="@Url.Action(MVC.Person.AddCrew())"><i class="glyphicon glyphicon-plus"></i> Add Crew Credit</a></small></h4>
+        <h4>Crew Credits <small class="pull-right"><a class="js-edit-modal-link" href="@Model.AddCrewURL"><i class="glyphicon glyphicon-plus"></i> Add Crew Credit</a></small></h4>
         @if (Model.CrewPositions.Any())
         {
             <table class="table table-condensed table-hover">
@@ -148,7 +148,7 @@
                     {
                         <tr data-showid="@item.ShowId" data-name="@item.Name">
                             <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
-                            <td><a href="@Url.Action(MVC.Show.Get(item.ShowId))">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
+                            <td><a href="@item.ShowLinkURL">@ExtensionMethods.RearrangeShowTitle(item.ShowName)</a></td>
                             <td>@item.Name</td>
                             <td style="text-align: right;">
                                 <div class="btn-group btn-group-xs">
@@ -156,7 +156,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <li><a href="@Url.Action(MVC.Person.DeleteCrew(Model.PersonId, item.ShowCrewId))" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
+                                        <li><a href="@item.DeleteCrewURL" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
                                     </ul>
                                 </div>
                             </td>

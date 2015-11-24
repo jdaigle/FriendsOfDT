@@ -8,7 +8,7 @@ using NHibernate;
 
 namespace FODT.Controllers
 {
-    public abstract partial class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         private ISession databaseSession;
         private bool databaseSessionClosed;

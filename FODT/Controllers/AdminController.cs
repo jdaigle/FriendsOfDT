@@ -10,16 +10,16 @@ using NHibernate.Linq;
 namespace FODT.Controllers
 {
     [RoutePrefix("admin")]
-    public partial class AdminController : BaseController
+    public class AdminController : BaseController
     {
         [HttpGet, Route("")]
-        public virtual ActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }
 
         [HttpGet, Route("users/list")]
-        public virtual ActionResult UsersList()
+        public ActionResult UsersList()
         {
             var users = this.DatabaseSession.Query<UserAccount>().ToList();
             var viewModel = users
@@ -39,7 +39,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("people/list")]
-        public virtual ActionResult PeopleList()
+        public ActionResult PeopleList()
         {
             var users = this.DatabaseSession.Query<Person>().ToList();
             var viewModel = users

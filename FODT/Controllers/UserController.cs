@@ -15,7 +15,7 @@ using NHibernate.Linq;
 namespace FODT.Controllers
 {
     [RoutePrefix("User")]
-    public partial class UserController : BaseController
+    public class UserController : BaseController
     {
         private IAuthenticationTokenContext authenticationTokenContext;
 
@@ -26,7 +26,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("SignIn")]
-        public virtual ActionResult SignIn(string redirectUrl)
+        public ActionResult SignIn(string redirectUrl)
         {
             var url =
                 string.Format("https://www.facebook.com/dialog/oauth?client_id={0}&redirect_uri={1}&scope=email&state={2}",
@@ -37,19 +37,19 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("SignOut")]
-        public virtual ActionResult SignOut()
+        public ActionResult SignOut()
         {
             authenticationTokenContext.RevokeAuthenticationToken();
-            return RedirectToAction(MVC.Home.Welcome());
+            return Redirect("~");
         }
 
         private string GenerateFacbookOAuthResponseURL()
         {
-            return Settings.Facebook_Login_SiteURL + Url.Action(Actions.HandleFacebookOAuthCallback());
+            return Settings.Facebook_Login_SiteURL + Url.Action();
         }
 
         [HttpGet, Route("oauth/facebook")]
-        public virtual ActionResult HandleFacebookOAuthCallback(string code, string state)
+        public ActionResult HandleFacebookOAuthCallback(string code, string state)
         {
             var redirectURL = string.Empty;
             if (!string.IsNullOrWhiteSpace(state))
@@ -76,7 +76,7 @@ namespace FODT.Controllers
             if (user == null)
             {
                 user = new UserAccount(profile);
-                result = RedirectToAction(Actions.Welcome());
+                result = this.RedirectToAction(c => c.Welcome());
             }
             else
             {
@@ -91,7 +91,7 @@ namespace FODT.Controllers
                 }
                 else
                 {
-                    result = RedirectToAction(MVC.Home.Welcome());
+                    result = Redirect("~");
                 }
             }
             user.Update(profile);
@@ -105,7 +105,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("Welcome")]
-        public virtual ActionResult Welcome()
+        public ActionResult Welcome()
         {
             return View();
         }

@@ -9,13 +9,14 @@ namespace FODT.Views.Show
 {
     public class GetShowMediaViewModel
     {
-        public int ShowId { get; set; }
+        public string UploadLinkURL { get; set; }
+        public string ShowLinkURL { get; set; }
         public string ShowTitle { get; set; }
         public short ShowYear { get; set; }
         public int MediaItemId { get; set; }
 
-        public int? PreviousId { get; set; }
-        public int? NextId { get; set; }
+        public string PreviousItemLinkURL { get; set; }
+        public string NextItemLinkURL { get; set; }
 
         public MediaItemViewModel MediaItemViewModel { get; set; }
     }

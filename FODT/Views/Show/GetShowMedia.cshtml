@@ -3,23 +3,27 @@
     <tbody>
         <tr align="center">
             <td align="left" valign="top">
-                @if (Model.PreviousId.HasValue)
+                @if (Model.PreviousItemLinkURL != "")
                 {
-                    <a href="@Url.Action(MVC.Show.GetShowMedia(Model.ShowId, Model.PreviousId.Value))">&lt;--- Previous Item</a>
-                } else {
+                    <a href="@Model.PreviousItemLinkURL">&lt;--- Previous Item</a>
+                }
+                else
+                {
                     @:&lt;--- Previous Item
                 }
             </td>
             <td align="center">
-                <center><font size="+2">Media for <a href="@Url.Action(MVC.Show.Get(Model.ShowId))">@ExtensionMethods.RearrangeShowTitle(Model.ShowTitle) (@Model.ShowYear)</a></font><br><br><a href="@Url.Action(MVC.Media.Upload())">Upload more pictures for this show</a></center>
+                <center><font size="+2">Media for <a href="@Model.ShowLinkURL">@ExtensionMethods.RearrangeShowTitle(Model.ShowTitle) (@Model.ShowYear)</a></font><br><br><a href="@Model.UploadLinkURL">Upload more pictures for this show</a></center>
                 <br>
                 <br>
             </td>
             <td align="right" valign="top">
-                @if (Model.NextId.HasValue)
+                @if (Model.NextItemLinkURL != "")
                 {
-                    <a href="@Url.Action(MVC.Show.GetShowMedia(Model.ShowId, Model.NextId.Value))">Next Item ---&gt;</a>
-                } else {
+                    <a href="@Model.NextItemLinkURL">Next Item ---&gt;</a>
+                }
+                else
+                {
                     @:Next Item ---&gt;
                 }
             </td>

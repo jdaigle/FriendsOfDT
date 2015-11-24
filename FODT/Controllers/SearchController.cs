@@ -11,14 +11,14 @@ using NHibernate.Linq;
 namespace FODT.Controllers
 {
     [RoutePrefix("")]
-    public partial class SearchController : BaseController
+    public class SearchController : BaseController
     {
         [HttpGet, Route("search")]
-        public virtual ActionResult Search(string searchTerm, string searchType)
+        public ActionResult Search(string searchTerm, string searchType)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                return RedirectToAction(MVC.Home.Welcome());
+                return Redirect("~");
             }
 
             searchType = (searchType ?? "all").ToLower();
@@ -41,8 +41,8 @@ namespace FODT.Controllers
                     Name = x.Title,
                     Year = x.Year.ToString(),
                     SortField = x.Title,
-                    ImageUrl = Url.Action(MVC.Media.GetItemTiny(x.MediaItem.MediaItemId)),
-                    LinkUrl = Url.Action(MVC.Show.Get(x.ShowId)),
+                    ImageUrl = Url.Action<MediaController>(c => c.GetItemTiny(x.MediaItem.MediaItemId)),
+                    LinkUrl = Url.Action<ShowController>(c => c.Get(x.ShowId)),
                 }));
             }
 
@@ -60,8 +60,8 @@ namespace FODT.Controllers
                 {
                     Name = x.Fullname,
                     SortField = x.LastName,
-                    ImageUrl = Url.Action(MVC.Media.GetItemTiny(x.MediaItem.MediaItemId)),
-                    LinkUrl = Url.Action(MVC.Person.PersonDetails(x.PersonId)),
+                    ImageUrl = Url.Action<MediaController>(c => c.GetItemTiny(x.MediaItem.MediaItemId)),
+                    LinkUrl = Url.Action<PersonController>(c => c.PersonDetails(x.PersonId)),
                 }));
             }
 

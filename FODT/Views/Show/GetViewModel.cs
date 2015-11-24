@@ -18,10 +18,21 @@ namespace FODT.Views.Show
         public string Toaster { get; set; }
         public int MediaItemId { get; set; }
 
-        public int? NextShowId { get; set; }
-        public int? PreviousShowId { get; set; }
+        public string MediaItemLinkURL { get; set; }
+        public string MediaItemThumbnailURL { get; set; }
+        public string MediaListLinkURL { get; set; }
 
-        public IEnumerable<Tuple<int, string, short>> OtherPerformances { get; set; }
+        public string NextShowLinkURL { get; set; }
+        public string PreviousShowLinkURL { get; set; }
+
+        public IEnumerable<OtherPerfViewModel> OtherPerformances { get; set; }
+
+        public class OtherPerfViewModel
+        {
+            public string ShowLinkURL { get; set; }
+            public string Title { get; set; }
+            public short Year { get; set; }
+    }
 
         public IEnumerable<ClubPosition> ClubPositions { get; set; }
 
@@ -36,6 +47,8 @@ namespace FODT.Views.Show
 
         public class Award
         {
+            public string AwardYearLinkURL { get; set; }
+            public string PersonLinkURL { get; set; }
             public short Year { get; set; }
             public int AwardId { get; set; }
             public string Name { get; set; }
@@ -48,6 +61,7 @@ namespace FODT.Views.Show
 
         public class CastRole
         {
+            public string PersonLinkURL { get; set; }
             public int PersonId { get; set; }
             public string PersonName { get; set; }
             public string PersonLastName { get; set; }
@@ -58,6 +72,7 @@ namespace FODT.Views.Show
 
         public class CrewPosition
         {
+            public string PersonLinkURL { get; set; }
             public int PersonId { get; set; }
             public string PersonName { get; set; }
             public string PersonLastName { get; set; }

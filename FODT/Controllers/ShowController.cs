@@ -11,18 +11,18 @@ using NHibernate.Linq;
 namespace FODT.Controllers
 {
     [RoutePrefix("Show")]
-    public partial class ShowController : BaseController
+    public class ShowController : BaseController
     {
         public class ShowOrderDto
         {
-            public virtual int ShowId { get; set; }
-            public virtual string Title { get; set; }
-            public virtual Quarter Quarter { get; set; }
-            public virtual short Year { get; set; }
+            public int ShowId { get; set; }
+            public string Title { get; set; }
+            public Quarter Quarter { get; set; }
+            public short Year { get; set; }
         }
 
         [HttpGet, Route("{showId}")]
-        public virtual ActionResult Get(int showId)
+        public ActionResult Get(int showId)
         {
             var orderedShows = DatabaseSession.Query<Show>().Select(x => new ShowOrderDto()
                 {
@@ -56,13 +56,23 @@ namespace FODT.Controllers
             viewModel.Pictures = show.Pictures;
             viewModel.Toaster = show.Toaster;
             viewModel.MediaItemId = show.MediaItem.MediaItemId;
-            viewModel.PreviousShowId = previousShowId;
-            viewModel.NextShowId = nextShowId;
+            viewModel.PreviousShowLinkURL = previousShowId.HasValue ? this.GetURL(c => c.Get(previousShowId.Value)) : "";
+            viewModel.NextShowLinkURL = nextShowId.HasValue ? this.GetURL(c => c.Get(nextShowId.Value)) : "";
 
-            viewModel.OtherPerformances = otherPerformances.Select(x => new System.Tuple<int, string, short>(x.ShowId, x.Title, x.Year)).ToList();
+            viewModel.MediaItemLinkURL = this.GetURL(c => c.GetShowMedia(showId, show.MediaItem.MediaItemId));
+            viewModel.MediaItemThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(show.MediaItem.MediaItemId));
+            viewModel.MediaListLinkURL = this.GetURL(c => c.ListShowMedia(showId));
+
+            viewModel.OtherPerformances = otherPerformances.Select(x => new GetViewModel.OtherPerfViewModel {
+                ShowLinkURL = this.GetURL(c => c.Get(x.ShowId)),
+                Title = x.Title,
+                Year = x.Year,
+            }).ToList();
 
             viewModel.Awards = awards.Select(x => new GetViewModel.Award
             {
+                AwardYearLinkURL = this.GetURL<AwardsController>(c => c.ByYear(x.Year)),
+                PersonLinkURL = x.Person != null ? this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)) : "",
                 Year = x.Year,
                 AwardId = x.ShowAwardId,
                 Name = x.Award.Name,
@@ -73,6 +83,7 @@ namespace FODT.Controllers
 
             viewModel.Cast = cast.Select(x => new GetViewModel.CastRole
             {
+                PersonLinkURL = this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
                 PersonId = x.Person.PersonId,
                 PersonName = x.Person.Fullname,
                 PersonLastName = x.Person.LastName,
@@ -81,6 +92,7 @@ namespace FODT.Controllers
 
             viewModel.Crew = crew.Select(x => new GetViewModel.CrewPosition
             {
+                PersonLinkURL = this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
                 PersonId = x.Person.PersonId,
                 PersonName = x.Person.Fullname,
                 PersonLastName = x.Person.LastName,
@@ -92,24 +104,25 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("{showId}/Media")]
-        public virtual ActionResult ListShowMedia(int showId)
+        public ActionResult ListShowMedia(int showId)
         {
             var show = DatabaseSession.Get<Show>(showId);
             var relatedMedia = DatabaseSession.Query<ShowMedia>().Where(x => x.Show == show).Fetch(x => x.MediaItem).ToList();
 
             var viewModel = new ListShowMediaViewModel();
-            viewModel.ShowId = showId;
             viewModel.ShowTitle = show.Title;
             viewModel.ShowYear = show.Year;
+            viewModel.ShowLinkURL = this.GetURL(c => c.Get(showId));
             viewModel.RelatedMedia = relatedMedia.OrderBy(x => x.MediaItem.InsertedDateTime).ThenBy(x => x.MediaItem.MediaItemId).Select(x => new ListShowMediaViewModel.Media
             {
-                MediaItemId = x.MediaItem.MediaItemId,
+                MediaTinyURL = this.GetURL<MediaController>(c => c.GetItemTiny(x.MediaItem.MediaItemId)),
+                MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(x.MediaItem.MediaItemId)),
             }).ToList();
             return View(viewModel);
         }
 
         [HttpGet, Route("{showId}/Media/{mediaItemId}")]
-        public virtual ActionResult GetShowMedia(int showId, int mediaItemId)
+        public ActionResult GetShowMedia(int showId, int mediaItemId)
         {
             var show = DatabaseSession.Get<Show>(showId);
             var relatedMedia = DatabaseSession
@@ -124,14 +137,15 @@ namespace FODT.Controllers
             var nextId = index < relatedMedia.Count - 1 ? relatedMedia[index + 1].MediaItem.MediaItemId : (int?)null;
 
             var viewModel = new GetShowMediaViewModel();
-            viewModel.ShowId = showId;
+            viewModel.UploadLinkURL = this.GetURL<MediaController>(c => c.Upload());
+            viewModel.ShowLinkURL = this.GetURL(c => c.Get(showId));
             viewModel.ShowTitle = show.Title;
             viewModel.ShowYear = show.Year;
-            viewModel.PreviousId = previousId;
-            viewModel.NextId = nextId;
+            viewModel.PreviousItemLinkURL = previousId.HasValue ? this.GetURL(c => c.GetShowMedia(showId, previousId.Value)) : "";
+            viewModel.NextItemLinkURL = nextId.HasValue ? this.GetURL(c => c.GetShowMedia(showId, nextId.Value)) : "";
             viewModel.MediaItemId = media.MediaItem.MediaItemId;
             viewModel.MediaItemViewModel = new MediaItemViewModel();
-            viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, mediaItemId);
+            viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, Url, mediaItemId);
 
             return View(viewModel);
         }

@@ -4,14 +4,15 @@ namespace FODT.Views.Person
 {
     public class GetPersonMediaViewModel
     {
-        public int PersonId { get; set; }
         public string PersonFullname { get; set; }
 
-        public int? PreviousId { get; set; }
-        public int? NextId { get; set; }
-
-        public int MediaItemId { get; set; }
-
         public MediaItemViewModel MediaItemViewModel { get; set; }
+
+        public string MediaUploadLinkURL { get; set; }
+        public string PersonLinkURL { get; set; }
+        public bool HasPreviousMediaLinkURL { get; set; }
+        public string PreviousMediaLinkURL { get; set; }
+        public bool HasNextMediaLinkURL { get; set; }
+        public string NextMediaLinkURL { get; set; }
     }
 }

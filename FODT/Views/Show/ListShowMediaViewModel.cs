@@ -7,14 +7,17 @@ namespace FODT.Views.Show
 {
     public class ListShowMediaViewModel
     {
-        public int ShowId { get; set; }
         public string ShowTitle { get; set; }
         public short ShowYear { get; set; }
         public List<Media> RelatedMedia { get; set; }
 
+        public string ShowLinkURL { get; set; }
+        public string MediaUploadLinkURL { get; set; }
+
         public class Media
         {
-            public int MediaItemId { get; set; }
+            public string MediaTinyURL { get; set; }
+            public string MediaThumbnailURL { get; set; }
         }
     }
 }

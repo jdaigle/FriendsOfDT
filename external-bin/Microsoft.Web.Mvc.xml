@@ -1,0 +1,881 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Web.Mvc</name>
+    </assembly>
+    <members>
+        <member name="M:Microsoft.Web.Mvc.ModelBinding.ModelBinderUtil.EnsureDebuggableException(System.MissingMethodException,System.String)">
+            <summary>
+            Provide a new <see cref="T:System.MissingMethodException"/> if original Message does not contain given full Type name.
+            </summary>
+            <param name="originalException"><see cref="T:System.MissingMethodException"/> to check.</param>
+            <param name="fullTypeName">Full Type name which Message should contain.</param>
+            <returns>New <see cref="T:System.MissingMethodException"/> if an update is required; null otherwise.</returns>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.TempDataValueProviderFactory.TempDataVoid">
+            <summary>
+            dummy struct that resembles Void but can be used in a generic context
+            </summary>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.ActionType">
+            <summary>
+            This enum is used by the UrlHelper extension methods to create links within resource controllers
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.AjaxHelperExtensions.BeginResourceForm(System.Web.Mvc.AjaxHelper,System.String,System.Object,System.Web.Mvc.Ajax.AjaxOptions)">
+            <summary>
+            Generates the Form preamble, defaulting the link for the Retrieve action
+            </summary>
+            <param name="ajax"></param>
+            <param name="controllerName"></param>
+            <param name="routeValues"></param>
+            <param name="ajaxOptions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.AjaxHelperExtensions.BeginResourceForm(System.Web.Mvc.AjaxHelper,System.String,System.Object,System.Web.Mvc.Ajax.AjaxOptions,Microsoft.Web.Mvc.Resources.ActionType)">
+            <summary>
+            Generates the Form preamble
+            </summary>
+            <param name="ajax"></param>
+            <param name="controllerName"></param>
+            <param name="routeValues"></param>
+            <param name="ajaxOptions"></param>
+            <param name="actionType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.AjaxHelperExtensions.ResourceLink(System.Web.Mvc.AjaxHelper,System.String,System.Object,System.Web.Mvc.Ajax.AjaxOptions)">
+            <summary>
+            Generates a link to the resource controller, defaulting to the Retrieve action
+            </summary>
+            <param name="ajax"></param>
+            <param name="controllerName"></param>
+            <param name="routeValues"></param>
+            <param name="ajaxOptions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.AjaxHelperExtensions.ResourceLink(System.Web.Mvc.AjaxHelper,System.String,System.String,System.Object,System.Web.Mvc.Ajax.AjaxOptions)">
+            <summary>
+            Generates a link to the resource controller, defaulting to the Retrieve action
+            </summary>
+            <param name="ajax"></param>
+            <param name="controllerName"></param>
+            <param name="linkText"></param>
+            <param name="routeValues"></param>
+            <param name="ajaxOptions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.AjaxHelperExtensions.ResourceLink(System.Web.Mvc.AjaxHelper,System.String,System.String,System.Object,System.Web.Mvc.Ajax.AjaxOptions,Microsoft.Web.Mvc.Resources.ActionType)">
+            <summary>
+            Generates a link to the resource controller
+            </summary>
+            <param name="ajax"></param>
+            <param name="controllerName"></param>
+            <param name="linkText"></param>
+            <param name="routeValues"></param>
+            <param name="ajaxOptions"></param>
+            <param name="actionType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.AtomEntryActionResult">
+            <summary>
+            An ActionResult that can render a SyndicationItem to the Atom 1.0 entry format
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.AtomEntryActionResult.#ctor(System.ServiceModel.Syndication.SyndicationItem)">
+            <summary>
+            The content type defaults to application/atom+xml; type=entry
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.AtomFeedActionResult">
+            <summary>
+            An ActionResult that can render a SyndicationFeed to the Atom 1.0 feed format
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.AtomFeedActionResult.#ctor(System.ServiceModel.Syndication.SyndicationFeed)">
+            <summary>
+            The content type defaults to application/atom+xml
+            </summary>
+            <param name="feed"></param>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.AtomServiceDocumentActionResult">
+            <summary>
+            An ActionResult that can render a ServiceDocument to the Atom 1.0 ServiceDocument format
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.AtomServiceDocumentActionResult.#ctor(System.ServiceModel.Syndication.ServiceDocument)">
+            <summary>
+            The content type defaults to application/atomsvc+xml
+            </summary>
+            <param name="document"></param>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.DataContractJsonActionResult">
+            <summary>
+            An ActionResult that can render an object to the json format using the DataContractJsonSerializer
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.DataContractJsonActionResult.#ctor(System.Object)">
+            <summary>
+            The default content type is application/json
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.RouteCollectionExtensions.MapResourceRoute(System.Web.Routing.RouteCollection,System.String,System.String)">
+            <summary>
+            Adds the routes to enable RESTful routing of requests to specified controller. The controllerName is the URL prefix to the controller.
+            The routeSuffix is used for more specific routing in the resource. For example, a controllerName of "books" and a routeSuffix of "{id}" will
+            result in the following routes being registered for the controller:
+            ~/books/, ~/books/{id} to the resource,
+            ~/books/CreateForm to the CreateForm controller action,
+            ~/books/{id}/EditForm to the EditForm controller action
+            </summary>
+            <param name="routes"></param>
+            <param name="controllerName"></param>
+            <param name="routeSuffix"></param>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.RouteCollectionExtensions.MapResourceRoute(System.Web.Routing.RouteCollection,System.String,System.String,System.Object)">
+            <summary>
+            Adds the routes to enable RESTful routing of requests to specified controller. The controllerName is the URL prefix to the controller.
+            The routeSuffix is used for more specific routing in the resource. For example, a controllerName of "books" and a routeSuffix of "{id}" will
+            result in the following routes being registered for the controller:
+            ~/books/, ~/books/{id} to the resource,
+            ~/books/CreateForm to the CreateForm controller action,
+            ~/books/{id}/EditForm to the EditForm controller action
+            </summary>
+            <param name="routes"></param>
+            <param name="controllerName"></param>
+            <param name="routeSuffix"></param>
+            <param name="constraints"></param>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.RouteCollectionExtensions.MapResourceRoute(System.Web.Routing.RouteCollection,System.String,System.String,System.String)">
+            <summary>
+            Adds the routes to enable RESTful routing of requests to specified controller. The routePrefix is the URL prefix to the controller.
+            The routeSuffix is used for more specific routing in the resource. For example, a routePrefix of "books" and a routeSuffix of "{id}" will
+            result in the following routes being registered for the controller:
+            ~/books/, ~/books/{id} to the resource,
+            ~/books/CreateForm to the CreateForm controller action,
+            ~/books/{id}/EditForm to the EditForm controller action
+            </summary>
+            <param name="routes"></param>
+            <param name="controllerName"></param>
+            <param name="routePrefix"></param>
+            <param name="routeSuffix"></param>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.RouteCollectionExtensions.MapResourceRoute(System.Web.Routing.RouteCollection,System.String,System.String,System.String,System.Object)">
+            <summary>
+            Adds the routes to enable RESTful routing of requests to specified controller. The routePrefix is the URL prefix to the controller.
+            The routeSuffix is used for more specific routing in the resource. For example, a routePrefix of "books" and a routeSuffix of "{id}" will
+            result in the following routes being registered for the controller:
+            ~/books/, ~/books/{id} to the resource,
+            ~/books/CreateForm to the CreateForm controller action,
+            ~/books/{id}/EditForm to the EditForm controller action
+            </summary>
+            <param name="routes"></param>
+            <param name="controllerName"></param>
+            <param name="routePrefix"></param>
+            <param name="routeSuffix"></param>
+            <param name="constraints"></param>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.UriHelperExtensions.ResourceUrl(System.Web.Mvc.UrlHelper,System.String,System.Object)">
+            <summary>
+            Generates the route URL for the resource controller's Retrieve action
+            </summary>
+            <param name="url"></param>
+            <param name="controllerName"></param>
+            <param name="routeValues"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.UriHelperExtensions.ResourceUrl(System.Web.Mvc.UrlHelper,System.String,System.Object,Microsoft.Web.Mvc.Resources.ActionType)">
+            <summary>
+            Generates the route URL for the resource
+            </summary>
+            <param name="url"></param>
+            <param name="controllerName"></param>
+            <param name="routeValues"></param>
+            <param name="actionType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.WebApiEnabledAttribute">
+            <summary>
+            Attribute indicating that the controller supports multiple formats (HTML, XML, JSON etc), HTTP method based dispatch
+            and HTTP error handling.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Resources.WebApiEnabledAttribute.StatusOnNullModel">
+            <summary>
+            The HTTP status code to use in case a null value is returned from the controller action method.
+            The default is NotFound
+            </summary>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.IResponseFormatHandler">
+            <summary>
+            Extensibility mechanism for serializing response in
+            additional formats. FormatManager.Current.RequestFormatHandlers contains the list of request formats
+            supported by the web application
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Resources.IResponseFormatHandler.FriendlyName">
+            <summary>
+            The preferred friendly name for the handled format
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.IResponseFormatHandler.TryMapFormatFriendlyName(System.String,System.Net.Mime.ContentType@)">
+            <summary>
+            Return true if the specified friendly name ('xml' for instance) can
+            be mapped to a content type ('application/xml' for instance). If the mapping
+            can be performed return the content type that the friendlyName maps to
+            </summary>
+            <param name="friendlyName"></param>
+            <param name="contentType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.IResponseFormatHandler.CanSerialize(System.Net.Mime.ContentType)">
+            <summary>
+            Return true if the specified response format can be serialized
+            </summary>
+            <param name="responseFormat"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.IResponseFormatHandler.Serialize(System.Web.Mvc.ControllerContext,System.Object,System.Net.Mime.ContentType)">
+            <summary>
+            Serialize the model into the response body in the specified response format
+            </summary>
+            <param name="context"></param>
+            <param name="model"></param>
+            <param name="responseFormat"></param>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.IRequestFormatHandler">
+            <summary>
+            Extensibility mechanism for deserializing data in additional formats.
+            FormatManager.Current.RequestFormatHandlers contains the list of request formats
+            supported by the web application
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.IRequestFormatHandler.CanDeserialize(System.Net.Mime.ContentType)">
+            <summary>
+            Returns true if the handler can deserialize request's content type
+            </summary>
+            <param name="requestFormat"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.IRequestFormatHandler.Deserialize(System.Web.Mvc.ControllerContext,System.Web.Mvc.ModelBindingContext,System.Net.Mime.ContentType)">
+            <summary>
+            Deserialize the request body based on model binding context and return the object.
+            Note that the URI parameters are handled by the base infrastructure.
+            </summary>
+            <param name="controllerContext"></param>
+            <param name="bindingContext"></param>
+            <param name="requestFormat"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.FormatManager">
+            <summary>
+            Class that maintains a registration of handlers for
+            request and response formats
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Resources.FormatManager.RequestFormatHandlers">
+            <summary>
+            The list of handlers that can parse the request body
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Resources.FormatManager.ResponseFormatHandlers">
+            <summary>
+            The list of handlers that can serialize the response body
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.HtmlHelperExtensions.BeginResourceForm(System.Web.Mvc.HtmlHelper,System.String,System.Object)">
+            <summary>
+            Generates the Form preamble, defaulting the link for the Retrieve action
+            </summary>
+            <param name="html"></param>
+            <param name="controllerName"></param>
+            <param name="routeValues"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.HtmlHelperExtensions.BeginResourceForm(System.Web.Mvc.HtmlHelper,System.String,System.Object,Microsoft.Web.Mvc.Resources.ActionType)">
+            <summary>
+            Generates the Form preamble
+            </summary>
+            <param name="html"></param>
+            <param name="controllerName"></param>
+            <param name="routeValues"></param>
+            <param name="actionType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.HtmlHelperExtensions.BeginResourceForm(System.Web.Mvc.HtmlHelper,System.String,System.Object,System.Object,Microsoft.Web.Mvc.Resources.ActionType)">
+            <summary>
+            Generates the Form preamble
+            </summary>
+            <param name="html"></param>
+            <param name="controllerName"></param>
+            <param name="routeValues"></param>
+            <param name="htmlAttributes"></param>
+            <param name="actionType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.HtmlHelperExtensions.ResourceLink(System.Web.Mvc.HtmlHelper,System.String,System.Object)">
+            <summary>
+            Generates a link to the resource controller, defaulting to the Retrieve action
+            </summary>
+            <param name="html"></param>
+            <param name="controllerName"></param>
+            <param name="routeValues"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.HtmlHelperExtensions.ResourceLink(System.Web.Mvc.HtmlHelper,System.String,System.String,System.Object)">
+            <summary>
+            Generates a link to the resource controller, defaulting to the Retrieve action
+            </summary>
+            <param name="html"></param>
+            <param name="controllerName"></param>
+            <param name="linkText"></param>
+            <param name="routeValues"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.HtmlHelperExtensions.ResourceLink(System.Web.Mvc.HtmlHelper,System.String,System.String,System.Object,Microsoft.Web.Mvc.Resources.ActionType)">
+            <summary>
+            Generates a link to the resource controller
+            </summary>
+            <param name="html"></param>
+            <param name="controllerName"></param>
+            <param name="linkText"></param>
+            <param name="routeValues"></param>
+            <param name="actionType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.HtmlHelperExtensions.HttpMethodOverride(System.Web.Mvc.HtmlHelper,Microsoft.Web.Mvc.Resources.ActionType)">
+            <summary>
+            Emits a hidden form variable for X-Http-Method-Override. The only valid values for actionType
+            are ActionType.Delete and ActionType.Update
+            </summary>
+            <param name="html"></param>
+            <param name="actionType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.MultiFormatActionResult">
+            <summary>
+            Returns the response in the format specified by the request. By default, supports returning the model
+            as a HTML view, XML and JSON.
+            If the response format requested is not supported, then the NotAcceptable status code is returned
+            </summary>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.RequestContextExtensions">
+            <summary>
+            RequestContext extension methods that call directly into the registered FormatHelper
+            </summary>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.ResourceControllerFactory">
+            <summary>
+            Specialized ControllerFactory that augments the base controller factory to make it RESTful - specifically, adding
+            support for multiple formats, HTTP method based dispatch to controller methods and HTTP error handling
+            </summary>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.ResourceErrorActionResult">
+            <summary>
+            Action result for returning HTTP errors that result from performing operations on resources, including
+            an optional details in the HTTP body
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.ResourceErrorActionResult.#ctor(System.Web.HttpException,System.Net.Mime.ContentType)">
+            <summary>
+            Sends back a response using the status code in the HttpException.
+            The response body contains a details serialized in the responseFormat.
+            If the HttpException.Data has a key named "details", its value is used as the response body.
+            If there is no such key, HttpException.ToString() is used as the response body.
+            </summary>
+            <param name="httpException"></param>
+            <param name="responseFormat"></param>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.ResourceModelBinder">
+            <summary>
+            ModelBinder implementation that augments the inner model binder with support for binding to other formats -
+            XML and JSON by default.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.ResourceModelBinder.#ctor">
+            <summary>
+            Wraps the ModelBinders.Binders.DefaultBinder
+            </summary>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.ResourceRedirectToRouteResult">
+            <summary>
+            Augments the RedirectToRouteResult behavior by sending Created HTTP status code in responses to POST, OK HTTP status code otherwise
+            </summary>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.DataContractXmlActionResult">
+            <summary>
+            An ActionResult that can render an object to the xml format using the DataContractSerializer
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.DataContractXmlActionResult.#ctor(System.Object)">
+            <summary>
+            The content type of the response defaults to application/xml
+            </summary>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.HttpRequestBaseExtensions">
+            <summary>
+            HttpRequestBase extension methods that call directly into the DefaultFormatHelper
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.IEnumerableExtensions.AsSerializable``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Convenience API to allow an IEnumerable{T} (such as returned by Linq2Sql) to be serialized by DataContractSerilizer
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="collection"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.DefaultFormatHelper">
+            <summary>
+            Default implementation of FormatHelper
+            The results for GetRequestFormat() and GetResponseFormats() are cached on the HttpContext.Items dictionary:
+            HttpContext.Items["requestFormat"]
+            HttpContext.Items["responseFormat"]
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.DefaultFormatHelper.GetRequestFormat(System.Web.Routing.RequestContext)">
+            <summary>
+            Returns the format of a given request, according to the following
+            rules:
+            1. If a Content-Type header exists it returns a ContentType for it or fails if one can't be created
+            2. Otherwie, if a Content-Type header does not exists it provides the default ContentType of "application/octet-stream" (per RFC 2616 7.2.1)
+            </summary>
+            <param name="requestContext">The request.</param>
+            <returns>The format of the request.</returns>
+            <exception cref="T:System.Web.HttpException">If the format is unrecognized or not supported.</exception>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.DefaultFormatHelper.GetResponseFormats(System.Web.Routing.RequestContext)">
+            <summary>
+            Returns the preferred content type to use for the response, based on the request, according to the following
+            rules:
+            1. If the RouteData contains a value for a key called "format", its value is returned as the content type
+            2. Otherwise, if the query string contains a key called "format", its value is returned as the content type
+            3. Otherwise, if the request has an Accepts header, the list of content types in order of preference is returned
+            4. Otherwise, if the request has a content type, its value is returned
+            </summary>
+            <param name="requestContext">The request.</param>
+            <returns>The formats to use for rendering a response.</returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.DefaultFormatHelper.GetResponseFormats(System.Web.HttpRequestBase)">
+            <summary>
+            Returns the preferred content type to use for the response, based on the request, according to the following
+            rules:
+            1. If the query string contains a key called "format", its value is returned as the content type
+            2. Otherwise, if the request has an Accepts header, the list of content types in order of preference is returned
+            3. Otherwise, if the request has a content type, its value is returned
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.DefaultFormatHelper.IsBrowserRequest(System.Web.HttpRequestBase)">
+            <summary>
+            Determines whether the specified HTTP request was sent by a Browser.
+            A request is considered to be from the browser if:
+            it's a GET or POST
+            and does not have a non-HTML entity format (XML/JSON)
+            and has a known User-Agent header (as determined by the request's BrowserCapabilities property),
+            </summary>
+            <param name="request">The request.</param>
+            <returns>true if the specified HTTP request is a Browser request; otherwise, false.</returns>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Resources.FormatHelper">
+            <summary>
+            Base class for content negotiation support
+            </summary>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.FormatHelper.GetRequestFormat(System.Web.Routing.RequestContext)">
+            <summary>
+            Returns the ContentType of a given request.
+            </summary>
+            <param name="requestContext">The request.</param>
+            <returns>The format of the request.</returns>
+            <exception cref="T:System.Web.HttpException">If the format is unrecognized or not supported.</exception>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.FormatHelper.GetResponseFormats(System.Web.Routing.RequestContext)">
+            <summary>
+            Returns a collection of ContentType instances that can be used to render a response to a given request, sorted in priority order.
+            </summary>
+            <param name="requestContext">The request.</param>
+            <returns>The formats to use for rendering a response.</returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.Resources.FormatHelper.IsBrowserRequest(System.Web.Routing.RequestContext)">
+            <summary>
+            Determines whether the specified HTTP request was sent by a Browser.
+            </summary>
+            <param name="requestContext">The request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.SubmitButton(System.Web.Mvc.HtmlHelper,System.String)">
+            <summary>
+            Creates a submit button for your form
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">The name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.SubmitButton(System.Web.Mvc.HtmlHelper,System.String,System.String)">
+            <summary>
+            Creates a submit button for your form
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">The name.</param>
+            <param name="buttonText">The text for the button face</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.SubmitButton(System.Web.Mvc.HtmlHelper)">
+            <summary>
+            Creates a submit button for your form
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.SubmitButton(System.Web.Mvc.HtmlHelper,System.String,System.String,System.Object)">
+            <summary>
+            Creates a submit button for your form
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">Name of the button</param>
+            <param name="buttonText">The text for the button face</param>
+            <param name="htmlAttributes">Any attributes you want set on the tag. Use anonymous-type declaration for this: new{class=cssclass}</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.SubmitButton(System.Web.Mvc.HtmlHelper,System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Creates a submit button for your form
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">Name of the button</param>
+            <param name="buttonText">The text for the button face</param>
+            <param name="htmlAttributes">Dictionary of HTML settings</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.SubmitImage(System.Web.Mvc.HtmlHelper,System.String,System.String)">
+            <summary>
+            Creates a submit button for your form using an image
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">Name of the button</param>
+            <param name="imageSrc">The URL for the image</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.SubmitImage(System.Web.Mvc.HtmlHelper,System.String,System.String,System.Object)">
+            <summary>
+            Creates a submit button for your form using an image
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">Name of the button</param>
+            <param name="imageSrc">The URL for the image</param>
+            <param name="htmlAttributes">Any attributes you want set on the tag. Use anonymous-type declaration for this: new{class=cssclass}</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.SubmitImage(System.Web.Mvc.HtmlHelper,System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Creates a submit button for your form using an image
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">Name of the button</param>
+            <param name="imageSrc">The URL for the image</param>
+            <param name="htmlAttributes">Dictionary of HTML settings</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.Button(System.Web.Mvc.HtmlHelper,System.String,System.String,Microsoft.Web.Mvc.HtmlButtonType)">
+            <summary>
+            A Simple button you can use with javascript
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">Name of the button</param>
+            <param name="buttonText">The text for the button face</param>
+            <param name="buttonType">The button type (Button, Submit, or Reset)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.Button(System.Web.Mvc.HtmlHelper,System.String,System.String,Microsoft.Web.Mvc.HtmlButtonType,System.String)">
+            <summary>
+            A Simple button you can use with javascript
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">Name of the button</param>
+            <param name="buttonText">The text for the button face</param>
+            <param name="buttonType">The button type (Button, Submit, or Reset)</param>
+            <param name="onClickMethod">The method or script routine to call when the button is clicked.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.Button(System.Web.Mvc.HtmlHelper,System.String,System.String,Microsoft.Web.Mvc.HtmlButtonType,System.String,System.Object)">
+            <summary>
+            A Simple button you can use with javascript
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">Name of the button</param>
+            <param name="buttonText">The text for the button face</param>
+            <param name="buttonType">The button type (Button, Submit, or Reset)</param>
+            <param name="onClickMethod">The method or script routine to call when the button is clicked.</param>
+            <param name="htmlAttributes">Any attributes you want set on the tag. Use anonymous-type declaration for this: new{class=cssclass}</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.ButtonsAndLinkExtensions.Button(System.Web.Mvc.HtmlHelper,System.String,System.String,Microsoft.Web.Mvc.HtmlButtonType,System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            A Simple button you can use with javascript
+            </summary>
+            <param name="helper">The helper which we extend.</param>
+            <param name="name">Name of the button</param>
+            <param name="buttonText">The text for the button face</param>
+            <param name="buttonType">The button type (Button, Submit, or Reset)</param>
+            <param name="onClickMethod">The method or script routine to call when the button is clicked.</param>
+            <param name="htmlAttributes">Any attributes you want set on the tag. Use anonymous-type declaration for this: new{class=cssclass}</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.LinkBuilder.BuildUrlFromExpression``1(System.Web.Routing.RequestContext,System.Web.Routing.RouteCollection,System.Linq.Expressions.Expression{System.Action{``0}})">
+            <summary>
+            Builds a URL based on the Expression passed in
+            </summary>
+            <typeparam name="TController">Controller Type Only</typeparam>
+            <param name="context">The current ViewContext</param>
+            <param name="routeCollection">The <see cref="T:System.Web.Routing.RouteCollection"/> to use for building the URL.</param>
+            <param name="action">The action to invoke</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.LinkBuilder.BuildParameterValuesFromExpression(System.Linq.Expressions.MethodCallExpression)">
+            <summary>
+            Creates a querystring as a Dictionary based on the passed-in Lambda
+            </summary>
+            <param name="call">The Lambda of the Controller method</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.LinkExtensions.ActionLink``1(System.Web.Mvc.HtmlHelper,System.Linq.Expressions.Expression{System.Action{``0}},System.String)">
+            <summary>
+            Creates an anchor tag based on the passed in controller type and method
+            </summary>
+            <typeparam name="TController">The Controller Type</typeparam>
+            <param name="helper">The <see cref="T:System.Web.Mvc.HtmlHelper"/> where to create the link.</param>
+            <param name="action">The Method to route to</param>
+            <param name="linkText">The linked text to appear on the page</param>
+            <returns>The anchor tag.</returns>
+        </member>
+        <member name="M:Microsoft.Web.Mvc.LinkExtensions.ActionLink``1(System.Web.Mvc.HtmlHelper,System.Linq.Expressions.Expression{System.Action{``0}},System.String,System.Object)">
+            <summary>
+            Creates an anchor tag based on the passed in controller type and method
+            </summary>
+            <typeparam name="TController">The Controller Type</typeparam>
+            <param name="helper">The <see cref="T:System.Web.Mvc.HtmlHelper"/> where to create the link.</param>
+            <param name="action">The Method to route to</param>
+            <param name="linkText">The linked text to appear on the page</param>
+            <param name="htmlAttributes">Any additional HTML attributes.</param>
+            <returns>The anchor tag.</returns>
+        </member>
+        <member name="T:Microsoft.Web.Mvc.Properties.MvcResources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.AcceptAttribute_Invalid">
+            <summary>
+              Looks up a localized string similar to The {0} field only accepts files with one of the following content types: {1}..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.BindingBehavior_ValueNotFound">
+            <summary>
+              Looks up a localized string similar to A value for &apos;{0}&apos; is required but was not present in the request..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.Common_NullOrEmpty">
+            <summary>
+              Looks up a localized string similar to Value cannot be null or empty..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.Common_TypeMustImplementInterface">
+            <summary>
+              Looks up a localized string similar to The type &apos;{0}&apos; does not implement the interface &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.CommonControls_NameRequired">
+            <summary>
+              Looks up a localized string similar to The &apos;Name&apos; property must be set..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.CreditCardAttribute_Invalid">
+            <summary>
+              Looks up a localized string similar to The {0} field is not a valid credit card number..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.DropDownList_SampleItem">
+            <summary>
+              Looks up a localized string similar to Sample Item.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.DynamicViewDataDictionary_SingleIndexerOnly">
+            <summary>
+              Looks up a localized string similar to DynamicViewDataDictionary only supports single indexers..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.DynamicViewDataDictionary_StringIndexerOnly">
+            <summary>
+              Looks up a localized string similar to DynamicViewDataDictionary only supports string-based indexers..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.DynamicViewPage_NoProperties">
+            <summary>
+              Looks up a localized string similar to The property {0} doesn&apos;t exist. There are no public properties on this object..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.DynamicViewPage_PropertyDoesNotExist">
+            <summary>
+              Looks up a localized string similar to The property {0} doesn&apos;t exist. Supported properties are: {1}..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.EmailAddressAttribute_Invalid">
+            <summary>
+              Looks up a localized string similar to The {0} field is not a valid e-mail address..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ExpressionHelper_CannotCallCompletedMethod">
+            <summary>
+              Looks up a localized string similar to The method &apos;{0}&apos; is an asynchronous completion method and cannot be called directly..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ExpressionHelper_CannotCallNonAction">
+            <summary>
+              Looks up a localized string similar to The method &apos;{0}&apos; is marked [NonAction] and cannot be called directly..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ExpressionHelper_CannotRouteToController">
+            <summary>
+              Looks up a localized string similar to Cannot route to class named &apos;Controller&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ExpressionHelper_MustBeMethodCall">
+            <summary>
+              Looks up a localized string similar to Expression must be a method call..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ExpressionHelper_TargetMustEndInController">
+            <summary>
+              Looks up a localized string similar to Controller name must end in &apos;Controller&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ExtensibleModelBinderAdapter_PropertyFilterMustNotBeSet">
+            <summary>
+              Looks up a localized string similar to The new model binding system cannot be used when a property whitelist or blacklist has been specified in [Bind] or via the call to UpdateModel() / TryUpdateModel(). Use the [BindRequired] and [BindNever] attributes on the model type or its properties instead..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.FileExtensionsAttribute_Invalid">
+            <summary>
+              Looks up a localized string similar to The {0} field only accepts files with the following extensions: {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.GenericModelBinderProvider_ParameterMustSpecifyOpenGenericType">
+            <summary>
+              Looks up a localized string similar to The type &apos;{0}&apos; is not an open generic type..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.GenericModelBinderProvider_TypeArgumentCountMismatch">
+            <summary>
+              Looks up a localized string similar to The open model type &apos;{0}&apos; has {1} generic type argument(s), but the open binder type &apos;{2}&apos; has {3} generic type argument(s). The binder type must not be an open generic type or must have the same number of generic arguments as the open model type..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.HtmlHelper_MissingSelectData">
+            <summary>
+              Looks up a localized string similar to There is no ViewData item with the key &apos;{0}&apos; of type &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.HtmlHelper_WrongSelectDataType">
+            <summary>
+              Looks up a localized string similar to The ViewData item with the key &apos;{0}&apos; is of type &apos;{1}&apos; but needs to be of type &apos;{2}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBinderConfig_ValueInvalid">
+            <summary>
+              Looks up a localized string similar to The value &apos;{0}&apos; is not valid for {1}..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBinderConfig_ValueRequired">
+            <summary>
+              Looks up a localized string similar to A value is required..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBinderProviderCollection_BinderForTypeNotFound">
+            <summary>
+              Looks up a localized string similar to A binder for type {0} could not be located..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBinderProviderCollection_InvalidBinderType">
+            <summary>
+              Looks up a localized string similar to The type &apos;{0}&apos; does not subclass {1} or implement the interface {2}..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBinderProviderCollection_TypeCannotHaveBindAttribute">
+            <summary>
+              Looks up a localized string similar to The model of type &apos;{0}&apos; has a [Bind] attribute. The new model binding system cannot be used with models that have type-level [Bind] attributes. Use the [BindRequired] and [BindNever] attributes on the model type or its properties instead..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBinderUtil_CannotCreateInstance">
+            <summary>
+              Looks up a localized string similar to {0} Object type &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBinderUtil_ModelCannotBeNull">
+            <summary>
+              Looks up a localized string similar to The binding context has a null Model, but this binder requires a non-null model of type &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBinderUtil_ModelInstanceIsWrong">
+            <summary>
+              Looks up a localized string similar to The binding context has a Model of type &apos;{0}&apos;, but this binder can only operate on models of type &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBinderUtil_ModelMetadataCannotBeNull">
+            <summary>
+              Looks up a localized string similar to The binding context cannot have a null ModelMetadata..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBinderUtil_ModelTypeIsWrong">
+            <summary>
+              Looks up a localized string similar to The binding context has a ModelType of &apos;{0}&apos;, but this binder can only operate on models of type &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ModelBindingContext_ModelMetadataMustBeSet">
+            <summary>
+              Looks up a localized string similar to The ModelMetadata property must be set before accessing this property..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.MvcSerializer_DeserializationFailed">
+            <summary>
+              Looks up a localized string similar to Deserialization failed. Verify that the data is being deserialized using the same SerializationMode with which it was serialized. Otherwise see the inner exception..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ResourceControllerFactory_ConflictingActions">
+            <summary>
+              Looks up a localized string similar to Error dispatching on controller {0}, conflicting actions matched: {1}..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.ResourceControllerFactory_NoActions">
+            <summary>
+              Looks up a localized string similar to Error dispatching on controller {0}, no actions matched..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.Resources_UnsupportedFormat">
+            <summary>
+              Looks up a localized string similar to Format &apos;{0}&apos; is not supported..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.Resources_UnsupportedMediaType">
+            <summary>
+              Looks up a localized string similar to Unsupported Media Type: &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Web.Mvc.Properties.MvcResources.UrlAttribute_Invalid">
+            <summary>
+              Looks up a localized string similar to The {0} field is not a valid fully-qualified http, https, or ftp URL..
+            </summary>
+        </member>
+    </members>
+</doc>

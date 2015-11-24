@@ -20,7 +20,6 @@ namespace FODT
 
         protected void Application_EndRequest()
         {
-            ObjectDisposal.DisposeAll();
         }
     }
 }

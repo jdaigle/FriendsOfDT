@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using FODT.Controllers;
 
 namespace FODT.Security
 {
@@ -43,7 +44,7 @@ namespace FODT.Security
             if (user == null || !user.Identity.IsAuthenticated)
             {
                 // redirect to error page
-                OnUnauthorized(filterContext, MVC.User.SignIn());
+                OnUnauthorized(filterContext, null);
                 return;
             }
             foreach (var role in RequiredRoles ?? new string[0])
@@ -51,7 +52,7 @@ namespace FODT.Security
                 if (!user.IsInRole(role))
                 {
                     // redirect to error page
-                    OnUnauthorized(filterContext, MVC.User.SignIn());
+                    OnUnauthorized(filterContext, null);
                     return;
                 }
             }

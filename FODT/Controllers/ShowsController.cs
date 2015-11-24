@@ -12,18 +12,18 @@ using NHibernate.Linq;
 namespace FODT.Controllers
 {
     [RoutePrefix("shows")]
-    public partial class ShowsController : BaseController
+    public class ShowsController : BaseController
     {
         public class ShowOrderDto
         {
-            public virtual int ShowId { get; set; }
-            public virtual string Title { get; set; }
-            public virtual Quarter Quarter { get; set; }
-            public virtual short Year { get; set; }
+            public int ShowId { get; set; }
+            public string Title { get; set; }
+            public Quarter Quarter { get; set; }
+            public short Year { get; set; }
         }
 
         [HttpGet, Route("sort/year")]
-        public virtual ActionResult SortByYear()
+        public ActionResult SortByYear()
         {
             var shows = DatabaseSession.Query<Show>().Select(x => new ShowOrderDto()
             {
@@ -35,6 +35,7 @@ namespace FODT.Controllers
             var viewModel = new SortedShowsViewModel();
             viewModel.Shows = shows.OrderBy(x => x.Year).ThenBy(x => x.Quarter).ThenBy(x => x.Title).Select(x => new SortedShowsViewModel.Show
             {
+                ShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.ShowId)),
                 ShowId = x.ShowId,
                 ShowTitle = x.Title,
                 ShowQuarter = x.Quarter,
@@ -44,7 +45,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("sort/title")]
-        public virtual ActionResult SortByTitle()
+        public ActionResult SortByTitle()
         {
             var shows = DatabaseSession.Query<Show>().Select(x => new ShowOrderDto()
             {
@@ -56,6 +57,7 @@ namespace FODT.Controllers
             var viewModel = new SortedShowsViewModel();
             viewModel.Shows = shows.OrderBy(x => x.Title).Select(x => new SortedShowsViewModel.Show
             {
+                ShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.ShowId)),
                 ShowId = x.ShowId,
                 ShowTitle = x.Title,
                 ShowQuarter = x.Quarter,

@@ -12,6 +12,8 @@ namespace FODT.Views.Person
             return new EditPersonViewModel() { RelatedMedia = new List<Media>() };
         }
 
+        public string POSTUrl { get; set; }
+
         public int? PersonId { get; set; }
 
         public string Honorific { get; set; }
@@ -29,6 +31,8 @@ namespace FODT.Views.Person
         public class Media
         {
             public int MediaItemId { get; set; }
+            public string MediaTinyURL { get; set; }
+            public string MediaThumbnailURL { get; set; }
         }
     }
 }

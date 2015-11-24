@@ -1,7 +1,7 @@
 ﻿@model FODT.Views.Person.EditPersonViewModel
 <div class="modal fade" tabindex="-1">
     <div class="modal-dialog">
-        <form method="POST" action="@Url.Action(MVC.Person.EditPerson())">
+        <form method="POST" action="@Model.POSTUrl">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -41,19 +41,19 @@
     </div>
 }
 
-@*<table align="center" frame="1" width="60%">
+<table align="center" frame="1" width="60%">
     <tbody>
         <tr valign="middle">
             <td align="center">
                 <font size="+2">Set default picture for this record</font>
                 <br>
                 If you do not see a picture you want to associate, please
-                <a href="@Url.Action(MVC.Media.Upload())">upload one!</a>
+                @*<a href="@Url.Action(MVC.Media.Upload())">upload one!</a>*@
             </td>
         </tr>
         <tr>
             <td align="center">
-                <form action="@Url.Action(MVC.Person.ChangeDefaultMediaItem())" method="POST">
+                <form action="#" method="POST">
                     <table align="center" width="100%">
                         <tbody>
                             @{
@@ -67,8 +67,8 @@
                                         <td>
                                             <center>
                                                 <a class="thumbnail" href="#thumb">
-                                                    <img src="@Url.Action(MVC.Media.GetItemTiny(item.MediaItemId))" border="0" />
-                                                    <span><img src="@Url.Action(MVC.Media.GetItemThumbnail(item.MediaItemId))"><br></span>
+                                                    <img src="@item.MediaTinyURL" border="0" />
+                                                    <span><img src="@item.MediaThumbnailURL"><br></span>
                                                 </a>
                                                 <br>
                                                 <input type="radio" name="mediaItemId" value="@item.MediaItemId" @(item.MediaItemId == Model.DefaultMediaItemId ? "checked='checked'" : "")>
@@ -90,7 +90,7 @@
                                         <font size="+2">No media associated!</font>
                                         <br>
                                         Before you can choose a default picture, one must be uploaded to the media center and associated with this record.<br>
-                                        You can do that at the <a href="@Url.Action(MVC.Media.Upload())">Media Upload Page</a>
+                                        @*You can do that at the <a href="@Url.Action(MVC.Media.Upload())">Media Upload Page</a>*@
                                     </td>
                                 }
                             </tr>
@@ -100,4 +100,4 @@
             </td>
         </tr>
     </tbody>
-</table>*@
+</table>

@@ -9,6 +9,7 @@ namespace FODT.Views.Shows
 
         public class Show
         {
+            public string ShowLinkURL { get; set; }
             public int ShowId { get; set; }
             public string ShowTitle { get; set; }
             public Quarter ShowQuarter { get; set; }

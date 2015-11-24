@@ -9,8 +9,8 @@ namespace FODT.Views.Awards
     public class ByYearViewModel
     {
         public short Year { get; set; }
-        public short? PreviousYear { get; set; }
-        public short? NextYear { get; set; }
+        public string PreviousYearURL { get; set; }
+        public string NextYearURL { get; set; }
 
         public IEnumerable<Award> Awards { get; set; }
 
@@ -20,14 +20,11 @@ namespace FODT.Views.Awards
             public int AwardId { get; set; }
             public string Name { get; set; }
 
-            public int? PersonId { get; set; }
-            public string PersonName { get; set; }
-            public string PersonLastName { get; set; }
+            public string AwardShowLinkURL { get; set; }
+            public string AwardShowLinkText { get; set; }
 
-            public int? ShowId { get; set; }
-            public string ShowTitle { get; set; }
-            public Quarter ShowQuarter { get; set; }
-            public short? ShowYear { get; set; }
+            public string AwardPersonLinkURL { get; set; }
+            public string AwardPersonLinkText { get; set; }
         }
     }
 }

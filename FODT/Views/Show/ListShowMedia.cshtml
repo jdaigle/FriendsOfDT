@@ -1,9 +1,9 @@
 ﻿@model FODT.Views.Show.ListShowMediaViewModel
 
 <center>
-    <font size="+2">Media for <a href="@Url.Action(MVC.Show.Get(Model.ShowId))">@ExtensionMethods.RearrangeShowTitle(Model.ShowTitle) (@Model.ShowYear)</a></font>
+    <font size="+2">Media for <a href="@Model.ShowLinkURL">@ExtensionMethods.RearrangeShowTitle(Model.ShowTitle) (@Model.ShowYear)</a></font>
     <br><br>
-    <a href="@Url.Action(MVC.Media.Upload())&amp;IDtype=shows&amp;ID=168">Upload more pictures for this show</a>
+    <a href="@Model.MediaUploadLinkURL">Upload more pictures for this show</a>
 </center>
 <br />
 <br />
@@ -20,8 +20,9 @@
 	                {
                         <td align="center" valign="middle">
                             <div class="rollover">
-                                <a href="@Url.Action(MVC.Show.GetShowMedia(Model.ShowId, item.MediaItemId))">
-                                <img src="@Url.Action(MVC.Media.GetItemThumbnail(item.MediaItemId))"></a>
+                                <a href="@item.MediaLinkURL">
+                                    <img src="@item.MediaThumbnailURL">
+                                </a>
                             </div>
                         </td>
 	                }
@@ -33,5 +34,5 @@
 
 @if (Model.RelatedMedia.Count == 0)
 {
-    <center><h1>No associated media found!<br> Would you like to <a href="@Url.Action(MVC.Media.Upload())">upload some</a>?</h1><br><br></center>
+    <center><h1>No associated media found!<br> Would you like to <a href="@Model.MediaUploadLinkURL">upload some</a>?</h1><br><br></center>
 }

@@ -4,22 +4,22 @@
     <tbody>
         <tr align="center">
             <td align="left" valign="top">
-                @if (Model.PreviousId.HasValue)
+                @if (Model.HasPreviousMediaLinkURL)
                 {
-                    <a href="@Url.Action(MVC.Media.GetItemDetail(Model.PreviousId.Value))">&lt;--- Previous Item</a>
+                    <a href="@Model.PreviousMediaLinkURL">&lt;--- Previous Item</a>
                 } else {
                     @:&lt;--- Previous Item
                 }
             </td>
             <td align="center">
-                <center><font size="+2">Item @Model.Id</font><br><br><a href="@Url.Action(MVC.Media.Upload())">Upload a new picture</a></center>
+                <center><font size="+2">Item @Model.ToString()</font><br><br><a href="@Model.MediaUploadLinkURL">Upload a new picture</a></center>
                 <br>
                 <br>
             </td>
             <td align="right" valign="top">
-                @if (Model.NextId.HasValue)
+                @if (Model.HasNextMediaLinkURL)
                 {
-                    <a href="@Url.Action(MVC.Media.GetItemDetail(Model.NextId.Value))">Next Item ---&gt;</a>
+                    <a href="@Model.NextMediaLinkURL">Next Item ---&gt;</a>
                 } else {
                     @:Next Item ---&gt;
                 }

@@ -38,11 +38,11 @@
                 <form class="navbar-form navbar-right">
                     @if (!ViewBag.IsAuthenticated)
                     {
-                        <a class="btn btn-success sign-in-facebook" href="@Url.Action(MVC.User.SignIn(this.Request.Url.PathAndQuery))">Sign In</a>
+                        <a class="btn btn-success sign-in-facebook" href="~/User/SignOut?redirectUrl=@Request.Url.PathAndQuery">Sign In</a>
                     }
                     else
                     {
-                        <a class="btn btn-danger" href="@Url.Action(MVC.User.SignOut())">Sign Out</a>
+                        <a class="btn btn-danger" href="~/User/SignOut">Sign Out</a>
                     }
                 </form>
                 <p class="navbar-text navbar-right">Welcome @ViewBag.UserName!</p>
@@ -50,7 +50,7 @@
         </div>
     </nav>
     <div class="container">
-        <form method="get" action="@Url.Action(MVC.Search.Search())" class="">
+        <form method="get" action="~/search" class="">
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
                     <div class="form-group">

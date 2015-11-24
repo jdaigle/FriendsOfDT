@@ -9,9 +9,11 @@ namespace FODT.Views.Media
 {
     public class GetItemDetailViewModel
     {
-        public int Id { get; set; }
-        public int? PreviousId { get; set; }
-        public int? NextId { get; set; }
+        public string MediaUploadLinkURL { get; set; }
+        public bool HasPreviousMediaLinkURL { get; set; }
+        public string PreviousMediaLinkURL { get; set; }
+        public bool HasNextMediaLinkURL { get; set; }
+        public string NextMediaLinkURL { get; set; }
 
         public MediaItemViewModel MediaItemViewModel { get; set; }
     }

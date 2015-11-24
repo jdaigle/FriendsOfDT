@@ -11,10 +11,10 @@ using NHibernate.Linq;
 namespace FODT.Controllers
 {
     [RoutePrefix("Person")]
-    public partial class PersonController : BaseController
+    public class PersonController : BaseController
     {
         [HttpGet, Route("{personId}")]
-        public virtual ActionResult PersonDetails(int personId)
+        public ActionResult PersonDetails(int personId)
         {
             var person = DatabaseSession.Get<Person>(personId);
             var clubPositions = DatabaseSession.Query<PersonClubPosition>().Where(x => x.Person == person).ToList();
@@ -25,18 +25,33 @@ namespace FODT.Controllers
             var relatedMedia = DatabaseSession.Query<PersonMedia>().Where(x => x.Person == person).Fetch(x => x.MediaItem).ToList();
 
             var viewModel = new PersonDetailsViewModel();
+
+            viewModel.EditLinkURL = this.GetURL(c => c.EditPerson(personId));
+            viewModel.AddAwardURL = this.GetURL(c => c.AddAward(personId));
+            viewModel.AddClubPositionURL = this.GetURL(c => c.AddClubPosition(personId));
+            viewModel.AddCastURL = this.GetURL(c => c.AddCast(personId));
+            viewModel.AddCrewURL = this.GetURL(c => c.AddCrew(personId));
+            viewModel.MediaUploadLinkURL = this.GetURL<MediaController>(c => c.Upload());
+            viewModel.MediaLinkURL = this.GetURL(c => c.GetPersonMedia(personId, person.MediaItem.MediaItemId));
+            viewModel.MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(person.MediaItem.MediaItemId));
+            viewModel.MediaListLinkURL = this.GetURL(c => c.ListPersonMedia(personId));
+
             viewModel.PersonId = personId;
             viewModel.FullName = person.Fullname;
             viewModel.Biography = person.Biography;
             viewModel.MediaItemId = person.MediaItem.MediaItemId;
             viewModel.ClubPositions = clubPositions.OrderBy(x => x.DisplayOrder).ThenByDescending(x => x.Year).Select(x => new PersonDetailsViewModel.ClubPosition
             {
+                DeleteClubPositionURL = this.GetURL(c => c.DeleteClubPosition(personId, x.PersonClubPositionId)),
                 Year = x.Year,
                 Name = x.Position,
                 ClubPositionId = x.PersonClubPositionId,
             }).ToList();
             viewModel.Awards = showAwards.Select(x => new PersonDetailsViewModel.Award
             {
+                DeleteAwardURL = this.GetURL(c => c.DeleteAward(personId, x.ShowAwardId, x.Show.ShowId)),
+                ShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.Show.ShowId)),
+                AwardYearLinkURL = this.GetURL<AwardsController>(c => c.ByYear(x.Year)),
                 Year = x.Year,
                 AwardId = x.ShowAwardId,
                 Name = x.Award.Name,
@@ -47,12 +62,16 @@ namespace FODT.Controllers
             })
             .Concat(myAwards.Select(x => new PersonDetailsViewModel.Award
             {
+                DeleteAwardURL = this.GetURL(c => c.DeleteAward(personId, x.PersonAwardId, null)),
+                AwardYearLinkURL = this.GetURL<AwardsController>(c => c.ByYear(x.Year)),
                 Year = x.Year,
                 AwardId = x.PersonAwardId,
                 Name = x.Award.Name,
             })).ToList();
             viewModel.CastRoles = cast.Select(x => new PersonDetailsViewModel.CastRole
             {
+                DeleteCastURL = this.GetURL(c => c.DeleteCast(personId, x.ShowCastId)),
+                ShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.Show.ShowId)),
                 ShowCastId = x.ShowCastId,
                 ShowId = x.Show.ShowId,
                 ShowName = x.Show.Title,
@@ -62,6 +81,8 @@ namespace FODT.Controllers
             }).ToList();
             viewModel.CrewPositions = crew.Select(x => new PersonDetailsViewModel.CrewPosition
             {
+                DeleteCrewURL = this.GetURL(c => c.DeleteCrew(personId, x.ShowCrewId)),
+                ShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.Show.ShowId)),
                 ShowCrewId = x.ShowCrewId,
                 ShowId = x.Show.ShowId,
                 ShowName = x.Show.Title,
@@ -70,29 +91,41 @@ namespace FODT.Controllers
                 Name = x.Position,
             }).ToList();
             viewModel.RelatedMediaCount = relatedMedia.Count;
-            viewModel.NewRelatedMedia = relatedMedia.OrderByDescending(x => x.InsertedDateTime).Select(x => x.MediaItem.MediaItemId).Where(x => x != person.MediaItem.MediaItemId).Take(4).ToList();
+            viewModel.NewRelatedMedia = relatedMedia
+                .OrderByDescending(x => x.InsertedDateTime)
+                .Where(x => x.MediaItem.MediaItemId != person.MediaItem.MediaItemId)
+                .Select(x => new PersonDetailsViewModel.RelatedMediaViewModel
+                {
+                    ID = x.MediaItem.MediaItemId,
+                    MediaLinkURL = this.GetURL(c => c.GetPersonMedia(personId, x.MediaItem.MediaItemId)),
+                    MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemTiny(x.MediaItem.MediaItemId)),
+                })
+                .Take(4)
+                .ToList();
 
             return View(viewModel);
         }
 
         [HttpGet, Route("{personId}/Media")]
-        public virtual ActionResult ListPersonMedia(int personId)
+        public ActionResult ListPersonMedia(int personId)
         {
             var person = DatabaseSession.Get<Person>(personId);
             var relatedMedia = DatabaseSession.Query<PersonMedia>().Where(x => x.Person == person).Fetch(x => x.MediaItem).ToList();
 
             var viewModel = new ListPersonMediaViewModel();
-            viewModel.PersonId = personId;
             viewModel.PersonFullname = person.Fullname;
+            viewModel.MediaUploadLinkURL = this.GetURL<MediaController>(c => c.Upload());
+            viewModel.PersonLinkURL = this.GetURL(c => c.PersonDetails(personId));
             viewModel.RelatedMedia = relatedMedia.OrderBy(x => x.MediaItem.InsertedDateTime).ThenBy(x => x.MediaItem.MediaItemId).Select(x => new ListPersonMediaViewModel.Media
             {
-                MediaItemId = x.MediaItem.MediaItemId,
+                MediaLinkURL = this.GetURL(c => c.GetPersonMedia(personId, x.MediaItem.MediaItemId)),
+                MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(x.MediaItem.MediaItemId)),
             }).ToList();
             return View(viewModel);
         }
 
         [HttpGet, Route("{personId}/Media/{mediaItemId}")]
-        public virtual ActionResult GetPersonMedia(int personId, int mediaItemId)
+        public ActionResult GetPersonMedia(int personId, int mediaItemId)
         {
             var person = DatabaseSession.Get<Person>(personId);
             var relatedMedia = DatabaseSession
@@ -107,26 +140,42 @@ namespace FODT.Controllers
             var nextId = index < relatedMedia.Count - 1 ? relatedMedia[index + 1].MediaItem.MediaItemId : (int?)null;
 
             var viewModel = new GetPersonMediaViewModel();
-            viewModel.PersonId = personId;
             viewModel.PersonFullname = person.Fullname;
-            viewModel.PreviousId = previousId;
-            viewModel.NextId = nextId;
-            viewModel.MediaItemId = media.MediaItem.MediaItemId;
             viewModel.MediaItemViewModel = new MediaItemViewModel();
-            viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, mediaItemId);
+            viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, Url, mediaItemId);
+
+            viewModel.MediaUploadLinkURL = this.GetURL<MediaController>(c => c.Upload());
+            viewModel.PersonLinkURL = this.GetURL(c => c.PersonDetails(personId));
+            viewModel.PreviousMediaLinkURL = this.GetURL(c => c.GetPersonMedia(personId, mediaItemId));
+            viewModel.NextMediaLinkURL = this.GetURL(c => c.GetPersonMedia(personId, mediaItemId));
+            if (previousId.HasValue)
+            {
+                viewModel.HasPreviousMediaLinkURL = true;
+                viewModel.PreviousMediaLinkURL = this.GetURL(c => c.GetPersonMedia(personId, previousId.Value));
+            }
+            if (nextId.HasValue)
+            {
+                viewModel.HasNextMediaLinkURL = true;
+                viewModel.NextMediaLinkURL = this.GetURL(c => c.GetPersonMedia(personId, nextId.Value));
+            }
 
             return View(viewModel);
         }
 
-        [HttpGet, Route("New", Order = 0)]
-        public virtual ActionResult New()
+        [HttpGet, Route("Add")]
+        public ActionResult AddPerson()
         {
-            var viewModel = EditPersonViewModel.Empty();
-            return View("Edit", viewModel);
+            if (!Request.IsAjaxRequest())
+            {
+                return Redirect("~");
+            }
+            var viewModel = new EditPersonViewModel();
+            viewModel.POSTUrl = Url.Action("SaveAddPerson");
+            return PartialView("EditPerson", viewModel);
         }
 
-        [HttpPost, Route("New", Order = 0)]
-        public virtual ActionResult SaveNew(SaveEditParameters param)
+        [HttpPost, Route("Add")]
+        public ActionResult SaveAddPerson(SaveEditParameters param)
         {
             if (string.IsNullOrWhiteSpace(param.FirstName) ||
                 string.IsNullOrWhiteSpace(param.LastName))
@@ -149,21 +198,22 @@ namespace FODT.Controllers
             DatabaseSession.Save(person);
             DatabaseSession.CommitTransaction();
 
-            return RedirectToAction(Actions.PersonDetails(person.PersonId));
+            return this.RedirectToAction(x => x.PersonDetails(person.PersonId));
         }
 
         [HttpGet, Route("{personId}/Edit")]
-        public virtual ActionResult EditPerson(int personId)
+        public ActionResult EditPerson(int personId)
         {
             if (!Request.IsAjaxRequest())
             {
-                return RedirectToAction(Actions.PersonDetails(personId));
+                return this.RedirectToAction(x => x.PersonDetails(personId));
             }
 
             var person = DatabaseSession.Get<Person>(personId);
             var relatedMedia = DatabaseSession.Query<PersonMedia>().Where(x => x.Person == person).Fetch(x => x.MediaItem).ToList();
 
             var viewModel = new EditPersonViewModel();
+            viewModel.POSTUrl = Url.Action("SaveEdit");
             viewModel.PersonId = personId;
             viewModel.FirstName = person.FirstName;
             viewModel.LastName = person.LastName;
@@ -176,13 +226,15 @@ namespace FODT.Controllers
             viewModel.RelatedMedia = relatedMedia.OrderBy(x => x.MediaItem.InsertedDateTime).ThenBy(x => x.MediaItem.MediaItemId).Select(x => new EditPersonViewModel.Media
             {
                 MediaItemId = x.MediaItem.MediaItemId,
+                MediaTinyURL = this.GetURL<MediaController>(c => c.GetItemTiny(x.MediaItem.MediaItemId)),
+                MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(x.MediaItem.MediaItemId)),
             }).ToList();
 
             return PartialView(viewModel);
         }
 
         [HttpPost, Route("{personId}/Edit")]
-        public virtual ActionResult SaveEdit(int personId, SaveEditParameters param)
+        public ActionResult SaveEdit(int personId, SaveEditParameters param)
         {
             if (string.IsNullOrWhiteSpace(param.FirstName) ||
                 string.IsNullOrWhiteSpace(param.LastName))
@@ -205,11 +257,11 @@ namespace FODT.Controllers
             }
             DatabaseSession.CommitTransaction();
 
-            return RedirectToAction(Actions.PersonDetails(personId));
+            return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpPost, Route("{personId}/ChangeDefaultMediaItem")]
-        public virtual ActionResult ChangeDefaultMediaItem(int personId, int mediaItemId)
+        public ActionResult ChangeDefaultMediaItem(int personId, int mediaItemId)
         {
             var person = DatabaseSession.Get<Person>(personId);
             person.MediaItem = DatabaseSession.Load<MediaItem>(mediaItemId);
@@ -220,7 +272,7 @@ namespace FODT.Controllers
             }
             DatabaseSession.CommitTransaction();
 
-            return RedirectToAction(Actions.PersonDetails(personId));
+            return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         public class SaveEditParameters
@@ -238,11 +290,11 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("{personId}/AddAward")]
-        public virtual ActionResult AddAward(int personId)
+        public ActionResult AddAward(int personId)
         {
             if (!Request.IsAjaxRequest())
             {
-                return RedirectToAction(Actions.PersonDetails(personId));
+                return this.RedirectToAction(x => x.PersonDetails(personId));
             }
 
             var person = DatabaseSession.Get<Person>(personId);
@@ -268,6 +320,7 @@ namespace FODT.Controllers
                 .ToList();
             var viewModel = new
             {
+                POSTUrl = this.GetURL(x => x.AddAward(personId)),
                 Shows = shows,
                 Awards = awards,
             }.ToExpando();
@@ -275,7 +328,7 @@ namespace FODT.Controllers
         }
 
         [HttpPost, Route("{personId}/AddAward")]
-        public virtual ActionResult AddAward(int personId, int awardId, short year, int? showId)
+        public ActionResult AddAward(int personId, int awardId, short year, int? showId)
         {
             if (showId == null)
             {
@@ -289,11 +342,11 @@ namespace FODT.Controllers
                 DatabaseSession.Save(award);
                 DatabaseSession.CommitTransaction();
             }
-            return RedirectToAction(Actions.PersonDetails(personId));
+            return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpPost, Route("{personId}/DeleteAward")]
-        public virtual ActionResult DeleteAward(int personId, int awardId, int? showId)
+        public ActionResult DeleteAward(int personId, int awardId, int? showId)
         {
             if (showId.HasValue)
             {
@@ -307,49 +360,50 @@ namespace FODT.Controllers
                 DatabaseSession.Delete(award);
                 DatabaseSession.CommitTransaction();
             }
-            return RedirectToAction(Actions.PersonDetails(personId));
+            return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpGet, Route("{personId}/AddClubPosition")]
-        public virtual ActionResult AddClubPosition(int personId)
+        public ActionResult AddClubPosition(int personId)
         {
             if (!Request.IsAjaxRequest())
             {
-                return RedirectToAction(Actions.PersonDetails(personId));
+                return this.RedirectToAction(x => x.PersonDetails(personId));
             }
             var person = DatabaseSession.Get<Person>(personId);
             var positions = DatabaseSession.Query<PersonClubPosition>().Select(x => x.Position).Distinct().ToList();
             var viewModel = new
             {
+                POSTUrl = this.GetURL(x => x.AddClubPosition(personId)),
                 Positions = string.Join(", ", positions.OrderBy(x => x).Select(x => "\"" + x.Replace("\"", "&quot;") + "\"")),
             }.ToExpando();
             return PartialView(viewModel);
         }
 
         [HttpPost, Route("{personId}/AddClubPosition")]
-        public virtual ActionResult AddClubPosition(int personId, string position, short year)
+        public ActionResult AddClubPosition(int personId, string position, short year)
         {
             var entity = new PersonClubPosition(DatabaseSession.Load<Person>(personId), position, year);
             DatabaseSession.Save(entity);
             DatabaseSession.CommitTransaction();
-            return RedirectToAction(Actions.PersonDetails(personId));
+            return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpPost, Route("{personId}/DeleteClubPosition")]
-        public virtual ActionResult DeleteClubPosition(int personId, int personClubPositionId)
+        public ActionResult DeleteClubPosition(int personId, int personClubPositionId)
         {
             var entity = DatabaseSession.Get<PersonClubPosition>(personClubPositionId);
             DatabaseSession.Delete(entity);
             DatabaseSession.CommitTransaction();
-            return RedirectToAction(Actions.PersonDetails(personId));
+            return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpGet, Route("{personId}/AddCast")]
-        public virtual ActionResult AddCast(int personId)
+        public ActionResult AddCast(int personId)
         {
             if (!Request.IsAjaxRequest())
             {
-                return RedirectToAction(Actions.PersonDetails(personId));
+                return this.RedirectToAction(x => x.PersonDetails(personId));
             }
 
             var person = DatabaseSession.Get<Person>(personId);
@@ -366,35 +420,36 @@ namespace FODT.Controllers
                 .ToList();
             var viewModel = new
             {
+                POSTUrl = this.GetURL(x => x.AddCast(personId)),
                 Shows = shows,
             }.ToExpando();
             return PartialView(viewModel);
         }
 
         [HttpPost, Route("{personId}/AddCast")]
-        public virtual ActionResult AddCast(int personId, int showId, string role)
+        public ActionResult AddCast(int personId, int showId, string role)
         {
             var entity = new ShowCast(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), role);
             DatabaseSession.Save(entity);
             DatabaseSession.CommitTransaction();
-            return RedirectToAction(Actions.PersonDetails(personId));
+            return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpPost, Route("{personId}/DeleteCast")]
-        public virtual ActionResult DeleteCast(int personId, int showCastId)
+        public ActionResult DeleteCast(int personId, int showCastId)
         {
             var entity = DatabaseSession.Get<ShowCast>(showCastId);
             DatabaseSession.Delete(entity);
             DatabaseSession.CommitTransaction();
-            return RedirectToAction(Actions.PersonDetails(personId));
+            return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpGet, Route("{personId}/AddCrew")]
-        public virtual ActionResult AddCrew(int personId)
+        public ActionResult AddCrew(int personId)
         {
             if (!Request.IsAjaxRequest())
             {
-                return RedirectToAction(Actions.PersonDetails(personId));
+                return this.RedirectToAction(x => x.PersonDetails(personId));
             }
 
             var person = DatabaseSession.Get<Person>(personId);
@@ -412,6 +467,7 @@ namespace FODT.Controllers
             var positions = DatabaseSession.Query<ShowCrew>().Select(x => x.Position).Distinct().ToList();
             var viewModel = new
             {
+                POSTUrl = this.GetURL(x => x.AddCrew(personId)),
                 Shows = shows,
                 Positions = string.Join(", ", positions.OrderBy(x => x).Select(x => "\"" + x.Replace("\\", "\\\\").Replace("\"", "&quot;") + "\"")),
             }.ToExpando();
@@ -419,21 +475,21 @@ namespace FODT.Controllers
         }
 
         [HttpPost, Route("{personId}/AddCrew")]
-        public virtual ActionResult AddCrew(int personId, int showId, string position)
+        public ActionResult AddCrew(int personId, int showId, string position)
         {
             var entity = new ShowCrew(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), position);
             DatabaseSession.Save(entity);
             DatabaseSession.CommitTransaction();
-            return RedirectToAction(Actions.PersonDetails(personId));
+            return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpPost, Route("{personId}/DeleteCrew")]
-        public virtual ActionResult DeleteCrew(int personId, int showCrewId)
+        public ActionResult DeleteCrew(int personId, int showCrewId)
         {
             var entity = DatabaseSession.Get<ShowCrew>(showCrewId);
             DatabaseSession.Delete(entity);
             DatabaseSession.CommitTransaction();
-            return RedirectToAction(Actions.PersonDetails(personId));
+            return this.RedirectToAction(x => x.PersonDetails(personId));
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
+using FODT.Controllers;
 using FODT.Models;
 using FODT.Models.IMDT;
 using NHibernate;
@@ -12,13 +14,15 @@ namespace FODT.Views.Shared
     public class MediaItemViewModel
     {
         public int Id { get; set; }
+        public string ItemURL { get; set; }
+        public string TagPOSTUrl { get; set; }
 
         public List<RelatedShow> RelatedShows { get; set; }
         public List<RelatedPerson> RelatedPeople { get; set; }
 
         public class RelatedShow
         {
-            public int ShowId { get; set; }
+            public string ShowLinkURL { get; set; }
             public string ShowTitle { get; set; }
             public Quarter ShowQuarter { get; set; }
             public short ShowYear { get; set; }
@@ -26,7 +30,7 @@ namespace FODT.Views.Shared
 
         public class RelatedPerson
         {
-            public int PersonId { get; set; }
+            public string PersonLinkURL { get; set; }
             public string PersonFullname { get; set; }
             public string PersonLastName { get; set; }
         }
@@ -50,22 +54,24 @@ namespace FODT.Views.Shared
             public string PersonFirstName { get; set; }
         }
 
-        public void PopulateFromDatabase(ISession databaseSession, int mediaItemId)
+        public void PopulateFromDatabase(ISession databaseSession, UrlHelper url, int mediaItemId)
         {
             var relatedPeople = databaseSession.Query<PersonMedia>().Where(x => x.MediaItem == databaseSession.Load<MediaItem>(mediaItemId)).Fetch(x => x.Person).ToList();
             var relatedshows = databaseSession.Query<ShowMedia>().Where(x => x.MediaItem == databaseSession.Load<MediaItem>(mediaItemId)).Fetch(x => x.Show).ToList();
 
             this.Id = mediaItemId;
+            this.ItemURL = url.Action<MediaController>(c => c.GetItem(mediaItemId));
+            this.TagPOSTUrl = url.Action<MediaController>(c => c.Tag(mediaItemId, null, null));
             this.RelatedShows = relatedshows.Select(x => new MediaItemViewModel.RelatedShow
             {
-                ShowId = x.Show.ShowId,
+                ShowLinkURL = url.Action<ShowController>(c => c.Get(x.Show.ShowId)),
                 ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
                 ShowTitle = x.Show.Title,
             }).ToList();
             this.RelatedPeople = relatedPeople.Select(x => new MediaItemViewModel.RelatedPerson
             {
-                PersonId = x.Person.PersonId,
+                PersonLinkURL = url.Action<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
                 PersonLastName = x.Person.LastName,
                 PersonFullname = x.Person.Fullname,
             }).ToList();

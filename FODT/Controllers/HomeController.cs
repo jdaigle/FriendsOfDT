@@ -8,22 +8,22 @@ using FODT.Views.Home;
 namespace FODT.Controllers
 {
     [RoutePrefix("")]
-    public partial class HomeController : BaseController
+    public class HomeController : BaseController
     {
         [HttpGet, Route("")]
-        public virtual ActionResult Welcome()
+        public ActionResult Welcome()
         {
             return View();
         }
 
         [HttpGet, Route("Index")]
-        public virtual ActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }
 
         //[HttpGet, Route("Admin")]
-        //public virtual ActionResult Admin()
+        //public ActionResult Admin()
         //{
         //    var viewModel = new AdminViewModel();
         //    viewModel.PopulateFromDatabase(DatabaseSession);
@@ -31,12 +31,12 @@ namespace FODT.Controllers
         //}
 
         [HttpGet, Route("Admin/EditPerson")]
-        public virtual ActionResult Admin_EditPerson(int personId)
+        public ActionResult Admin_EditPerson(int personId)
         {
-            return RedirectToAction(MVC.Person.EditPerson(personId));
+            return this.RedirectToAction<PersonController>(x => x.EditPerson(personId));
         }
         [HttpGet, Route("Admin/ShowPerson")]
-        public virtual ActionResult Admin_ShowPerson(int showId)
+        public ActionResult Admin_ShowPerson(int showId)
         {
             //return RedirectToAction(MVC.Person.Edit(personId));
             throw new NotImplementedException();

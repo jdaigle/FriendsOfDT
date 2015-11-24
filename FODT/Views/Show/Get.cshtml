@@ -3,8 +3,8 @@
     <tbody>
         <tr align="center">
             <td align="left" valign="top">
-                @if (Model.PreviousShowId.HasValue) {
-                <a href="@Url.Action(MVC.Show.Get(Model.PreviousShowId.Value))">&lt;--- Previous Show</a>
+                @if (Model.PreviousShowLinkURL != "") {
+                <a href="@Model.PreviousShowLinkURL">&lt;--- Previous Show</a>
                 } else {
                     @:&lt;--- Previous Show
                 }
@@ -13,8 +13,8 @@
                 <center><font size="+4">@ExtensionMethods.RearrangeShowTitle(Model.Title)</font><br><font size="+3">by @Model.Author</font><br><font size="+2"><b>@Model.Quarter @Model.Year</b></font></center>
             </td>
             <td align="right" valign="top">
-                @if (Model.NextShowId.HasValue) {
-                <a href="@Url.Action(MVC.Show.Get(Model.NextShowId.Value))">Next Show ---&gt;</a>
+                @if (Model.NextShowLinkURL != "") {
+                <a href="@Model.NextShowLinkURL">Next Show ---&gt;</a>
                 } else {
                     @:Next Show ---&gt;
                 }
@@ -27,21 +27,25 @@
     <tbody>
         <tr>
             <td align="center" valign="top" rowspan="3" width="30%">
-                @if (Model.MediaItemId != 1){
-                <a href="@Url.Action(MVC.Show.GetShowMedia(Model.ShowId, Model.MediaItemId))">
-                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.Title">
-                </a>
-                } else {
-                    <img src="@Url.Action(MVC.Media.GetItemThumbnail(Model.MediaItemId))" alt="@Model.Title">
+                @if (Model.MediaItemId != 1)
+                {
+                    <a href="@Model.MediaItemLinkURL">
+                        <img src="@Model.MediaItemThumbnailURL" alt="@Model.Title">
+                    </a>
+                }
+                else
+                {
+                    <img src="@Model.MediaItemThumbnailURL" alt="@Model.Title">
                 }
                 <br>
                 Click picture to see original size<br>
                 <br>
-                <a href="@Url.Action(MVC.Show.ListShowMedia(Model.ShowId))">See all media associated with this show</a>
+                <a href="@Model.MediaListLinkURL">See all media associated with this show</a>
                 <br>
                 <br>
-                
-                @if (!string.IsNullOrWhiteSpace(Model.Pictures)) {
+
+                @if (!string.IsNullOrWhiteSpace(Model.Pictures))
+                {
                     <br>
                     <br>
                     @:Click <a href="@Model.Pictures">here</a> for pictures from this production
@@ -89,13 +93,13 @@
                                         @foreach (var item in Model.Awards.OrderByDescending(x => x.Year).ThenBy(x => x.Name).ThenBy(x => x.PersonLastName))
                                         {
                                         <tr>
-                                            <td align="center"><a href="@Url.Action(MVC.Awards.ByYear(item.Year))">@item.Year</a></td>
+                                            <td align="center"><a href="@item.AwardYearLinkURL">@item.Year</a></td>
                                             <td>&nbsp; - &nbsp; </td>
                                             <td align="center">@item.Name</td>
                                             @if (item.PersonId.HasValue)
                                             {
                                                 <td>&nbsp; - &nbsp; </td>
-                                                <td align="left"><a href="@Url.Action(MVC.Person.PersonDetails(item.PersonId.Value))">@item.PersonName</a></td>
+                                                <td align="left"><a href="@item.PersonLinkURL">@item.PersonName</a></td>
                                             }
                                             else
                                             {
@@ -114,9 +118,9 @@
                                 <br>
                                 <b><u>Other Performances</u></b><br>
                                 <br>
-                                @foreach (var item in Model.OtherPerformances.OrderBy(x => x.Item3))
+                                @foreach (var item in Model.OtherPerformances.OrderBy(x => x.Year))
                                 {
-                                    <a href="@Url.Action(MVC.Show.Get(item.Item1))">@ExtensionMethods.RearrangeShowTitle(item.Item2) (@item.Item3)</a>
+                                    <a href="@Url.Action(item.ShowLinkURL)">@ExtensionMethods.RearrangeShowTitle(item.Title) (@item.Year)</a>
                                     <br>
                                 }
                             </td>
@@ -133,7 +137,7 @@
                             foreach (var item in Model.Cast.OrderBy(x => x.PersonLastName))
                             {
                             <tr align="center">
-                                <td width="47%" align="right"><a href="@Url.Action(MVC.Person.PersonDetails(item.PersonId))">@item.PersonName</a></td>
+                                <td width="47%" align="right"><a href="@item.PersonLinkURL">@item.PersonName</a></td>
                                 <td width="6%" align="center">&nbsp; - &nbsp;</td>
                                 <td align="left">@item.Role</td>
                             </tr>
@@ -151,7 +155,7 @@
                             foreach (var item in Model.Crew.OrderBy(x => x.DisplayOrder).ThenBy(x => x.PersonLastName))
                             {
                             <tr align="center">
-                                <td width="47%" align="right"><a href="@Url.Action(MVC.Person.PersonDetails(item.PersonId))">@item.PersonName</a></td>
+                                <td width="47%" align="right"><a href="@item.PersonLinkURL">@item.PersonName</a></td>
                                 <td width="6%" align="center">&nbsp; - &nbsp;</td>
                                 <td align="left">@item.Name</td>
                             </tr>

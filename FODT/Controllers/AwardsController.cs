@@ -10,22 +10,24 @@ using FODT.Views.Awards;
 namespace FODT.Controllers
 {
     [RoutePrefix("awards")]
-    public partial class AwardsController : BaseController
+    public class AwardsController : BaseController
     {
         [HttpGet, Route("year/{year?}")]
-        public virtual ActionResult ByYear(short? year)
+        public ActionResult ByYear(short? year)
         {
             if (!year.HasValue || year > DateTime.Now.Year)
             {
-                return RedirectToAction(Actions.ByYear(GetMostRecentYear()));
+                return this.RedirectToAction(c => c.ByYear(GetMostRecentYear()));
             }
             var showAwards = DatabaseSession.Query<ShowAward>().Where(x => x.Year == year).Fetch(x => x.Show).Fetch(x => x.Person).Fetch(x => x.Award).ToList();
             var peopleAwards = DatabaseSession.Query<PersonAward>().Where(x => x.Year == year).Fetch(x => x.Person).Fetch(x => x.Award).ToList();
 
             var viewModel = new ByYearViewModel();
             viewModel.Year = year.Value;
-            viewModel.NextYear = (year >= DateTime.Now.Year) ? (short?)null : (short)(year.Value + 1);
-            viewModel.PreviousYear = (short)(year.Value - 1);
+            var nextYear = (short)(year.Value + 1);
+            var prevYear = (short)(year.Value - 1);
+            viewModel.NextYearURL = this.GetURL(c => c.ByYear(nextYear));
+            viewModel.PreviousYearURL = this.GetURL(c => c.ByYear(prevYear));
 
             viewModel.Awards = showAwards.Select(x => new ByYearViewModel.Award
             {
@@ -33,14 +35,11 @@ namespace FODT.Controllers
                 AwardId = x.Award.AwardId,
                 Name = x.Award.Name,
 
-                ShowId = x.Show.ShowId,
-                ShowTitle = x.Show.Title,
-                ShowQuarter = x.Show.Quarter,
-                ShowYear = x.Show.Year,
+                AwardShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.Show.ShowId)),
+                AwardShowLinkText = x.Show.Title,
 
-                PersonId = x.Person != null ? x.Person.PersonId : (int?)null,
-                PersonName = x.Person != null ? x.Person.Fullname : (string)null,
-                PersonLastName = x.Person != null ? x.Person.LastName : (string)null,
+                AwardPersonLinkURL = x.Person != null ? this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)) : "",
+                AwardPersonLinkText = x.Person != null ? x.Person.Fullname : "",
             })
             .Concat(peopleAwards.Select(x => new ByYearViewModel.Award
             {
@@ -48,9 +47,11 @@ namespace FODT.Controllers
                 AwardId = x.Award.AwardId,
                 Name = x.Award.Name,
 
-                PersonId = x.Person.PersonId,
-                PersonName = x.Person.Fullname, 
-                PersonLastName = x.Person.LastName,
+                AwardShowLinkURL = "",
+                AwardShowLinkText = "",
+
+                AwardPersonLinkURL = this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
+                AwardPersonLinkText = x.Person.Fullname,
             })).OrderBy(x => x.AwardId).ToList();
 
             return View(viewModel);

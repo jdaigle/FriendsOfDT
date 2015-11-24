@@ -14,10 +14,10 @@ using FODT.Database;
 namespace FODT.Controllers
 {
     [RoutePrefix("Media")]
-    public partial class MediaController : BaseController
+    public class MediaController : BaseController
     {
         [HttpGet, Route("Upload")]
-        public virtual ActionResult Upload()
+        public ActionResult Upload()
         {
             var people = DatabaseSession.Query<Person>().ToList();
             var shows = DatabaseSession.Query<Show>().ToList();
@@ -42,7 +42,7 @@ namespace FODT.Controllers
         }
 
         [HttpPost, Route("Upload")]
-        public virtual ActionResult Upload(UploadPOSTParameters param)
+        public ActionResult Upload(UploadPOSTParameters param)
         {
             if (!param.PersonId.HasValue && !param.ShowId.HasValue)
             {
@@ -112,8 +112,8 @@ namespace FODT.Controllers
             DatabaseSession.CommitTransaction();
 
             return showMedia != null
-                ? RedirectToAction(MVC.Show.GetShowMedia(showMedia.Show.ShowId, showMedia.MediaItem.MediaItemId))
-                : RedirectToAction(MVC.Person.GetPersonMedia(personMedia.Person.PersonId, personMedia.MediaItem.MediaItemId));
+                ? this.RedirectToAction<ShowController>(x => x.GetShowMedia(showMedia.Show.ShowId, showMedia.MediaItem.MediaItemId))
+                : this.RedirectToAction<PersonController>(x => x.GetPersonMedia(personMedia.Person.PersonId, personMedia.MediaItem.MediaItemId));
         }
 
         public class UploadPOSTParameters
@@ -124,7 +124,7 @@ namespace FODT.Controllers
         }
 
         [HttpPost, Route("{id}/tag")]
-        public virtual ActionResult Tag(int id, int? personId, int? showId)
+        public ActionResult Tag(int id, int? personId, int? showId)
         {
             if (personId.HasValue)
             {
@@ -147,14 +147,14 @@ namespace FODT.Controllers
             if (Request.UrlReferrer == null ||
                 string.IsNullOrWhiteSpace(Request.UrlReferrer.PathAndQuery))
             {
-                return RedirectToAction(Actions.GetItemDetail(id));
+                return this.RedirectToAction(x => x.GetItemDetail(id));
             }
 
             return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
         [HttpGet, Route("{id}")]
-        public virtual ActionResult GetItem(int id)
+        public ActionResult GetItem(int id)
         {
             var mediaItem = DatabaseSession.Get<MediaItem>(id);
             if (mediaItem == null)
@@ -165,7 +165,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("{id}/tiny")]
-        public virtual ActionResult GetItemTiny(int id)
+        public ActionResult GetItemTiny(int id)
         {
             var mediaItem = DatabaseSession.Get<MediaItem>(id);
             if (mediaItem == null)
@@ -176,7 +176,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("{id}/thumbnail")]
-        public virtual ActionResult GetItemThumbnail(int id)
+        public ActionResult GetItemThumbnail(int id)
         {
             var mediaItem = DatabaseSession.Get<MediaItem>(id);
             if (mediaItem == null)
@@ -187,7 +187,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("{id}/detail")]
-        public virtual ActionResult GetItemDetail(int id)
+        public ActionResult GetItemDetail(int id)
         {
             var mediaItems = DatabaseSession
                 .Query<MediaItem>()
@@ -204,11 +204,23 @@ namespace FODT.Controllers
             var nextId = index < mediaItems.Count - 1 ? mediaItems[index + 1].MediaItemId : (int?)null;
 
             var viewModel = new GetItemDetailViewModel();
-            viewModel.Id = id;
-            viewModel.PreviousId = previousId;
-            viewModel.NextId = nextId;
+
+            viewModel.MediaUploadLinkURL = this.GetURL(c => c.Upload());
+            viewModel.PreviousMediaLinkURL = this.GetURL(c => c.GetItemDetail(id));
+            viewModel.NextMediaLinkURL = this.GetURL(c => c.GetItemDetail(id));
+            if (previousId.HasValue)
+            {
+                viewModel.HasPreviousMediaLinkURL = true;
+                viewModel.PreviousMediaLinkURL = this.GetURL(c => c.GetItemDetail(previousId.Value));
+            }
+            if (nextId.HasValue)
+            {
+                viewModel.HasNextMediaLinkURL = true;
+                viewModel.NextMediaLinkURL = this.GetURL(c => c.GetItemDetail(nextId.Value));
+            }
+
             viewModel.MediaItemViewModel = new MediaItemViewModel();
-            viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, id);
+            viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, Url, id);
             return View(viewModel);
         }
 
@@ -219,7 +231,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("")]
-        public virtual ActionResult Index()
+        public ActionResult Index()
         {
             var mediaItems = DatabaseSession
                 .Query<MediaItem>()
@@ -243,8 +255,16 @@ namespace FODT.Controllers
             }
 
             var viewModel = new IndexViewModel();
-            viewModel.RecentlyUploaded = recentlyUploaded.Select(x => x.MediaItemId).ToList();
-            viewModel.RandomPic = randomSet.ToList();
+            viewModel.RecentlyUploaded = recentlyUploaded.Select(x => new IndexViewModel.Media
+            {
+                MediaLinkURL = this.GetURL(c => c.GetItemDetail(x.MediaItemId)),
+                MediaThumbnailURL = this.GetURL(c => c.GetItemThumbnail(x.MediaItemId)),
+            }).ToList();
+            viewModel.RandomPic = randomSet.Select(x => new IndexViewModel.Media
+            {
+                MediaLinkURL = this.GetURL(c => c.GetItemDetail(x)),
+                MediaThumbnailURL = this.GetURL(c => c.GetItemThumbnail(x)),
+            }).ToList();
             return View(viewModel);
         }
     }
