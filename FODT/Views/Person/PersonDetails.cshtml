@@ -91,7 +91,7 @@
         {
             <table class="table table-condensed table-hover">
                 <tbody>
-                    @foreach (var item in Model.ClubPositions)
+                    @foreach (var item in Model.ClubPositions.OrderByDescending(x => x.Year))
                     {
                         <tr>
                             <td><a href="#">@item.Year</a></td>
