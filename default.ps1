@@ -1,6 +1,9 @@
 Framework "4.5.1x64"
 
 properties {
+    $deployURL = "https://friendsofdt-prod.scm.azurewebsites.net:443/MsDeploy.axd"
+    $deployUsername = "`$friendsofdt-prod"
+    $deployPassword = ""
 }
 
 $baseDir  = resolve-path .
@@ -56,4 +59,9 @@ task Package -depends Init {
 
 task Build -depends Compile, Package {
 
+}
+
+task deploy-web {
+    exec { & "$deployDir\FODT.deploy.cmd" /T /M:$deployURL /U:$deployUsername /P:$deployPassword /A:basic }
+    write-host -foregroundcolor Magenta "Be sure to check the output of the above command since msdeploy.exe already returns exit code 0!"
 }
