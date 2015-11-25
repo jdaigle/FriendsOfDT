@@ -14,8 +14,8 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
 
 #Roadmap
 
-- [ ] Build and deploy site artifacts and database schema to Azure. Deployment pipeline is complete.
-- [ ] Complete data migration. On demand data synchronization from existing site.
+- [x] Build and deploy site artifacts and database schema to Azure. Deployment pipeline is complete.
+- [x] Complete data migration. On demand data synchronization from existing site.
 - [ ] Complete read-only views
 - [ ] Build authentication module. Custom OWIN middleware for Facebook login (ideally lighterweight than MS').
 - [ ] Basic user admin tasks (manage users, roles, etc.).
