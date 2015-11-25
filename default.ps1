@@ -4,6 +4,7 @@ properties {
     $deployURL = "https://friendsofdt-prod.scm.azurewebsites.net:443/MsDeploy.axd"
     $deployUsername = "`$friendsofdt-prod"
     $deployPassword = ""
+    $dbdeployPassword = ""
 }
 
 $baseDir  = resolve-path .
@@ -64,4 +65,12 @@ task Build -depends Compile, Package {
 task deploy-web {
     exec { & "$deployDir\FODT.deploy.cmd" /T /M:$deployURL /U:$deployUsername /P:$deployPassword /A:basic }
     write-host -foregroundcolor Magenta "Be sure to check the output of the above command since msdeploy.exe already returns exit code 0!"
+}
+
+task deploy-database {
+    exec { & $toolsDir\SqlMigrate.exe -m database -s friendsofdt-prod.database.windows.net -d fodt -u fodtadmin -p $dbdeployPassword -a -f }
+}
+
+task dbup {
+    exec { & $toolsDir\SqlMigrate.exe -m database -s . -d fodt -i }
 }

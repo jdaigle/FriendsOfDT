@@ -1,6 +1,3 @@
-USE fodt;
-GO
-
 CREATE TABLE [dbo].[MediaItem] (
 	[MediaItemId] [int] IDENTITY(1,1) NOT NULL,
 	[Path] [varchar](100) NOT NULL,

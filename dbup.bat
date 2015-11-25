@@ -1,1 +1,0 @@
-.\tools\SqlMigrate.exe -m database -s . -d fodt -i
