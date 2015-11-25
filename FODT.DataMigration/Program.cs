@@ -1,83 +1,143 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using FODT.Database;
 using FODT.Models;
 using FODT.Models.IMDT;
+using Dapper;
+using System.Net;
+using System.Drawing.Imaging;
+using System.Threading;
+using System.Globalization;
+using System.Diagnostics;
+using System.Text;
+using System.Drawing;
 
 namespace FODT.DataMigration
 {
     public class Program
     {
-        public const string DataDumpDirectory = @"C:\src\FriendsOfDT\data\dump";
+        private static NHibernate.ISessionFactory sessionFactory;
+        private static DbConnection oldDatabaseConnection;
+
+        private static string azureStorageBaseURL = "";
+        private static string azureStorageAccountName = "";
+        private static string azureStorageAccountKey = "";
+
+        private static bool skipBlobUpload = true;
 
         public static void Main(string[] args)
         {
             log4net.Config.XmlConfigurator.Configure();
 
+            azureStorageAccountName = ConfigurationManager.AppSettings["azure-storage-account-name"];
+            azureStorageAccountKey = ConfigurationManager.AppSettings["azure-storage-account-key"];
+            azureStorageBaseURL = "https://" + azureStorageAccountName + ".blob.core.windows.net/" + ConfigurationManager.AppSettings["azure-storage-blob-container"] + "/";
+
             var connectionString = ConfigurationManager.ConnectionStrings["fodt"].ConnectionString;
             var cfg = DatabaseBootstrapper.Bootstrap(connectionString);
-            var sessionFactory = cfg.BuildSessionFactory();
+            sessionFactory = cfg.BuildSessionFactory();
 
-            ImportMediaItems(sessionFactory);
-            ImportAwardsList(sessionFactory);
-            ImportPersons(sessionFactory);
-            ImportPersonMedia(sessionFactory);
-            ImportShows(sessionFactory);
-            ImportShowMedia(sessionFactory);
-            ImportShowAwards(sessionFactory);
-            ImportPersonAwards(sessionFactory);
-            ImportCast(sessionFactory);
-            ImportCrew(sessionFactory);
-            ImportEC(sessionFactory);
+            oldDatabaseConnection = new MySql.Data.MySqlClient.MySqlConnection(ConfigurationManager.ConnectionStrings["old_fodt"].ConnectionString);
+            oldDatabaseConnection.Open();
+
+            TruncateDatabase();
+            ImportMediaItems();
+            ImportAwardsList();
+            ImportPersons();
+            ImportPersonMedia();
+            ImportShows();
+            ImportShowMedia();
+            ImportShowAwards();
+            ImportPersonAwards();
+            ImportCast();
+            ImportCrew();
+            ImportEC();
         }
 
-        private static void ImportShows(NHibernate.ISessionFactory sessionFactory)
+        private static void TruncateDatabase()
         {
             using (var session = sessionFactory.OpenSession())
             {
-                var mediaLookup = LoadEntities("media.txt")
-                    .Select(x => new { media_id = int.Parse(x[0]), mediaItem_id = int.Parse(x[4]) })
-                    .ToDictionary(x => x.media_id);
-                var shows = LoadEntities("shows_fixed.txt");
+                session.Connection.Execute(@"
+DELETE FROM ShowMedia;
+DELETE FROM ShowCrew;
+DELETE FROM ShowCast;
+DELETE FROM ShowAward;
+DELETE FROM Show;
+DELETE FROM PersonMedia;
+DELETE FROM PersonClubPosition;
+DELETE FROM PersonAward;
+DELETE FROM Person;
+DELETE FROM MediaItem;
+DELETE FROM Award;
+");
+            }
+        }
+
+        private static void Log(string msg)
+        {
+            Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + ": " + msg);
+        }
+
+        private static void ImportShows()
+        {
+            var shows = oldDatabaseConnection.Query("SELECT * FROM shows").ToList();
+            var mediaLookup = oldDatabaseConnection.Query("SELECT * FROM media")
+                .Select(x => new { media_id = (int)x.ID, mediaItem_id = (int)x.item_id })
+                .ToDictionary(x => x.media_id);
+
+            using (var session = sessionFactory.OpenSession())
+            {
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].Show ON").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in shows)
                 {
-                    if (string.IsNullOrWhiteSpace(_row[1]))
+                    if (string.IsNullOrWhiteSpace(_row.title))
                     {
                         // no title? no show
                         continue;
                     }
                     var entity = new Show();
-                    entity.ShowId = int.Parse(_row[0]);
-                    entity.Title = (_row[1] ?? string.Empty).Trim();
-                    if (!string.IsNullOrWhiteSpace(_row[2]))
+                    entity.ShowId = _row.ID;
+                    entity.Title = (_row.title ?? string.Empty).Trim();
+                    if (_row.quarter != null)
                     {
-                        entity.Quarter = (Quarter)byte.Parse(_row[2]);
+                        entity.Quarter = (Quarter)(byte)_row.quarter;
                     }
                     else
                     {
                         // TODO?
                     }
-                    entity.Author = (_row[3] ?? string.Empty).Trim();
-                    if (!string.IsNullOrWhiteSpace(_row[4]))
+                    entity.Author = (_row.author ?? string.Empty).Trim();
+                    if (_row.year != null)
                     {
-                        entity.Year = short.Parse(_row[4]);
+                        entity.Year = (short)_row.year;
                     }
                     else
                     {
                         // TODO?
                     }
-                    entity.Pictures = (_row[5] ?? string.Empty).Trim();
-                    entity.FunFacts = (_row[6] ?? string.Empty).Trim();
-                    entity.Toaster = (_row[9] ?? string.Empty).Trim();
-                    if (mediaLookup.ContainsKey(int.Parse(_row[8])))
+                    entity.Pictures = (_row.pictures ?? string.Empty).Trim();
+
+                    entity.FunFacts = "";
+                    if (_row.funfacts != null && _row.funfacts.Length > 0)
                     {
-                        entity.MediaItem = session.Load<MediaItem>(mediaLookup[int.Parse(_row[8])].mediaItem_id);
+                        entity.FunFacts = Encoding.ASCII.GetString(_row.funfacts);
+                    }
+                    entity.Toaster = "";
+                    if (_row.toaster != null && _row.toaster.Length > 0)
+                    {
+                        entity.Toaster = Encoding.ASCII.GetString(_row.toaster);
+                    }
+
+                    if (_row.media_id != null)
+                    {
+                        entity.MediaItem = session.Load<MediaItem>(mediaLookup[_row.media_id].mediaItem_id);
                     }
                     else
                     {
@@ -86,9 +146,9 @@ namespace FODT.DataMigration
                     entity.InsertedDateTime = DateTime.UtcNow;
                     entity.LastModifiedDateTime = DateTime.UtcNow;
                     var lastModifiedDateTime = DateTime.UtcNow;
-                    if (DateTime.TryParse(_row[7], out lastModifiedDateTime))
+                    if (_row.last_mod != null)
                     {
-                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.ShowId);
                     if (entity.ShowId > maxId) maxId = entity.ShowId;
@@ -101,31 +161,37 @@ namespace FODT.DataMigration
             }
         }
 
-        private static void ImportPersons(NHibernate.ISessionFactory sessionFactory)
+        private static void ImportPersons()
         {
+            var people = oldDatabaseConnection.Query("SELECT * FROM people").ToList();
+            var mediaLookup = oldDatabaseConnection.Query("SELECT * FROM media")
+                .Select(x => new { media_id = (int)x.ID, mediaItem_id = (int)x.item_id })
+                .ToDictionary(x => x.media_id);
+            Log("Importing " + people.Count + " People");
+
             using (var session = sessionFactory.OpenSession())
             {
-                var mediaLookup = LoadEntities("media.txt")
-                    .Select(x => new { media_id = int.Parse(x[0]), mediaItem_id = int.Parse(x[4]) })
-                    .ToDictionary(x => x.media_id);
-                var people = LoadEntities("people_fixed.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].Person ON").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in people)
                 {
                     var entity = new Person();
-                    entity.PersonId = int.Parse(_row[0]);
-                    entity.Honorific = (_row[1] ?? string.Empty).Trim();
-                    entity.FirstName = (_row[2] ?? string.Empty).Trim();
-                    entity.MiddleName = (_row[3] ?? string.Empty).Trim();
-                    entity.LastName = (_row[4] ?? string.Empty).Trim();
-                    entity.Suffix = (_row[5] ?? string.Empty).Trim();
-                    entity.Nickname = (_row[6] ?? string.Empty).Trim();
-                    entity.Biography = (_row[7] ?? string.Empty).Trim();
-                    if (mediaLookup.ContainsKey(int.Parse(_row[13])))
+                    entity.PersonId = (int)_row.ID;
+                    entity.Honorific = (_row.hon ?? string.Empty).Trim();
+                    entity.FirstName = (_row.fname ?? string.Empty).Trim();
+                    entity.MiddleName = (_row.mname ?? string.Empty).Trim();
+                    entity.LastName = (_row.lname ?? string.Empty).Trim();
+                    entity.Suffix = (_row.suffix ?? string.Empty).Trim();
+                    entity.Nickname = (_row.nickname ?? string.Empty).Trim();
+                    entity.Biography = "";
+                    if (_row.bio != null && _row.bio.Length > 0)
                     {
-                        entity.MediaItem = session.Load<MediaItem>(mediaLookup[int.Parse(_row[13])].mediaItem_id);
+                        entity.Biography = Encoding.ASCII.GetString(_row.bio);
+                    }
+                    if (mediaLookup.ContainsKey((int)_row.media_id))
+                    {
+                        entity.MediaItem = session.Load<MediaItem>(mediaLookup[(int)_row.media_id].mediaItem_id);
                     }
                     else
                     {
@@ -134,9 +200,9 @@ namespace FODT.DataMigration
                     entity.InsertedDateTime = DateTime.UtcNow;
                     entity.LastModifiedDateTime = DateTime.UtcNow;
                     var lastModifiedDateTime = DateTime.UtcNow;
-                    if (DateTime.TryParse(_row[12], out lastModifiedDateTime))
+                    if (_row.last_mod != null)
                     {
-                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.PersonId);
                     if (entity.PersonId > maxId) maxId = entity.PersonId;
@@ -149,51 +215,112 @@ namespace FODT.DataMigration
             }
         }
 
-        private static void ImportMediaItems(NHibernate.ISessionFactory sessionFactory)
+        private static void ImportMediaItems()
         {
+            var rootMediaPath = @"http://imdt.friendsofdt.org/";
+            var media_items = oldDatabaseConnection.Query("SELECT * FROM media_items").ToList();
+            Log("Importing " + media_items.Count + " Media Items");
+
             using (var session = sessionFactory.OpenSession())
             {
-                var media_items = LoadEntities("media_items.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[MediaItem] ON").ExecuteUpdate();
                 var maxId = 0;
+                var count = 0;
                 foreach (var _row in media_items)
                 {
                     var entity = new MediaItem();
-                    entity.MediaItemId = int.Parse(_row[0]);
-                    entity.Path = (_row[1] ?? string.Empty).Trim();
-                    entity.ThumbnailPath = (_row[2] ?? string.Empty).Trim();
-                    entity.TinyPath = (_row[3] ?? string.Empty).Trim();
-                    entity.InsertedDateTime = DateTime.UtcNow;
-                    var insertedDateTime = DateTime.UtcNow;
-                    if (DateTime.TryParse(_row[4], out insertedDateTime))
+                    if (_row.guid == null)
                     {
-                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(insertedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                        throw new InvalidOperationException("Media Item is Missing GUID. Row needs to be updated before Importing");
                     }
+                    Guid guid = _row.guid;
+                    entity.MediaItemId = (int)_row.ID;
+                    entity.GUID = (Guid)_row.guid;
+                    entity.InsertedDateTime = DateTime.UtcNow;
+                    if (_row.lastmod != null)
+                    {
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc((DateTime)_row.lastmod, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                    }
+
+                    byte[] original = null;
+                    if (!skipBlobUpload)
+                    {
+                        original = AzureBlogStorageUtil.DownloadPublicBlob(rootMediaPath + _row.item.ToString().Replace("./", ""));
+
+                        if (original == null)
+                        {
+                            Log("Missing File!" + _row.item.ToString());
+                            continue;
+                        }
+                    }
+
                     session.Save(entity, entity.MediaItemId);
                     if (entity.MediaItemId > maxId) maxId = entity.MediaItemId;
+
+                    if (!skipBlobUpload)
+                    {
+                        var fullSize = ImageUtilities.LoadBitmap(original);
+                        var thumbnail = ImageUtilities.GetBytes(ImageUtilities.Resize(fullSize, 240, 240), ImageFormat.Jpeg);
+                        var tiny = ImageUtilities.GetBytes(ImageUtilities.Resize(fullSize, 50, 50), ImageFormat.Jpeg);
+
+                        PutBlob(entity.GetOriginalFileName(), original);
+                        PutBlob(entity.GetThumbnailFileName(), thumbnail);
+                        PutBlob(entity.GetTinyFileName(), tiny);
+                    }
+
+                    count++;
+                    if (count % 100 == 0)
+                    {
+                        Log("Imported " + count + " Media Items");
+
+                        session.Flush();
+                        session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[MediaItem] OFF").ExecuteUpdate();
+                        session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.[MediaItem]', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                        session.Transaction.Commit();
+
+                        session.Clear();
+
+                        session.Transaction.Begin();
+                        session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[MediaItem] ON").ExecuteUpdate();
+                    }
                 }
                 session.Flush();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[MediaItem] OFF").ExecuteUpdate();
                 session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.[MediaItem]', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
+                Log("Imported " + count + " Media Items");
             }
         }
 
-        private static void ImportAwardsList(NHibernate.ISessionFactory sessionFactory)
+        private static void PutBlob(string name, byte[] buffer)
         {
+            if (skipBlobUpload)
+            {
+                return;
+            }
+            if (!AzureBlogStorageUtil.BlobExists(azureStorageBaseURL + name))
+            {
+                AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + name, azureStorageAccountName, azureStorageAccountKey, buffer, "image/jpeg");
+            }
+        }
+
+        private static void ImportAwardsList()
+        {
+            var awards = oldDatabaseConnection.Query("SELECT * FROM awards_list").ToList();
+            Log("Importing " + awards.Count + " awards");
+
             using (var session = sessionFactory.OpenSession())
             {
-                var awards = LoadEntities("awards_list.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].Award ON").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in awards)
                 {
                     var entity = new Award();
-                    entity.AwardId = int.Parse(_row[0]);
-                    entity.Name = (_row[1] ?? string.Empty).Trim();
+                    entity.AwardId = (int)_row.ID;
+                    entity.Name = ((string)_row.name ?? "").Trim();
                     if (string.IsNullOrWhiteSpace(entity.Name))
                     {
                         entity.Name = "[MISSING]";
@@ -209,29 +336,30 @@ namespace FODT.DataMigration
             }
         }
 
-        private static void ImportPersonMedia(NHibernate.ISessionFactory sessionFactory)
+        private static void ImportPersonMedia()
         {
+            var media = oldDatabaseConnection.Query("SELECT * FROM media").ToList();
+            Log("Importing " + media.Count + " person media");
+
             using (var session = sessionFactory.OpenSession())
             {
-                var media = LoadEntities("media.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].PersonMedia ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in media)
                 {
-                    if (_row[2].ToLower() != "people")
+                    if (_row.IDtype.ToLower() != "people")
                     {
                         continue;
                     }
                     var entity = new PersonMedia();
-                    entity.PersonMediaId = int.Parse(_row[0]);
-                    entity.Person = session.Load<Person>(int.Parse(_row[1]));
-                    entity.MediaItem = session.Load<MediaItem>(int.Parse(_row[4]));
+                    entity.PersonMediaId = _row.ID;
+                    entity.Person = session.Load<Person>(_row.assocID);
+                    entity.MediaItem = session.Load<MediaItem>(_row.item_id);
                     entity.InsertedDateTime = DateTime.UtcNow;
-                    var insertedDateTime = DateTime.UtcNow;
-                    if (DateTime.TryParse(_row[3], out insertedDateTime))
+                    if (_row.last_mod != null)
                     {
-                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(insertedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.PersonMediaId);
                     if (entity.PersonMediaId > maxId) maxId = entity.PersonMediaId;
@@ -244,29 +372,30 @@ namespace FODT.DataMigration
             }
         }
 
-        private static void ImportShowMedia(NHibernate.ISessionFactory sessionFactory)
+        private static void ImportShowMedia()
         {
+            var media = oldDatabaseConnection.Query("SELECT * FROM media").ToList();
+            Log("Importing " + media.Count + " show media");
+
             using (var session = sessionFactory.OpenSession())
             {
-                var media = LoadEntities("media.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowMedia ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in media)
                 {
-                    if (_row[2].ToLower() != "shows")
+                    if (_row.IDtype.ToLower() != "shows")
                     {
                         continue;
                     }
                     var entity = new ShowMedia();
-                    entity.ShowMediaId = int.Parse(_row[0]);
-                    entity.Show = session.Load<Show>(int.Parse(_row[1]));
-                    entity.MediaItem = session.Load<MediaItem>(int.Parse(_row[4]));
+                    entity.ShowMediaId = _row.ID;
+                    entity.Show = session.Load<Show>(_row.assocID);
+                    entity.MediaItem = session.Load<MediaItem>(_row.item_id);
                     entity.InsertedDateTime = DateTime.UtcNow;
-                    var insertedDateTime = DateTime.UtcNow;
-                    if (DateTime.TryParse(_row[3], out insertedDateTime))
+                    if (_row.last_mod != null)
                     {
-                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(insertedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.ShowMediaId);
                     if (entity.ShowMediaId > maxId) maxId = entity.ShowMediaId;
@@ -279,35 +408,34 @@ namespace FODT.DataMigration
             }
         }
 
-        private static void ImportShowAwards(NHibernate.ISessionFactory sessionFactory)
+        private static void ImportShowAwards()
         {
+            var awards = oldDatabaseConnection.Query("SELECT * FROM awards").ToList();
+            Log("Importing " + awards.Count + " show awards");
+
             using (var session = sessionFactory.OpenSession())
             {
-                var awards = LoadEntities("awards.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowAward ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in awards)
                 {
-                    int showId = 0;
-                    if (int.TryParse(_row[1], out showId))
+                    if (_row.showID != null)
                     {
                         var entity = new ShowAward();
-                        entity.ShowAwardId = int.Parse(_row[0]);
-                        entity.Show = session.Load<Show>(showId);
-                        int personId = 0;
-                        if (int.TryParse(_row[2], out personId))
+                        entity.ShowAwardId = _row.ID;
+                        entity.Show = session.Load<Show>(_row.showID);
+                        if (_row.peepID != null)
                         {
-                            entity.Person = session.Load<Person>(personId);
+                            entity.Person = session.Load<Person>(_row.peepID);
                         }
-                        entity.Award = session.Load<Award>(int.Parse(_row[3]));
-                        entity.Year = short.Parse(_row[4]);
+                        entity.Award = session.Load<Award>((int)_row.awardID);
+                        entity.Year = (short)_row.year;
                         entity.InsertedDateTime = DateTime.UtcNow;
                         entity.LastModifiedDateTime = DateTime.UtcNow;
-                        var lastModifiedDateTime = DateTime.UtcNow;
-                        if (DateTime.TryParse(_row[5], out lastModifiedDateTime))
+                        if (_row.last_mod != null)
                         {
-                            entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                            entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                         }
                         session.Save(entity, entity.ShowAwardId);
                         if (entity.ShowAwardId > maxId) maxId = entity.ShowAwardId;
@@ -321,32 +449,31 @@ namespace FODT.DataMigration
             }
         }
 
-        private static void ImportPersonAwards(NHibernate.ISessionFactory sessionFactory)
+        private static void ImportPersonAwards()
         {
+            var awards = oldDatabaseConnection.Query("SELECT * FROM awards").ToList();
+            Log("Importing " + awards.Count + " person awards");
+
             using (var session = sessionFactory.OpenSession())
             {
-                var awards = LoadEntities("awards.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].PersonAward ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in awards)
                 {
-                    int showId = 0;
-                    int personId = 0;
-                    if (!int.TryParse(_row[1], out showId) && int.TryParse(_row[2], out personId))
+                    if (_row.showID == null && _row.peepID != null)
                     {
                         // no show, only a person
                         var entity = new PersonAward();
-                        entity.PersonAwardId = int.Parse(_row[0]);
-                        entity.Person = session.Load<Person>(personId);
-                        entity.Award = session.Load<Award>(int.Parse(_row[3]));
-                        entity.Year = short.Parse(_row[4]);
+                        entity.PersonAwardId = _row.ID;
+                        entity.Person = session.Load<Person>(_row.peepID);
+                        entity.Award = session.Load<Award>((int)_row.awardID);
+                        entity.Year = (short)_row.year;
                         entity.InsertedDateTime = DateTime.UtcNow;
                         entity.LastModifiedDateTime = DateTime.UtcNow;
-                        var lastModifiedDateTime = DateTime.UtcNow;
-                        if (DateTime.TryParse(_row[5], out lastModifiedDateTime))
+                        if (_row.last_mod != null)
                         {
-                            entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                            entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                         }
                         session.Save(entity, entity.PersonAwardId);
                         if (entity.PersonAwardId > maxId) maxId = entity.PersonAwardId;
@@ -360,36 +487,37 @@ namespace FODT.DataMigration
             }
         }
 
-        private static void ImportCast(NHibernate.ISessionFactory sessionFactory)
+        private static void ImportCast()
         {
+            var cast = oldDatabaseConnection.Query("SELECT * FROM cast").ToList();
+            Log("Importing " + cast.Count + " cast");
+
             using (var session = sessionFactory.OpenSession())
             {
-                var cast = LoadEntities("cast.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowCast ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in cast)
                 {
-                    if (string.IsNullOrWhiteSpace(_row[1]) || string.IsNullOrWhiteSpace(_row[2]))
+                    if (_row.peepID == null || _row.showID == null)
                     {
                         // broken?
                         continue;
                     }
                     var entity = new ShowCast();
-                    entity.ShowCastId = int.Parse(_row[0]);
-                    entity.Person = session.Load<Person>(int.Parse(_row[1]));
-                    entity.Show = session.Load<Show>(int.Parse(_row[2]));
-                    entity.Role = (_row[3] ?? string.Empty).Trim();
+                    entity.ShowCastId = _row.ID;
+                    entity.Person = session.Load<Person>(_row.peepID);
+                    entity.Show = session.Load<Show>(_row.showID);
+                    entity.Role = (_row.role ?? string.Empty).Trim();
                     if (string.IsNullOrWhiteSpace(entity.Role))
                     {
                         entity.Role = "[MISSING]";
                     }
                     entity.InsertedDateTime = DateTime.UtcNow;
                     entity.LastModifiedDateTime = DateTime.UtcNow;
-                    var lastModifiedDateTime = DateTime.UtcNow;
-                    if (DateTime.TryParse(_row[4], out lastModifiedDateTime))
+                    if (_row.last_mod != null)
                     {
-                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.ShowCastId);
                     if (entity.ShowCastId > maxId) maxId = entity.ShowCastId;
@@ -402,42 +530,46 @@ namespace FODT.DataMigration
             }
         }
 
-        private static void ImportCrew(NHibernate.ISessionFactory sessionFactory)
+        private static void ImportCrew()
         {
+            var crew = oldDatabaseConnection.Query("SELECT * FROM crew").ToList();
+            var jobs = oldDatabaseConnection.Query("SELECT * FROM jobs").Select(x =>
+            {
+                if (x.ID == null || string.IsNullOrWhiteSpace(x.job))
+                {
+                    return null;
+                }
+                int order = 999;
+                if (x.priority != null)
+                {
+                    order = x.priority;
+                }
+                return new
+                {
+                    id = (int)x.ID,
+                    name = (string)x.job,
+                    order = order,
+                };
+            }).Where(x => x != null).ToDictionary(x => x.id);
+            Log("Importing " + crew.Count + " crew");
+
             using (var session = sessionFactory.OpenSession())
             {
-                var jobs = LoadEntities("jobs.txt").Select(x =>
-                {
-                    int id = 0;
-                    if (!int.TryParse(x[0], out id))
-                    {
-                        return null;
-                    }
-                    int order = 0;
-                    if (!int.TryParse(x[2], out order)) order = 999;
-                    return new
-                    {
-                        id = id,
-                        name = x[1],
-                        order = order,
-                    };
-                }).Where(x => x != null).ToDictionary(x => x.id);
-                var crew = LoadEntities("crew.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowCrew ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in crew)
                 {
-                    if (string.IsNullOrWhiteSpace(_row[1]) || string.IsNullOrWhiteSpace(_row[2]))
+                    if (_row.peepID == null || _row.showID == null)
                     {
                         // broken?
                         continue;
                     }
                     var entity = new ShowCrew();
-                    entity.ShowCrewId = int.Parse(_row[0]);
-                    entity.Person = session.Load<Person>(int.Parse(_row[1]));
-                    entity.Show = session.Load<Show>(int.Parse(_row[2]));
-                    int jobId = int.Parse(_row[3]);
+                    entity.ShowCrewId = _row.ID;
+                    entity.Person = session.Load<Person>(_row.peepID);
+                    entity.Show = session.Load<Show>(_row.showID);
+                    int jobId = _row.jobID;
                     entity.DisplayOrder = jobs[jobId].order;
                     entity.Position = jobs[jobId].name;
                     if (string.IsNullOrWhiteSpace(entity.Position))
@@ -446,10 +578,9 @@ namespace FODT.DataMigration
                     }
                     entity.InsertedDateTime = DateTime.UtcNow;
                     entity.LastModifiedDateTime = DateTime.UtcNow;
-                    var lastModifiedDateTime = DateTime.UtcNow;
-                    if (DateTime.TryParse(_row[4], out lastModifiedDateTime))
+                    if (_row.last_mod != null)
                     {
-                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.ShowCrewId);
                     if (entity.ShowCrewId > maxId) maxId = entity.ShowCrewId;
@@ -462,51 +593,51 @@ namespace FODT.DataMigration
             }
         }
 
-        private static void ImportEC(NHibernate.ISessionFactory sessionFactory)
+        private static void ImportEC()
         {
+            var ec = oldDatabaseConnection.Query("SELECT * FROM ec").ToList();
+            var ec_list = oldDatabaseConnection.Query("SELECT * FROM ec_list").Select(x =>
+            {
+                if(x.ID == null)
+                {
+                    return null;
+                }
+                return new
+                {
+                    id = (int)x.ID,
+                    name = (string)x.title ?? "",
+                };
+            }).Where(x => x != null).ToDictionary(x => x.id);
+            Log("Importing " + ec.Count + " ec");
+
             using (var session = sessionFactory.OpenSession())
             {
-                var ec_list = LoadEntities("ec_list.txt").Select(x =>
-                {
-                    int id = 0;
-                    if (!int.TryParse(x[0], out id))
-                    {
-                        return null;
-                    }
-                    return new
-                    {
-                        id = id,
-                        name = x[1],
-                    };
-                }).Where(x => x != null).ToDictionary(x => x.id);
-                var ec = LoadEntities("ec.txt");
                 session.Transaction.Begin();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].PersonClubPosition ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in ec)
                 {
-                    if (string.IsNullOrWhiteSpace(_row[1]))
+                    if (_row.peepID == null)
                     {
                         // broken?
                         continue;
                     }
                     var entity = new PersonClubPosition();
-                    entity.PersonClubPositionId = int.Parse(_row[0]);
-                    entity.Person = session.Load<Person>(int.Parse(_row[1]));
-                    int ecId = int.Parse(_row[2]);
-                    entity.Position = ec_list[ecId].name;
-                    entity.Year = short.Parse(_row[3]);
+                    entity.PersonClubPositionId = _row.ID;
+                    entity.Person = session.Load<Person>(_row.peepID);
+                    entity.Position = ec_list[_row.ECID].name;
+                    entity.Year = (short)_row.year;
                     if (string.IsNullOrWhiteSpace(entity.Position))
                     {
                         entity.Position = "[MISSING]";
                     }
-                    entity.DisplayOrder = ecId;
+                    entity.DisplayOrder = _row.ECID;
                     entity.InsertedDateTime = DateTime.UtcNow;
                     entity.LastModifiedDateTime = DateTime.UtcNow;
-                    var lastModifiedDateTime = DateTime.UtcNow;
-                    if (DateTime.TryParse(_row[4], out lastModifiedDateTime))
+                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    if (_row.last_mod != null)
                     {
-                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(lastModifiedDateTime, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.PersonClubPositionId);
                     if (entity.PersonClubPositionId > maxId) maxId = entity.PersonClubPositionId;
@@ -517,11 +648,6 @@ namespace FODT.DataMigration
                 session.Transaction.Commit();
                 session.Close();
             }
-        }
-
-        public static List<IDelimitedRow> LoadEntities(string file)
-        {
-            return new TSVReader(File.OpenRead(Path.Combine(DataDumpDirectory, file)), false).ToList();
         }
     }
 }

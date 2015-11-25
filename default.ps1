@@ -72,5 +72,5 @@ task deploy-database {
 }
 
 task dbup {
-    exec { & $toolsDir\SqlMigrate.exe -m database -s . -d fodt -i }
+    exec { & $toolsDir\SqlMigrate.exe -m database -s . -d fodt -i -f }
 }

@@ -10,12 +10,25 @@ using FODT.Views.Media;
 using FODT.Views.Shared;
 using NHibernate.Linq;
 using FODT.Database;
+using System.Configuration;
 
 namespace FODT.Controllers
 {
     [RoutePrefix("Media")]
     public class MediaController : BaseController
     {
+        private static readonly string azureStorageAccountName;
+        private static readonly string azureStorageAccountKey;
+        private static readonly string azureStorageBaseURL;
+
+        static MediaController()
+        {
+            azureStorageAccountName = ConfigurationManager.AppSettings["azure-storage-account-name"];
+            azureStorageAccountKey = ConfigurationManager.AppSettings["azure-storage-account-key"];
+            azureStorageBaseURL = "https://" + azureStorageAccountName + ".blob.core.windows.net/" + ConfigurationManager.AppSettings["azure-storage-blob-container"] + "/";
+        }
+
+
         [HttpGet, Route("Upload")]
         public ActionResult Upload()
         {
@@ -59,33 +72,32 @@ namespace FODT.Controllers
                 throw new InvalidOperationException("File too big: " + param.UploadedFile.ContentLength);
             }
 
-            var unique_file_name = Guid.NewGuid().ToString();
-
             var mediaItem = new MediaItem();
-            mediaItem.Path = string.Empty;
-            mediaItem.ThumbnailPath = string.Empty;
-            mediaItem.TinyPath = string.Empty;
-            mediaItem.InsertedDateTime = DateTime.UtcNow;
             DatabaseSession.Save(mediaItem);
             DatabaseSession.Flush(); // to get the ID
 
             var unique_id = mediaItem.MediaItemId.ToString();
-            mediaItem.Path = string.Format("./media/{0}.jpg", unique_id);
-            mediaItem.ThumbnailPath = string.Format("./media/{0}-thumb.jpg", unique_id);
-            mediaItem.TinyPath = string.Format("./media/{0}-tiny.jpg", unique_id);
 
-            var buffer = new byte[param.UploadedFile.ContentLength];
-            param.UploadedFile.InputStream.Read(buffer, 0, param.UploadedFile.ContentLength);
-            using (var fullSize = ImageUtilities.LoadBitmap(buffer))
+            var original_buffer = new byte[param.UploadedFile.ContentLength];
+            param.UploadedFile.InputStream.Read(original_buffer, 0, param.UploadedFile.ContentLength);
+
+            AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + mediaItem.GetOriginalFileName()
+                , azureStorageAccountName, azureStorageAccountKey
+                , original_buffer, "image/jpeg");
+
+            using (var fullSize = ImageUtilities.LoadBitmap(original_buffer))
             {
-                fullSize.Save(Path.Combine(@"C:\temp\imdt", mediaItem.Path), System.Drawing.Imaging.ImageFormat.Jpeg);
                 using (var thumbnail = ImageUtilities.Resize(fullSize, 240, 240))
                 {
-                    thumbnail.Save(Path.Combine(@"C:\temp\imdt", mediaItem.ThumbnailPath), System.Drawing.Imaging.ImageFormat.Jpeg);
+                    AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + mediaItem.GetThumbnailFileName()
+                        , azureStorageAccountName, azureStorageAccountKey
+                        , ImageUtilities.GetBytes(thumbnail, System.Drawing.Imaging.ImageFormat.Jpeg), "image/jpeg");
                 }
                 using (var tiny = ImageUtilities.Resize(fullSize, 50, 50))
                 {
-                    tiny.Save(Path.Combine(@"C:\temp\imdt", mediaItem.TinyPath), System.Drawing.Imaging.ImageFormat.Jpeg);
+                    AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + mediaItem.GetTinyFileName()
+                        , azureStorageAccountName, azureStorageAccountKey
+                        , ImageUtilities.GetBytes(tiny, System.Drawing.Imaging.ImageFormat.Jpeg), "image/jpeg");
                 }
             }
 
@@ -161,7 +173,7 @@ namespace FODT.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            return new FilePathResult(Path.Combine(@"C:\temp\imdt", mediaItem.Path), "image/jpg");
+            return new RedirectResult(azureStorageBaseURL + mediaItem.GetOriginalFileName());
         }
 
         [HttpGet, Route("{id}/tiny")]
@@ -172,7 +184,7 @@ namespace FODT.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            return new FilePathResult(Path.Combine(@"C:\temp\imdt", mediaItem.TinyPath), "image/jpg");
+            return new RedirectResult(azureStorageBaseURL + mediaItem.GetTinyFileName());
         }
 
         [HttpGet, Route("{id}/thumbnail")]
@@ -183,7 +195,7 @@ namespace FODT.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            return new FilePathResult(Path.Combine(@"C:\temp\imdt", mediaItem.ThumbnailPath), "image/jpg");
+            return new RedirectResult(azureStorageBaseURL + mediaItem.GetThumbnailFileName());
         }
 
         [HttpGet, Route("{id}/detail")]

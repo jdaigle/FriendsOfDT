@@ -22,6 +22,15 @@ namespace FODT.Models
             }
         }
 
+        public static byte[] GetBytes(Bitmap source, ImageFormat format)
+        {
+            using (var s = new MemoryStream())
+            {
+                source.Save(s, format);
+                return s.ToArray();
+            }
+        }
+
         public static Bitmap Resize(Bitmap source, float maxWidth, float maxHeight)
         {
             if (source.Width <= maxWidth && source.Height <= maxHeight)
