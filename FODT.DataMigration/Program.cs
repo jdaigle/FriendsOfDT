@@ -56,6 +56,10 @@ namespace FODT.DataMigration
             ImportCast();
             ImportCrew();
             ImportEC();
+            if (!skipBlobUpload)
+            {
+                ImportMediaBlobs();
+            }
         }
 
         private static void TruncateDatabase()
@@ -217,7 +221,6 @@ DELETE FROM Award;
 
         private static void ImportMediaItems()
         {
-            var rootMediaPath = @"http://imdt.friendsofdt.org/";
             var media_items = oldDatabaseConnection.Query("SELECT * FROM media_items").ToList();
             Log("Importing " + media_items.Count + " Media Items");
 
@@ -242,48 +245,9 @@ DELETE FROM Award;
                     {
                         entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc((DateTime)_row.lastmod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
-
-                    byte[] original = null;
-                    if (!skipBlobUpload)
-                    {
-                        original = AzureBlogStorageUtil.DownloadPublicBlob(rootMediaPath + _row.item.ToString().Replace("./", ""));
-
-                        if (original == null)
-                        {
-                            Log("Missing File!" + _row.item.ToString());
-                            continue;
-                        }
-                    }
-
                     session.Save(entity, entity.MediaItemId);
                     if (entity.MediaItemId > maxId) maxId = entity.MediaItemId;
-
-                    if (!skipBlobUpload)
-                    {
-                        var fullSize = ImageUtilities.LoadBitmap(original);
-                        var thumbnail = ImageUtilities.GetBytes(ImageUtilities.Resize(fullSize, 240, 240), ImageFormat.Jpeg);
-                        var tiny = ImageUtilities.GetBytes(ImageUtilities.Resize(fullSize, 50, 50), ImageFormat.Jpeg);
-
-                        PutBlob(entity.GetOriginalFileName(), original);
-                        PutBlob(entity.GetThumbnailFileName(), thumbnail);
-                        PutBlob(entity.GetTinyFileName(), tiny);
-                    }
-
                     count++;
-                    if (count % 100 == 0)
-                    {
-                        Log("Imported " + count + " Media Items");
-
-                        session.Flush();
-                        session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[MediaItem] OFF").ExecuteUpdate();
-                        session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.[MediaItem]', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
-                        session.Transaction.Commit();
-
-                        session.Clear();
-
-                        session.Transaction.Begin();
-                        session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[MediaItem] ON").ExecuteUpdate();
-                    }
                 }
                 session.Flush();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[MediaItem] OFF").ExecuteUpdate();
@@ -294,12 +258,54 @@ DELETE FROM Award;
             }
         }
 
+        private static void ImportMediaBlobs()
+        {
+            var rootMediaPath = @"http://imdt.friendsofdt.org/";
+
+            var media_items = oldDatabaseConnection.Query("SELECT * FROM media_items").ToList();
+            Log("Importing " + media_items.Count + " Media Items");
+
+            var count = 0;
+            foreach (var _row in media_items)
+            {
+                var entity = new MediaItem();
+                if (_row.guid == null)
+                {
+                    throw new InvalidOperationException("Media Item is Missing GUID. Row needs to be updated before Importing");
+                }
+                Guid guid = _row.guid;
+                entity.MediaItemId = (int)_row.ID;
+                entity.GUID = (Guid)_row.guid;
+
+                byte[] original = null;
+                original = AzureBlogStorageUtil.DownloadPublicBlob(rootMediaPath + _row.item.ToString().Replace("./", ""));
+
+                if (original == null)
+                {
+                    Log("Missing File!" + _row.item.ToString());
+                    continue;
+                }
+
+                var fullSize = ImageUtilities.LoadBitmap(original);
+                var thumbnail = ImageUtilities.GetBytes(ImageUtilities.Resize(fullSize, 240, 240), ImageFormat.Jpeg);
+                var tiny = ImageUtilities.GetBytes(ImageUtilities.Resize(fullSize, 50, 50), ImageFormat.Jpeg);
+
+                PutBlob(entity.GetOriginalFileName(), original);
+                PutBlob(entity.GetThumbnailFileName(), thumbnail);
+                PutBlob(entity.GetTinyFileName(), tiny);
+
+                count++;
+                if (count % 100 == 0)
+                {
+                    Log("Imported " + count + " Media Items");
+
+                }
+            }
+            Log("Imported " + count + " Media Items");
+        }
+
         private static void PutBlob(string name, byte[] buffer)
         {
-            if (skipBlobUpload)
-            {
-                return;
-            }
             if (!AzureBlogStorageUtil.BlobExists(azureStorageBaseURL + name))
             {
                 AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + name, azureStorageAccountName, azureStorageAccountKey, buffer, "image/jpeg");
