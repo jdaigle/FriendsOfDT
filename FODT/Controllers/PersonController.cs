@@ -9,6 +9,7 @@ using FODT.Views.Shared;
 using FODT.Security;
 using NHibernate.Linq;
 using FODT.Views.Awards;
+using FODT.Views.Show;
 
 namespace FODT.Controllers
 {
@@ -31,10 +32,6 @@ namespace FODT.Controllers
             viewModel.CanEdit = this.ControllerContext.CanEditPerson(person);
 
             viewModel.EditLinkURL = this.GetURL(c => c.EditPerson(personId));
-            viewModel.AddAwardURL = this.GetURL(c => c.AddAward(personId));
-            viewModel.AddClubPositionURL = this.GetURL(c => c.AddClubPosition(personId));
-            viewModel.AddCastURL = this.GetURL(c => c.AddCast(personId));
-            viewModel.AddCrewURL = this.GetURL(c => c.AddCrew(personId));
             viewModel.MediaUploadLinkURL = this.GetURL<MediaController>(c => c.Upload());
             viewModel.MediaLinkURL = this.GetURL(c => c.GetPersonMedia(personId, person.MediaItem.MediaItemId));
             viewModel.MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(person.MediaItem.MediaItemId));
@@ -44,13 +41,6 @@ namespace FODT.Controllers
             viewModel.FullName = person.Fullname;
             viewModel.Biography = person.Biography;
             viewModel.MediaItemId = person.MediaItem.MediaItemId;
-            viewModel.ClubPositions = clubPositions.OrderBy(x => x.DisplayOrder).ThenByDescending(x => x.Year).Select(x => new PersonDetailsViewModel.ClubPosition
-            {
-                DeleteClubPositionURL = this.GetURL(c => c.DeleteClubPosition(personId, x.PersonClubPositionId)),
-                Year = x.Year,
-                Name = x.Position,
-                ClubPositionId = x.PersonClubPositionId,
-            }).ToList();
 
             viewModel.AwardsTable = new AwardsTableViewModel(
                 this.Url
@@ -62,49 +52,33 @@ namespace FODT.Controllers
                 AddItemURL = this.GetURL(c => c.AddAward(personId)),
             };
 
-            viewModel.Awards = showAwards.Select(x => new PersonDetailsViewModel.Award
+            viewModel.ClubPositionsTable = new ClubPositionsTableViewModel(
+                this.Url
+                , x => this.GetURL(c => c.DeleteClubPosition(personId, x))
+                , clubPositions)
             {
-                DeleteAwardURL = this.GetURL(c => c.DeleteAward(personId, x.ShowAwardId, x.Show.ShowId)),
-                ShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.Show.ShowId)),
-                AwardYearLinkURL = this.GetURL<AwardsController>(c => c.ByYear(x.Year)),
-                Year = x.Year,
-                AwardId = x.ShowAwardId,
-                Name = x.Award.Name,
-                ShowId = x.Show.ShowId,
-                ShowName = x.Show.Title,
-                ShowQuarter = x.Show.Quarter,
-                ShowYear = x.Show.Year,
-            })
-            .Concat(myAwards.Select(x => new PersonDetailsViewModel.Award
+                CanEdit = this.ControllerContext.CanEditPerson(person),
+                AddItemURL = this.GetURL(c => c.AddClubPosition(personId)),
+            };
+
+            viewModel.CastRolesTable = new CastRolesTableViewModel(
+                this.Url
+                , x => this.GetURL(c => c.DeleteCast(personId, x))
+                , cast)
             {
-                DeleteAwardURL = this.GetURL(c => c.DeleteAward(personId, x.PersonAwardId, null)),
-                AwardYearLinkURL = this.GetURL<AwardsController>(c => c.ByYear(x.Year)),
-                Year = x.Year,
-                AwardId = x.PersonAwardId,
-                Name = x.Award.Name,
-            })).ToList();
-            viewModel.CastRoles = cast.Select(x => new PersonDetailsViewModel.CastRole
+                CanEdit = this.ControllerContext.CanEditPerson(person),
+                AddItemURL = this.GetURL(c => c.AddCast(personId)),
+            };
+
+            viewModel.CrewPositionsTable = new CrewPositionsTableViewModel(
+                this.Url
+                , x => this.GetURL(c => c.DeleteCrew(personId, x))
+                , crew)
             {
-                DeleteCastURL = this.GetURL(c => c.DeleteCast(personId, x.ShowCastId)),
-                ShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.Show.ShowId)),
-                ShowCastId = x.ShowCastId,
-                ShowId = x.Show.ShowId,
-                ShowName = x.Show.Title,
-                ShowQuarter = x.Show.Quarter,
-                ShowYear = x.Show.Year,
-                Role = x.Role,
-            }).ToList();
-            viewModel.CrewPositions = crew.Select(x => new PersonDetailsViewModel.CrewPosition
-            {
-                DeleteCrewURL = this.GetURL(c => c.DeleteCrew(personId, x.ShowCrewId)),
-                ShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.Show.ShowId)),
-                ShowCrewId = x.ShowCrewId,
-                ShowId = x.Show.ShowId,
-                ShowName = x.Show.Title,
-                ShowQuarter = x.Show.Quarter,
-                ShowYear = x.Show.Year,
-                Name = x.Position,
-            }).ToList();
+                CanEdit = this.ControllerContext.CanEditPerson(person),
+                AddItemURL = this.GetURL(c => c.AddCrew(personId)),
+            };
+
             viewModel.RelatedMediaCount = relatedMedia.Count;
             viewModel.NewRelatedMedia = relatedMedia
                 .OrderByDescending(x => x.InsertedDateTime)

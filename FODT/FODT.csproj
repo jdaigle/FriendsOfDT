@@ -196,6 +196,7 @@
     <Compile Include="Views\Media\GetItemDetailViewModel.cs" />
     <Compile Include="Views\Media\IndexViewModel.cs" />
     <Compile Include="Views\Media\UploadViewModel.cs" />
+    <Compile Include="Views\Person\ClubPositionsTableViewModel.cs" />
     <Compile Include="Views\Person\EditPersonViewModel.cs" />
     <Compile Include="Views\Person\GetPersonMediaViewModel.cs" />
     <Compile Include="Views\Person\ListPersonMediaViewModel.cs" />
@@ -203,6 +204,8 @@
     <Compile Include="Views\Shared\MediaItemViewModel.cs" />
     <Compile Include="Views\Shared\RelationTableViewModel.cs" />
     <Compile Include="Views\Shows\SortedShowsViewModel.cs" />
+    <Compile Include="Views\Show\CastRolesTableViewModel.cs" />
+    <Compile Include="Views\Show\CrewPositionsTableViewModel.cs" />
     <Compile Include="Views\Show\GetShowMediaViewModel.cs" />
     <Compile Include="Views\Show\GetViewModel.cs" />
     <Compile Include="Views\Person\PersonDetailsViewModel.cs" />
@@ -313,9 +316,12 @@
     <Content Include="Views\Person\AddCrew.cshtml" />
     <Content Include="Views\Person\AddCast.cshtml" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Views\Shared\_RelationTable.cshtml" />
+    <Content Include="Views\Shared\RelationTable.cshtml" />
     <RazorSrcFiles Include="Views\Awards\AwardsTableHelper.cshtml" />
     <Content Include="razorgenerator.directives" />
+    <RazorSrcFiles Include="Views\Person\ClubPositionsTableHelper.cshtml" />
+    <RazorSrcFiles Include="Views\Show\CrewPositionsTableHelper.cshtml" />
+    <RazorSrcFiles Include="Views\Show\CastRolesTableHelper.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
