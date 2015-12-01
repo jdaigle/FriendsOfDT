@@ -208,9 +208,12 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Content Include="Assets\css\bootstrap-theme.css" />
     <Content Include="Assets\css\fodt-components.css" />
+    <Content Include="Assets\css\fodt-shared.css" />
     <Content Include="Assets\img\ajax-loader.gif" />
     <Content Include="Assets\img\bulletRelatedLinks.gif" />
+    <Content Include="Assets\img\DT-WOB.png" />
     <Content Include="Assets\img\facebook_16.png" />
     <Content Include="Assets\img\facebook_32.png" />
     <Content Include="Assets\img\facebook_signin.png" />
@@ -218,12 +221,7 @@
     <Content Include="Assets\img\bkup.imdtlogo.png" />
     <Content Include="Assets\css\bootstrap.css" />
     <Content Include="Assets\img\dtlogo.png" />
-    <Content Include="Assets\dtstyle.css" />
     <Content Include="Assets\img\dttitle.png" />
-    <Content Include="Assets\css\fodt-forms.css" />
-    <Content Include="Assets\css\fodt-main.css" />
-    <Content Include="Assets\css\fodt-slideshow.css" />
-    <Content Include="Assets\css\fodt-tables.css" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Assets\img\greg_abbott.jpg" />
     <Content Include="Assets\img\header.png" />
@@ -292,7 +290,6 @@
     <Content Include="Views\Shared\MediaItem.cshtml" />
     <Content Include="Views\Person\ListPersonMedia.cshtml" />
     <Content Include="Views\Person\GetPersonMedia.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shows\SortByYear.cshtml" />
     <Content Include="Views\Shows\SortByTitle.cshtml" />
     <Content Include="Views\User\Welcome.cshtml" />
@@ -330,7 +327,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>16680</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

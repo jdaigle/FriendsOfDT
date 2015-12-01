@@ -11,24 +11,16 @@ namespace FODT.Controllers
     public class HomeController : BaseController
     {
         [HttpGet, Route("")]
+        public ActionResult Index()
+        {
+            return this.RedirectToAction(c => c.Welcome());
+        }
+
+        [HttpGet, Route("Welcome")]
         public ActionResult Welcome()
         {
             return View();
         }
-
-        [HttpGet, Route("Index")]
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        //[HttpGet, Route("Admin")]
-        //public ActionResult Admin()
-        //{
-        //    var viewModel = new AdminViewModel();
-        //    viewModel.PopulateFromDatabase(DatabaseSession);
-        //    return View(viewModel);
-        //}
 
         [HttpGet, Route("Admin/EditPerson")]
         public ActionResult Admin_EditPerson(int personId)

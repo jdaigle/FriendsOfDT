@@ -10,11 +10,9 @@ namespace FODT
             // Stylesheets
             var css = new StyleBundle("~/Assets/css/site").Include(
                         "~/assets/css/bootstrap.css"
+                        , "~/assets/css/bootstrap-theme.css"
+                        , "~/assets/css/fodt-shared.css"
                         , "~/assets/css/fodt-components.css"
-                //, "~/assets/css/fodt-main.css"
-                //, "~/assets/css/fodt-forms.css"
-                //, "~/assets/css/fodt-tables.css"
-                //, "~/assets/css/fodt-slideshow.css"
                         );
             bundles.Add(css);
 
