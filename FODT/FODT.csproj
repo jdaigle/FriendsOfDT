@@ -173,6 +173,7 @@
     <Compile Include="Models\IMDT\Show.cs" />
     <Compile Include="Models\IMDT\Person.cs" />
     <Compile Include="Models\ExtensionMethods.cs" />
+    <Compile Include="Security\AuthorizationContextExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -188,8 +189,10 @@
     <Compile Include="Security\RequiresAuthenticationAttribute.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="UrlExtensions.cs" />
+    <Compile Include="Views\Awards\AwardsTableViewModel.cs" />
     <Compile Include="Views\Awards\ByYearViewModel.cs" />
     <Compile Include="Views\Home\AdminViewModel.cs" />
+    <Compile Include="Views\IUserEditableViewModel.cs" />
     <Compile Include="Views\Media\GetItemDetailViewModel.cs" />
     <Compile Include="Views\Media\IndexViewModel.cs" />
     <Compile Include="Views\Media\UploadViewModel.cs" />
@@ -198,6 +201,7 @@
     <Compile Include="Views\Person\ListPersonMediaViewModel.cs" />
     <Compile Include="Views\Search\SearchResultsViewModel.cs" />
     <Compile Include="Views\Shared\MediaItemViewModel.cs" />
+    <Compile Include="Views\Shared\RelationTableViewModel.cs" />
     <Compile Include="Views\Shows\SortedShowsViewModel.cs" />
     <Compile Include="Views\Show\GetShowMediaViewModel.cs" />
     <Compile Include="Views\Show\GetViewModel.cs" />
@@ -309,6 +313,9 @@
     <Content Include="Views\Person\AddCrew.cshtml" />
     <Content Include="Views\Person\AddCast.cshtml" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Views\Shared\_RelationTable.cshtml" />
+    <RazorSrcFiles Include="Views\Awards\AwardsTableHelper.cshtml" />
+    <Content Include="razorgenerator.directives" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -341,6 +348,13 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="..\packages\RazorGenerator.MsBuild.2.3.13\build\RazorGenerator.MsBuild.targets" Condition="Exists('..\packages\RazorGenerator.MsBuild.2.3.13\build\RazorGenerator.MsBuild.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\RazorGenerator.MsBuild.2.3.13\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RazorGenerator.MsBuild.2.3.13\build\RazorGenerator.MsBuild.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

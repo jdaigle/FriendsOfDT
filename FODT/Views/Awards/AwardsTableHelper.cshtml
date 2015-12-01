@@ -1,0 +1,16 @@
+﻿@* Generator: WebPagesHelper *@
+
+@using FODT.Models
+@using FODT.Views.Awards
+
+@helper RenderColumns(AwardViewModel item)
+{
+    <td><a href="@item.AwardYearLinkURL">@item.Year</a></td>
+    <td>
+        @item.Name
+        @if (!item.ShowLinkURL.IsNullOrWhiteSpace())
+        {
+            @: for <a href="@item.ShowLinkURL">@item.ShowName</a>
+        }
+    </td>
+}

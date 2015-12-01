@@ -2,12 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using FODT.Models;
+using FODT.Views.Awards;
+using FODT.Views.Shared;
 
 namespace FODT.Views.Person
 {
     public class PersonDetailsViewModel
     {
+        public bool CanEdit { get; set; }
+
+        public MvcHtmlString RenderEditControls(Func<object, System.Web.WebPages.HelperResult> template)
+        {
+            if (CanEdit)
+            {
+                return MvcHtmlString.Create(template.Invoke(null).ToHtmlString());
+            }
+            else
+            {
+                return MvcHtmlString.Empty;
+            }
+        }
+
         public string MediaLinkURL { get; set; } // Person.GetPersonMedia(Model.PersonId, Model.MediaItemId)
         public string MediaThumbnailURL { get; set; } // Media.GetItemThumbnail(Model.MediaItemId)
         public string MediaListLinkURL { get; set; } // Media.ListPersonMedia(Model.PersonId)
@@ -33,6 +50,8 @@ namespace FODT.Views.Person
             public int ClubPositionId { get; set; }
             public string DeleteClubPositionURL { get; set; }
         }
+
+        public AwardsTableViewModel AwardsTable { get; set; }
 
         public IEnumerable<Award> Awards { get; set; }
 

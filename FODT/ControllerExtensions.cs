@@ -25,6 +25,11 @@ namespace FODT
             return new RedirectToRouteResult(routeValues);
         }
 
+        public static string GetURL<TController>(this UrlHelper urlHelper, Expression<Action<TController>> action) where TController : Controller
+        {
+            return urlHelper.Action<TController>(action);
+        }
+
         public static string GetURL<TController>(this TController controller, Expression<Action<TController>> action) where TController : Controller
         {
             return GetURL((Controller)controller, action);
@@ -36,7 +41,7 @@ namespace FODT
             {
                 throw new ArgumentNullException("controller");
             }
-            return controller.Url.Action<TController>(action);
+            return controller.Url.GetURL<TController>(action);
         }
 
         public static UrlHelper Url(this ControllerContext context)

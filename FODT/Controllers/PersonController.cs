@@ -6,7 +6,9 @@ using FODT.Database;
 using FODT.Models.IMDT;
 using FODT.Views.Person;
 using FODT.Views.Shared;
+using FODT.Security;
 using NHibernate.Linq;
+using FODT.Views.Awards;
 
 namespace FODT.Controllers
 {
@@ -25,6 +27,8 @@ namespace FODT.Controllers
             var relatedMedia = DatabaseSession.Query<PersonMedia>().Where(x => x.Person == person).Fetch(x => x.MediaItem).ToList();
 
             var viewModel = new PersonDetailsViewModel();
+
+            viewModel.CanEdit = this.ControllerContext.CanEditPerson(person);
 
             viewModel.EditLinkURL = this.GetURL(c => c.EditPerson(personId));
             viewModel.AddAwardURL = this.GetURL(c => c.AddAward(personId));
@@ -47,6 +51,17 @@ namespace FODT.Controllers
                 Name = x.Position,
                 ClubPositionId = x.PersonClubPositionId,
             }).ToList();
+
+            viewModel.AwardsTable = new AwardsTableViewModel(
+                this.Url
+                , (x, y) => this.GetURL(c => c.DeleteAward(personId, x, y))
+                , showAwards: showAwards
+                , personAwards: myAwards)
+            {
+                CanEdit = this.ControllerContext.CanEditPerson(person),
+                AddItemURL = this.GetURL(c => c.AddAward(personId)),
+            };
+
             viewModel.Awards = showAwards.Select(x => new PersonDetailsViewModel.Award
             {
                 DeleteAwardURL = this.GetURL(c => c.DeleteAward(personId, x.ShowAwardId, x.Show.ShowId)),

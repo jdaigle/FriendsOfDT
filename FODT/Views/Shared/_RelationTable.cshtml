@@ -1,0 +1,31 @@
+﻿@model FODT.Views.Shared.RelationTableViewModel
+
+@if (Model.ShowTable)
+{
+    <h4>@Model.TableTitle @Model.RenderIfCanEdit(@<small class="pull-right"><a class="js-edit-modal-link" href="@Model.AddItemURL"><i class="glyphicon glyphicon-plus"></i> @Model.AddItemURLText</a></small>)</h4>
+    if (Model.Items.Any())
+    {
+        <table class="table table-condensed table-hover">
+            <tbody>
+                @foreach (var _item in Model.Items)
+                {
+                    <tr>
+                        @Model.RenderItemColumns(_item)
+                        @Model.RenderIfCanEdit(
+                        @<td style="text-align: right;">
+                            <div class="btn-group btn-group-xs">
+                                <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <li><a href="@_item.DeleteItemURL" title="Remove" onclick="if (confirm('Are you sure?')) { return fodt.postLink(event); } return false;"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        )
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
