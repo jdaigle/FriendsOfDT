@@ -8,7 +8,7 @@ using FODT.Views.Shared;
 
 namespace FODT.Views.Person
 {
-    public class ClubPositionsTableViewModel : RelationTableViewModel
+    public class ClubPositionsTableViewModel : RelationTableViewModel<ClubPositionViewModel>
     {
         public ClubPositionsTableViewModel(UrlHelper url, Func<int, string> getDeleteItemURL, List<PersonClubPosition> clubPositions)
         {
@@ -22,14 +22,6 @@ namespace FODT.Views.Person
                 Year = x.Year,
                 Name = x.Position,
             }));
-        }
-
-        public override Func<RelationViewModel, HelperResult> RenderItemColumns
-        {
-            get
-            {
-                return x => ClubPositionsTableHelper.RenderColumns((ClubPositionViewModel)x);
-            }
         }
     }
 

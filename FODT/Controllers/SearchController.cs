@@ -42,7 +42,7 @@ namespace FODT.Controllers
                     Year = x.Year.ToString(),
                     SortField = x.Title,
                     ImageUrl = Url.Action<MediaController>(c => c.GetItemTiny(x.MediaItem.MediaItemId)),
-                    LinkUrl = Url.Action<ShowController>(c => c.Get(x.ShowId)),
+                    LinkUrl = Url.Action<ShowController>(c => c.ShowDetails(x.ShowId)),
                 }));
             }
 

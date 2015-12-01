@@ -10,7 +10,7 @@ using FODT.Controllers;
 
 namespace FODT.Views.Show
 {
-    public class CastRolesTableViewModel : RelationTableViewModel
+    public class CastRolesTableViewModel : RelationTableViewModel<CastRoleViewModel>
     {
         public CastRolesTableViewModel(UrlHelper url, Func<int, string> getDeleteItemURL, List<ShowCast> cast)
         {
@@ -23,29 +23,28 @@ namespace FODT.Views.Show
                 .Select(x => new CastRoleViewModel
                 {
                     DeleteItemURL = getDeleteItemURL(x.ShowCastId),
-                    ShowLinkURL = url.GetURL<ShowController>(c => c.Get(x.Show.ShowId)),
-                    ShowName = ExtensionMethods.RearrangeShowTitle(x.Show.Title),
                     ShowQuarter = x.Show.Quarter,
                     ShowYear = x.Show.Year,
+                    ShowLinkURL = url.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)),
+                    ShowName = ExtensionMethods.RearrangeShowTitle(x.Show.Title),
+                    PersonLinkURL = url.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
+                    PersonName = x.Person.Fullname,
                     Role = x.Role,
                 }));
-        }
-
-        public override Func<RelationViewModel, HelperResult> RenderItemColumns
-        {
-            get
-            {
-                return x => CastRolesTableHelper.RenderColumns((CastRoleViewModel)x);
-            }
         }
     }
 
     public class CastRoleViewModel : RelationViewModel
     {
-        public string ShowLinkURL { get; set; }
-        public string ShowName { get; set; }
         public Quarter ShowQuarter { get; set; }
         public short ShowYear { get; set; }
+
+        public string ShowLinkURL { get; set; }
+        public string ShowName { get; set; }
+
+        public string PersonLinkURL { get; set; }
+        public string PersonName { get; set; }
+
         public string Role { get; set; }
     }
 }

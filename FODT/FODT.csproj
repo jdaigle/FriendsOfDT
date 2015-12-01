@@ -196,6 +196,7 @@
     <Compile Include="Views\Media\GetItemDetailViewModel.cs" />
     <Compile Include="Views\Media\IndexViewModel.cs" />
     <Compile Include="Views\Media\UploadViewModel.cs" />
+    <Compile Include="Views\Show\OtherPerformancesTableViewModel.cs" />
     <Compile Include="Views\Person\ClubPositionsTableViewModel.cs" />
     <Compile Include="Views\Person\EditPersonViewModel.cs" />
     <Compile Include="Views\Person\GetPersonMediaViewModel.cs" />
@@ -207,7 +208,7 @@
     <Compile Include="Views\Show\CastRolesTableViewModel.cs" />
     <Compile Include="Views\Show\CrewPositionsTableViewModel.cs" />
     <Compile Include="Views\Show\GetShowMediaViewModel.cs" />
-    <Compile Include="Views\Show\GetViewModel.cs" />
+    <Compile Include="Views\Show\ShowDetailsViewModel.cs" />
     <Compile Include="Views\Person\PersonDetailsViewModel.cs" />
     <Compile Include="Views\Show\ListShowMediaViewModel.cs" />
     <Compile Include="Views\Toaster\HuntViewModel.cs" />
@@ -272,7 +273,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Show\Get.cshtml" />
+    <Content Include="Views\Show\ShowDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -317,11 +318,6 @@
     <Content Include="Views\Person\AddCast.cshtml" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Views\Shared\RelationTable.cshtml" />
-    <RazorSrcFiles Include="Views\Awards\AwardsTableHelper.cshtml" />
-    <Content Include="razorgenerator.directives" />
-    <RazorSrcFiles Include="Views\Person\ClubPositionsTableHelper.cshtml" />
-    <RazorSrcFiles Include="Views\Show\CrewPositionsTableHelper.cshtml" />
-    <RazorSrcFiles Include="Views\Show\CastRolesTableHelper.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -354,13 +350,6 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="..\packages\RazorGenerator.MsBuild.2.3.13\build\RazorGenerator.MsBuild.targets" Condition="Exists('..\packages\RazorGenerator.MsBuild.2.3.13\build\RazorGenerator.MsBuild.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\RazorGenerator.MsBuild.2.3.13\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RazorGenerator.MsBuild.2.3.13\build\RazorGenerator.MsBuild.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

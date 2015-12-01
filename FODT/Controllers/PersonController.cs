@@ -29,18 +29,14 @@ namespace FODT.Controllers
 
             var viewModel = new PersonDetailsViewModel();
 
-            viewModel.CanEdit = this.ControllerContext.CanEditPerson(person);
-
             viewModel.EditLinkURL = this.GetURL(c => c.EditPerson(personId));
             viewModel.MediaUploadLinkURL = this.GetURL<MediaController>(c => c.Upload());
             viewModel.MediaLinkURL = this.GetURL(c => c.GetPersonMedia(personId, person.MediaItem.MediaItemId));
             viewModel.MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(person.MediaItem.MediaItemId));
             viewModel.MediaListLinkURL = this.GetURL(c => c.ListPersonMedia(personId));
 
-            viewModel.PersonId = personId;
             viewModel.FullName = person.Fullname;
             viewModel.Biography = person.Biography;
-            viewModel.MediaItemId = person.MediaItem.MediaItemId;
 
             viewModel.AwardsTable = new AwardsTableViewModel(
                 this.Url

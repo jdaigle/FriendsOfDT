@@ -64,7 +64,7 @@ namespace FODT.Views.Shared
             this.TagPOSTUrl = url.Action<MediaController>(c => c.Tag(mediaItemId, null, null));
             this.RelatedShows = relatedshows.Select(x => new MediaItemViewModel.RelatedShow
             {
-                ShowLinkURL = url.Action<ShowController>(c => c.Get(x.Show.ShowId)),
+                ShowLinkURL = url.Action<ShowController>(c => c.ShowDetails(x.Show.ShowId)),
                 ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
                 ShowTitle = x.Show.Title,

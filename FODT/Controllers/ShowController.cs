@@ -4,9 +4,11 @@ using System.Web.Mvc;
 using FODT.Database;
 using FODT.Models;
 using FODT.Models.IMDT;
+using FODT.Views.Awards;
 using FODT.Views.Shared;
 using FODT.Views.Show;
 using NHibernate.Linq;
+using FODT.Security;
 
 namespace FODT.Controllers
 {
@@ -22,7 +24,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("{showId}")]
-        public ActionResult Get(int showId)
+        public ActionResult ShowDetails(int showId)
         {
             var orderedShows = DatabaseSession.Query<Show>().Select(x => new ShowOrderDto()
                 {
@@ -41,13 +43,20 @@ namespace FODT.Controllers
             var cast = DatabaseSession.Query<ShowCast>().Where(x => x.Show == show).Fetch(x => x.Person).ToList();
             var awards = DatabaseSession.Query<ShowAward>().Where(x => x.Show == show).Fetch(x => x.Person).Fetch(x => x.Award).ToList();
 
+            var relatedMedia = DatabaseSession.Query<ShowMedia>().Where(x => x.Show == show).Fetch(x => x.MediaItem).ToList();
+
             var otherPerformances = DatabaseSession.Query<Show>()
                 .Where(x => x.Title == show.Title &&
                             x.ShowId != show.ShowId)
                 .ToList();
 
-            var viewModel = new GetViewModel();
-            viewModel.ShowId = showId;
+            var viewModel = new ShowDetailsViewModel();
+
+            viewModel.MediaUploadLinkURL = this.GetURL<MediaController>(c => c.Upload());
+            viewModel.MediaLinkURL = this.GetURL(c => c.GetShowMedia(showId, show.MediaItem.MediaItemId));
+            viewModel.MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(show.MediaItem.MediaItemId));
+            viewModel.MediaListLinkURL = this.GetURL(c => c.ListShowMedia(showId));
+
             viewModel.Title = show.Title;
             viewModel.Author = show.Author;
             viewModel.Quarter = show.Quarter;
@@ -55,50 +64,50 @@ namespace FODT.Controllers
             viewModel.FunFacts = show.FunFacts;
             viewModel.Pictures = show.Pictures;
             viewModel.Toaster = show.Toaster;
-            viewModel.MediaItemId = show.MediaItem.MediaItemId;
-            viewModel.PreviousShowLinkURL = previousShowId.HasValue ? this.GetURL(c => c.Get(previousShowId.Value)) : "";
-            viewModel.NextShowLinkURL = nextShowId.HasValue ? this.GetURL(c => c.Get(nextShowId.Value)) : "";
+            viewModel.PreviousShowLinkURL = previousShowId.HasValue ? this.GetURL(c => c.ShowDetails(previousShowId.Value)) : "";
+            viewModel.NextShowLinkURL = nextShowId.HasValue ? this.GetURL(c => c.ShowDetails(nextShowId.Value)) : "";
 
-            viewModel.MediaItemLinkURL = this.GetURL(c => c.GetShowMedia(showId, show.MediaItem.MediaItemId));
-            viewModel.MediaItemThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(show.MediaItem.MediaItemId));
-            viewModel.MediaListLinkURL = this.GetURL(c => c.ListShowMedia(showId));
+            viewModel.OtherPerformances = new OtherPerformancesTableViewModel(this.Url, otherPerformances);
 
-            viewModel.OtherPerformances = otherPerformances.Select(x => new GetViewModel.OtherPerfViewModel {
-                ShowLinkURL = this.GetURL(c => c.Get(x.ShowId)),
-                Title = x.Title,
-                Year = x.Year,
-            }).ToList();
-
-            viewModel.Awards = awards.Select(x => new GetViewModel.Award
+            viewModel.AwardsTable = new AwardsTableViewModel(
+                this.Url
+                , (x, y) => this.GetURL(c => c.DeleteAward(showId, x))
+                , showAwards: awards)
             {
-                AwardYearLinkURL = this.GetURL<AwardsController>(c => c.ByYear(x.Year)),
-                PersonLinkURL = x.Person != null ? this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)) : "",
-                Year = x.Year,
-                AwardId = x.ShowAwardId,
-                Name = x.Award.Name,
-                PersonId = x.Person != null ? x.Person.PersonId : (int?)null,
-                PersonName = x.Person != null ? x.Person.Fullname : (string)null,
-                PersonLastName = x.Person != null ? x.Person.LastName : (string)null,
-            }).ToList();
+                CanEdit = this.ControllerContext.CanEditShow(show),
+                AddItemURL = this.GetURL(c => c.AddAward(showId)),
+            };
 
-            viewModel.Cast = cast.Select(x => new GetViewModel.CastRole
+            viewModel.CastRolesTable = new CastRolesTableViewModel(
+                this.Url
+                , x => this.GetURL(c => c.DeleteCast(showId, x))
+                , cast)
             {
-                PersonLinkURL = this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
-                PersonId = x.Person.PersonId,
-                PersonName = x.Person.Fullname,
-                PersonLastName = x.Person.LastName,
-                Role = x.Role,
-            }).ToList();
+                CanEdit = this.ControllerContext.CanEditShow(show),
+                AddItemURL = this.GetURL(c => c.AddCast(showId)),
+            };
 
-            viewModel.Crew = crew.Select(x => new GetViewModel.CrewPosition
+            viewModel.CrewPositionsTable = new CrewPositionsTableViewModel(
+                this.Url
+                , x => this.GetURL(c => c.DeleteCrew(showId, x))
+                , crew)
             {
-                PersonLinkURL = this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
-                PersonId = x.Person.PersonId,
-                PersonName = x.Person.Fullname,
-                PersonLastName = x.Person.LastName,
-                Name = x.Position,
-                DisplayOrder = x.DisplayOrder,
-            }).ToList();
+                CanEdit = this.ControllerContext.CanEditShow(show),
+                AddItemURL = this.GetURL(c => c.AddCrew(showId)),
+            };
+
+            viewModel.RelatedMediaCount = relatedMedia.Count;
+            viewModel.NewRelatedMedia = relatedMedia
+                .OrderByDescending(x => x.InsertedDateTime)
+                .Where(x => x.MediaItem.MediaItemId != show.MediaItem.MediaItemId)
+                .Select(x => new ShowDetailsViewModel.RelatedMediaViewModel
+                {
+                    ID = x.MediaItem.MediaItemId,
+                    MediaLinkURL = this.GetURL(c => c.GetShowMedia(showId, x.MediaItem.MediaItemId)),
+                    MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemTiny(x.MediaItem.MediaItemId)),
+                })
+                .Take(4)
+                .ToList();
 
             return View(viewModel);
         }
@@ -112,7 +121,7 @@ namespace FODT.Controllers
             var viewModel = new ListShowMediaViewModel();
             viewModel.ShowTitle = show.Title;
             viewModel.ShowYear = show.Year;
-            viewModel.ShowLinkURL = this.GetURL(c => c.Get(showId));
+            viewModel.ShowLinkURL = this.GetURL(c => c.ShowDetails(showId));
             viewModel.RelatedMedia = relatedMedia.OrderBy(x => x.MediaItem.InsertedDateTime).ThenBy(x => x.MediaItem.MediaItemId).Select(x => new ListShowMediaViewModel.Media
             {
                 MediaTinyURL = this.GetURL<MediaController>(c => c.GetItemTiny(x.MediaItem.MediaItemId)),
@@ -138,7 +147,7 @@ namespace FODT.Controllers
 
             var viewModel = new GetShowMediaViewModel();
             viewModel.UploadLinkURL = this.GetURL<MediaController>(c => c.Upload());
-            viewModel.ShowLinkURL = this.GetURL(c => c.Get(showId));
+            viewModel.ShowLinkURL = this.GetURL(c => c.ShowDetails(showId));
             viewModel.ShowTitle = show.Title;
             viewModel.ShowYear = show.Year;
             viewModel.PreviousItemLinkURL = previousId.HasValue ? this.GetURL(c => c.GetShowMedia(showId, previousId.Value)) : "";
@@ -148,6 +157,98 @@ namespace FODT.Controllers
             viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, Url, mediaItemId);
 
             return View(viewModel);
+        }
+
+        [HttpGet, Route("{showId}/AddAward")]
+        public ActionResult AddAward(int showId)
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return this.RedirectToAction(x => x.ShowDetails(showId));
+            }
+
+            throw new NotImplementedException();
+        }
+
+        [HttpPost, Route("{showId}/AddAward")]
+        public ActionResult AddAward(int showId, int awardId, short year, int? personId)
+        {
+            Person person = null;
+            if (personId.HasValue)
+            {
+                person = DatabaseSession.Load<Person>(personId.Value);
+            }
+            var award = new ShowAward(DatabaseSession.Load<Show>(showId), person, DatabaseSession.Load<Award>(awardId), year);
+            DatabaseSession.Save(award);
+            DatabaseSession.CommitTransaction();
+            return this.RedirectToAction(x => x.ShowDetails(showId));
+        }
+
+        [HttpPost, Route("{showId}/DeleteAward")]
+        public ActionResult DeleteAward(int showId, int showAwardId)
+        {
+            var award = DatabaseSession.Get<ShowAward>(showAwardId);
+            DatabaseSession.Delete(award);
+            DatabaseSession.CommitTransaction();
+            return this.RedirectToAction(x => x.ShowDetails(showId));
+        }
+
+        [HttpGet, Route("{showId}/AddCast")]
+        public ActionResult AddCast(int showId)
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return this.RedirectToAction(x => x.ShowDetails(showId));
+            }
+
+            throw new NotImplementedException();
+        }
+
+        [HttpPost, Route("{showId}/AddCast")]
+        public ActionResult AddCast(int showId, int personId, string role)
+        {
+            var entity = new ShowCast(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), role);
+            DatabaseSession.Save(entity);
+            DatabaseSession.CommitTransaction();
+            return this.RedirectToAction(x => x.ShowDetails(showId));
+        }
+
+        [HttpPost, Route("{showId}/DeleteCast")]
+        public ActionResult DeleteCast(int showId, int showCastId)
+        {
+            var entity = DatabaseSession.Get<ShowCast>(showCastId);
+            DatabaseSession.Delete(entity);
+            DatabaseSession.CommitTransaction();
+            return this.RedirectToAction(x => x.ShowDetails(showId));
+        }
+
+        [HttpGet, Route("{showId}/AddCrew")]
+        public ActionResult AddCrew(int showId)
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return this.RedirectToAction(x => x.ShowDetails(showId));
+            }
+
+            throw new NotImplementedException();
+        }
+
+        [HttpPost, Route("{showId}/AddCrew")]
+        public ActionResult AddCrew(int showId, int personId, string position)
+        {
+            var entity = new ShowCrew(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), position);
+            DatabaseSession.Save(entity);
+            DatabaseSession.CommitTransaction();
+            return this.RedirectToAction(x => x.ShowDetails(showId));
+        }
+
+        [HttpPost, Route("{showId}/DeleteCrew")]
+        public ActionResult DeleteCrew(int showId, int showCrewId)
+        {
+            var entity = DatabaseSession.Get<ShowCrew>(showCrewId);
+            DatabaseSession.Delete(entity);
+            DatabaseSession.CommitTransaction();
+            return this.RedirectToAction(x => x.ShowDetails(showId));
         }
     }
 }

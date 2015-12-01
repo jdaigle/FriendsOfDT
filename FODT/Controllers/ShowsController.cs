@@ -35,7 +35,7 @@ namespace FODT.Controllers
             var viewModel = new SortedShowsViewModel();
             viewModel.Shows = shows.OrderBy(x => x.Year).ThenBy(x => x.Quarter).ThenBy(x => x.Title).Select(x => new SortedShowsViewModel.Show
             {
-                ShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.ShowId)),
+                ShowLinkURL = this.GetURL<ShowController>(c => c.ShowDetails(x.ShowId)),
                 ShowId = x.ShowId,
                 ShowTitle = x.Title,
                 ShowQuarter = x.Quarter,
@@ -57,7 +57,7 @@ namespace FODT.Controllers
             var viewModel = new SortedShowsViewModel();
             viewModel.Shows = shows.OrderBy(x => x.Title).Select(x => new SortedShowsViewModel.Show
             {
-                ShowLinkURL = this.GetURL<ShowController>(c => c.Get(x.ShowId)),
+                ShowLinkURL = this.GetURL<ShowController>(c => c.ShowDetails(x.ShowId)),
                 ShowId = x.ShowId,
                 ShowTitle = x.Title,
                 ShowQuarter = x.Quarter,

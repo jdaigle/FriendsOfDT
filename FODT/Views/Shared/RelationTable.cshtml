@@ -1,7 +1,9 @@
 ﻿@model FODT.Views.Shared.RelationTableViewModel
-
+@{ 
+    var columnTemplate = (Delegate)ViewData["RelationTable_ColumnTemplate"];
+}
 @if (Model.ShowTable)
-{
+    {
     <h4>@Model.TableTitle @Model.RenderIfCanEdit(@<small class="pull-right"><a class="js-edit-modal-link" href="@Model.AddItemURL"><i class="glyphicon glyphicon-plus"></i> @Model.AddItemURLText</a></small>)</h4>
     if (Model.Items.Any())
     {
@@ -10,7 +12,7 @@
                 @foreach (var _item in Model.Items)
                 {
                     <tr>
-                        @Model.RenderItemColumns(_item)
+                        @columnTemplate.DynamicInvoke(_item)
                         @Model.RenderIfCanEdit(
                         @<td style="text-align: right;">
                             <div class="btn-group btn-group-xs">

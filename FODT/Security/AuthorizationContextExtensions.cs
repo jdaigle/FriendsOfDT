@@ -25,5 +25,22 @@ namespace FODT.Security
 
             throw new NotImplementedException();
         }
+
+        public static bool CanEditShow(this ControllerContext controllerContext, Show show)
+        {
+#if DEBUG
+            if (!controllerContext.HttpContext.Request.Params["edit"].IsNullOrWhiteSpace())
+            {
+                return true;
+            }
+#endif
+            if (controllerContext.HttpContext.User == null ||
+                !controllerContext.HttpContext.User.Identity.IsAuthenticated)
+            {
+                return false;
+            }
+
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,0 +1,126 @@
+﻿@model FODT.Views.Show.ShowDetailsViewModel
+
+<table border="0" align="center" width="100%">
+    <tbody>
+        <tr align="center">
+            <td align="left" valign="top">
+                @if (Model.PreviousShowLinkURL != "")
+                {
+                    <a href="@Model.PreviousShowLinkURL">&lt;--- Previous Show</a>
+                }
+                else {
+                    @:&lt;--- Previous Show
+                }
+            </td>
+            <td align="right" valign="top">
+                @if (Model.NextShowLinkURL != "")
+                {
+                    <a href="@Model.NextShowLinkURL">Next Show ---&gt;</a>
+                }
+                else {
+                    @:Next Show ---&gt;
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-sm-3">
+        @if (!Model.MediaLinkURL.IsNullOrWhiteSpace())
+        {
+            <a href="@Model.MediaLinkURL">
+                <img src="@Model.MediaThumbnailURL" alt="@Model.Title" class="img-thumbnail">
+            </a>
+        }
+        else
+        {
+            <img src="@Model.MediaThumbnailURL" alt="@Model.Title">
+        }
+        <hr />
+        <a href="@Model.MediaListLinkURL">@Model.RelatedMediaCount Images &raquo;</a>
+        <ul class="media-banner">
+            @foreach (var item in Model.NewRelatedMedia)
+            {
+                <li><a href="@item.MediaLinkURL"><img class="img-thumbnail" src="@item.MediaThumbnailURL" alt="@Model.Title"></a></li>
+            }
+        </ul>
+        @*<a href="@Model.MediaUploadLinkURL"><i class="glyphicon glyphicon-upload"></i> Upload an Image</a>*@
+    </div>
+    <div class="col-sm-9">
+        <h1>@Model.Title</h1>
+        <h4>by @Model.Author</h4>
+        <h4>@Model.Quarter @Model.Year</h4>
+        @*<p>
+                Is this you? <a href="#" title="Claim this person so that you can edit so that you can edit the entry.">Claim this Person</a>
+                | <a class="js-edit-modal-link" href="@Model.EditLinkURL">Edit Info</a>
+            </p>*@
+        <hr />
+        @if (!Model.FunFacts.IsNullOrWhiteSpace())
+        {
+            <p>
+                @Html.Raw(MarkdownSharp.Markdown.Default.Transform(Model.FunFacts))
+            </p>
+            <hr />
+        }
+        @if (!Model.Toaster.IsNullOrWhiteSpace())
+        {
+            <p>
+                @Html.Raw(MarkdownSharp.Markdown.Default.Transform(Model.Toaster))
+            </p>
+            <hr />
+        }
+        @Html.RelationTable(Model.OtherPerformances, renderOtherPerformancesTableColumns)
+        @Html.RelationTable(Model.AwardsTable, renderAwardsTableColumns)
+        @Html.RelationTable(Model.CastRolesTable, renderCastRolesTableColumns)
+        @Html.RelationTable(Model.CrewPositionsTable, renderCrewPositionsTableColumns)
+    </div>
+</div>
+
+@helper renderOtherPerformancesTableColumns(FODT.Views.Show.OtherPerformancesViewModel item)
+{
+    <td>
+        @item.ShowQuarter.ToString() @item.ShowYear
+    </td>
+    <td>
+        <a href="@item.ShowLinkURL">@item.ShowName</a>
+    </td>
+}
+
+@helper renderAwardsTableColumns(FODT.Views.Awards.AwardViewModel item)
+{
+    <td><a href="@item.AwardYearLinkURL">@item.Year</a></td>
+    <td>
+        @item.Name
+        @if (!((string)item.PersonLinkURL).IsNullOrWhiteSpace())
+        {
+            @: awarded to <a href="@item.PersonLinkURL">@item.PersonName</a>
+        }
+    </td>
+}
+
+@helper renderCastRolesTableColumns(FODT.Views.Show.CastRoleViewModel item)
+{
+    <td><a href="@item.PersonLinkURL">@item.PersonName</a></td>
+    <td>@item.Role</td>
+}
+
+@helper renderCrewPositionsTableColumns(FODT.Views.Show.CrewPositionViewModel item)
+{
+    <td><a href="@item.PersonLinkURL">@item.PersonName</a></td>
+    <td>@item.Name</td>
+}
+
+@section endOfBody {
+    <script type="text/javascript">
+        $(function () {
+            $(document).on('click', '.js-edit-modal-link', function (e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                $.get(url, function (html) {
+                    $(html).modal();
+                });
+            });
+        });
+    </script>
+}

@@ -12,7 +12,7 @@ using FODT.Views.Shared;
 
 namespace FODT.Views.Awards
 {
-    public class AwardsTableViewModel : RelationTableViewModel
+    public class AwardsTableViewModel : RelationTableViewModel<AwardViewModel>
     {
         public AwardsTableViewModel(UrlHelper urlHelper, Func<int, int?, string> getDeleteItemURL, IEnumerable<ShowAward> showAwards = null, IEnumerable<PersonAward> personAwards = null)
         {
@@ -27,13 +27,16 @@ namespace FODT.Views.Awards
                 {
                     //DeleteAwardURL = this.GetURL(c => c.DeleteAward(personId, x.ShowAwardId, x.Show.ShowId)),
                     DeleteItemURL = getDeleteItemURL(x.ShowAwardId, x.Show.ShowId),
-                    ShowLinkURL = urlHelper.GetURL<ShowController>(c => c.Get(x.Show.ShowId)),
                     AwardYearLinkURL = urlHelper.GetURL<AwardsController>(c => c.ByYear(x.Year)),
 
                     Year = x.Year,
                     Name = x.Award.Name,
+
+                    ShowLinkURL = urlHelper.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)),
                     ShowName = ExtensionMethods.RearrangeShowTitle(x.Show.Title),
 
+                    PersonLinkURL = x.Person != null ? urlHelper.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)) : "",
+                    PersonName = x.Person != null ? x.Person.Fullname : "",
                 }));
             }
 
@@ -57,14 +60,6 @@ namespace FODT.Views.Awards
                 .AsEnumerable<RelationViewModel>()
                 .ToList();
         }
-
-        public override Func<RelationViewModel, HelperResult> RenderItemColumns
-        {
-            get
-            {
-                return x => AwardsTableHelper.RenderColumns((AwardViewModel)x);
-            }
-        }
     }
 
     public class AwardViewModel : RelationViewModel
@@ -73,7 +68,11 @@ namespace FODT.Views.Awards
         public string DeleteAwardURL { get; set; }
         public short Year { get; set; }
         public string Name { get; set; }
+
         public string ShowLinkURL { get; set; }
         public string ShowName { get; set; }
+
+        public string PersonLinkURL { get; set; }
+        public string PersonName { get; set; }
     }
 }

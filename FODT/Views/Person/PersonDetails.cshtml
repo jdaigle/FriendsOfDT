@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-sm-3">
-        @if (Model.MediaItemId != 1)
+        @if (!Model.MediaLinkURL.IsNullOrWhiteSpace())
         {
             <a href="@Model.MediaLinkURL">
                 <img src="@Model.MediaThumbnailURL" alt="@Model.FullName" class="img-thumbnail">
@@ -29,7 +29,7 @@
             | <a class="js-edit-modal-link" href="@Model.EditLinkURL">Edit Info</a>
         </p>*@
         <hr />
-        @if (!string.IsNullOrWhiteSpace(Model.Biography))
+        @if (!Model.Biography.IsNullOrWhiteSpace())
         {
             <p>
                 @Html.Raw(MarkdownSharp.Markdown.Default.Transform(Model.Biography))
@@ -37,13 +37,44 @@
             <hr />
         }
 
-        @Html.Partial("RelationTable", Model.AwardsTable)
-        @Html.Partial("RelationTable", Model.ClubPositionsTable)
-        @Html.Partial("RelationTable", Model.CastRolesTable)
-        @Html.Partial("RelationTable", Model.CrewPositionsTable)
+        @Html.RelationTable(Model.AwardsTable, renderAwardsTableColumns)
+        @Html.RelationTable(Model.ClubPositionsTable, renderClubPositionsTableColumns)
+        @Html.RelationTable(Model.CastRolesTable, renderCastRolesTableColumns)
+        @Html.RelationTable(Model.CrewPositionsTable, renderCrewPositionsTableColumns)
     </div>
 </div>
 
+@helper renderClubPositionsTableColumns(FODT.Views.Person.ClubPositionViewModel item)
+{
+    <td>@item.Year</td>
+    <td>@item.Name</td>
+}
+
+@helper renderAwardsTableColumns(FODT.Views.Awards.AwardViewModel item)
+{
+    <td><a href="@item.AwardYearLinkURL">@item.Year</a></td>
+    <td>
+        @item.Name
+        @if (!((string)item.ShowLinkURL).IsNullOrWhiteSpace())
+        {
+            @: for <a href="@item.ShowLinkURL">@item.ShowName</a>
+        }
+    </td>
+}
+
+@helper renderCastRolesTableColumns(FODT.Views.Show.CastRoleViewModel item)
+{
+    <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
+    <td><a href="@item.ShowLinkURL">@item.ShowName</a></td>
+    <td>@item.Role</td>
+}
+
+@helper renderCrewPositionsTableColumns(FODT.Views.Show.CrewPositionViewModel item)
+{
+    <td>@item.ShowQuarter.ToString() @item.ShowYear</td>
+    <td><a href="@item.ShowLinkURL">@item.ShowName</a></td>
+    <td>@item.Name</td>
+}
 
 @section endOfBody {
     <script type="text/javascript">

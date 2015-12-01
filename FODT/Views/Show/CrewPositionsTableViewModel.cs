@@ -10,7 +10,7 @@ using FODT.Controllers;
 
 namespace FODT.Views.Show
 {
-    public class CrewPositionsTableViewModel : RelationTableViewModel
+    public class CrewPositionsTableViewModel : RelationTableViewModel<CrewPositionViewModel>
     {
         public CrewPositionsTableViewModel(UrlHelper url, Func<int, string> getDeleteItemURL, List<ShowCrew> crew)
         {
@@ -23,29 +23,28 @@ namespace FODT.Views.Show
                 .Select(x => new CrewPositionViewModel
                 {
                     DeleteItemURL = getDeleteItemURL(x.ShowCrewId),
-                    ShowLinkURL = url.GetURL<ShowController>(c => c.Get(x.Show.ShowId)),
-                    ShowName = ExtensionMethods.RearrangeShowTitle(x.Show.Title),
                     ShowQuarter = x.Show.Quarter,
                     ShowYear = x.Show.Year,
+                    ShowLinkURL = url.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)),
+                    ShowName = ExtensionMethods.RearrangeShowTitle(x.Show.Title),
+                    PersonLinkURL = url.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
+                    PersonName = x.Person.Fullname,
                     Name = x.Position,
                 }));
-        }
-
-        public override Func<RelationViewModel, HelperResult> RenderItemColumns
-        {
-            get
-            {
-                return x => CrewPositionsTableHelper.RenderColumns((CrewPositionViewModel)x);
-            }
         }
     }
 
     public class CrewPositionViewModel : RelationViewModel
     {
-        public string ShowLinkURL { get; set; }
-        public string ShowName { get; set; }
         public Quarter ShowQuarter { get; set; }
         public short ShowYear { get; set; }
+
+        public string ShowLinkURL { get; set; }
+        public string ShowName { get; set; }
+
+        public string PersonLinkURL { get; set; }
+        public string PersonName { get; set; }
+
         public string Name { get; set; }
     }
 }
