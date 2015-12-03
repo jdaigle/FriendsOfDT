@@ -14,42 +14,29 @@ namespace FODT.Views.Awards
 {
     public class AwardsTableViewModel : RelationTableViewModel<AwardViewModel>
     {
-        public AwardsTableViewModel(UrlHelper urlHelper, Func<int, int?, string> getDeleteItemURL, IEnumerable<ShowAward> showAwards = null, IEnumerable<PersonAward> personAwards = null)
+        public AwardsTableViewModel(UrlHelper urlHelper, Func<int, string> getDeleteItemURL, IEnumerable<Award> awards)
         {
             TableTitle = "Awards";
             AddItemURLText = "Add Award";
 
             Items = new List<RelationViewModel>();
 
-            if (showAwards != null)
+            if (awards != null)
             {
-                Items.AddRange(showAwards.Select(x => new AwardViewModel
+                Items.AddRange(awards.Select(x => new AwardViewModel
                 {
                     //DeleteAwardURL = this.GetURL(c => c.DeleteAward(personId, x.ShowAwardId, x.Show.ShowId)),
-                    DeleteItemURL = getDeleteItemURL(x.ShowAwardId, x.Show.ShowId),
+                    DeleteItemURL = getDeleteItemURL(x.AwardId),
                     AwardYearLinkURL = urlHelper.GetURL<AwardsController>(c => c.ByYear(x.Year)),
 
                     Year = x.Year,
-                    Name = x.Award.Name,
+                    Name = x.AwardType.Name,
 
-                    ShowLinkURL = urlHelper.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)),
-                    ShowName = ExtensionMethods.RearrangeShowTitle(x.Show.Title),
+                    ShowLinkURL = x.Show != null ? urlHelper.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)) : "",
+                    ShowName = x.Show != null ? ExtensionMethods.RearrangeShowTitle(x.Show.Title) : "",
 
                     PersonLinkURL = x.Person != null ? urlHelper.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)) : "",
                     PersonName = x.Person != null ? x.Person.Fullname : "",
-                }));
-            }
-
-            if (personAwards != null)
-            {
-                Items.AddRange(personAwards.Select(x => new AwardViewModel
-                {
-                    //DeleteAwardURL = this.GetURL(c => c.DeleteAward(personId, x.PersonAwardId, null)),
-                    DeleteItemURL = getDeleteItemURL(x.PersonAwardId, null),
-                    AwardYearLinkURL = urlHelper.GetURL<AwardsController>(c => c.ByYear(x.Year)),
-
-                    Year = x.Year,
-                    Name = x.Award.Name,
                 }));
             }
 

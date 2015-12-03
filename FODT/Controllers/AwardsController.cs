@@ -19,8 +19,7 @@ namespace FODT.Controllers
             {
                 return this.RedirectToAction(c => c.ByYear(GetMostRecentYear()));
             }
-            var showAwards = DatabaseSession.Query<ShowAward>().Where(x => x.Year == year).Fetch(x => x.Show).Fetch(x => x.Person).Fetch(x => x.Award).ToList();
-            var peopleAwards = DatabaseSession.Query<PersonAward>().Where(x => x.Year == year).Fetch(x => x.Person).Fetch(x => x.Award).ToList();
+            var awards = DatabaseSession.Query<Award>().Where(x => x.Year == year).Fetch(x => x.Show).Fetch(x => x.Person).Fetch(x => x.AwardType).ToList();
 
             var viewModel = new ByYearViewModel();
             viewModel.Year = year.Value;
@@ -29,39 +28,26 @@ namespace FODT.Controllers
             viewModel.NextYearURL = this.GetURL(c => c.ByYear(nextYear));
             viewModel.PreviousYearURL = this.GetURL(c => c.ByYear(prevYear));
 
-            viewModel.Awards = showAwards.Select(x => new ByYearViewModel.Award
+            viewModel.Awards = awards.Select(x => new ByYearViewModel.Award
             {
                 Year = x.Year,
-                AwardId = x.Award.AwardId,
-                Name = x.Award.Name,
+                AwardId = x.AwardType.AwardTypeId,
+                Name = x.AwardType.Name,
 
-                AwardShowLinkURL = this.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)),
-                AwardShowLinkText = x.Show.Title,
+                AwardShowLinkURL = x.Show != null ? this.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)) : "",
+                AwardShowLinkText = x.Show != null ? x.Show.Title : "",
 
                 AwardPersonLinkURL = x.Person != null ? this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)) : "",
                 AwardPersonLinkText = x.Person != null ? x.Person.Fullname : "",
             })
-            .Concat(peopleAwards.Select(x => new ByYearViewModel.Award
-            {
-                Year = x.Year,
-                AwardId = x.Award.AwardId,
-                Name = x.Award.Name,
-
-                AwardShowLinkURL = "",
-                AwardShowLinkText = "",
-
-                AwardPersonLinkURL = this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
-                AwardPersonLinkText = x.Person.Fullname,
-            })).OrderBy(x => x.AwardId).ToList();
+            .OrderBy(x => x.AwardId).ToList();
 
             return View(viewModel);
         }
 
         private short GetMostRecentYear()
         {
-            var mostRecentShowYear = DatabaseSession.Query<ShowAward>().OrderByDescending(x => x.Year).Take(1).ToList().Select(x => x.Year).Single();
-            var mostRecentPersonYear = DatabaseSession.Query<PersonAward>().OrderByDescending(x => x.Year).Take(1).ToList().Select(x => x.Year).Single();
-            return mostRecentShowYear > mostRecentPersonYear ? mostRecentShowYear : mostRecentPersonYear;
+            return DatabaseSession.Query<Award>().OrderByDescending(x => x.Year).Take(1).ToList().Select(x => x.Year).Single();
         }
     }
 }

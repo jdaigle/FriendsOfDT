@@ -41,7 +41,7 @@ namespace FODT.Controllers
 
             var crew = DatabaseSession.Query<ShowCrew>().Where(x => x.Show == show).Fetch(x => x.Person).ToList();
             var cast = DatabaseSession.Query<ShowCast>().Where(x => x.Show == show).Fetch(x => x.Person).ToList();
-            var awards = DatabaseSession.Query<ShowAward>().Where(x => x.Show == show).Fetch(x => x.Person).Fetch(x => x.Award).ToList();
+            var awards = DatabaseSession.Query<Award>().Where(x => x.Show == show).Fetch(x => x.Person).Fetch(x => x.AwardType).ToList();
 
             var relatedMedia = DatabaseSession.Query<ShowMedia>().Where(x => x.Show == show).Fetch(x => x.MediaItem).ToList();
 
@@ -71,8 +71,8 @@ namespace FODT.Controllers
 
             viewModel.AwardsTable = new AwardsTableViewModel(
                 this.Url
-                , (x, y) => this.GetURL(c => c.DeleteAward(showId, x))
-                , showAwards: awards)
+                , id => this.GetURL(c => c.DeleteAward(showId, id))
+                , awards)
             {
                 CanEdit = this.ControllerContext.CanEditShow(show),
                 AddItemURL = this.GetURL(c => c.AddAward(showId)),
@@ -80,7 +80,7 @@ namespace FODT.Controllers
 
             viewModel.CastRolesTable = new CastRolesTableViewModel(
                 this.Url
-                , x => this.GetURL(c => c.DeleteCast(showId, x))
+                , id => this.GetURL(c => c.DeleteCast(showId, id))
                 , cast)
             {
                 CanEdit = this.ControllerContext.CanEditShow(show),
@@ -89,7 +89,7 @@ namespace FODT.Controllers
 
             viewModel.CrewPositionsTable = new CrewPositionsTableViewModel(
                 this.Url
-                , x => this.GetURL(c => c.DeleteCrew(showId, x))
+                , id => this.GetURL(c => c.DeleteCrew(showId, id))
                 , crew)
             {
                 CanEdit = this.ControllerContext.CanEditShow(show),
@@ -178,7 +178,7 @@ namespace FODT.Controllers
             {
                 person = DatabaseSession.Load<Person>(personId.Value);
             }
-            var award = new ShowAward(DatabaseSession.Load<Show>(showId), person, DatabaseSession.Load<Award>(awardId), year);
+            var award = new Award(DatabaseSession.Load<Show>(showId), person, DatabaseSession.Load<AwardType>(awardId), year);
             DatabaseSession.Save(award);
             DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.ShowDetails(showId));
@@ -187,7 +187,7 @@ namespace FODT.Controllers
         [HttpPost, Route("{showId}/DeleteAward")]
         public ActionResult DeleteAward(int showId, int showAwardId)
         {
-            var award = DatabaseSession.Get<ShowAward>(showAwardId);
+            var award = DatabaseSession.Get<Award>(showAwardId);
             DatabaseSession.Delete(award);
             DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.ShowDetails(showId));

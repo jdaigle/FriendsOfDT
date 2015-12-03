@@ -160,7 +160,7 @@
     <Compile Include="Models\FacebookProfile.cs" />
     <Compile Include="Models\FODT\UserAccount.cs" />
     <Compile Include="Models\ImageUtilities.cs" />
-    <Compile Include="Models\IMDT\Award.cs" />
+    <Compile Include="Models\IMDT\AwardType.cs" />
     <Compile Include="Models\IMDT\PersonMedia.cs" />
     <Compile Include="Models\IMDT\ShowMedia.cs" />
     <Compile Include="Models\IMDT\MediaItem.cs" />
@@ -168,8 +168,7 @@
     <Compile Include="Models\Quarter.cs" />
     <Compile Include="Models\IMDT\ShowCast.cs" />
     <Compile Include="Models\IMDT\ShowCrew.cs" />
-    <Compile Include="Models\IMDT\ShowAward.cs" />
-    <Compile Include="Models\IMDT\PersonAward.cs" />
+    <Compile Include="Models\IMDT\Award.cs" />
     <Compile Include="Models\IMDT\Show.cs" />
     <Compile Include="Models\IMDT\Person.cs" />
     <Compile Include="Models\ExtensionMethods.cs" />

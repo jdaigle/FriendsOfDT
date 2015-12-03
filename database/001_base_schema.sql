@@ -95,57 +95,39 @@ CREATE TABLE [dbo].[ShowMedia] (
 );
 GO
 
+CREATE TABLE [dbo].[AwardType] (
+	[AwardTypeId] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NOT NULL,
+	CONSTRAINT [PK_AwardType] PRIMARY KEY CLUSTERED 
+    (
+	    [AwardTypeId] ASC
+    ),
+);
+GO
+
 CREATE TABLE [dbo].[Award] (
 	[AwardId] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](50) NOT NULL,
+	[ShowId] [int] NULL,
+	[PersonId] [int] NULL,
+	[AwardTypeId] [int] NOT NULL,
+	[Year] smallint NOT NULL,
+	[InsertedDateTime] [datetime2] NOT NULL,
+	[LastModifiedDateTime] [datetime2] NOT NULL,
 	CONSTRAINT [PK_Award] PRIMARY KEY CLUSTERED 
     (
 	    [AwardId] ASC
     ),
-);
-GO
-
-CREATE TABLE [dbo].[ShowAward] (
-	[ShowAwardId] [int] IDENTITY(1,1) NOT NULL,
-	[ShowId] [int] NOT NULL,
-	[PersonId] [int] NULL,
-	[AwardId] [int] NOT NULL,
-	[Year] smallint NOT NULL,
-	[InsertedDateTime] [datetime2] NOT NULL,
-	[LastModifiedDateTime] [datetime2] NOT NULL,
-	CONSTRAINT [PK_ShowAward] PRIMARY KEY CLUSTERED 
-    (
-	    [ShowAwardId] ASC
-    ),
-	CONSTRAINT [FK_ShowAward_Award]
-		FOREIGN KEY ([AwardId])
-		REFERENCES [dbo].[Award],
-	CONSTRAINT [FK_ShowAward_Show]
+	CONSTRAINT [FK_Award_AwardType]
+		FOREIGN KEY ([AwardTypeId])
+		REFERENCES [dbo].[AwardType],
+	CONSTRAINT [FK_Award_Show]
 		FOREIGN KEY ([ShowId])
 		REFERENCES [dbo].[Show],
-	CONSTRAINT [FK_ShowAward_Person]
+	CONSTRAINT [FK_Award_Person]
 		FOREIGN KEY ([PersonId])
 		REFERENCES [dbo].[Person],
-);
-GO
-
-CREATE TABLE [dbo].[PersonAward] (
-	[PersonAwardId] [int] IDENTITY(1,1) NOT NULL,
-	[PersonId] [int] NOT NULL,
-	[AwardId] [int] NOT NULL,
-	[Year] smallint NOT NULL,
-	[InsertedDateTime] [datetime2] NOT NULL,
-	[LastModifiedDateTime] [datetime2] NOT NULL,
-	CONSTRAINT [PK_PersonAward] PRIMARY KEY CLUSTERED 
-    (
-	    [PersonAwardId] ASC
-    ),
-	CONSTRAINT [FK_PersonAward_Award]
-		FOREIGN KEY ([AwardId])
-		REFERENCES [dbo].[Award],
-	CONSTRAINT [FK_PersonAward_Person]
-		FOREIGN KEY ([PersonId])
-		REFERENCES [dbo].[Person],
+	CONSTRAINT CHK_ShowOrPerson
+		CHECK (ShowId IS NOT NULL OR PersonId IS NOT NULL)
 );
 GO
 

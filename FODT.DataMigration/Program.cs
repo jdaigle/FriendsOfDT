@@ -51,8 +51,7 @@ namespace FODT.DataMigration
             ImportPersonMedia();
             ImportShows();
             ImportShowMedia();
-            ImportShowAwards();
-            ImportPersonAwards();
+            ImportAwards();
             ImportCast();
             ImportCrew();
             ImportEC();
@@ -324,15 +323,15 @@ DELETE FROM Award;
                 var maxId = 0;
                 foreach (var _row in awards)
                 {
-                    var entity = new Award();
-                    entity.AwardId = (int)_row.ID;
+                    var entity = new AwardType();
+                    entity.AwardTypeId = (int)_row.ID;
                     entity.Name = ((string)_row.name ?? "").Trim();
                     if (string.IsNullOrWhiteSpace(entity.Name))
                     {
                         entity.Name = "[MISSING]";
                     }
-                    session.Save(entity, entity.AwardId);
-                    if (entity.AwardId > maxId) maxId = entity.AwardId;
+                    session.Save(entity, entity.AwardTypeId);
+                    if (entity.AwardTypeId > maxId) maxId = entity.AwardTypeId;
                 }
                 session.Flush();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].Award OFF").ExecuteUpdate();
@@ -414,7 +413,7 @@ DELETE FROM Award;
             }
         }
 
-        private static void ImportShowAwards()
+        private static void ImportAwards()
         {
             var awards = oldDatabaseConnection.Query("SELECT * FROM awards").ToList();
             Log("Importing " + awards.Count + " show awards");
@@ -426,68 +425,30 @@ DELETE FROM Award;
                 var maxId = 0;
                 foreach (var _row in awards)
                 {
+                    var entity = new Award();
+                    entity.AwardId = _row.ID;
                     if (_row.showID != null)
                     {
-                        var entity = new ShowAward();
-                        entity.ShowAwardId = _row.ID;
                         entity.Show = session.Load<Show>(_row.showID);
-                        if (_row.peepID != null)
-                        {
-                            entity.Person = session.Load<Person>(_row.peepID);
-                        }
-                        entity.Award = session.Load<Award>((int)_row.awardID);
-                        entity.Year = (short)_row.year;
-                        entity.InsertedDateTime = DateTime.UtcNow;
-                        entity.LastModifiedDateTime = DateTime.UtcNow;
-                        if (_row.last_mod != null)
-                        {
-                            entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
-                        }
-                        session.Save(entity, entity.ShowAwardId);
-                        if (entity.ShowAwardId > maxId) maxId = entity.ShowAwardId;
                     }
+                    if (_row.peepID != null)
+                    {
+                        entity.Person = session.Load<Person>(_row.peepID);
+                    }
+                    entity.AwardType = session.Load<AwardType>((int)_row.awardID);
+                    entity.Year = (short)_row.year;
+                    entity.InsertedDateTime = DateTime.UtcNow;
+                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    if (_row.last_mod != null)
+                    {
+                        entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
+                    }
+                    session.Save(entity, entity.AwardId);
+                    if (entity.AwardId > maxId) maxId = entity.AwardId;
                 }
                 session.Flush();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowAward OFF;").ExecuteUpdate();
                 session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.ShowAward', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
-                session.Transaction.Commit();
-                session.Close();
-            }
-        }
-
-        private static void ImportPersonAwards()
-        {
-            var awards = oldDatabaseConnection.Query("SELECT * FROM awards").ToList();
-            Log("Importing " + awards.Count + " person awards");
-
-            using (var session = sessionFactory.OpenSession())
-            {
-                session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].PersonAward ON;").ExecuteUpdate();
-                var maxId = 0;
-                foreach (var _row in awards)
-                {
-                    if (_row.showID == null && _row.peepID != null)
-                    {
-                        // no show, only a person
-                        var entity = new PersonAward();
-                        entity.PersonAwardId = _row.ID;
-                        entity.Person = session.Load<Person>(_row.peepID);
-                        entity.Award = session.Load<Award>((int)_row.awardID);
-                        entity.Year = (short)_row.year;
-                        entity.InsertedDateTime = DateTime.UtcNow;
-                        entity.LastModifiedDateTime = DateTime.UtcNow;
-                        if (_row.last_mod != null)
-                        {
-                            entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
-                        }
-                        session.Save(entity, entity.PersonAwardId);
-                        if (entity.PersonAwardId > maxId) maxId = entity.PersonAwardId;
-                    }
-                }
-                session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].PersonAward OFF;").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.PersonAward', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
@@ -604,7 +565,7 @@ DELETE FROM Award;
             var ec = oldDatabaseConnection.Query("SELECT * FROM ec").ToList();
             var ec_list = oldDatabaseConnection.Query("SELECT * FROM ec_list").Select(x =>
             {
-                if(x.ID == null)
+                if (x.ID == null)
                 {
                     return null;
                 }
