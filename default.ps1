@@ -11,8 +11,8 @@ $baseDir  = resolve-path .
 $buildDir = "$baseDir\build"
 $deployDir = "$baseDir\deploy"
 $toolsDir = "$baseDir\tools"
-$coreSlns = "$baseDir\friendsofdt.sln"
-$packageProjects = "$baseDir\FODT\FODT.csproj"
+$coreSlns = "$baseDir\src\friendsofdt.sln"
+$packageProjects = "$baseDir\src\FODT\FODT.csproj"
 
 include $toolsDir\psake\buildutils.ps1
 
