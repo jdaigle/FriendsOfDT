@@ -1,7 +1,0 @@
-﻿@model FODT.Views.Person.GetPersonPhotoViewModel
-
-<div style="text-align: center;">
-    <h3>Related Photos for <a href="@Model.PersonLinkURL">@Model.PersonFullname</a></h3>
-</div>
-
-@Html.Partial("~/views/photos/Photo.cshtml", Model.PhotoViewModel)

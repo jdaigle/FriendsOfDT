@@ -1,50 +1,27 @@
 ﻿@model FODT.Views.Photos.PhotoViewModel
-<div style="text-align: center;">
-    <p>
-        <a href="@Model.PhotoURL" target="_blank"><img src="@Model.PhotoURL" style="max-width: 600px;" /></a>
-    </p>
-</div>
-<div style="text-align: center;">
-    <p>
-        This image is tagged with:
-    </p>
-    <ul style="list-style: none;">
-        @foreach (var item in Model.RelatedShows)
-        {
-            <li><a href="@item.ShowLinkURL">@ExtensionMethods.RearrangeShowTitle(item.ShowTitle) (@item.ShowYear)</a></li>
-        }
-        @foreach (var item in Model.RelatedPeople)
-        {
-            <li><a href="@item.PersonLinkURL">@item.PersonFullname</a></li>
-        }
-    </ul>
-</div>
-<div style="text-align: center;">
-    <p>
-        See someone in the image not listed above? Should it be tied to a show? Tie them in!
-    </p>
-    <form class="form-inline" method="POST" action="@Model.TagPOSTUrl">
-    <fieldset>
-        <legend>Tag Image to Person or Show</legend>
-
-    </fieldset>
-
-    Person:
-    <select name="PersonId">
-        <option value=""></option>
-        @foreach (var item in Model.AllPeople.OrderBy(x => x.PersonLastName))
-        {
-            <option value="@item.PersonId">@item.PersonLastName, @item.PersonFirstName</option>
-        }
-    </select>
-    Show:
-    <select name="ShowId">
-        <option value=""></option>
-        @foreach (var item in Model.AllShows.OrderBy(x => x.ShowTitle))
-        {
-            <option value="@item.ShowId">@item.ShowTitle (@item.ShowYear)</option>
-        }
-    </select>
-    <input type="submit" class="btn" value="Tag Image">
-    </form>
+<p>
+    <a href="@Model.PhotoURL" target="_blank"><img src="@Model.PhotoURL" class="img-responsive center-block" /></a>
+</p>
+<div class="text-center">
+    Uploaded on @Model.UploadDate.
+    @if (Model.RelatedShows.Any())
+    {
+        <ul class="list-inline center-block" style="margin: 0;">
+            <li>From</li>
+            @foreach (var item in Model.RelatedShows)
+            {
+                <li><a href="@item.ShowLinkURL">@ExtensionMethods.RearrangeShowTitle(item.ShowTitle) (@item.ShowYear)</a></li>
+            }
+        </ul>
+    }
+    @if (Model.RelatedPeople.Any())
+    {
+        <ul class="list-inline center-block" style="margin: 0;">
+            <li>With</li>
+            @foreach (var item in Model.RelatedPeople)
+            {
+                <li><a href="@item.PersonLinkURL">@item.PersonFullname</a></li>
+            }
+        </ul>
+    }
 </div>

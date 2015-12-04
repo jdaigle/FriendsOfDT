@@ -152,8 +152,7 @@ namespace FODT.Controllers
             viewModel.PreviousPhotoLinkURL = previousId.HasValue ? this.GetURL(c => c.GetShowPhoto(showId, previousId.Value)) : "";
             viewModel.NextPhotoLinkURL = nextId.HasValue ? this.GetURL(c => c.GetShowPhoto(showId, nextId.Value)) : "";
             viewModel.PhotoId = photo.Photo.PhotoId;
-            viewModel.PhotoViewModel = new PhotoViewModel();
-            viewModel.PhotoViewModel.PopulateFromDatabase(DatabaseSession, Url, photoId);
+            viewModel.PhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
 
             return View(viewModel);
         }

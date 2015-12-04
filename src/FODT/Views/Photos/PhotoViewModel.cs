@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,9 +14,8 @@ namespace FODT.Views.Photos
 {
     public class PhotoViewModel
     {
-        public int Id { get; set; }
         public string PhotoURL { get; set; }
-        public string TagPOSTUrl { get; set; }
+        public string UploadDate { get; set; }
 
         public List<RelatedShow> RelatedShows { get; set; }
         public List<RelatedPerson> RelatedPeople { get; set; }
@@ -35,33 +35,28 @@ namespace FODT.Views.Photos
             public string PersonLastName { get; set; }
         }
 
-        public List<Show> AllShows { get; set; }
-        public List<Person> AllPeople { get; set; }
-
-        public class Show
+        public PhotoViewModel(Photo photo, ISession databaseSession, UrlHelper url)
         {
-            public int ShowId { get; set; }
-            public string ShowTitle { get; set; }
-            public Quarter ShowQuarter { get; set; }
-            public short ShowYear { get; set; }
-        }
+            var relatedPeople = databaseSession.Query<PersonPhoto>().Where(x => x.Photo == photo).Fetch(x => x.Person).ToList();
+            var relatedshows = databaseSession.Query<ShowPhoto>().Where(x => x.Photo == photo).Fetch(x => x.Show).ToList();
 
-        public class Person
-        {
-            public int PersonId { get; set; }
-            public string PersonFullname { get; set; }
-            public string PersonLastName { get; set; }
-            public string PersonFirstName { get; set; }
-        }
+            var uploadDateTime = photo.InsertedDateTime;
+            if (uploadDateTime == DateTime.MinValue)
+            {
+                var insertDateTimes = relatedPeople.Select(x => x.InsertedDateTime).Concat(relatedshows.Select(x => x.InsertedDateTime));
+                uploadDateTime = insertDateTimes.Where(x => x > DateTime.MinValue).DefaultIfEmpty(DateTime.MinValue).Min();
+            }
 
-        public void PopulateFromDatabase(ISession databaseSession, UrlHelper url, int photoId)
-        {
-            var relatedPeople = databaseSession.Query<PersonPhoto>().Where(x => x.Photo == databaseSession.Load<Photo>(photoId)).Fetch(x => x.Person).ToList();
-            var relatedshows = databaseSession.Query<ShowPhoto>().Where(x => x.Photo == databaseSession.Load<Photo>(photoId)).Fetch(x => x.Show).ToList();
+            if (uploadDateTime > DateTime.MinValue)
+            {
+                this.UploadDate = uploadDateTime.ToString("MMMM dd, yyyy", CultureInfo.InvariantCulture);
+            } else
+            {
+                this.UploadDate = "Unknown Date";
+            }
 
-            this.Id = photoId;
-            this.PhotoURL = url.Action<PhotosController>(c => c.GetPhotoOriginal(photoId));
-            this.TagPOSTUrl = url.Action<PhotosController>(c => c.Tag(photoId, null, null));
+            this.PhotoURL = url.Action<PhotosController>(c => c.GetPhotoOriginal(photo.PhotoId));
+
             this.RelatedShows = relatedshows.Select(x => new PhotoViewModel.RelatedShow
             {
                 ShowLinkURL = url.Action<ShowController>(c => c.ShowDetails(x.Show.ShowId)),
@@ -69,29 +64,12 @@ namespace FODT.Views.Photos
                 ShowYear = x.Show.Year,
                 ShowTitle = x.Show.Title,
             }).ToList();
+
             this.RelatedPeople = relatedPeople.Select(x => new PhotoViewModel.RelatedPerson
             {
                 PersonLinkURL = url.Action<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
                 PersonLastName = x.Person.LastName,
                 PersonFullname = x.Person.Fullname,
-            }).ToList();
-
-            var people = databaseSession.Query<Models.IMDT.Person>().ToList();
-            var shows = databaseSession.Query<Models.IMDT.Show>().ToList();
-
-            this.AllPeople = people.Select(x => new PhotoViewModel.Person
-            {
-                PersonId = x.PersonId,
-                PersonLastName = x.LastName,
-                PersonFirstName = x.FirstName,
-                PersonFullname = x.Fullname,
-            }).ToList();
-            this.AllShows = shows.Select(x => new PhotoViewModel.Show
-            {
-                ShowId = x.ShowId,
-                ShowQuarter = x.Quarter,
-                ShowYear = x.Year,
-                ShowTitle = x.Title,
             }).ToList();
         }
     }

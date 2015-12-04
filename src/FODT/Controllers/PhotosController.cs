@@ -124,7 +124,7 @@ namespace FODT.Controllers
 
             return showPhoto != null
                 ? this.RedirectToAction<ShowController>(x => x.GetShowPhoto(showPhoto.Show.ShowId, showPhoto.Photo.PhotoId))
-                : this.RedirectToAction<PersonController>(x => x.GetPersonPhoto(personPhoto.Person.PersonId, personPhoto.Photo.PhotoId));
+                : this.RedirectToAction<PersonController>(x => x.GetPersonPhotos(personPhoto.Person.PersonId, personPhoto.Photo.PhotoId));
         }
 
         public class UploadPOSTParameters
@@ -230,8 +230,7 @@ namespace FODT.Controllers
                 viewModel.NextPhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(nextId.Value));
             }
 
-            viewModel.PhotoViewModel = new PhotoViewModel();
-            viewModel.PhotoViewModel.PopulateFromDatabase(DatabaseSession, Url, id);
+            viewModel.PhotoViewModel = new PhotoViewModel(DatabaseSession.Get<Photo>(id), DatabaseSession, Url);
             return View("PhotoDetail", viewModel);
         }
 

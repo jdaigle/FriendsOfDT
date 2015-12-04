@@ -1,0 +1,34 @@
+﻿@model FODT.Views.Person.PersonPhotosViewModel
+
+<h1>Photos of <a href="@Model.PersonLinkURL">@Model.PersonFullname</a></h1>
+<hr />
+@if (Model.PhotoViewModel != null)
+{
+    @Html.Partial("~/views/photos/Photo.cshtml", Model.PhotoViewModel)
+    <hr />
+}
+<div class="text-center">
+    @if (Model.Photos.Count == 0)
+    {
+        <h4>No photos found!</h4>
+    }
+</div>
+@if (Model.Photos.Any())
+{
+    var rowCount = Math.Ceiling((double)Model.Photos.Count / 4d);
+    <div>
+        @for (int i = 0; i < rowCount; i++)
+        {
+            <div class="row" style="">
+                @foreach (var item in Model.Photos.Skip(i * 4).Take(4))
+                {
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <a href="@item.PhotoLinkURL">
+                            <img src="@item.PhotoThumbnailURL" class="img-thumbnail img-responsive center-block" />
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}

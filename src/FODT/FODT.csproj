@@ -198,8 +198,7 @@
     <Compile Include="Views\Show\OtherPerformancesTableViewModel.cs" />
     <Compile Include="Views\Person\ClubPositionsTableViewModel.cs" />
     <Compile Include="Views\Person\EditPersonViewModel.cs" />
-    <Compile Include="Views\Person\GetPersonPhotoViewModel.cs" />
-    <Compile Include="Views\Person\ListPersonPhotosViewModel.cs" />
+    <Compile Include="Views\Person\PersonPhotosViewModel.cs" />
     <Compile Include="Views\Search\SearchResultsViewModel.cs" />
     <Compile Include="Views\Photos\PhotoViewModel.cs" />
     <Compile Include="Views\Shared\RelationTableViewModel.cs" />
@@ -295,8 +294,7 @@
     <Content Include="Views\Show\ListShowPhotos.cshtml" />
     <Content Include="Views\Show\GetShowPhoto.cshtml" />
     <Content Include="Views\Photos\Photo.cshtml" />
-    <Content Include="Views\Person\ListPersonPhotos.cshtml" />
-    <Content Include="Views\Person\GetPersonPhoto.cshtml" />
+    <Content Include="Views\Person\PersonPhotos.cshtml" />
     <Content Include="Views\Shows\SortByYear.cshtml" />
     <Content Include="Views\Shows\SortByTitle.cshtml" />
     <Content Include="Views\User\Welcome.cshtml" />
