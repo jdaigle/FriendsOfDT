@@ -1,0 +1,127 @@
+
+Change Log for IMDT Site
+
+2007-06-20 Released beta version
+2007-06-22 Added EC and Awards
+2007-06-24 Added splash page on front page
+2007-07-03 Rewrote search feature to allow search of multiple fields - thanks, Chris!
+2007-07-09 Added ability to browse by show name/year
+2007-07-10 Added administration of Awards and EC
+2007-07-11 optimized code for adding/deleting items
+2007-07-12 rewrote code for adding - now adds a row and calls the edit function
+2007-07-16 created functions for all option lists to simplify readability
+2007-07-17 linked the "Welcome $user" text to the peep_detail for the logged-in user.
+2007-07-18 repaired SQL-injection vulnerabilities
+2007-07-19 Added previous/next links to the show_detail page
+	   Added "Other Performances" heading to show_detail page
+	   Added ability to prioritize crew positions from the editjobs page
+2007-07-20 created this page to keep track of all of it
+	   Edited the images some
+	   Linked the images to the front page
+2007-07-23 Fixed the image upload to deal with IE's mangling of the file header
+	   Added a fair slap of data
+2007-07-25 Added ability to create/edit/delete an Award or EC Position
+	   Added field/buttons for same on Admin page
+2007-07-26 Added "last_mod" column to shows, EC, awards, cast, crew, people to allow "What's new" search.
+	   Added "What's New" function
+	   Changed get_title feature to also get year as part of the title
+	   Changed the splash page.
+	   Added all the LTT! officers.  RLY.
+	   Fixed the check_number function to accept a blank line as a number.
+2007-07-28 Chris Luu wrote a v. cool six degrees feature.  Need to integrate.
+2007-07-31 Re-worked the app so it is a series of included files.  Now it loads much faster.
+2007-08-01 Changed the interface bar to include links to "What's new" and "6 Degrees".
+2007-08-03 Chris Luu modified 6degrees to be a subset of index instead of a separate function.
+	   He also made it so you could do cast or crew degrees.  Awesome!
+2007-08-07 Added a page for stats.  Created top ten cast/crew lists.
+2007-08-08 Added rearrange_title function.  Makes titles ending in ", The", ", A", or ", An" display nicely.
+	   Everywhere except in the search buttons.  It's not worth it to fix there.
+	   Added a note to the show edit page explaining proper article convention.
+2007-08-15 Changed the search page so you can click the picture.  Also, removed the form.
+	   Added CSS to pretty up the links on the search page.
+	   Made the passwords into MD5 hashes.  Changed in DB and in session storage.
+	   Expanded the password field to 32 characters and then did that again.  Good catch, Chris!
+2007-08-18 Changed the search page so the whole table cell highlights on hover.
+	   CSS is awesome.  Just puttin' that out there.
+2007-08-22 Changed the stats page for crew to limit list to distinct shows.
+	   This changed the people in the top ten (Sorry, Jimmy!).
+2007-08-27 Added alt text for images on personal and show pages.  This should help GIS.
+	   Also removed links and alt-text for default "no picture" images.
+	   Added URL field for Crew positions.
+	   Changed castcrew and show_detail routines to reflect the links if present.
+2007-09-11 Added a routine to clean up empty entries in the DB.
+	   Edited the delete routine to not print a big old message for each row deleted.
+2007-09-13 Disaster!  Totally boned the database.  Replaced with old backup copy, created backup routine.
+	   Horse stolen, the barn door is now locked.
+2007-09-30 Added a "Browse the EC" page to the stats page.  Not the right place for it, but I was using it to help
+	   restore some of the Deleted People.  Must remember to make it prettier, too.
+2007-10-05 Added a "Most Awards" section to the stats page.
+2007-10-08 Prettied up that EC browse page, as promised.
+	   Moved "Browse Shows" to the stats page, replaced browse link in the interface with a stats link.
+		Not sure I like it better.
+2007-10-09 Modified delete routine to update the last_mod column in the _bkup table to show the date the 
+	   deletion occurred.
+2007-10-10 Got contacted by a theatre group in Melbourne, Victoria, Australia.  They want to use IMDT.  
+	   I'm pretty stoked about this.
+2007-10-15 Created a function to delete people and shows.  Super-user only, disallows if there are 
+	   existing associations to cast/crew/shows/awards/etc.  Created associated button on detail view.
+2008-04-29 Chris Luu created a basic awards_by_year" function.  I prettied it up some.
+	   Added a link to it from the Stats page as well.
+2008-05-03 Modified the year column in the awards listings in peep_detail and show_detail to link to all 
+	   awards for that year.
+2008-06-17 Ran some w3 validators against the pages and found many issues, mostly with placement of close 
+	   tags and links that use '&' instead of '&amp;'.  Corrected these in just about every file.  
+	   Apparently, '_blank' is the new '_new'.  Who _knew?  I hope this will help with cellphone browsers.  
+	   Every page is now Tidy.
+2008-06-25 Fixed some alignment issues with how awards are displayed.  Cast and show pages are now consistent.
+2008-07-15 Replaced the old ECbrowse with a function that lets you see EC by year, similar to awards_by_year.
+2009-02-10 Updated the code to PHP5 and mySQL5 perforce.  Thanks, drive failure!
+2009-02-19 Wrote media page index.  Wrote detail page Mark-1. Currently only support JPEGs.
+2009-02-20 Refined media detail page to allow tying people and shows to images. Still feels kludgey.
+2009-02-25 Changing naming scheme &c. for pictures to allow multiple pics, true media diversity.  Sinking into
+	   a morass of tiny changes.  Losing hope.
+2009-02-26 Added get_pic.php, full of tasty media tidbits.  Updated the DB to reflect new layer of abstraction 
+	   for media.  Updated search, peep_detail, show_detail to use the new picture fetching routines.
+2009-02-27 Replaced all calls to index images to use get_tinypic, which pulls from media table.
+2009-02-28 Replaced editpeople headshot upload with choosing a default pic from uploaded media.  One step closer!
+2009-03-01 Created media_default, a landing page for media_index that shows random pics.  I like it. Worked on upload routine.
+2009-03-03 Redid the database, split media table into media and media_items.  this both simplifies and complicates 
+2009-03-10 Media page is working.  Backing away slowly...
+2009-03-25 Changed the thumbnail link of headshots and posters in detail pages to point to the associated media page.
+	   Eliminated one SQL call in the process.
+2009-03-29 Added style and code to make index pix on the default pic choice page pop up the thumbnail image.
+2009-07-14 Fixed the bkup tables so delete routine would work again.
+2009-12-28 Added "toaster" column in shows database, made necessary changes to show_detail and editshows routines to
+	   incorporate a Toaster Location field.  Created "Toaster Hunt" page, listing all toaster appearances.
+	   Also fixed the _bkup table so show deletes will work.  Thanks, past me, for keeping good notes!
+2010-01-04 Added "FAIL" button to user approval page to more efficiently handle the crappy spammers.
+2010-01-07 Linked the toaster in the logo to the toaster page.  just for fun.
+2010-05-04 Created editsplash function.  One step closer to a brandable site.  May the 4th be with you. :)
+2010-05-05 Made the durn thing actually work.  N.B.: Variables don't like to be escaped.  Happy Cinco de Whatever.
+2010-07-07 Fixed minor formatting issues on the show page.
+2010-09-25 Added reCaptcha to the registration page.  SPAM requests instantly dropped to zero!  Thanks, Google!
+2011-02-01 SPAM requests are back on the rise - I don't get it!
+2011-03-09 Added Facebook "like" button to the site.  Going to add them for individuals and shows once I get time.
+
+Features Not Yet Implemented
+Ability to upload other media types - gif, movies, &c.
+Branding/Initial setup for other theatres.  Make db names generic, flexibility in design, etc.  Create skins?
+Display EC positions as a range of time
+Include Quarter in EC position display
+
+Requested Features I Don't Know How To Implement
+None.  I am mighty! :)
+
+Requested Features I Have No Intention Of Implementing
+InformationCard support (sorry, Glen!)
+
+
+Special Thanks
+To Greg, for being the inspiration to get involved and stay involved with DT;
+To Dean James Dull, without whom there would be no DramaTech;
+To Julie, for putting up with my obsession with tolerance and grace;
+To Chris, for all the code help and an infusion of enthusiasm when it was fading fast;
+To Glen, for challenging me to go beyond the mediocre and polish this thing up;
+To Eric, for answering all those "Hey Eric" questions;
+And finally, to DramaTech herself, in her current and past incarnations, for giving a
+	bunch of nerds an outlet to become something more than they ever knew they could be.

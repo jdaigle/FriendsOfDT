@@ -1,0 +1,49 @@
+function show_results($query_string,$peep_name,$type) {
+    $query = mysql_query($query_string);
+    if (mysql_num_rows($query) == 1) {
+        while ($result = mysql_fetch_array($query)) {
+            if ($type == 'peep') {include("include/peep_detail.php"); show_peep_detail($result[0]);}
+            elseif ($type == 'show') {include("include/show_detail.php"); show_show_detail($result[0]);}
+        endlines();
+        }
+    }
+    echo "<h1>Possible Matches for '$peep_name':</h1><br>\n";
+    if (mysql_num_rows($query) < 1) {echo "<h1>No Records found!</hi>\n"; endlines();}
+    $counter = 0;
+    echo "<table align=center border=1><tr>";
+    include ("include/get_fullname.php");
+    include ("include/rearrange_title.php");
+    while ($result = mysql_fetch_array($query)) {
+        $peep_id = $result[0];
+        if ( $type == 'peep') {
+            $pic_query = mysql_query("select tinypic from people where ID=$peep_id");
+            $fullname= get_fullname($peep_id);
+            while ($pic_result = mysql_fetch_array($pic_query)) {
+                $picture=$pic_result[0];
+            }
+        } elseif ( $type == 'show') {
+            $pic_query = mysql_query("select tinypic from shows where ID=$peep_id");
+            $fullname = get_title($peep_id);
+            while ($pic_result = mysql_fetch_array($pic_query)) {
+                $picture=$pic_result[0];
+            }
+        }
+        $counter++;
+        if ($counter == 5) {
+            echo "</tr><tr>";
+            $counter = 1;
+        }
+        $action = $type . "_detail";
+        $idtype = $type . "_id";
+        echo <<< EOT7
+        <td align=center valign=middle>
+        <form method=GET action='$_SERVER[PHP_SELF]'>
+        <input type='hidden' name='action' value='$action'>
+        <input type='hidden' name='$idtype' value='$peep_id'>
+        <img src="$picture"><br>
+EOT7;
+        echo"<input type=submit value=\"".$fullname."\"></form></td>";
+    }
+    echo "</tr></table>";
+}
+
