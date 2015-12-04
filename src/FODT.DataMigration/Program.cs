@@ -29,6 +29,8 @@ namespace FODT.DataMigration
 
         private static bool skipBlobUpload = true;
 
+        private static readonly Encoding blobEncoding = Encoding.GetEncoding(1252);
+
         public static void Main(string[] args)
         {
             log4net.Config.XmlConfigurator.Configure();
@@ -129,12 +131,12 @@ DELETE FROM AwardType;
                     entity.FunFacts = "";
                     if (_row.funfacts != null && _row.funfacts.Length > 0)
                     {
-                        entity.FunFacts = Encoding.ASCII.GetString(_row.funfacts);
+                        entity.FunFacts = blobEncoding.GetString(_row.funfacts);
                     }
                     entity.Toaster = "";
                     if (_row.toaster != null && _row.toaster.Length > 0)
                     {
-                        entity.Toaster = Encoding.ASCII.GetString(_row.toaster);
+                        entity.Toaster = blobEncoding.GetString(_row.toaster);
                     }
 
                     if (_row.media_id != null)
@@ -189,7 +191,7 @@ DELETE FROM AwardType;
                     entity.Biography = "";
                     if (_row.bio != null && _row.bio.Length > 0)
                     {
-                        entity.Biography = Encoding.ASCII.GetString(_row.bio);
+                        entity.Biography = blobEncoding.GetString(_row.bio);
                     }
                     if (mediaLookup.ContainsKey((int)_row.media_id))
                     {
