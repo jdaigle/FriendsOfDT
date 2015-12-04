@@ -37,9 +37,9 @@ namespace FODT.Models.IMDT
         public virtual DateTime LastModifiedDateTime { get; set; }
     }
 
-    public class ShowAwardClassMap : ClassMap<Award>
+    public class AwardClassMap : ClassMap<Award>
     {
-        public ShowAwardClassMap()
+        public AwardClassMap()
         {
             Id(x => x.AwardId).GeneratedBy.Identity();
             References(x => x.Show, "ShowId").Nullable();

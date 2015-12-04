@@ -69,14 +69,13 @@ namespace FODT.DataMigration
 DELETE FROM ShowMedia;
 DELETE FROM ShowCrew;
 DELETE FROM ShowCast;
-DELETE FROM ShowAward;
+DELETE FROM Award;
 DELETE FROM Show;
 DELETE FROM PersonMedia;
 DELETE FROM PersonClubPosition;
-DELETE FROM PersonAward;
 DELETE FROM Person;
 DELETE FROM MediaItem;
-DELETE FROM Award;
+DELETE FROM AwardType;
 ");
             }
         }
@@ -319,7 +318,7 @@ DELETE FROM Award;
             using (var session = sessionFactory.OpenSession())
             {
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].Award ON").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].AwardType ON").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in awards)
                 {
@@ -334,8 +333,8 @@ DELETE FROM Award;
                     if (entity.AwardTypeId > maxId) maxId = entity.AwardTypeId;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].Award OFF").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.Award', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].AwardType OFF").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.AwardType', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
@@ -421,10 +420,14 @@ DELETE FROM Award;
             using (var session = sessionFactory.OpenSession())
             {
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowAward ON;").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].Award ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in awards)
                 {
+                    if (_row.showID == null && _row.peepID == null)
+                    {
+                        continue;
+                    }
                     var entity = new Award();
                     entity.AwardId = _row.ID;
                     if (_row.showID != null)
@@ -447,8 +450,8 @@ DELETE FROM Award;
                     if (entity.AwardId > maxId) maxId = entity.AwardId;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowAward OFF;").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.ShowAward', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].Award OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.Award', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }

@@ -13,9 +13,9 @@ namespace FODT.Models.IMDT
         public virtual string Name { get; set; }
     }
 
-    public class AwardClassMap : ClassMap<AwardType>
+    public class AwardTypeClassMap : ClassMap<AwardType>
     {
-        public AwardClassMap()
+        public AwardTypeClassMap()
         {
             Id(x => x.AwardTypeId).GeneratedBy.Identity();
             Map(x => x.Name).Not.Nullable().Length(50);

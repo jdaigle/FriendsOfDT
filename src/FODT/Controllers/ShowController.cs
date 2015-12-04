@@ -185,9 +185,9 @@ namespace FODT.Controllers
         }
 
         [HttpPost, Route("{showId}/DeleteAward")]
-        public ActionResult DeleteAward(int showId, int showAwardId)
+        public ActionResult DeleteAward(int showId, int awardId)
         {
-            var award = DatabaseSession.Get<Award>(showAwardId);
+            var award = DatabaseSession.Get<Award>(awardId);
             DatabaseSession.Delete(award);
             DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.ShowDetails(showId));

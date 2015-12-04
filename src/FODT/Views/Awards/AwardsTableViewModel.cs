@@ -25,7 +25,6 @@ namespace FODT.Views.Awards
             {
                 Items.AddRange(awards.Select(x => new AwardViewModel
                 {
-                    //DeleteAwardURL = this.GetURL(c => c.DeleteAward(personId, x.ShowAwardId, x.Show.ShowId)),
                     DeleteItemURL = getDeleteItemURL(x.AwardId),
                     AwardYearLinkURL = urlHelper.GetURL<AwardsController>(c => c.ByYear(x.Year)),
 
