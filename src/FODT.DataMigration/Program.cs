@@ -27,7 +27,8 @@ namespace FODT.DataMigration
         private static string azureStorageAccountName = "";
         private static string azureStorageAccountKey = "";
 
-        private static bool skipBlobUpload = true;
+        private static bool skipDatabaseImport = true;
+        private static bool skipBlobUpload = false;
 
         private static readonly Encoding blobEncoding = Encoding.GetEncoding(1252);
 
@@ -46,17 +47,20 @@ namespace FODT.DataMigration
             oldDatabaseConnection = new MySql.Data.MySqlClient.MySqlConnection(ConfigurationManager.ConnectionStrings["old_fodt"].ConnectionString);
             oldDatabaseConnection.Open();
 
-            TruncateDatabase();
-            ImportPhotos();
-            ImportAwardsList();
-            ImportPersons();
-            ImportPersonPhotos();
-            ImportShows();
-            ImportShowPhotos();
-            ImportAwards();
-            ImportCast();
-            ImportCrew();
-            ImportEC();
+            if (!skipDatabaseImport)
+            {
+                TruncateDatabase();
+                ImportPhotos();
+                ImportAwardsList();
+                ImportPersons();
+                ImportPersonPhotos();
+                ImportShows();
+                ImportShowPhotos();
+                ImportAwards();
+                ImportCast();
+                ImportCrew();
+                ImportEC();
+            }
             if (!skipBlobUpload)
             {
                 ImportPhotoBlobs();
@@ -267,7 +271,7 @@ DELETE FROM AwardType;
             var rootPhotoPath = @"http://imdt.friendsofdt.org/";
 
             var media_items = oldDatabaseConnection.Query("SELECT * FROM media_items").ToList();
-            Log("Importing " + media_items.Count + " Media Items");
+            Log("Importing " + media_items.Count + " Media Blobs");
 
             var count = 0;
             foreach (var _row in media_items)

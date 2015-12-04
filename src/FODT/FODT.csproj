@@ -35,7 +35,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PublishDatabases>false</PublishDatabases>
     <DeployIisAppPath>friendsofdt.org</DeployIisAppPath>
-    <DesktopBuildPackageLocation>..\deploy\FODT.zip</DesktopBuildPackageLocation>
+    <DesktopBuildPackageLocation>..\..\deploy\FODT.zip</DesktopBuildPackageLocation>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -47,7 +47,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PublishDatabases>false</PublishDatabases>
-    <DesktopBuildPackageLocation>..\deploy\FODT.zip</DesktopBuildPackageLocation>
+    <DesktopBuildPackageLocation>..\..\deploy\FODT.zip</DesktopBuildPackageLocation>
     <DeployIisAppPath>friendsofdt.org</DeployIisAppPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -57,7 +57,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Elmah">
-      <HintPath>..\external-bin\Elmah.dll</HintPath>
+      <HintPath>..\..\external-bin\Elmah.dll</HintPath>
     </Reference>
     <Reference Include="FluentNHibernate, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentNHibernate.2.0.3.0\lib\net40\FluentNHibernate.dll</HintPath>
@@ -73,7 +73,7 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Mvc">
-      <HintPath>..\external-bin\Microsoft.Web.Mvc.dll</HintPath>
+      <HintPath>..\..\external-bin\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
