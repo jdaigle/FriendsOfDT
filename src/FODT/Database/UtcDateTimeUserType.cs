@@ -20,10 +20,6 @@ namespace FODT.Database
 
             if (dateValue.HasValue)
             {
-                if (dateValue.Value.Kind != DateTimeKind.Utc)
-                    throw new InvalidOperationException(string.Format("This field can only persist a DateTime with a .Kind of Utc. Param {0} in [{1}]",
-                                                                    index, cmd.CommandText));
-
                 NHibernateUtil.DateTime2.NullSafeSet(cmd, dateValue, index);
             }
             else

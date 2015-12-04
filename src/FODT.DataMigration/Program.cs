@@ -147,11 +147,11 @@ DELETE FROM AwardType;
                     {
                         entity.MediaItem = session.Load<MediaItem>(1); // default to nopic
                     }
-                    entity.InsertedDateTime = DateTime.UtcNow;
-                    entity.LastModifiedDateTime = DateTime.UtcNow;
-                    var lastModifiedDateTime = DateTime.UtcNow;
+                    entity.InsertedDateTime = DateTime.MinValue;
+                    entity.LastModifiedDateTime = DateTime.MinValue;
                     if (_row.last_mod != null)
                     {
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                         entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.ShowId);
@@ -205,11 +205,11 @@ DELETE FROM AwardType;
                     {
                         entity.MediaItem = session.Load<MediaItem>(1); // default to nopic
                     }
-                    entity.InsertedDateTime = DateTime.UtcNow;
-                    entity.LastModifiedDateTime = DateTime.UtcNow;
-                    var lastModifiedDateTime = DateTime.UtcNow;
+                    entity.InsertedDateTime = DateTime.MinValue;
+                    entity.LastModifiedDateTime = DateTime.MinValue;
                     if (_row.last_mod != null)
                     {
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                         entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.PersonId);
@@ -244,7 +244,7 @@ DELETE FROM AwardType;
                     Guid guid = _row.guid;
                     entity.MediaItemId = (int)_row.ID;
                     entity.GUID = (Guid)_row.guid;
-                    entity.InsertedDateTime = DateTime.UtcNow;
+                    entity.InsertedDateTime = DateTime.MinValue;
                     if (_row.lastmod != null)
                     {
                         entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc((DateTime)_row.lastmod, TimeZoneCode.Eastern.ToTimeZoneInfo());
@@ -366,7 +366,7 @@ DELETE FROM AwardType;
                     entity.PersonMediaId = _row.ID;
                     entity.Person = session.Load<Person>(_row.assocID);
                     entity.MediaItem = session.Load<MediaItem>(_row.item_id);
-                    entity.InsertedDateTime = DateTime.UtcNow;
+                    entity.InsertedDateTime = DateTime.MinValue;
                     if (_row.last_mod != null)
                     {
                         entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
@@ -402,7 +402,7 @@ DELETE FROM AwardType;
                     entity.ShowMediaId = _row.ID;
                     entity.Show = session.Load<Show>(_row.assocID);
                     entity.MediaItem = session.Load<MediaItem>(_row.item_id);
-                    entity.InsertedDateTime = DateTime.UtcNow;
+                    entity.InsertedDateTime = DateTime.MinValue;
                     if (_row.last_mod != null)
                     {
                         entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
@@ -446,10 +446,11 @@ DELETE FROM AwardType;
                     }
                     entity.AwardType = session.Load<AwardType>((int)_row.awardID);
                     entity.Year = (short)_row.year;
-                    entity.InsertedDateTime = DateTime.UtcNow;
-                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    entity.InsertedDateTime = DateTime.MinValue;
+                    entity.LastModifiedDateTime = DateTime.MinValue;
                     if (_row.last_mod != null)
                     {
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                         entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.AwardId);
@@ -489,10 +490,11 @@ DELETE FROM AwardType;
                     {
                         continue; // skip
                     }
-                    entity.InsertedDateTime = DateTime.UtcNow;
-                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    entity.InsertedDateTime = DateTime.MinValue;
+                    entity.LastModifiedDateTime = DateTime.MinValue;
                     if (_row.last_mod != null)
                     {
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                         entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.ShowCastId);
@@ -552,10 +554,11 @@ DELETE FROM AwardType;
                     {
                         continue; // skip
                     }
-                    entity.InsertedDateTime = DateTime.UtcNow;
-                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    entity.InsertedDateTime = DateTime.MinValue;
+                    entity.LastModifiedDateTime = DateTime.MinValue;
                     if (_row.last_mod != null)
                     {
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                         entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.ShowCrewId);
@@ -608,11 +611,11 @@ DELETE FROM AwardType;
                         continue; // skip
                     }
                     entity.DisplayOrder = _row.ECID;
-                    entity.InsertedDateTime = DateTime.UtcNow;
-                    entity.LastModifiedDateTime = DateTime.UtcNow;
-                    entity.LastModifiedDateTime = DateTime.UtcNow;
+                    entity.InsertedDateTime = DateTime.MinValue;
+                    entity.LastModifiedDateTime = DateTime.MinValue;
                     if (_row.last_mod != null)
                     {
+                        entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                         entity.LastModifiedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
                     session.Save(entity, entity.PersonClubPositionId);
