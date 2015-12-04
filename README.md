@@ -19,7 +19,7 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
 * [ ] Complete read-only views
   * [ ] Welcome Page
   * [x] Search/Search results
-  * [ ] Person Details
+  * [x] Person Details
   * [ ] Show Details
   * [ ] Awards by Year (e.g. Banquet)
   * [ ] Media for Person
