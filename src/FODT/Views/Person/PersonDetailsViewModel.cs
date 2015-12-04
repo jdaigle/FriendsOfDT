@@ -12,10 +12,10 @@ namespace FODT.Views.Person
 {
     public class PersonDetailsViewModel
     {
-        public string MediaLinkURL { get; set; } // Person.GetPersonMedia(Model.PersonId, Model.MediaItemId)
-        public string MediaThumbnailURL { get; set; } // Media.GetItemThumbnail(Model.MediaItemId)
-        public string MediaListLinkURL { get; set; } // Media.ListPersonMedia(Model.PersonId)
-        public string MediaUploadLinkURL { get; set; } // 
+        public string PhotoLinkURL { get; set; }
+        public string PhotoThumbnailURL { get; set; }
+        public string PhotoListLinkURL { get; set; }
+        public string PhotoUploadLinkURL { get; set; } // 
 
         public string EditLinkURL { get; set; }
 
@@ -27,14 +27,13 @@ namespace FODT.Views.Person
         public CastRolesTableViewModel CastRolesTable { get; set; }
         public CrewPositionsTableViewModel CrewPositionsTable { get; set; }
 
-        public int RelatedMediaCount { get; set; }
-        public List<RelatedMediaViewModel> NewRelatedMedia { get; set; }
+        public int PhotoCount { get; set; }
+        public List<NewPhotosViewModel> NewPhotos { get; set; }
 
-        public class RelatedMediaViewModel
+        public class NewPhotosViewModel
         {
-            public int ID { get; set; }
-            public string MediaLinkURL { get; set; } // Person.GetPersonMedia(Model.PersonId, Model.MediaItemId)
-            public string MediaThumbnailURL { get; set; } // Media.GetItemThumbnail(Model.MediaItemId)
+            public string PhotoLinkURL { get; set; }
+            public string PhotoTinyURL { get; set; }
         }
     }
 }

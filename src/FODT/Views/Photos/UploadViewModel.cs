@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using FODT.Models;
 
-namespace FODT.Views.Media
+namespace FODT.Views.Photos
 {
     public class UploadViewModel
     {

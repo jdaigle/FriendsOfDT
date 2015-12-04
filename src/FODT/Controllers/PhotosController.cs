@@ -6,22 +6,21 @@ using System.Web;
 using System.Web.Mvc;
 using FODT.Models;
 using FODT.Models.IMDT;
-using FODT.Views.Media;
-using FODT.Views.Shared;
+using FODT.Views.Photos;
 using NHibernate.Linq;
 using FODT.Database;
 using System.Configuration;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("Media")]
-    public class MediaController : BaseController
+    [RoutePrefix("Photos")]
+    public class PhotosController : BaseController
     {
         private static readonly string azureStorageAccountName;
         private static readonly string azureStorageAccountKey;
         private static readonly string azureStorageBaseURL;
 
-        static MediaController()
+        static PhotosController()
         {
             azureStorageAccountName = ConfigurationManager.AppSettings["azure-storage-account-name"];
             azureStorageAccountKey = ConfigurationManager.AppSettings["azure-storage-account-key"];
@@ -72,16 +71,16 @@ namespace FODT.Controllers
                 throw new InvalidOperationException("File too big: " + param.UploadedFile.ContentLength);
             }
 
-            var mediaItem = new MediaItem();
-            DatabaseSession.Save(mediaItem);
+            var photo = new Photo();
+            DatabaseSession.Save(photo);
             DatabaseSession.Flush(); // to get the ID
 
-            var unique_id = mediaItem.MediaItemId.ToString();
+            var unique_id = photo.PhotoId.ToString();
 
             var original_buffer = new byte[param.UploadedFile.ContentLength];
             param.UploadedFile.InputStream.Read(original_buffer, 0, param.UploadedFile.ContentLength);
 
-            AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + mediaItem.GetOriginalFileName()
+            AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + photo.GetOriginalFileName()
                 , azureStorageAccountName, azureStorageAccountKey
                 , original_buffer, "image/jpeg");
 
@@ -89,43 +88,43 @@ namespace FODT.Controllers
             {
                 using (var thumbnail = ImageUtilities.Resize(fullSize, 240, 240))
                 {
-                    AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + mediaItem.GetThumbnailFileName()
+                    AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + photo.GetThumbnailFileName()
                         , azureStorageAccountName, azureStorageAccountKey
                         , ImageUtilities.GetBytes(thumbnail, System.Drawing.Imaging.ImageFormat.Jpeg), "image/jpeg");
                 }
                 using (var tiny = ImageUtilities.Resize(fullSize, 50, 50))
                 {
-                    AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + mediaItem.GetTinyFileName()
+                    AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + photo.GetTinyFileName()
                         , azureStorageAccountName, azureStorageAccountKey
                         , ImageUtilities.GetBytes(tiny, System.Drawing.Imaging.ImageFormat.Jpeg), "image/jpeg");
                 }
             }
 
-            PersonMedia personMedia = null;
+            PersonPhoto personPhoto = null;
             if (param.PersonId.HasValue)
             {
-                personMedia = new PersonMedia();
-                personMedia.Person = DatabaseSession.Load<Person>(param.PersonId.Value);
-                personMedia.MediaItem = mediaItem;
-                personMedia.InsertedDateTime = DateTime.UtcNow;
-                DatabaseSession.Save(personMedia);
+                personPhoto = new PersonPhoto();
+                personPhoto.Person = DatabaseSession.Load<Person>(param.PersonId.Value);
+                personPhoto.Photo = photo;
+                personPhoto.InsertedDateTime = DateTime.UtcNow;
+                DatabaseSession.Save(personPhoto);
             }
 
-            ShowMedia showMedia = null;
+            ShowPhoto showPhoto = null;
             if (param.ShowId.HasValue)
             {
-                showMedia = new ShowMedia();
-                showMedia.Show = DatabaseSession.Load<Show>(param.ShowId.Value);
-                showMedia.MediaItem = mediaItem;
-                showMedia.InsertedDateTime = DateTime.UtcNow;
-                DatabaseSession.Save(showMedia);
+                showPhoto = new ShowPhoto();
+                showPhoto.Show = DatabaseSession.Load<Show>(param.ShowId.Value);
+                showPhoto.Photo = photo;
+                showPhoto.InsertedDateTime = DateTime.UtcNow;
+                DatabaseSession.Save(showPhoto);
             }
 
             DatabaseSession.CommitTransaction();
 
-            return showMedia != null
-                ? this.RedirectToAction<ShowController>(x => x.GetShowMedia(showMedia.Show.ShowId, showMedia.MediaItem.MediaItemId))
-                : this.RedirectToAction<PersonController>(x => x.GetPersonMedia(personMedia.Person.PersonId, personMedia.MediaItem.MediaItemId));
+            return showPhoto != null
+                ? this.RedirectToAction<ShowController>(x => x.GetShowPhoto(showPhoto.Show.ShowId, showPhoto.Photo.PhotoId))
+                : this.RedirectToAction<PersonController>(x => x.GetPersonPhoto(personPhoto.Person.PersonId, personPhoto.Photo.PhotoId));
         }
 
         public class UploadPOSTParameters
@@ -140,142 +139,142 @@ namespace FODT.Controllers
         {
             if (personId.HasValue)
             {
-                var personMedia = new PersonMedia();
-                personMedia.Person = DatabaseSession.Load<Person>(personId.Value);
-                personMedia.MediaItem = DatabaseSession.Load<MediaItem>(id);
-                personMedia.InsertedDateTime = DateTime.UtcNow;
-                DatabaseSession.Save(personMedia);
+                var personPhoto = new PersonPhoto();
+                personPhoto.Person = DatabaseSession.Load<Person>(personId.Value);
+                personPhoto.Photo = DatabaseSession.Load<Photo>(id);
+                personPhoto.InsertedDateTime = DateTime.UtcNow;
+                DatabaseSession.Save(personPhoto);
             }
             if (showId.HasValue)
             {
-                var showMedia = new ShowMedia();
-                showMedia.Show = DatabaseSession.Load<Show>(showId.Value);
-                showMedia.MediaItem = DatabaseSession.Load<MediaItem>(id);
-                showMedia.InsertedDateTime = DateTime.UtcNow;
-                DatabaseSession.Save(showMedia);
+                var showPhoto = new ShowPhoto();
+                showPhoto.Show = DatabaseSession.Load<Show>(showId.Value);
+                showPhoto.Photo = DatabaseSession.Load<Photo>(id);
+                showPhoto.InsertedDateTime = DateTime.UtcNow;
+                DatabaseSession.Save(showPhoto);
             }
             DatabaseSession.CommitTransaction();
 
             if (Request.UrlReferrer == null ||
                 string.IsNullOrWhiteSpace(Request.UrlReferrer.PathAndQuery))
             {
-                return this.RedirectToAction(x => x.GetItemDetail(id));
+                return this.RedirectToAction(x => x.GetPhotoDetail(id));
             }
 
             return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
         [HttpGet, Route("{id}")]
-        public ActionResult GetItem(int id)
+        public ActionResult GetPhotoOriginal(int id)
         {
-            var mediaItem = DatabaseSession.Get<MediaItem>(id);
-            if (mediaItem == null)
+            var photo = DatabaseSession.Get<Photo>(id);
+            if (photo == null)
             {
                 return new HttpNotFoundResult();
             }
-            return new RedirectResult(azureStorageBaseURL + mediaItem.GetOriginalFileName());
+            return new RedirectResult(azureStorageBaseURL + photo.GetOriginalFileName());
         }
 
         [HttpGet, Route("{id}/tiny")]
-        public ActionResult GetItemTiny(int id)
+        public ActionResult GetPhotoTiny(int id)
         {
-            var mediaItem = DatabaseSession.Get<MediaItem>(id);
-            if (mediaItem == null)
+            var photo = DatabaseSession.Get<Photo>(id);
+            if (photo == null)
             {
                 return new HttpNotFoundResult();
             }
-            return new RedirectResult(azureStorageBaseURL + mediaItem.GetTinyFileName());
+            return new RedirectResult(azureStorageBaseURL + photo.GetTinyFileName());
         }
 
         [HttpGet, Route("{id}/thumbnail")]
-        public ActionResult GetItemThumbnail(int id)
+        public ActionResult GetPhotoThumbnail(int id)
         {
-            var mediaItem = DatabaseSession.Get<MediaItem>(id);
-            if (mediaItem == null)
+            var photo = DatabaseSession.Get<Photo>(id);
+            if (photo == null)
             {
                 return new HttpNotFoundResult();
             }
-            return new RedirectResult(azureStorageBaseURL + mediaItem.GetThumbnailFileName());
+            return new RedirectResult(azureStorageBaseURL + photo.GetThumbnailFileName());
         }
 
         [HttpGet, Route("{id}/detail")]
-        public ActionResult GetItemDetail(int id)
+        public ActionResult GetPhotoDetail(int id)
         {
-            var mediaItems = DatabaseSession
-                .Query<MediaItem>()
-                .Select(x => new MediaItemDto
+            var photos = DatabaseSession
+                .Query<Photo>()
+                .Select(x => new PhotoItemDto
                 {
-                    MediaItemId = x.MediaItemId,
+                    PhotoId = x.PhotoId,
                     InsertedDateTime = x.InsertedDateTime,
                 })
-                .ToList().OrderBy(x => x.MediaItemId).ToList();
+                .ToList().OrderBy(x => x.PhotoId).ToList();
 
 
-            var index = mediaItems.IndexOf(mediaItems.Single(x => x.MediaItemId == id));
-            var previousId = index > 0 ? mediaItems[index - 1].MediaItemId : (int?)null;
-            var nextId = index < mediaItems.Count - 1 ? mediaItems[index + 1].MediaItemId : (int?)null;
+            var index = photos.IndexOf(photos.Single(x => x.PhotoId == id));
+            var previousId = index > 0 ? photos[index - 1].PhotoId : (int?)null;
+            var nextId = index < photos.Count - 1 ? photos[index + 1].PhotoId : (int?)null;
 
-            var viewModel = new GetItemDetailViewModel();
+            var viewModel = new PhotoDetailViewModel();
 
-            viewModel.MediaUploadLinkURL = this.GetURL(c => c.Upload());
-            viewModel.PreviousMediaLinkURL = this.GetURL(c => c.GetItemDetail(id));
-            viewModel.NextMediaLinkURL = this.GetURL(c => c.GetItemDetail(id));
+            viewModel.PhotoUploadLinkURL = this.GetURL(c => c.Upload());
+            viewModel.PreviousPhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(id));
+            viewModel.NextPhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(id));
             if (previousId.HasValue)
             {
-                viewModel.HasPreviousMediaLinkURL = true;
-                viewModel.PreviousMediaLinkURL = this.GetURL(c => c.GetItemDetail(previousId.Value));
+                viewModel.HasPreviousPhotoLinkURL = true;
+                viewModel.PreviousPhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(previousId.Value));
             }
             if (nextId.HasValue)
             {
-                viewModel.HasNextMediaLinkURL = true;
-                viewModel.NextMediaLinkURL = this.GetURL(c => c.GetItemDetail(nextId.Value));
+                viewModel.HasNextPhotoLinkURL = true;
+                viewModel.NextPhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(nextId.Value));
             }
 
-            viewModel.MediaItemViewModel = new MediaItemViewModel();
-            viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, Url, id);
-            return View(viewModel);
+            viewModel.PhotoViewModel = new PhotoViewModel();
+            viewModel.PhotoViewModel.PopulateFromDatabase(DatabaseSession, Url, id);
+            return View("PhotoDetail", viewModel);
         }
 
-        public class MediaItemDto
+        public class PhotoItemDto
         {
-            public int MediaItemId { get; set; }
+            public int PhotoId { get; set; }
             public DateTime InsertedDateTime { get; set; }
         }
 
         [HttpGet, Route("")]
         public ActionResult Index()
         {
-            var mediaItems = DatabaseSession
-                .Query<MediaItem>()
-                .Select(x => new MediaItemDto
+            var photos = DatabaseSession
+                .Query<Photo>()
+                .Select(x => new PhotoItemDto
                 {
-                    MediaItemId = x.MediaItemId,
+                    PhotoId = x.PhotoId,
                     InsertedDateTime = x.InsertedDateTime,
                 })
                 .ToList();
 
-            var recentlyUploaded = mediaItems.OrderByDescending(x => x.InsertedDateTime).ThenByDescending(x => x.MediaItemId).Take(10).ToList();
+            var recentlyUploaded = photos.OrderByDescending(x => x.InsertedDateTime).ThenByDescending(x => x.PhotoId).Take(10).ToList();
             var ran = new Random();
             var randomSet = new HashSet<int>();
-            var randomList = new List<MediaItemDto>(mediaItems);
+            var randomList = new List<PhotoItemDto>(photos);
             while (randomSet.Count < 10)
             {
                 var nextIndex = ran.Next(randomList.Count);
                 var item = randomList[nextIndex];
                 randomList.Remove(item);
-                randomSet.Add(item.MediaItemId);
+                randomSet.Add(item.PhotoId);
             }
 
             var viewModel = new IndexViewModel();
-            viewModel.RecentlyUploaded = recentlyUploaded.Select(x => new IndexViewModel.Media
+            viewModel.RecentlyUploaded = recentlyUploaded.Select(x => new IndexViewModel.Photo
             {
-                MediaLinkURL = this.GetURL(c => c.GetItemDetail(x.MediaItemId)),
-                MediaThumbnailURL = this.GetURL(c => c.GetItemThumbnail(x.MediaItemId)),
+                PhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(x.PhotoId)),
+                PhotoThumbnailURL = this.GetURL(c => c.GetPhotoThumbnail(x.PhotoId)),
             }).ToList();
-            viewModel.RandomPic = randomSet.Select(x => new IndexViewModel.Media
+            viewModel.RandomPic = randomSet.Select(x => new IndexViewModel.Photo
             {
-                MediaLinkURL = this.GetURL(c => c.GetItemDetail(x)),
-                MediaThumbnailURL = this.GetURL(c => c.GetItemThumbnail(x)),
+                PhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(x)),
+                PhotoThumbnailURL = this.GetURL(c => c.GetPhotoThumbnail(x)),
             }).ToList();
             return View(viewModel);
         }

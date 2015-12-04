@@ -1,12 +1,10 @@
-CREATE TABLE [dbo].[MediaItem] (
-	[MediaItemId] [int] IDENTITY(1,1) NOT NULL,
-	[Path] [varchar](100) NOT NULL,
-	[ThumbnailPath] [varchar](100) NOT NULL,
-	[TinyPath] [varchar](100) NOT NULL,
+CREATE TABLE [dbo].[Photo] (
+	[PhotoId] [int] IDENTITY(1,1) NOT NULL,
+	[GUID] uniqueidentifier NOT NULL,
 	[InsertedDateTime] [datetime2] NOT NULL,
-	CONSTRAINT [PK_MediaItem] PRIMARY KEY CLUSTERED 
+	CONSTRAINT [PK_Photo] PRIMARY KEY CLUSTERED 
     (
-	    [MediaItemId] ASC
+	    [PhotoId] ASC
     ),
 );
 GO
@@ -20,16 +18,16 @@ CREATE TABLE [dbo].[Person] (
 	[Suffix] [nvarchar](50) NOT NULL,
 	[Nickname] [nvarchar](100) NOT NULL,
 	[Biography] [nvarchar](max) NOT NULL,
-	[MediaItemId] [int] NOT NULL CONSTRAINT DF_Person_MediaItemId DEFAULT 1,
+	[PhotoId] [int] NOT NULL CONSTRAINT DF_Person_PhotoId DEFAULT 1,
 	[InsertedDateTime] [datetime2] NOT NULL,
 	[LastModifiedDateTime] [datetime2] NOT NULL,
 	CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED 
     (
 	    [PersonId] ASC
     ),
-    CONSTRAINT [FK_Person_MediaItem]
-		FOREIGN KEY ([MediaItemId])
-		REFERENCES [dbo].[MediaItem],
+    CONSTRAINT [FK_Person_Photo]
+		FOREIGN KEY ([PhotoId])
+		REFERENCES [dbo].[Photo],
  -- `username` nvarchar(25) DEFAULT NULL,
  -- `password` nvarchar(32) DEFAULT NULL,
  -- `email` nvarchar(50) DEFAULT NULL,
@@ -37,21 +35,21 @@ CREATE TABLE [dbo].[Person] (
 );
 GO
 
-CREATE TABLE [dbo].[PersonMedia] (
-	[PersonMediaId] [int] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [dbo].[PersonPhoto] (
+	[PersonPhotoId] [int] IDENTITY(1,1) NOT NULL,
 	[PersonId] [int] NOT NULL,
-	[MediaItemId] [int] NOT NULL,
+	[PhotoId] [int] NOT NULL,
 	[InsertedDateTime] [datetime2] NOT NULL,
-	CONSTRAINT [PK_PersonMedia] PRIMARY KEY CLUSTERED 
+	CONSTRAINT [PK_PersonPhoto] PRIMARY KEY CLUSTERED 
     (
-	    [PersonMediaId] ASC
+	    [PersonPhotoId] ASC
     ),
-    CONSTRAINT [FK_PersonMedia_Person]
+    CONSTRAINT [FK_PersonPhoto_Person]
 		FOREIGN KEY ([PersonId])
 		REFERENCES [dbo].[Person],
-    CONSTRAINT [FK_PersonMedia_MediaItem]
-		FOREIGN KEY ([MediaItemId])
-		REFERENCES [dbo].[MediaItem],
+    CONSTRAINT [FK_PersonPhoto_Photo]
+		FOREIGN KEY ([PhotoId])
+		REFERENCES [dbo].[Photo],
 );
 GO
 
@@ -64,34 +62,34 @@ CREATE TABLE [dbo].[Show] (
 	[Pictures] [nvarchar](100) NOT NULL,
 	[FunFacts] [nvarchar](max) NOT NULL,
 	[Toaster] [nvarchar](max) NOT NULL,
-	[MediaItemId] [int] NOT NULL CONSTRAINT DF_Show_MediaItemId DEFAULT 1,
+	[PhotoId] [int] NOT NULL CONSTRAINT DF_Show_PhotoId DEFAULT 1,
 	[InsertedDateTime] [datetime2] NOT NULL,
 	[LastModifiedDateTime] [datetime2] NOT NULL,
 	CONSTRAINT [PK_Show] PRIMARY KEY CLUSTERED 
     (
 	    [ShowId] ASC
     ),
-    CONSTRAINT [FK_Show_MediaItem]
-		FOREIGN KEY ([MediaItemId])
-		REFERENCES [dbo].[MediaItem],
+    CONSTRAINT [FK_Show_Photo]
+		FOREIGN KEY ([PhotoId])
+		REFERENCES [dbo].[Photo],
 );
 GO
 
-CREATE TABLE [dbo].[ShowMedia] (
-	[ShowMediaId] [int] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [dbo].[ShowPhoto] (
+	[ShowPhotoId] [int] IDENTITY(1,1) NOT NULL,
 	[ShowId] [int] NOT NULL,
-	[MediaItemId] [int] NOT NULL,
+	[PhotoId] [int] NOT NULL,
 	[InsertedDateTime] [datetime2] NOT NULL,
-	CONSTRAINT [PK_ShowMedia] PRIMARY KEY CLUSTERED 
+	CONSTRAINT [PK_ShowPhoto] PRIMARY KEY CLUSTERED 
     (
-	    [ShowMediaId] ASC
+	    [ShowPhotoId] ASC
     ),
-    CONSTRAINT [FK_ShowMedia_Show]
+    CONSTRAINT [FK_ShowPhoto_Show]
 		FOREIGN KEY ([ShowId])
 		REFERENCES [dbo].[Show],
-    CONSTRAINT [FK_ShowMedia_MediaItem]
-		FOREIGN KEY ([MediaItemId])
-		REFERENCES [dbo].[MediaItem],
+    CONSTRAINT [FK_ShowPhoto_Photo]
+		FOREIGN KEY ([PhotoId])
+		REFERENCES [dbo].[Photo],
 );
 GO
 

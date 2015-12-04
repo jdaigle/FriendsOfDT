@@ -139,7 +139,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AwardsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\MediaController.cs" />
+    <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
@@ -161,9 +161,9 @@
     <Compile Include="Models\FODT\UserAccount.cs" />
     <Compile Include="Models\ImageUtilities.cs" />
     <Compile Include="Models\IMDT\AwardType.cs" />
-    <Compile Include="Models\IMDT\PersonMedia.cs" />
-    <Compile Include="Models\IMDT\ShowMedia.cs" />
-    <Compile Include="Models\IMDT\MediaItem.cs" />
+    <Compile Include="Models\IMDT\PersonPhoto.cs" />
+    <Compile Include="Models\IMDT\ShowPhoto.cs" />
+    <Compile Include="Models\IMDT\Photo.cs" />
     <Compile Include="Models\IMDT\PersonClubPosition.cs" />
     <Compile Include="Models\Quarter.cs" />
     <Compile Include="Models\IMDT\ShowCast.cs" />
@@ -192,24 +192,24 @@
     <Compile Include="Views\Awards\ByYearViewModel.cs" />
     <Compile Include="Views\Home\AdminViewModel.cs" />
     <Compile Include="Views\IUserEditableViewModel.cs" />
-    <Compile Include="Views\Media\GetItemDetailViewModel.cs" />
-    <Compile Include="Views\Media\IndexViewModel.cs" />
-    <Compile Include="Views\Media\UploadViewModel.cs" />
+    <Compile Include="Views\Photos\PhotoDetailViewModel.cs" />
+    <Compile Include="Views\Photos\IndexViewModel.cs" />
+    <Compile Include="Views\Photos\UploadViewModel.cs" />
     <Compile Include="Views\Show\OtherPerformancesTableViewModel.cs" />
     <Compile Include="Views\Person\ClubPositionsTableViewModel.cs" />
     <Compile Include="Views\Person\EditPersonViewModel.cs" />
-    <Compile Include="Views\Person\GetPersonMediaViewModel.cs" />
-    <Compile Include="Views\Person\ListPersonMediaViewModel.cs" />
+    <Compile Include="Views\Person\GetPersonPhotoViewModel.cs" />
+    <Compile Include="Views\Person\ListPersonPhotosViewModel.cs" />
     <Compile Include="Views\Search\SearchResultsViewModel.cs" />
-    <Compile Include="Views\Shared\MediaItemViewModel.cs" />
+    <Compile Include="Views\Photos\PhotoViewModel.cs" />
     <Compile Include="Views\Shared\RelationTableViewModel.cs" />
     <Compile Include="Views\Shows\SortedShowsViewModel.cs" />
     <Compile Include="Views\Show\CastRolesTableViewModel.cs" />
     <Compile Include="Views\Show\CrewPositionsTableViewModel.cs" />
-    <Compile Include="Views\Show\GetShowMediaViewModel.cs" />
+    <Compile Include="Views\Show\GetShowPhotoViewModel.cs" />
     <Compile Include="Views\Show\ShowDetailsViewModel.cs" />
     <Compile Include="Views\Person\PersonDetailsViewModel.cs" />
-    <Compile Include="Views\Show\ListShowMediaViewModel.cs" />
+    <Compile Include="Views\Show\ListShowPhotosViewModel.cs" />
     <Compile Include="Views\Toaster\HuntViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -290,17 +290,17 @@
     <Content Include="Views\Toaster\Hunt.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Media\Index.cshtml" />
-    <Content Include="Views\Media\GetItemDetail.cshtml" />
-    <Content Include="Views\Show\ListShowMedia.cshtml" />
-    <Content Include="Views\Show\GetShowMedia.cshtml" />
-    <Content Include="Views\Shared\MediaItem.cshtml" />
-    <Content Include="Views\Person\ListPersonMedia.cshtml" />
-    <Content Include="Views\Person\GetPersonMedia.cshtml" />
+    <Content Include="Views\Photos\Index.cshtml" />
+    <Content Include="Views\Photos\PhotoDetail.cshtml" />
+    <Content Include="Views\Show\ListShowPhotos.cshtml" />
+    <Content Include="Views\Show\GetShowPhoto.cshtml" />
+    <Content Include="Views\Photos\Photo.cshtml" />
+    <Content Include="Views\Person\ListPersonPhotos.cshtml" />
+    <Content Include="Views\Person\GetPersonPhoto.cshtml" />
     <Content Include="Views\Shows\SortByYear.cshtml" />
     <Content Include="Views\Shows\SortByTitle.cshtml" />
     <Content Include="Views\User\Welcome.cshtml" />
-    <Content Include="Views\Media\Upload.cshtml" />
+    <Content Include="Views\Photos\Upload.cshtml" />
     <Content Include="Views\Awards\ByYear.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="packages.config" />

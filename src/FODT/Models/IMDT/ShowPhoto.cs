@@ -7,21 +7,21 @@ using FODT.Database;
 
 namespace FODT.Models.IMDT
 {
-    public class ShowMedia
+    public class ShowPhoto
     {
-        public virtual int ShowMediaId { get; set; }
+        public virtual int ShowPhotoId { get; set; }
         public virtual Show Show { get; set; }
-        public virtual MediaItem MediaItem { get; set; }
+        public virtual Photo Photo { get; set; }
         public virtual DateTime InsertedDateTime { get; set; }
     }
 
-    public class ShowMediaClassMap : ClassMap<ShowMedia>
+    public class ShowPhotoClassMap : ClassMap<ShowPhoto>
     {
-        public ShowMediaClassMap()
+        public ShowPhotoClassMap()
         {
-            Id(x => x.ShowMediaId).GeneratedBy.Identity();
+            Id(x => x.ShowPhotoId).GeneratedBy.Identity();
             References(x => x.Show, "ShowId").Not.Nullable();
-            References(x => x.MediaItem, "MediaItemId").Not.Nullable();
+            References(x => x.Photo, "PhotoId").Not.Nullable();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }
     }

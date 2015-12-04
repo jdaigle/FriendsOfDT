@@ -1,4 +1,4 @@
-﻿@model FODT.Views.Media.IndexViewModel
+﻿@model FODT.Views.Photos.IndexViewModel
 
 <font size="+3"><center>IMDT Media Center</center></font>
 <br>
@@ -21,8 +21,8 @@
             @foreach (var item in Model.RandomPic.Take(5))
             {
             <td align="center">
-                <a href="@item.MediaLinkURL">
-                    <img src="@item.MediaThumbnailURL">
+                <a href="@item.PhotoLinkURL">
+                    <img src="@item.PhotoThumbnailURL">
                 </a>
             </td>
             }
@@ -31,8 +31,8 @@
             @foreach (var item in Model.RandomPic.Skip(5).Take(5))
             {
             <td align="center">
-                <a href="@item.MediaLinkURL">
-                    <img src="@item.MediaThumbnailURL">
+                <a href="@item.PhotoLinkURL">
+                    <img src="@item.PhotoThumbnailURL">
                 </a>
             </td>
             }
@@ -44,8 +44,8 @@
             @foreach (var item in Model.RecentlyUploaded.Take(5))
             {
             <td align="center">
-                <a href="@item.MediaLinkURL">
-                    <img src="@item.MediaThumbnailURL">
+                <a href="@item.PhotoLinkURL">
+                    <img src="@item.PhotoThumbnailURL">
                 </a>
             </td>
             }
@@ -54,8 +54,8 @@
             @foreach (var item in Model.RecentlyUploaded.Skip(5).Take(5))
             {
             <td align="center">
-                <a href="@item.MediaLinkURL">
-                    <img src="@item.MediaThumbnailURL">
+                <a href="@item.PhotoLinkURL">
+                    <img src="@item.PhotoThumbnailURL">
                 </a>
             </td>
             }

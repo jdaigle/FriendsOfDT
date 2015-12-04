@@ -9,12 +9,12 @@ using FODT.Models.IMDT;
 using NHibernate;
 using NHibernate.Linq;
 
-namespace FODT.Views.Shared
+namespace FODT.Views.Photos
 {
-    public class MediaItemViewModel
+    public class PhotoViewModel
     {
         public int Id { get; set; }
-        public string ItemURL { get; set; }
+        public string PhotoURL { get; set; }
         public string TagPOSTUrl { get; set; }
 
         public List<RelatedShow> RelatedShows { get; set; }
@@ -54,22 +54,22 @@ namespace FODT.Views.Shared
             public string PersonFirstName { get; set; }
         }
 
-        public void PopulateFromDatabase(ISession databaseSession, UrlHelper url, int mediaItemId)
+        public void PopulateFromDatabase(ISession databaseSession, UrlHelper url, int photoId)
         {
-            var relatedPeople = databaseSession.Query<PersonMedia>().Where(x => x.MediaItem == databaseSession.Load<MediaItem>(mediaItemId)).Fetch(x => x.Person).ToList();
-            var relatedshows = databaseSession.Query<ShowMedia>().Where(x => x.MediaItem == databaseSession.Load<MediaItem>(mediaItemId)).Fetch(x => x.Show).ToList();
+            var relatedPeople = databaseSession.Query<PersonPhoto>().Where(x => x.Photo == databaseSession.Load<Photo>(photoId)).Fetch(x => x.Person).ToList();
+            var relatedshows = databaseSession.Query<ShowPhoto>().Where(x => x.Photo == databaseSession.Load<Photo>(photoId)).Fetch(x => x.Show).ToList();
 
-            this.Id = mediaItemId;
-            this.ItemURL = url.Action<MediaController>(c => c.GetItem(mediaItemId));
-            this.TagPOSTUrl = url.Action<MediaController>(c => c.Tag(mediaItemId, null, null));
-            this.RelatedShows = relatedshows.Select(x => new MediaItemViewModel.RelatedShow
+            this.Id = photoId;
+            this.PhotoURL = url.Action<PhotosController>(c => c.GetPhotoOriginal(photoId));
+            this.TagPOSTUrl = url.Action<PhotosController>(c => c.Tag(photoId, null, null));
+            this.RelatedShows = relatedshows.Select(x => new PhotoViewModel.RelatedShow
             {
                 ShowLinkURL = url.Action<ShowController>(c => c.ShowDetails(x.Show.ShowId)),
                 ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
                 ShowTitle = x.Show.Title,
             }).ToList();
-            this.RelatedPeople = relatedPeople.Select(x => new MediaItemViewModel.RelatedPerson
+            this.RelatedPeople = relatedPeople.Select(x => new PhotoViewModel.RelatedPerson
             {
                 PersonLinkURL = url.Action<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
                 PersonLastName = x.Person.LastName,
@@ -79,14 +79,14 @@ namespace FODT.Views.Shared
             var people = databaseSession.Query<Models.IMDT.Person>().ToList();
             var shows = databaseSession.Query<Models.IMDT.Show>().ToList();
 
-            this.AllPeople = people.Select(x => new MediaItemViewModel.Person
+            this.AllPeople = people.Select(x => new PhotoViewModel.Person
             {
                 PersonId = x.PersonId,
                 PersonLastName = x.LastName,
                 PersonFirstName = x.FirstName,
                 PersonFullname = x.Fullname,
             }).ToList();
-            this.AllShows = shows.Select(x => new MediaItemViewModel.Show
+            this.AllShows = shows.Select(x => new PhotoViewModel.Show
             {
                 ShowId = x.ShowId,
                 ShowQuarter = x.Quarter,

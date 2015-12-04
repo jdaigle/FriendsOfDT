@@ -2,22 +2,22 @@
 
 <div class="row">
     <div class="col-sm-3">
-        @if (!Model.MediaLinkURL.IsNullOrWhiteSpace())
+        @if (!Model.PhotoLinkURL.IsNullOrWhiteSpace())
         {
-            <a href="@Model.MediaLinkURL">
-                <img src="@Model.MediaThumbnailURL" alt="@Model.FullName" class="img-thumbnail">
+            <a href="@Model.PhotoLinkURL">
+                <img src="@Model.PhotoThumbnailURL" alt="@Model.FullName" class="img-thumbnail">
             </a>
         }
         else
         {
-            <img src="@Model.MediaThumbnailURL" alt="@Model.FullName">
+            <img src="@Model.PhotoThumbnailURL" alt="@Model.FullName">
         }
         <hr />
-        <a href="@Model.MediaListLinkURL">@Model.RelatedMediaCount Images &raquo;</a>
+        <a href="@Model.PhotoListLinkURL">@Model.PhotoCount Images &raquo;</a>
         <ul class="media-banner">
-            @foreach (var item in Model.NewRelatedMedia)
+            @foreach (var item in Model.NewPhotos)
             {
-                <li><a href="@item.MediaLinkURL"><img class="img-thumbnail" src="@item.MediaThumbnailURL" alt="@Model.FullName"></a></li>
+                <li><a href="@item.PhotoLinkURL"><img class="img-thumbnail" src="@item.PhotoTinyURL" alt="@Model.FullName"></a></li>
             }
         </ul>
         @*<a href="@Model.MediaUploadLinkURL"><i class="glyphicon glyphicon-upload"></i> Upload an Image</a>*@

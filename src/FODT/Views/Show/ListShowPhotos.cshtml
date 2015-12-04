@@ -1,0 +1,38 @@
+﻿@model FODT.Views.Show.ListShowPhotosViewModel
+
+<center>
+    <font size="+2">Photo for <a href="@Model.ShowLinkURL">@ExtensionMethods.RearrangeShowTitle(Model.ShowTitle) (@Model.ShowYear)</a></font>
+    <br><br>
+    <a href="@Model.PhotoUploadLinkURL">Upload more pictures for this show</a>
+</center>
+<br />
+<br />
+
+@if (Model.Photos.Any())
+{
+    var rowCount = Math.Ceiling((double)Model.Photos.Count / 3d);
+    <table align="center" border="1">
+        <tbody>
+            @for (int i = 0; i < rowCount; i++)
+            {
+                <tr>
+                    @foreach (var item in Model.Photos.Skip(i * 3).Take(3))
+	                {
+                        <td align="center" valign="middle">
+                            <div class="rollover">
+                                <a href="@item.PhotoLinkURL">
+                                    <img src="@item.PhotoThumbnailURL">
+                                </a>
+                            </div>
+                        </td>
+	                }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Model.Photos.Count == 0)
+{
+    <center><h1>No associated Photo found!<br> Would you like to <a href="@Model.PhotoUploadLinkURL">upload some</a>?</h1><br><br></center>
+}

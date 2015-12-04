@@ -7,9 +7,9 @@ using FODT.Database;
 
 namespace FODT.Models.IMDT
 {
-    public class MediaItem
+    public class Photo
     {
-        public MediaItem()
+        public Photo()
         {
             GUID = Guid.NewGuid();
             InsertedDateTime = DateTime.UtcNow;
@@ -17,7 +17,7 @@ namespace FODT.Models.IMDT
 
         public const int NoPic = 1;
 
-        public virtual int MediaItemId { get; set; }
+        public virtual int PhotoId { get; set; }
         public virtual Guid GUID { get; set; }
         public virtual DateTime InsertedDateTime { get; set; }
 
@@ -37,11 +37,11 @@ namespace FODT.Models.IMDT
         }
     }
 
-    public class MediaItemClassMap : ClassMap<MediaItem>
+    public class PhotoClassMap : ClassMap<Photo>
     {
-        public MediaItemClassMap()
+        public PhotoClassMap()
         {
-            Id(x => x.MediaItemId).GeneratedBy.Identity();
+            Id(x => x.PhotoId).GeneratedBy.Identity();
             Map(x => x.GUID).Not.Nullable();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }

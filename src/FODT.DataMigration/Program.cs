@@ -47,19 +47,19 @@ namespace FODT.DataMigration
             oldDatabaseConnection.Open();
 
             TruncateDatabase();
-            ImportMediaItems();
+            ImportPhotos();
             ImportAwardsList();
             ImportPersons();
-            ImportPersonMedia();
+            ImportPersonPhotos();
             ImportShows();
-            ImportShowMedia();
+            ImportShowPhotos();
             ImportAwards();
             ImportCast();
             ImportCrew();
             ImportEC();
             if (!skipBlobUpload)
             {
-                ImportMediaBlobs();
+                ImportPhotoBlobs();
             }
         }
 
@@ -68,15 +68,15 @@ namespace FODT.DataMigration
             using (var session = sessionFactory.OpenSession())
             {
                 session.Connection.Execute(@"
-DELETE FROM ShowMedia;
+DELETE FROM ShowPhoto;
 DELETE FROM ShowCrew;
 DELETE FROM ShowCast;
 DELETE FROM Award;
 DELETE FROM Show;
-DELETE FROM PersonMedia;
+DELETE FROM PersonPhoto;
 DELETE FROM PersonClubPosition;
 DELETE FROM Person;
-DELETE FROM MediaItem;
+DELETE FROM Photo;
 DELETE FROM AwardType;
 ");
             }
@@ -141,11 +141,11 @@ DELETE FROM AwardType;
 
                     if (_row.media_id != null)
                     {
-                        entity.MediaItem = session.Load<MediaItem>(mediaLookup[_row.media_id].mediaItem_id);
+                        entity.Photo = session.Load<Photo>(mediaLookup[_row.media_id].mediaItem_id);
                     }
                     else
                     {
-                        entity.MediaItem = session.Load<MediaItem>(1); // default to nopic
+                        entity.Photo = session.Load<Photo>(1); // default to nopic
                     }
                     entity.InsertedDateTime = DateTime.MinValue;
                     entity.LastModifiedDateTime = DateTime.MinValue;
@@ -199,11 +199,11 @@ DELETE FROM AwardType;
                     }
                     if (mediaLookup.ContainsKey((int)_row.media_id))
                     {
-                        entity.MediaItem = session.Load<MediaItem>(mediaLookup[(int)_row.media_id].mediaItem_id);
+                        entity.Photo = session.Load<Photo>(mediaLookup[(int)_row.media_id].mediaItem_id);
                     }
                     else
                     {
-                        entity.MediaItem = session.Load<MediaItem>(1); // default to nopic
+                        entity.Photo = session.Load<Photo>(1); // default to nopic
                     }
                     entity.InsertedDateTime = DateTime.MinValue;
                     entity.LastModifiedDateTime = DateTime.MinValue;
@@ -223,7 +223,7 @@ DELETE FROM AwardType;
             }
         }
 
-        private static void ImportMediaItems()
+        private static void ImportPhotos()
         {
             var media_items = oldDatabaseConnection.Query("SELECT * FROM media_items").ToList();
             Log("Importing " + media_items.Count + " Media Items");
@@ -231,40 +231,40 @@ DELETE FROM AwardType;
             using (var session = sessionFactory.OpenSession())
             {
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[MediaItem] ON").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[Photo] ON").ExecuteUpdate();
                 var maxId = 0;
                 var count = 0;
                 foreach (var _row in media_items)
                 {
-                    var entity = new MediaItem();
+                    var entity = new Photo();
                     if (_row.guid == null)
                     {
                         throw new InvalidOperationException("Media Item is Missing GUID. Row needs to be updated before Importing");
                     }
                     Guid guid = _row.guid;
-                    entity.MediaItemId = (int)_row.ID;
+                    entity.PhotoId = (int)_row.ID;
                     entity.GUID = (Guid)_row.guid;
                     entity.InsertedDateTime = DateTime.MinValue;
                     if (_row.lastmod != null)
                     {
                         entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc((DateTime)_row.lastmod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
-                    session.Save(entity, entity.MediaItemId);
-                    if (entity.MediaItemId > maxId) maxId = entity.MediaItemId;
+                    session.Save(entity, entity.PhotoId);
+                    if (entity.PhotoId > maxId) maxId = entity.PhotoId;
                     count++;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[MediaItem] OFF").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.[MediaItem]', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].[Photo] OFF").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.[Photo]', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
-                Log("Imported " + count + " Media Items");
+                Log("Imported " + count + " Photos");
             }
         }
 
-        private static void ImportMediaBlobs()
+        private static void ImportPhotoBlobs()
         {
-            var rootMediaPath = @"http://imdt.friendsofdt.org/";
+            var rootPhotoPath = @"http://imdt.friendsofdt.org/";
 
             var media_items = oldDatabaseConnection.Query("SELECT * FROM media_items").ToList();
             Log("Importing " + media_items.Count + " Media Items");
@@ -272,17 +272,17 @@ DELETE FROM AwardType;
             var count = 0;
             foreach (var _row in media_items)
             {
-                var entity = new MediaItem();
+                var entity = new Photo();
                 if (_row.guid == null)
                 {
                     throw new InvalidOperationException("Media Item is Missing GUID. Row needs to be updated before Importing");
                 }
                 Guid guid = _row.guid;
-                entity.MediaItemId = (int)_row.ID;
+                entity.PhotoId = (int)_row.ID;
                 entity.GUID = (Guid)_row.guid;
 
                 byte[] original = null;
-                original = AzureBlogStorageUtil.DownloadPublicBlob(rootMediaPath + _row.item.ToString().Replace("./", ""));
+                original = AzureBlogStorageUtil.DownloadPublicBlob(rootPhotoPath + _row.item.ToString().Replace("./", ""));
 
                 if (original == null)
                 {
@@ -301,11 +301,11 @@ DELETE FROM AwardType;
                 count++;
                 if (count % 100 == 0)
                 {
-                    Log("Imported " + count + " Media Items");
+                    Log("Imported " + count + " Photo Blobs");
 
                 }
             }
-            Log("Imported " + count + " Media Items");
+            Log("Imported " + count + " Photo Blobs");
         }
 
         private static void PutBlob(string name, byte[] buffer)
@@ -346,7 +346,7 @@ DELETE FROM AwardType;
             }
         }
 
-        private static void ImportPersonMedia()
+        private static void ImportPersonPhotos()
         {
             var media = oldDatabaseConnection.Query("SELECT * FROM media").ToList();
             Log("Importing " + media.Count + " person media");
@@ -354,7 +354,7 @@ DELETE FROM AwardType;
             using (var session = sessionFactory.OpenSession())
             {
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].PersonMedia ON;").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].PersonPhoto ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in media)
                 {
@@ -362,27 +362,27 @@ DELETE FROM AwardType;
                     {
                         continue;
                     }
-                    var entity = new PersonMedia();
-                    entity.PersonMediaId = _row.ID;
+                    var entity = new PersonPhoto();
+                    entity.PersonPhotoId = _row.ID;
                     entity.Person = session.Load<Person>(_row.assocID);
-                    entity.MediaItem = session.Load<MediaItem>(_row.item_id);
+                    entity.Photo = session.Load<Photo>(_row.item_id);
                     entity.InsertedDateTime = DateTime.MinValue;
                     if (_row.last_mod != null)
                     {
                         entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
-                    session.Save(entity, entity.PersonMediaId);
-                    if (entity.PersonMediaId > maxId) maxId = entity.PersonMediaId;
+                    session.Save(entity, entity.PersonPhotoId);
+                    if (entity.PersonPhotoId > maxId) maxId = entity.PersonPhotoId;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].PersonMedia OFF;").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.PersonMedia', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].PersonPhoto OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.PersonPhoto', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
         }
 
-        private static void ImportShowMedia()
+        private static void ImportShowPhotos()
         {
             var media = oldDatabaseConnection.Query("SELECT * FROM media").ToList();
             Log("Importing " + media.Count + " show media");
@@ -390,7 +390,7 @@ DELETE FROM AwardType;
             using (var session = sessionFactory.OpenSession())
             {
                 session.Transaction.Begin();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowMedia ON;").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowPhoto ON;").ExecuteUpdate();
                 var maxId = 0;
                 foreach (var _row in media)
                 {
@@ -398,21 +398,21 @@ DELETE FROM AwardType;
                     {
                         continue;
                     }
-                    var entity = new ShowMedia();
-                    entity.ShowMediaId = _row.ID;
+                    var entity = new ShowPhoto();
+                    entity.ShowPhotoId = _row.ID;
                     entity.Show = session.Load<Show>(_row.assocID);
-                    entity.MediaItem = session.Load<MediaItem>(_row.item_id);
+                    entity.Photo = session.Load<Photo>(_row.item_id);
                     entity.InsertedDateTime = DateTime.MinValue;
                     if (_row.last_mod != null)
                     {
                         entity.InsertedDateTime = TimeZoneInfo.ConvertTimeToUtc(_row.last_mod, TimeZoneCode.Eastern.ToTimeZoneInfo());
                     }
-                    session.Save(entity, entity.ShowMediaId);
-                    if (entity.ShowMediaId > maxId) maxId = entity.ShowMediaId;
+                    session.Save(entity, entity.ShowPhotoId);
+                    if (entity.ShowPhotoId > maxId) maxId = entity.ShowPhotoId;
                 }
                 session.Flush();
-                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowMedia OFF;").ExecuteUpdate();
-                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.ShowMedia', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].ShowPhoto OFF;").ExecuteUpdate();
+                session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.ShowPhoto', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }

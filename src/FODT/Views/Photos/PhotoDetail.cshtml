@@ -1,25 +1,25 @@
-﻿@model FODT.Views.Media.GetItemDetailViewModel
+﻿@model FODT.Views.Photos.PhotoDetailViewModel
 
 <table align="center" width="100%">
     <tbody>
         <tr align="center">
             <td align="left" valign="top">
-                @if (Model.HasPreviousMediaLinkURL)
+                @if (Model.HasPreviousPhotoLinkURL)
                 {
-                    <a href="@Model.PreviousMediaLinkURL">&lt;--- Previous Item</a>
+                    <a href="@Model.PreviousPhotoLinkURL">&lt;--- Previous Item</a>
                 } else {
                     @:&lt;--- Previous Item
                 }
             </td>
             <td align="center">
-                <center><font size="+2">Item @Model.ToString()</font><br><br><a href="@Model.MediaUploadLinkURL">Upload a new picture</a></center>
+                <center><font size="+2">Item @Model.ToString()</font><br><br><a href="@Model.PhotoUploadLinkURL">Upload a new picture</a></center>
                 <br>
                 <br>
             </td>
             <td align="right" valign="top">
-                @if (Model.HasNextMediaLinkURL)
+                @if (Model.HasNextPhotoLinkURL)
                 {
-                    <a href="@Model.NextMediaLinkURL">Next Item ---&gt;</a>
+                    <a href="@Model.NextPhotoLinkURL">Next Item ---&gt;</a>
                 } else {
                     @:Next Item ---&gt;
                 }
@@ -29,6 +29,6 @@
 </table>
 
 
-@Html.Partial("MediaItem", Model.MediaItemViewModel)
+@Html.Partial("Photo", Model.PhotoViewModel)
 
 

@@ -14,7 +14,7 @@ namespace FODT.Models.IMDT
         public virtual string Suffix { get; set; }
         public virtual string Nickname { get; set; }
         public virtual string Biography { get; set; }
-        public virtual MediaItem MediaItem { get; set; }
+        public virtual Photo Photo { get; set; }
         public virtual DateTime InsertedDateTime { get; set; }
         public virtual DateTime LastModifiedDateTime { get; set; }
 
@@ -80,7 +80,7 @@ namespace FODT.Models.IMDT
             Map(x => x.Suffix).Not.Nullable().Length(50);
             Map(x => x.Nickname).Not.Nullable().Length(100);
             Map(x => x.Biography).Not.Nullable().Length(10000);
-            References(x => x.MediaItem, "MediaItemId").Not.Nullable();
+            References(x => x.Photo, "PhotoId").Not.Nullable();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.LastModifiedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }

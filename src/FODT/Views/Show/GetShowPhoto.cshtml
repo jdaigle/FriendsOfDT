@@ -1,0 +1,34 @@
+﻿@model FODT.Views.Show.GetShowPhotoViewModel
+<table align="center" width="100%">
+    <tbody>
+        <tr align="center">
+            <td align="left" valign="top">
+                @if (Model.PreviousPhotoLinkURL != "")
+                {
+                    <a href="@Model.PreviousPhotoLinkURL">&lt;--- Previous Photo</a>
+                }
+                else
+                {
+                    @:&lt;--- Previous Photo
+                }
+            </td>
+            <td align="center">
+                <center><font size="+2">Photos for <a href="@Model.ShowLinkURL">@ExtensionMethods.RearrangeShowTitle(Model.ShowTitle) (@Model.ShowYear)</a></font><br><br><a href="@Model.UploadLinkURL">Upload more pictures for this show</a></center>
+                <br>
+                <br>
+            </td>
+            <td align="right" valign="top">
+                @if (Model.NextPhotoLinkURL != "")
+                {
+                    <a href="@Model.NextPhotoLinkURL">Next Photo ---&gt;</a>
+                }
+                else
+                {
+                    @:Next Photo ---&gt;
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@Html.Partial("~/views/photos/Photo.cshtml", Model.PhotoViewModel)

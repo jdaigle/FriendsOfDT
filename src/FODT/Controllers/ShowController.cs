@@ -5,10 +5,10 @@ using FODT.Database;
 using FODT.Models;
 using FODT.Models.IMDT;
 using FODT.Views.Awards;
-using FODT.Views.Shared;
 using FODT.Views.Show;
 using NHibernate.Linq;
 using FODT.Security;
+using FODT.Views.Photos;
 
 namespace FODT.Controllers
 {
@@ -43,7 +43,7 @@ namespace FODT.Controllers
             var cast = DatabaseSession.Query<ShowCast>().Where(x => x.Show == show).Fetch(x => x.Person).ToList();
             var awards = DatabaseSession.Query<Award>().Where(x => x.Show == show).Fetch(x => x.Person).Fetch(x => x.AwardType).ToList();
 
-            var relatedMedia = DatabaseSession.Query<ShowMedia>().Where(x => x.Show == show).Fetch(x => x.MediaItem).ToList();
+            var relatedPhotos = DatabaseSession.Query<ShowPhoto>().Where(x => x.Show == show).Fetch(x => x.Photo).ToList();
 
             var otherPerformances = DatabaseSession.Query<Show>()
                 .Where(x => x.Title == show.Title &&
@@ -52,10 +52,10 @@ namespace FODT.Controllers
 
             var viewModel = new ShowDetailsViewModel();
 
-            viewModel.MediaUploadLinkURL = this.GetURL<MediaController>(c => c.Upload());
-            viewModel.MediaLinkURL = this.GetURL(c => c.GetShowMedia(showId, show.MediaItem.MediaItemId));
-            viewModel.MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(show.MediaItem.MediaItemId));
-            viewModel.MediaListLinkURL = this.GetURL(c => c.ListShowMedia(showId));
+            viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
+            viewModel.PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, show.Photo.PhotoId));
+            viewModel.PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(show.Photo.PhotoId));
+            viewModel.PhotoListLinkURL = this.GetURL(c => c.ListShowPhotos(showId));
 
             viewModel.Title = show.Title;
             viewModel.Author = show.Author;
@@ -96,15 +96,14 @@ namespace FODT.Controllers
                 AddItemURL = this.GetURL(c => c.AddCrew(showId)),
             };
 
-            viewModel.RelatedMediaCount = relatedMedia.Count;
-            viewModel.NewRelatedMedia = relatedMedia
+            viewModel.PhotoCount = relatedPhotos.Count;
+            viewModel.NewPhotos = relatedPhotos
                 .OrderByDescending(x => x.InsertedDateTime)
-                .Where(x => x.MediaItem.MediaItemId != show.MediaItem.MediaItemId)
-                .Select(x => new ShowDetailsViewModel.RelatedMediaViewModel
+                .Where(x => x.Photo.PhotoId != show.Photo.PhotoId)
+                .Select(x => new ShowDetailsViewModel.NewPhotoViewModel
                 {
-                    ID = x.MediaItem.MediaItemId,
-                    MediaLinkURL = this.GetURL(c => c.GetShowMedia(showId, x.MediaItem.MediaItemId)),
-                    MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemTiny(x.MediaItem.MediaItemId)),
+                    PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, x.Photo.PhotoId)),
+                    PhotoTinyURL = this.GetURL<PhotosController>(c => c.GetPhotoTiny(x.Photo.PhotoId)),
                 })
                 .Take(4)
                 .ToList();
@@ -112,49 +111,49 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [HttpGet, Route("{showId}/Media")]
-        public ActionResult ListShowMedia(int showId)
+        [HttpGet, Route("{showId}/Photos")]
+        public ActionResult ListShowPhotos(int showId)
         {
             var show = DatabaseSession.Get<Show>(showId);
-            var relatedMedia = DatabaseSession.Query<ShowMedia>().Where(x => x.Show == show).Fetch(x => x.MediaItem).ToList();
+            var photos = DatabaseSession.Query<ShowPhoto>().Where(x => x.Show == show).Fetch(x => x.Photo).ToList();
 
-            var viewModel = new ListShowMediaViewModel();
+            var viewModel = new ListShowPhotosViewModel();
             viewModel.ShowTitle = show.Title;
             viewModel.ShowYear = show.Year;
             viewModel.ShowLinkURL = this.GetURL(c => c.ShowDetails(showId));
-            viewModel.RelatedMedia = relatedMedia.OrderBy(x => x.MediaItem.InsertedDateTime).ThenBy(x => x.MediaItem.MediaItemId).Select(x => new ListShowMediaViewModel.Media
+            viewModel.Photos = photos.OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId).Select(x => new ListShowPhotosViewModel.Photo
             {
-                MediaTinyURL = this.GetURL<MediaController>(c => c.GetItemTiny(x.MediaItem.MediaItemId)),
-                MediaThumbnailURL = this.GetURL<MediaController>(c => c.GetItemThumbnail(x.MediaItem.MediaItemId)),
+                PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, x.Photo.PhotoId)),
+                PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(x.Photo.PhotoId)),
             }).ToList();
             return View(viewModel);
         }
 
-        [HttpGet, Route("{showId}/Media/{mediaItemId}")]
-        public ActionResult GetShowMedia(int showId, int mediaItemId)
+        [HttpGet, Route("{showId}/Photo/{photoId}")]
+        public ActionResult GetShowPhoto(int showId, int photoId)
         {
             var show = DatabaseSession.Get<Show>(showId);
-            var relatedMedia = DatabaseSession
-                .Query<ShowMedia>().Where(x => x.Show == show).Fetch(x => x.MediaItem)
+            var photos = DatabaseSession
+                .Query<ShowPhoto>().Where(x => x.Show == show).Fetch(x => x.Photo)
                 .ToList()
-                .OrderBy(x => x.MediaItem.InsertedDateTime).ThenBy(x => x.MediaItem.MediaItemId)
+                .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
                 .ToList();
-            var media = relatedMedia.SingleOrDefault(x => x.MediaItem.MediaItemId == mediaItemId);
+            var photo = photos.SingleOrDefault(x => x.Photo.PhotoId == photoId);
 
-            var index = relatedMedia.IndexOf(relatedMedia.Single(x => x.ShowMediaId == media.ShowMediaId));
-            var previousId = index > 0 ? relatedMedia[index - 1].MediaItem.MediaItemId : (int?)null;
-            var nextId = index < relatedMedia.Count - 1 ? relatedMedia[index + 1].MediaItem.MediaItemId : (int?)null;
+            var index = photos.IndexOf(photos.Single(x => x.ShowPhotoId == photo.ShowPhotoId));
+            var previousId = index > 0 ? photos[index - 1].Photo.PhotoId : (int?)null;
+            var nextId = index < photos.Count - 1 ? photos[index + 1].Photo.PhotoId : (int?)null;
 
-            var viewModel = new GetShowMediaViewModel();
-            viewModel.UploadLinkURL = this.GetURL<MediaController>(c => c.Upload());
+            var viewModel = new GetShowPhotoViewModel();
+            viewModel.UploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
             viewModel.ShowLinkURL = this.GetURL(c => c.ShowDetails(showId));
             viewModel.ShowTitle = show.Title;
             viewModel.ShowYear = show.Year;
-            viewModel.PreviousItemLinkURL = previousId.HasValue ? this.GetURL(c => c.GetShowMedia(showId, previousId.Value)) : "";
-            viewModel.NextItemLinkURL = nextId.HasValue ? this.GetURL(c => c.GetShowMedia(showId, nextId.Value)) : "";
-            viewModel.MediaItemId = media.MediaItem.MediaItemId;
-            viewModel.MediaItemViewModel = new MediaItemViewModel();
-            viewModel.MediaItemViewModel.PopulateFromDatabase(DatabaseSession, Url, mediaItemId);
+            viewModel.PreviousPhotoLinkURL = previousId.HasValue ? this.GetURL(c => c.GetShowPhoto(showId, previousId.Value)) : "";
+            viewModel.NextPhotoLinkURL = nextId.HasValue ? this.GetURL(c => c.GetShowPhoto(showId, nextId.Value)) : "";
+            viewModel.PhotoId = photo.Photo.PhotoId;
+            viewModel.PhotoViewModel = new PhotoViewModel();
+            viewModel.PhotoViewModel.PopulateFromDatabase(DatabaseSession, Url, photoId);
 
             return View(viewModel);
         }

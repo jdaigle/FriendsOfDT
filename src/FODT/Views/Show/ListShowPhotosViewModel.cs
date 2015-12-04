@@ -5,19 +5,19 @@ using System.Web;
 
 namespace FODT.Views.Show
 {
-    public class ListShowMediaViewModel
+    public class ListShowPhotosViewModel
     {
         public string ShowTitle { get; set; }
         public short ShowYear { get; set; }
-        public List<Media> RelatedMedia { get; set; }
+        public List<Photo> Photos { get; set; }
 
         public string ShowLinkURL { get; set; }
-        public string MediaUploadLinkURL { get; set; }
+        public string PhotoUploadLinkURL { get; set; }
 
-        public class Media
+        public class Photo
         {
-            public string MediaTinyURL { get; set; }
-            public string MediaThumbnailURL { get; set; }
+            public string PhotoLinkURL { get; set; }
+            public string PhotoThumbnailURL { get; set; }
         }
     }
 }

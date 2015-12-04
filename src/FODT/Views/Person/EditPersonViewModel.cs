@@ -9,7 +9,7 @@ namespace FODT.Views.Person
     {
         public static EditPersonViewModel Empty()
         {
-            return new EditPersonViewModel() { RelatedMedia = new List<Media>() };
+            return new EditPersonViewModel() { Photos = new List<Photo>() };
         }
 
         public string POSTUrl { get; set; }
@@ -24,15 +24,15 @@ namespace FODT.Views.Person
         public string Nickname { get; set; }
         public string Biography { get; set; }
 
-        public int? DefaultMediaItemId { get; set; }
+        public int? DefaultPhotoId { get; set; }
 
-        public List<Media> RelatedMedia { get; set; }
+        public List<Photo> Photos { get; set; }
 
-        public class Media
+        public class Photo
         {
-            public int MediaItemId { get; set; }
-            public string MediaTinyURL { get; set; }
-            public string MediaThumbnailURL { get; set; }
+            public int PhotoItemId { get; set; }
+            public string PhotoTinyURL { get; set; }
+            public string PhotoThumbnailURL { get; set; }
         }
     }
 }
