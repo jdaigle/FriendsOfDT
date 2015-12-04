@@ -188,6 +188,10 @@ DELETE FROM AwardType;
                     entity.LastName = (_row.lname ?? string.Empty).Trim();
                     entity.Suffix = (_row.suffix ?? string.Empty).Trim();
                     entity.Nickname = (_row.nickname ?? string.Empty).Trim();
+                    if (entity.FirstName.Length == 0 && entity.LastName.Length == 0)
+                    {
+                        continue; // skip
+                    }
                     entity.Biography = "";
                     if (_row.bio != null && _row.bio.Length > 0)
                     {
@@ -329,7 +333,7 @@ DELETE FROM AwardType;
                     entity.Name = ((string)_row.name ?? "").Trim();
                     if (string.IsNullOrWhiteSpace(entity.Name))
                     {
-                        entity.Name = "[MISSING]";
+                        continue; // skip blank names
                     }
                     session.Save(entity, entity.AwardTypeId);
                     if (entity.AwardTypeId > maxId) maxId = entity.AwardTypeId;
@@ -483,7 +487,7 @@ DELETE FROM AwardType;
                     entity.Role = (_row.role ?? string.Empty).Trim();
                     if (string.IsNullOrWhiteSpace(entity.Role))
                     {
-                        entity.Role = "[MISSING]";
+                        continue; // skip
                     }
                     entity.InsertedDateTime = DateTime.UtcNow;
                     entity.LastModifiedDateTime = DateTime.UtcNow;
@@ -546,7 +550,7 @@ DELETE FROM AwardType;
                     entity.Position = jobs[jobId].name;
                     if (string.IsNullOrWhiteSpace(entity.Position))
                     {
-                        entity.Position = "[MISSING]";
+                        continue; // skip
                     }
                     entity.InsertedDateTime = DateTime.UtcNow;
                     entity.LastModifiedDateTime = DateTime.UtcNow;
@@ -601,7 +605,7 @@ DELETE FROM AwardType;
                     entity.Year = (short)_row.year;
                     if (string.IsNullOrWhiteSpace(entity.Position))
                     {
-                        entity.Position = "[MISSING]";
+                        continue; // skip
                     }
                     entity.DisplayOrder = _row.ECID;
                     entity.InsertedDateTime = DateTime.UtcNow;
