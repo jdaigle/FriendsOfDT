@@ -22,9 +22,9 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
   * [x] Person Details
   * [ ] Show Details
   * [ ] Awards by Year (e.g. Banquet)
-  * [ ] Media for Person
-  * [ ] Media for Show
-  * [ ] Recent/Random Media
+  * [ ] Photos for Person
+  * [ ] Photos for Show
+  * [ ] Recent/Random Photos
   * [ ] List Shows (sort by year/title)
   * [ ] Club Positions (e.g. EC) By Year
   * [ ] Toaster List
