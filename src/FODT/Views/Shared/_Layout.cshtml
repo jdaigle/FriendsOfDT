@@ -66,7 +66,14 @@
         <hr />
         @RenderBody()
     </div>
-    <hr />
+    <footer>
+        <hr />
+        <p class="copyright">
+            © @DateTime.UtcNow.Year "Friends of DramaTech" and contributors.
+            This site is <a href="https://github.com/jdaigle/FriendsOfDT" target="_blank">open source</a>
+            under <a href="https://github.com/jdaigle/FriendsOfDT/blob/master/LICENSE" target="_blank">The MIT License</a>.
+        </p>
+    </footer>
     <script type="text/javascript">
         if (window.location.hash && window.location.hash === "#_=_") {
             if (window.history && history.pushState) {
