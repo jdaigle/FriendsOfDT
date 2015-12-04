@@ -35,7 +35,7 @@ namespace FODT.Controllers
                 Name = x.AwardType.Name,
 
                 AwardShowLinkURL = x.Show != null ? this.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)) : "",
-                AwardShowLinkText = x.Show != null ? x.Show.Title : "",
+                AwardShowLinkText = x.Show != null ? x.Show.DisplayTitle: "",
 
                 AwardPersonLinkURL = x.Person != null ? this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)) : "",
                 AwardPersonLinkText = x.Person != null ? x.Person.Fullname : "",

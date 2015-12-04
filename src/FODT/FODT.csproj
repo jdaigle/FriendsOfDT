@@ -205,10 +205,9 @@
     <Compile Include="Views\Shows\SortedShowsViewModel.cs" />
     <Compile Include="Views\Show\CastRolesTableViewModel.cs" />
     <Compile Include="Views\Show\CrewPositionsTableViewModel.cs" />
-    <Compile Include="Views\Show\GetShowPhotoViewModel.cs" />
     <Compile Include="Views\Show\ShowDetailsViewModel.cs" />
     <Compile Include="Views\Person\PersonDetailsViewModel.cs" />
-    <Compile Include="Views\Show\ListShowPhotosViewModel.cs" />
+    <Compile Include="Views\Show\ShowPhotosViewModel.cs" />
     <Compile Include="Views\Toaster\HuntViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -291,8 +290,7 @@
   <ItemGroup>
     <Content Include="Views\Photos\Index.cshtml" />
     <Content Include="Views\Photos\PhotoDetail.cshtml" />
-    <Content Include="Views\Show\ListShowPhotos.cshtml" />
-    <Content Include="Views\Show\GetShowPhoto.cshtml" />
+    <Content Include="Views\Show\ShowPhotos.cshtml" />
     <Content Include="Views\Photos\Photo.cshtml" />
     <Content Include="Views\Person\PersonPhotos.cshtml" />
     <Content Include="Views\Shows\SortByYear.cshtml" />

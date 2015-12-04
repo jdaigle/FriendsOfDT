@@ -38,14 +38,13 @@
             <img src="@Model.PhotoThumbnailURL" alt="@Model.Title">
         }
         <hr />
-        <a href="@Model.PhotoListLinkURL">@Model.PhotoCount Images &raquo;</a>
         <ul class="media-banner">
             @foreach (var photo in Model.NewPhotos)
             {
                 <li><a href="@photo.PhotoLinkURL"><img class="img-thumbnail" src="@photo.PhotoTinyURL" alt="@Model.Title"></a></li>
             }
         </ul>
-        @*<a href="@Model.MediaUploadLinkURL"><i class="glyphicon glyphicon-upload"></i> Upload an Image</a>*@
+        <a href="@Model.PhotoListLinkURL">@Model.PhotoCount Images &raquo;</a>
     </div>
     <div class="col-sm-9">
         <h1>@Model.Title</h1>

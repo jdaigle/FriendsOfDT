@@ -48,7 +48,7 @@ namespace FODT.Views.Home
                 ShowId = x.ShowId,
                 ShowQuarter = x.Quarter,
                 ShowYear = x.Year,
-                ShowTitle = x.Title,
+                ShowTitle = x.DisplayTitle,
             }).ToList();
         }
     }

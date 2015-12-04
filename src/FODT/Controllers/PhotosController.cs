@@ -47,7 +47,7 @@ namespace FODT.Controllers
                 ShowId = x.ShowId,
                 ShowQuarter = x.Quarter,
                 ShowYear = x.Year,
-                ShowTitle = x.Title,
+                ShowTitle = x.DisplayTitle,
             }).ToList();
 
             return View(viewModel);
@@ -124,7 +124,7 @@ namespace FODT.Controllers
 
             return showPhoto != null
                 ? this.RedirectToAction<ShowController>(x => x.GetShowPhoto(showPhoto.Show.ShowId, showPhoto.Photo.PhotoId))
-                : this.RedirectToAction<PersonController>(x => x.GetPersonPhotos(personPhoto.Person.PersonId, personPhoto.Photo.PhotoId));
+                : this.RedirectToAction<PersonController>(x => x.GetPersonPhoto(personPhoto.Person.PersonId, personPhoto.Photo.PhotoId));
         }
 
         public class UploadPOSTParameters

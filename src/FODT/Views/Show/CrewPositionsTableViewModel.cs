@@ -26,7 +26,7 @@ namespace FODT.Views.Show
                     ShowQuarter = x.Show.Quarter,
                     ShowYear = x.Show.Year,
                     ShowLinkURL = url.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)),
-                    ShowName = ExtensionMethods.RearrangeShowTitle(x.Show.Title),
+                    ShowName = x.Show.DisplayTitle,
                     PersonLinkURL = url.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)),
                     PersonName = x.Person.Fullname,
                     Name = x.Position,

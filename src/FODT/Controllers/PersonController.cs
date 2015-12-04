@@ -30,7 +30,7 @@ namespace FODT.Controllers
 
             viewModel.EditLinkURL = this.GetURL(c => c.EditPerson(personId));
             viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
-            viewModel.PhotoLinkURL = this.GetURL(c => c.GetPersonPhotos(personId, person.Photo.PhotoId));
+            viewModel.PhotoLinkURL = this.GetURL(c => c.GetPersonPhoto(personId, person.Photo.PhotoId));
             viewModel.PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(person.Photo.PhotoId));
             viewModel.PhotoListLinkURL = this.GetURL(c => c.ListPersonPhotos(personId, null));
 
@@ -79,7 +79,7 @@ namespace FODT.Controllers
                 .Where(x => x.Photo.PhotoId != person.Photo.PhotoId)
                 .Select(x => new PersonDetailsViewModel.NewPhotosViewModel
                 {
-                    PhotoLinkURL = this.GetURL(c => c.GetPersonPhotos(personId, x.Photo.PhotoId)),
+                    PhotoLinkURL = this.GetURL(c => c.GetPersonPhoto(personId, x.Photo.PhotoId)),
                     PhotoTinyURL = this.GetURL<PhotosController>(c => c.GetPhotoTiny(x.Photo.PhotoId)),
                 })
                 .Take(4)
@@ -94,17 +94,17 @@ namespace FODT.Controllers
             var person = DatabaseSession.Get<Person>(personId);
             var photos = DatabaseSession.Query<PersonPhoto>()
                 .Where(x => x.Person == person).Fetch(x => x.Photo)
-                .ToList()
-                .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
                 .ToList();
 
             var viewModel = new PersonPhotosViewModel();
             viewModel.PersonFullname = person.Fullname;
             viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
             viewModel.PersonLinkURL = this.GetURL(c => c.PersonDetails(personId));
-            viewModel.Photos = photos.OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId).Select(x => new PersonPhotosViewModel.Photo
+            viewModel.Photos = photos
+                .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
+                .Select(x => new PersonPhotosViewModel.Photo
             {
-                PhotoLinkURL = this.GetURL(c => c.GetPersonPhotos(personId, x.Photo.PhotoId)),
+                PhotoLinkURL = this.GetURL(c => c.GetPersonPhoto(personId, x.Photo.PhotoId)),
                 PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(x.Photo.PhotoId)),
             }).ToList();
 
@@ -122,7 +122,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("{personId}/Photo/{photoId}")]
-        public ActionResult GetPersonPhotos(int personId, int photoId)
+        public ActionResult GetPersonPhoto(int personId, int photoId)
         {
             return ListPersonPhotos(personId, photoId);
         }
@@ -279,7 +279,7 @@ namespace FODT.Controllers
                 {
                     ShowId = x.ShowId,
                     Quarter = x.Quarter,
-                    Title = x.Title,
+                    Title = x.DisplayTitle,
                     Year = x.Year,
                 }.ToExpando())
                 .ToList();
@@ -361,7 +361,7 @@ namespace FODT.Controllers
                 {
                     ShowId = x.ShowId,
                     Quarter = x.Quarter,
-                    Title = x.Title,
+                    Title = x.DisplayTitle,
                     Year = x.Year,
                 }.ToExpando())
                 .ToList();
@@ -407,7 +407,7 @@ namespace FODT.Controllers
                 {
                     ShowId = x.ShowId,
                     Quarter = x.Quarter,
-                    Title = x.Title,
+                    Title = x.DisplayTitle,
                     Year = x.Year,
                 }.ToExpando())
                 .ToList();

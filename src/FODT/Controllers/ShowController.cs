@@ -55,9 +55,9 @@ namespace FODT.Controllers
             viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
             viewModel.PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, show.Photo.PhotoId));
             viewModel.PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(show.Photo.PhotoId));
-            viewModel.PhotoListLinkURL = this.GetURL(c => c.ListShowPhotos(showId));
+            viewModel.PhotoListLinkURL = this.GetURL(c => c.ListShowPhotos(showId, null));
 
-            viewModel.Title = show.Title;
+            viewModel.Title = show.DisplayTitle;
             viewModel.Author = show.Author;
             viewModel.Quarter = show.Quarter;
             viewModel.Year = show.Year;
@@ -112,49 +112,42 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("{showId}/Photos")]
-        public ActionResult ListShowPhotos(int showId)
+        public ActionResult ListShowPhotos(int showId, int? photoId = null)
         {
             var show = DatabaseSession.Get<Show>(showId);
-            var photos = DatabaseSession.Query<ShowPhoto>().Where(x => x.Show == show).Fetch(x => x.Photo).ToList();
+            var photos = DatabaseSession.Query<ShowPhoto>()
+                .Where(x => x.Show == show).Fetch(x => x.Photo)
+                .ToList();
 
-            var viewModel = new ListShowPhotosViewModel();
-            viewModel.ShowTitle = show.Title;
+            var viewModel = new ShowPhotosViewModel();
+            viewModel.ShowTitle = show.DisplayTitle;
             viewModel.ShowYear = show.Year;
             viewModel.ShowLinkURL = this.GetURL(c => c.ShowDetails(showId));
-            viewModel.Photos = photos.OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId).Select(x => new ListShowPhotosViewModel.Photo
+            viewModel.Photos = photos
+                .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
+                .Select(x => new ShowPhotosViewModel.Photo
             {
                 PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, x.Photo.PhotoId)),
                 PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(x.Photo.PhotoId)),
             }).ToList();
-            return View(viewModel);
+
+            if (photoId.HasValue)
+            {
+                var photo = photos.SingleOrDefault(x => x.Photo.PhotoId == photoId.Value);
+                if (photo == null)
+                {
+                    return new HttpNotFoundResult();
+                }
+                viewModel.PhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
+            }
+
+            return View("ShowPhotos", viewModel);
         }
 
         [HttpGet, Route("{showId}/Photo/{photoId}")]
         public ActionResult GetShowPhoto(int showId, int photoId)
         {
-            var show = DatabaseSession.Get<Show>(showId);
-            var photos = DatabaseSession
-                .Query<ShowPhoto>().Where(x => x.Show == show).Fetch(x => x.Photo)
-                .ToList()
-                .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
-                .ToList();
-            var photo = photos.SingleOrDefault(x => x.Photo.PhotoId == photoId);
-
-            var index = photos.IndexOf(photos.Single(x => x.ShowPhotoId == photo.ShowPhotoId));
-            var previousId = index > 0 ? photos[index - 1].Photo.PhotoId : (int?)null;
-            var nextId = index < photos.Count - 1 ? photos[index + 1].Photo.PhotoId : (int?)null;
-
-            var viewModel = new GetShowPhotoViewModel();
-            viewModel.UploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
-            viewModel.ShowLinkURL = this.GetURL(c => c.ShowDetails(showId));
-            viewModel.ShowTitle = show.Title;
-            viewModel.ShowYear = show.Year;
-            viewModel.PreviousPhotoLinkURL = previousId.HasValue ? this.GetURL(c => c.GetShowPhoto(showId, previousId.Value)) : "";
-            viewModel.NextPhotoLinkURL = nextId.HasValue ? this.GetURL(c => c.GetShowPhoto(showId, nextId.Value)) : "";
-            viewModel.PhotoId = photo.Photo.PhotoId;
-            viewModel.PhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
-
-            return View(viewModel);
+            return ListShowPhotos(showId, photoId);
         }
 
         [HttpGet, Route("{showId}/AddAward")]

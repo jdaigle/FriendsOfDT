@@ -23,7 +23,7 @@ namespace FODT.Views.Show
                     ShowQuarter = x.Quarter,
                     ShowYear = x.Year,
                     ShowLinkURL = url.GetURL<ShowController>(c => c.ShowDetails(x.ShowId)),
-                    ShowName = ExtensionMethods.RearrangeShowTitle(x.Title),
+                    ShowName = x.DisplayTitle,
                 }));
         }
     }

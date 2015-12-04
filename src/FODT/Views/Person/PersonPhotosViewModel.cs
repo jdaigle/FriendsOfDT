@@ -9,9 +9,9 @@ namespace FODT.Views.Person
     public class PersonPhotosViewModel
     {
         public string PersonFullname { get; set; }
-        public List<Photo> Photos { get; set; }
-
         public string PersonLinkURL { get; set; }
+
+        public List<Photo> Photos { get; set; }
         public string PhotoUploadLinkURL { get; set; }
 
         public PhotoViewModel PhotoViewModel { get; set; }

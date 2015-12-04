@@ -62,7 +62,7 @@ namespace FODT.Views.Photos
                 ShowLinkURL = url.Action<ShowController>(c => c.ShowDetails(x.Show.ShowId)),
                 ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
-                ShowTitle = x.Show.Title,
+                ShowTitle = x.Show.DisplayTitle,
             }).ToList();
 
             this.RelatedPeople = relatedPeople.Select(x => new PhotoViewModel.RelatedPerson

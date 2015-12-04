@@ -20,10 +20,10 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
   * [ ] Welcome Page
   * [x] Search/Search results
   * [x] Person Details
-  * [ ] Show Details
+  * [x] Show Details
   * [ ] Awards by Year (e.g. Banquet)
-  * [ ] Photos for Person
-  * [ ] Photos for Show
+  * [x] Photos for Person
+  * [x] Photos for Show
   * [ ] Recent/Random Photos
   * [ ] List Shows (sort by year/title)
   * [ ] Club Positions (e.g. EC) By Year

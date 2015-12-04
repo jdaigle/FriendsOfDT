@@ -32,7 +32,7 @@ namespace FODT.Views.Awards
                     Name = x.AwardType.Name,
 
                     ShowLinkURL = x.Show != null ? urlHelper.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)) : "",
-                    ShowName = x.Show != null ? ExtensionMethods.RearrangeShowTitle(x.Show.Title) : "",
+                    ShowName = x.Show != null ? x.Show.DisplayTitle : "",
 
                     PersonLinkURL = x.Person != null ? urlHelper.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)) : "",
                     PersonName = x.Person != null ? x.Person.Fullname : "",

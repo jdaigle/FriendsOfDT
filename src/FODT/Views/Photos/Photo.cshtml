@@ -3,14 +3,14 @@
     <a href="@Model.PhotoURL" target="_blank"><img src="@Model.PhotoURL" class="img-responsive center-block" /></a>
 </p>
 <div class="text-center">
-    Uploaded on @Model.UploadDate.
+    Uploaded on <strong>@Model.UploadDate</strong>.
     @if (Model.RelatedShows.Any())
     {
         <ul class="list-inline center-block" style="margin: 0;">
             <li>From</li>
             @foreach (var item in Model.RelatedShows)
             {
-                <li><a href="@item.ShowLinkURL">@ExtensionMethods.RearrangeShowTitle(item.ShowTitle) (@item.ShowYear)</a></li>
+                <li><strong><a href="@item.ShowLinkURL">@item.ShowTitle (@item.ShowYear)</a></strong></li>
             }
         </ul>
     }
@@ -20,7 +20,7 @@
             <li>With</li>
             @foreach (var item in Model.RelatedPeople)
             {
-                <li><a href="@item.PersonLinkURL">@item.PersonFullname</a></li>
+                <li><strong><a href="@item.PersonLinkURL">@item.PersonFullname</a></strong></li>
             }
         </ul>
     }
