@@ -18,6 +18,18 @@ function splashpage() {
 	$num_del=$num_del_result[0];
     }
     echo <<< EOT
+
+    <div style="background-color: #d9edf7; text-align: center; color: #31708f; padding: 15px; font-size: 120%;">
+        Heads up. <strong>We're building a new IMDT!</strong> You can check out the progress at
+        <a href="http://friendsofdt.org">http://friendsofdt.org</a>. For the time being it is "read-only"
+        and the database is occassionally refreshed.
+        <br />
+        <br />
+        The new site is <a href="https://github.com/jdaigle/friendsofdt">open source</a> and feedback
+        and contributions are not only welcome, they're encouraged! Details will be available on the new site's
+        welcome page.
+    </div>
+
 	<br><br><center><p><font size=+2>Welcome to IMDT - the <b>I</b>nternet <b>M</b>useum of <b>D</b>ramaTech <b>T</b>heatre!<br><br></font>
 
 	<b>Check out the new <a href="?action=media_index">Media Page</a>!  You can now <a href="?action=media_upload">Upload pictures</a> 
