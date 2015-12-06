@@ -1,4 +1,4 @@
-#Internet Museum of DramaTech Theatre
+#Friends of DramaTech Official Website
 
 [IMDT](http://imdt.friendsofdt.org/) is an archive and history site operated by Friends of DramaTech.
 Here you will find information on DramaTech going back to its beginnings in 1947.

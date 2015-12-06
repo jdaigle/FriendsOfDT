@@ -9,14 +9,15 @@
     @RenderSection("endOfHead", false)
 </head>
 <body>
-
-    <div style="position: fixed; top: 0; right: 5px; z-index: 1001;">
-        <span class="label label-info visible-xs-inline-block">size: xs</span>
-        <span class="label label-info visible-sm-inline-block">size: sm</span>
-        <span class="label label-info visible-md-inline-block">size: md</span>
-        <span class="label label-info visible-lg-inline-block">size: lg</span>
-    </div>
-
+    @if (this.IsDebug())
+    {
+        <div style="position: fixed; top: 0; right: 5px; z-index: 1001;">
+            <span class="label label-info visible-xs-inline-block">size: xs</span>
+            <span class="label label-info visible-sm-inline-block">size: sm</span>
+            <span class="label label-info visible-md-inline-block">size: md</span>
+            <span class="label label-info visible-lg-inline-block">size: lg</span>
+        </div>
+    }
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
@@ -26,26 +27,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="~/">fodt</a>
+                <a class="navbar-brand" href="~/">
+                    fodt
+                </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Show Archive</a></li>
-                    <li><a href="~/admin">Admin</a></li>
+                    <li class="active"><a href="~/">Show Arcive</a></li>
                 </ul>
-                <form class="navbar-form navbar-right">
-                    @if (!ViewBag.IsAuthenticated)
-                    {
-                        <a class="btn btn-success sign-in-facebook" href="~/User/SignOut?redirectUrl=@Request.Url.PathAndQuery">Sign In</a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-danger" href="~/User/SignOut">Sign Out</a>
-                    }
-                </form>
-                <p class="navbar-text navbar-right">Welcome @ViewBag.UserName!</p>
             </div>
         </div>
     </nav>
