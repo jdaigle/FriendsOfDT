@@ -67,6 +67,9 @@ task deploy-website {
     write-host -foregroundcolor Magenta "Be sure to check the output of the above command since msdeploy.exe already returns exit code 0!"
 }
 
+task redeploy-website -depends Package, deploy-website {
+}
+
 task deploy-database {
     exec { & $toolsDir\SqlMigrate.exe -m database -s friendsofdt-prod.database.windows.net -d fodt -u fodtadmin -p $dbdeployPassword -a -f }
 }
