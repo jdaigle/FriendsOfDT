@@ -21,8 +21,8 @@ function splashpage() {
 
     <div style="background-color: #d9edf7; text-align: center; color: #31708f; padding: 15px; font-size: 120%;">
         Heads up. <strong>We're building a new IMDT!</strong> You can check out the progress at
-        <a href="http://friendsofdt.org">http://friendsofdt.org</a>. For the time being it is "read-only"
-        and the database is occassionally refreshed.
+        <a href="http://friendsofdt.org">http://friendsofdt.org</a>. The new site may be out-of-date occasionally until
+        it's finished.
         <br />
         <br />
         The new site is <a href="https://github.com/jdaigle/friendsofdt">open source</a> and feedback
