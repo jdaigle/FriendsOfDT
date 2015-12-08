@@ -125,7 +125,7 @@ namespace FODT
 
             request.Headers.Add(
                 "Authorization",
-                string.Format(CultureInfo.InvariantCulture, "{0} {1}:{2}", "SharedKey", accountName, signature));
+                $"SharedKey {accountName}:{signature}");
         }
 
         private static string ComputeHmac256(byte[] key, string message)

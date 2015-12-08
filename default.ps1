@@ -1,4 +1,4 @@
-Framework "4.5.1x64"
+Framework "4.6.1"
 
 properties {
     $deployURL = "https://friendsofdt-prod.scm.azurewebsites.net:443/MsDeploy.axd"

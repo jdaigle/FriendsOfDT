@@ -14,7 +14,7 @@ namespace FODT.Models.IMDT
             this.Role = role;
             if (string.IsNullOrWhiteSpace(role))
             {
-                throw new ArgumentNullException("role");
+                throw new ArgumentNullException(nameof(role));
             }
             this.InsertedDateTime = DateTime.UtcNow;
             this.LastModifiedDateTime = DateTime.UtcNow;

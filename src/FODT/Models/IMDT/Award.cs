@@ -22,7 +22,7 @@ namespace FODT.Models.IMDT
             this.Year = year;
             if (year < 1940 || year > (DateTime.Now.Year + 1))
             {
-                throw new ArgumentOutOfRangeException("year");
+                throw new ArgumentOutOfRangeException(nameof(year));
             }
             this.InsertedDateTime = DateTime.UtcNow;
             this.LastModifiedDateTime = DateTime.UtcNow;

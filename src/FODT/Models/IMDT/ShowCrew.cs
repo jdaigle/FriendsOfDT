@@ -14,7 +14,7 @@ namespace FODT.Models.IMDT
             this.Position = position;
             if (string.IsNullOrWhiteSpace(position))
             {
-                throw new ArgumentNullException("position");
+                throw new ArgumentNullException(nameof(position));
             }
             this.DisplayOrder = 0;
             this.InsertedDateTime = DateTime.UtcNow;
