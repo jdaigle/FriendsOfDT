@@ -193,6 +193,7 @@
     <Compile Include="Views\Awards\ByYearViewModel.cs" />
     <Compile Include="Views\Extensions\DebugExtensions.cs" />
     <Compile Include="Views\Home\AdminViewModel.cs" />
+    <Compile Include="Views\Home\ArchiveWelcomeViewModel.cs" />
     <Compile Include="Views\IUserEditableViewModel.cs" />
     <Compile Include="Views\Photos\PhotoDetailViewModel.cs" />
     <Compile Include="Views\Photos\IndexViewModel.cs" />

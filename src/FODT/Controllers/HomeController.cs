@@ -25,7 +25,20 @@ namespace FODT.Controllers
         [HttpGet, Route("Archive")]
         public ActionResult ArchiveWelcome()
         {
-            return View();
+            var stats = DatabaseSession.Query<dynamic>(@"
+      SELECT 'ShowCount'   AS [Key], COUNT(*) AS [Value] FROM Show
+UNION SELECT 'PersonCount' AS [Key], COUNT(*) AS [Value] FROM Person
+UNION SELECT 'CastCount'   AS [Key], COUNT(*) AS [Value] FROM ShowCast
+UNION SELECT 'CrewCount'   AS [Key], COUNT(*) AS [Value] FROM ShowCrew
+UNION SELECT 'PhotoCount'  AS [Key], COUNT(*) AS [Value] FROM Photo
+                ");
+            var viewModel = new ArchiveWelcomeViewModel();
+            viewModel.ShowCount = (int)stats.Single(x => x.Key == "ShowCount").Value;
+            viewModel.PersonCount = (int)stats.Single(x => x.Key == "PersonCount").Value;
+            viewModel.CastCount = (int)stats.Single(x => x.Key == "CastCount").Value;
+            viewModel.CrewCount = (int)stats.Single(x => x.Key == "CrewCount").Value;
+            viewModel.PhotoCount = (int)stats.Single(x => x.Key == "PhotoCount").Value;
+            return View(viewModel);
         }
 
         [HttpGet, Route("IMDT")]
