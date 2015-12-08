@@ -172,6 +172,7 @@
     <Compile Include="Models\IMDT\Show.cs" />
     <Compile Include="Models\IMDT\Person.cs" />
     <Compile Include="Models\ExtensionMethods.cs" />
+    <Compile Include="NHibernateExtensions.cs" />
     <Compile Include="Security\AuthorizationContextExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="ObjectExtensions.cs" />
