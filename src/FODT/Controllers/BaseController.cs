@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using FODT.Database;
@@ -26,21 +28,29 @@ namespace FODT.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            this.databaseSession = DatabaseBootstrapper.SessionFactory.OpenSession();
-            this.databaseSession.FlushMode = FlushMode.Commit;
-            this.databaseSession.Transaction.Begin();
+            var isHTTPGET = filterContext.HttpContext.Request.HttpMethod.Equals("GET", StringComparison.InvariantCultureIgnoreCase);
+            databaseSession = DatabaseBootstrapper.SessionFactory.OpenSession();
+            databaseSession.FlushMode = FlushMode.Commit;
+            databaseSession.Transaction.Begin(isHTTPGET ? IsolationLevel.ReadCommitted : IsolationLevel.RepeatableRead);
+            databaseSession.DefaultReadOnly = isHTTPGET;
             databaseSessionClosed = false;
             base.OnActionExecuting(filterContext);
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
+            var isHTTPGET = filterContext.HttpContext.Request.HttpMethod.Equals("GET", StringComparison.InvariantCultureIgnoreCase);
             if (databaseSession != null)
             {
                 try
                 {
                     using (databaseSession)
                     {
+                        AssertDatabaseSessionNotDirty(isHTTPGET);
+                        if (isHTTPGET)
+                        {
+                            databaseSession.Clear(); // clear so we don't check dirty and flush
+                        }
                         if (databaseSession.Transaction.IsActive)
                         {
                             if (filterContext.Exception != null)
@@ -65,6 +75,15 @@ namespace FODT.Controllers
 
             ViewBag.IsAuthenticated = this.User.Identity.IsAuthenticated;
             ViewBag.UserName = this.User.Identity.Name;
+        }
+
+        [Conditional("DEBUG")]
+        private void AssertDatabaseSessionNotDirty(bool isHTTPGET)
+        {
+            if (isHTTPGET && databaseSession.IsDirty())
+            {
+                Debug.Fail("Executed an HTTP GET, but the database UoW has unflushed changes. This is probably a bug.");
+            }
         }
 
         protected override void OnException(ExceptionContext filterContext)
