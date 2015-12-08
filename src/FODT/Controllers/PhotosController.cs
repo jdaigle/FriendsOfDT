@@ -13,7 +13,7 @@ using System.Configuration;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("Photos")]
+    [RoutePrefix("archive/Photos")]
     public class PhotosController : BaseController
     {
         private static readonly string azureStorageAccountName;

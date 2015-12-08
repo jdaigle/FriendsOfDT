@@ -11,7 +11,7 @@ using NHibernate.Linq;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("shows")]
+    [RoutePrefix("archive/shows")]
     public class ShowsController : BaseController
     {
         [HttpGet, Route("sort/year")]

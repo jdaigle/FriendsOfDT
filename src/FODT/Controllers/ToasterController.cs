@@ -10,7 +10,7 @@ using NHibernate.Linq;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("Toaster")]
+    [RoutePrefix("archive/Toaster")]
     public class ToasterController : BaseController
     {
         [HttpGet, Route("Hunt")]

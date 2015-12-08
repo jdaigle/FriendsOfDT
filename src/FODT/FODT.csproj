@@ -314,6 +314,7 @@
     <Content Include="Views\Person\AddCast.cshtml" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Views\Shared\RelationTable.cshtml" />
+    <Content Include="Views\Home\ArchiveWelcome.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

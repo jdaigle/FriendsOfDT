@@ -12,7 +12,7 @@ using FODT.Views.Photos;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("Show")]
+    [RoutePrefix("archive/Show")]
     public class ShowController : BaseController
     {
         public class ShowOrderDto

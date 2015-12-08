@@ -13,7 +13,7 @@ using FODT.Views.Show;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("Person")]
+    [RoutePrefix("archive/Person")]
     public class PersonController : BaseController
     {
         [HttpGet, Route("{personId}")]

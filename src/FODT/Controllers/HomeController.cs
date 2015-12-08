@@ -22,6 +22,18 @@ namespace FODT.Controllers
             return View();
         }
 
+        [HttpGet, Route("Archive")]
+        public ActionResult ArchiveWelcome()
+        {
+            return View();
+        }
+
+        [HttpGet, Route("IMDT")]
+        public ActionResult IMDT()
+        {
+            return this.RedirectToAction(c => c.ArchiveWelcome(), permanent: true);
+        }
+
         [HttpGet, Route("Admin/EditPerson")]
         public ActionResult Admin_EditPerson(int personId)
         {

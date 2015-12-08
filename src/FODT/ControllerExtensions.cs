@@ -9,12 +9,12 @@ namespace FODT
 {
     public static class ControllerExtensions
     {
-        public static RedirectToRouteResult RedirectToAction<TController>(this TController controller, Expression<Action<TController>> action) where TController : Controller
+        public static RedirectToRouteResult RedirectToAction<TController>(this TController controller, Expression<Action<TController>> action, bool permanent = false) where TController : Controller
         {
-            return RedirectToAction((Controller)controller, action);
+            return RedirectToAction((Controller)controller, action, permanent);
         }
 
-        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Action<TController>> action) where TController : Controller
+        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Action<TController>> action, bool permanent = false) where TController : Controller
         {
             if (controller == null)
             {
@@ -22,7 +22,7 @@ namespace FODT
             }
 
             RouteValueDictionary routeValues = ExpressionHelper.GetRouteValuesFromExpression(action);
-            return new RedirectToRouteResult(routeValues);
+            return new RedirectToRouteResult("", routeValues, permanent);
         }
 
         public static string GetURL<TController>(this UrlHelper urlHelper, Expression<Action<TController>> action) where TController : Controller

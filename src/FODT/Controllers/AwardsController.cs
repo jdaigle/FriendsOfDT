@@ -9,7 +9,7 @@ using FODT.Views.Awards;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("awards")]
+    [RoutePrefix("archive/awards")]
     public class AwardsController : BaseController
     {
         [HttpGet, Route("year/{year?}")]
