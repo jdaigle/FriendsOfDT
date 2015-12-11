@@ -15,6 +15,9 @@ namespace FODT.Database
 
         public static void Bootstrap()
         {
+#if DEBUG
+            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+#endif
             Cfg = Bootstrap(ConfigurationManager.ConnectionStrings["fodt"].ConnectionString);
             SessionFactory = Cfg.BuildSessionFactory();
         }
