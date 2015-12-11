@@ -14,7 +14,7 @@ using NHibernate.Linq;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("User")]
+    [RoutePrefix("User"), NoCacheAttribute]
     public class UserController : BaseController
     {
         [HttpGet, Route("SignIn")]
@@ -66,9 +66,11 @@ namespace FODT.Controllers
                     result = Redirect("~");
                 }
             }
-            user.AddFacebookAccessToken(accessToken);
+            var token = user.AddFacebookAccessToken(accessToken);
             DatabaseSession.Save(user);
-            DatabaseSession.CommitTransaction();
+            DatabaseSession.Flush();
+
+            var tokenID = token.UserFacebookAccessTokenId;
 
             //authenticationTokenContext.IssueAuthenticationToken(user.UserAccountId, accessToken, profile.name, "oauth/facebook", expires);
 

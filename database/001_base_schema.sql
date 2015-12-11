@@ -1,3 +1,4 @@
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Photo]'))
 CREATE TABLE [dbo].[Photo] (
     [PhotoId] [int] IDENTITY(1,1) NOT NULL,
     [GUID] uniqueidentifier NOT NULL,
@@ -9,6 +10,7 @@ CREATE TABLE [dbo].[Photo] (
 );
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Person]'))
 CREATE TABLE [dbo].[Person] (
     [PersonId] [int] IDENTITY(1,1) NOT NULL,
     [Honorific] [nvarchar](50) NOT NULL,
@@ -31,6 +33,7 @@ CREATE TABLE [dbo].[Person] (
 );
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PersonPhoto]'))
 CREATE TABLE [dbo].[PersonPhoto] (
     [PersonPhotoId] [int] IDENTITY(1,1) NOT NULL,
     [PersonId] [int] NOT NULL,
@@ -49,6 +52,7 @@ CREATE TABLE [dbo].[PersonPhoto] (
 );
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Show]'))
 CREATE TABLE [dbo].[Show] (
     [ShowId] [int] IDENTITY(1,1) NOT NULL,
     [Title] [nvarchar](150) NOT NULL,
@@ -71,6 +75,7 @@ CREATE TABLE [dbo].[Show] (
 );
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ShowPhoto]'))
 CREATE TABLE [dbo].[ShowPhoto] (
     [ShowPhotoId] [int] IDENTITY(1,1) NOT NULL,
     [ShowId] [int] NOT NULL,
@@ -89,6 +94,7 @@ CREATE TABLE [dbo].[ShowPhoto] (
 );
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AwardType]'))
 CREATE TABLE [dbo].[AwardType] (
     [AwardTypeId] [int] IDENTITY(1,1) NOT NULL,
     [Name] [nvarchar](50) NOT NULL,
@@ -99,6 +105,7 @@ CREATE TABLE [dbo].[AwardType] (
 );
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Award]'))
 CREATE TABLE [dbo].[Award] (
     [AwardId] [int] IDENTITY(1,1) NOT NULL,
     [ShowId] [int] NULL,
@@ -125,6 +132,7 @@ CREATE TABLE [dbo].[Award] (
 );
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ShowCast]'))
 CREATE TABLE [dbo].[ShowCast] (
     [ShowCastId] [int] IDENTITY(1,1) NOT NULL,
     [ShowId] [int] NOT NULL,
@@ -145,6 +153,7 @@ CREATE TABLE [dbo].[ShowCast] (
 );
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ShowCrew]'))
 CREATE TABLE [dbo].[ShowCrew] (
     [ShowCrewId] [int] IDENTITY(1,1) NOT NULL,
     [ShowId] [int] NOT NULL,
@@ -166,6 +175,7 @@ CREATE TABLE [dbo].[ShowCrew] (
 );
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PersonClubPosition]'))
 CREATE TABLE [dbo].[PersonClubPosition] (
     [PersonClubPositionId] [int] IDENTITY(1,1) NOT NULL,
     [PersonId] [int] NOT NULL,

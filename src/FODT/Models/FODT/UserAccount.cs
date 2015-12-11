@@ -12,7 +12,7 @@ namespace FODT.Models.FODT
     {
         protected UserAccount()
         {
-            FacebookAccessTokens = new HashSet<UserFacebookAccessToken>();
+            FacebookAccessTokens = new List<UserFacebookAccessToken>();
         }
 
         public UserAccount(FacebookAccessToken token)
@@ -24,10 +24,12 @@ namespace FODT.Models.FODT
             Update(token);
         }
 
-        public virtual void AddFacebookAccessToken(FacebookAccessToken token)
+        public virtual UserFacebookAccessToken AddFacebookAccessToken(FacebookAccessToken token)
         {
-            FacebookAccessTokens.Add(new UserFacebookAccessToken(this, token));
+            var _token = new UserFacebookAccessToken(this, token);
+            FacebookAccessTokens.Add(_token);
             Update(token);
+            return _token;
         }
 
         public virtual void Update(FacebookAccessToken token)
@@ -51,7 +53,7 @@ namespace FODT.Models.FODT
         public virtual DateTime InsertedDateTime { get; protected set; }
         public virtual DateTime LastModifiedDateTime { get; protected set; }
 
-        public virtual ISet<UserFacebookAccessToken> FacebookAccessTokens { get; protected set; }
+        public virtual IList<UserFacebookAccessToken> FacebookAccessTokens { get; protected set; }
     }
 
     public class UserAccountClassMap : ClassMap<UserAccount>
@@ -66,6 +68,7 @@ namespace FODT.Models.FODT
             Map(x => x.LastModifiedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             HasMany(x => x.FacebookAccessTokens)
                 .AsBag()
+                .Cascade.SaveUpdate()
                 .Inverse();
         }
     }

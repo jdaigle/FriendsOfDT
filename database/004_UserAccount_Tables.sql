@@ -15,16 +15,20 @@ GO
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UserFacebookAccessToken]'))
 CREATE TABLE [dbo].[UserFacebookAccessToken] (
-    [AccessToken] [varchar](255) NOT NULL,
+    [UserFacebookAccessTokenId] [int] IDENTITY(1,1) NOT NULL,
+    [AccessToken] [varchar] (255) NOT NULL,
     [UserAccountId] [int] NOT NULL,
     [InsertedDateTime] [datetime2](7) NOT NULL,
     [ExpiresDateTime] [datetime2](7) NOT NULL,
     CONSTRAINT [PK_UserFacebookAccessToken] PRIMARY KEY CLUSTERED 
     (
-        [AccessToken] ASC
+        [UserFacebookAccessTokenId] ASC
     ),
     CONSTRAINT [FK_UserFacebookAccessToken_UserAccount]
         FOREIGN KEY ([UserAccountId])
         REFERENCES [dbo].[UserAccount] ([UserAccountId]),
 );
 GO
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'UX_UserFacebookAccessToken_AccessToken' AND object_id = OBJECT_ID('dbo.[UserFacebookAccessToken]'))
+    CREATE UNIQUE NONCLUSTERED INDEX UX_UserFacebookAccessToken_AccessToken ON dbo.[UserFacebookAccessToken] ([AccessToken]);

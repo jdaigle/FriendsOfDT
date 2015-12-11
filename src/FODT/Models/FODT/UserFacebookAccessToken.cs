@@ -20,6 +20,7 @@ namespace FODT.Models.FODT
             this.ExpiresDateTime = DateTime.UtcNow.AddSeconds(token.Expires);
         }
 
+        public virtual int UserFacebookAccessTokenId { get; protected set; }
         public virtual string AccessToken { get; protected set; }
         public virtual UserAccount User { get; protected set; }
         public virtual DateTime InsertedDateTime { get; protected set; }
@@ -30,8 +31,9 @@ namespace FODT.Models.FODT
     {
         public UserFacebookAccessTokenClassMap()
         {
-            Id(x => x.AccessToken).GeneratedBy.Assigned().CustomType("AnsiString").Length(255);
-            References(x => x.User, "UserId").Not.Nullable();
+            Id(x => x.UserFacebookAccessTokenId).GeneratedBy.Identity();
+            Map(x => x.AccessToken).CustomType("AnsiString").Length(255);
+            References(x => x.User, "UserAccountId").Not.Nullable();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.ExpiresDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }
