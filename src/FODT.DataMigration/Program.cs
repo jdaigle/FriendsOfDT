@@ -27,8 +27,8 @@ namespace FODT.DataMigration
         private static string azureStorageAccountName = "";
         private static string azureStorageAccountKey = "";
 
-        private static bool skipDatabaseImport = true;
-        private static bool skipBlobUpload = false;
+        private static bool skipDatabaseImport = false;
+        private static bool skipBlobUpload = true;
 
         private static readonly Encoding blobEncoding = Encoding.GetEncoding(1252);
 
