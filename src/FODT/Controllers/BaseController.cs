@@ -40,7 +40,7 @@ namespace FODT.Controllers
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             var isHTTPGET = filterContext.HttpContext.Request.HttpMethod.Equals("GET", StringComparison.InvariantCultureIgnoreCase);
-            if (databaseSession != null)
+            if (databaseSession != null && filterContext.Exception == null)
             {
                 try
                 {
