@@ -1,3 +1,5 @@
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID('dbo.ELMAH_Error'))
+BEGIN
 CREATE TABLE [dbo].[ELMAH_Error]
 (
     [ErrorId]     UNIQUEIDENTIFIER NOT NULL,
@@ -14,15 +16,14 @@ CREATE TABLE [dbo].[ELMAH_Error]
 ) 
 ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-GO
 
 ALTER TABLE [dbo].[ELMAH_Error] WITH NOCHECK ADD 
     CONSTRAINT [PK_ELMAH_Error] PRIMARY KEY NONCLUSTERED ([ErrorId]) ON [PRIMARY] 
-GO
+
 
 ALTER TABLE [dbo].[ELMAH_Error] ADD 
     CONSTRAINT [DF_ELMAH_Error_ErrorId] DEFAULT (NEWID()) FOR [ErrorId]
-GO
+
 
 CREATE NONCLUSTERED INDEX [IX_ELMAH_Error_App_Time_Seq] ON [dbo].[ELMAH_Error] 
 (
@@ -31,18 +32,19 @@ CREATE NONCLUSTERED INDEX [IX_ELMAH_Error_App_Time_Seq] ON [dbo].[ELMAH_Error]
     [Sequence]      DESC
 ) 
 ON [PRIMARY]
-GO
+END
 
 /* ------------------------------------------------------------------------ 
         STORED PROCEDURES                                                      
    ------------------------------------------------------------------------ */
 
-SET QUOTED_IDENTIFIER ON 
-GO
-SET ANSI_NULLS ON 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ELMAH_GetErrorXml]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[ELMAH_GetErrorXml] AS' 
+END
 GO
 
-CREATE PROCEDURE [dbo].[ELMAH_GetErrorXml]
+ALTER PROCEDURE [dbo].[ELMAH_GetErrorXml]
 (
     @Application NVARCHAR(60),
     @ErrorId UNIQUEIDENTIFIER
@@ -61,17 +63,15 @@ AS
         [Application] = @Application
 
 GO
-SET QUOTED_IDENTIFIER OFF 
-GO
-SET ANSI_NULLS ON 
+
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ELMAH_GetErrorsXml]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[ELMAH_GetErrorsXml] AS' 
+END
 GO
 
-SET QUOTED_IDENTIFIER ON 
-GO
-SET ANSI_NULLS ON 
-GO
-
-CREATE PROCEDURE [dbo].[ELMAH_GetErrorsXml]
+ALTER PROCEDURE [dbo].[ELMAH_GetErrorsXml]
 (
     @Application NVARCHAR(60),
     @PageIndex INT = 0,
@@ -152,17 +152,14 @@ AS
         XML AUTO
 
 GO
-SET QUOTED_IDENTIFIER OFF 
-GO
-SET ANSI_NULLS ON 
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ELMAH_LogError]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[ELMAH_LogError] AS' 
+END
 GO
 
-SET QUOTED_IDENTIFIER ON 
-GO
-SET ANSI_NULLS ON 
-GO
-
-CREATE PROCEDURE [dbo].[ELMAH_LogError]
+ALTER PROCEDURE [dbo].[ELMAH_LogError]
 (
     @ErrorId UNIQUEIDENTIFIER,
     @Application NVARCHAR(60),
@@ -208,8 +205,4 @@ AS
             @TimeUtc
         )
 
-GO
-SET QUOTED_IDENTIFIER OFF 
-GO
-SET ANSI_NULLS ON 
 GO

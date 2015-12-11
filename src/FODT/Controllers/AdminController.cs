@@ -28,10 +28,10 @@ namespace FODT.Controllers
                     Id = x.UserAccountId,
                     Name = x.Name,
                     Email = x.Email,
-                    IsFacebook = !string.IsNullOrWhiteSpace(x.FacebookId),
-                    FacebookPictureURL = x.FacebookPictureURL,
-                    FacebookURL = x.FacebookURL,
-                    LastLoginDateTime = x.LastLoginDateTime.ToString("o"),
+                    IsFacebook = x.FacebookId.HasValue,
+                    //FacebookPictureURL = x.FacebookPictureURL,
+                    //FacebookURL = x.FacebookURL,
+                    //LastLoginDateTime = x.LastLoginDateTime.ToString("o"),
                 }.ToExpando() as dynamic)
                 .OrderBy(x => x.Name)
                 .ToList();
