@@ -60,5 +60,8 @@ namespace FODT.Views.Awards
 
         public string PersonLinkURL { get; set; }
         public string PersonName { get; set; }
+
+        public bool ToPerson { get { return !PersonLinkURL.IsNullOrWhiteSpace(); } }
+        public bool ForShow { get { return !ShowLinkURL.IsNullOrWhiteSpace(); } }
     }
 }

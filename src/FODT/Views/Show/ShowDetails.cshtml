@@ -90,10 +90,13 @@
 {
     <td><a href="@item.AwardYearLinkURL">@item.Year</a></td>
     <td>
-        @item.Name
-        @if (!((string)item.PersonLinkURL).IsNullOrWhiteSpace())
+        @if (item.ToPerson)
         {
-            @: awarded to <a href="@item.PersonLinkURL">@item.PersonName</a>
+            @: @item.Name, awarded to <a href="@item.PersonLinkURL">@item.PersonName</a>
+        }
+        else
+        {
+            @item.Name
         }
     </td>
 }

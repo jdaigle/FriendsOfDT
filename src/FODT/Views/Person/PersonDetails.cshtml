@@ -53,10 +53,13 @@
 {
     <td><a href="@item.AwardYearLinkURL">@item.Year</a></td>
     <td>
-        @item.Name
-        @if (!((string)item.ShowLinkURL).IsNullOrWhiteSpace())
+        @if (item.ForShow)
         {
-            @: for <a href="@item.ShowLinkURL">@item.ShowName</a>
+            @: @item.Name, for <a href="@item.ShowLinkURL">@item.ShowName</a>
+        }
+        else
+        {
+            @item.Name
         }
     </td>
 }

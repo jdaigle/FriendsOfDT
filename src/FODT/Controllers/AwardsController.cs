@@ -12,6 +12,12 @@ namespace FODT.Controllers
     [RoutePrefix("archive/awards")]
     public class AwardsController : BaseController
     {
+        [HttpGet, Route("")]
+        public ActionResult Index()
+        {
+            return this.RedirectToAction(c => c.ByYear(GetMostRecentYear()));
+        }
+
         [HttpGet, Route("year/{year?}")]
         public ActionResult ByYear(short? year)
         {
@@ -28,19 +34,14 @@ namespace FODT.Controllers
             viewModel.NextYearURL = this.GetURL(c => c.ByYear(nextYear));
             viewModel.PreviousYearURL = this.GetURL(c => c.ByYear(prevYear));
 
-            viewModel.Awards = awards.Select(x => new ByYearViewModel.Award
+            viewModel.AwardsTable = new AwardsTableViewModel(
+                this.Url
+                , id => ""
+                , awards)
             {
-                Year = x.Year,
-                AwardId = x.AwardType.AwardTypeId,
-                Name = x.AwardType.Name,
-
-                AwardShowLinkURL = x.Show != null ? this.GetURL<ShowController>(c => c.ShowDetails(x.Show.ShowId)) : "",
-                AwardShowLinkText = x.Show != null ? x.Show.DisplayTitle: "",
-
-                AwardPersonLinkURL = x.Person != null ? this.GetURL<PersonController>(c => c.PersonDetails(x.Person.PersonId)) : "",
-                AwardPersonLinkText = x.Person != null ? x.Person.Fullname : "",
-            })
-            .OrderBy(x => x.AwardId).ToList();
+                CanEdit = false,
+                //AddItemURL = this.GetURL(c => c.AddAward(personId)),
+            };
 
             return View(viewModel);
         }
@@ -48,6 +49,14 @@ namespace FODT.Controllers
         private short GetMostRecentYear()
         {
             return DatabaseSession.Query<Award>().OrderByDescending(x => x.Year).Take(1).ToList().Select(x => x.Year).Single();
+        }
+
+        [HttpPost, Route("DeleteAward")]
+        public ActionResult DeleteAward(int awardId)
+        {
+            var award = DatabaseSession.Get<Award>(awardId);
+            DatabaseSession.Delete(award);
+            return this.RedirectToAction(x => x.ByYear(award.Year));
         }
     }
 }

@@ -4,29 +4,58 @@
     <tbody>
         <tr>
             <td width="25%"><a href="@Model.PreviousYearURL">&lt;--- Previous Year</a></td>
-            <td>
-                <center><h1>DT Banquet - Awards for @Model.Year</h1></center>
-            </td>
             <td width="25%" align="right"><a href="@Model.NextYearURL">Next Year ---&gt;</td>
         </tr>
     </tbody>
 </table>
 
 
-<center>
-    @foreach (var item in Model.Awards)
-	{
-        <span>
-            @item.Name
-            @if (item.AwardShowLinkURL != "")
+<div class="row">
+    <div class="col-sm-3">
+        <!-- TODO Photos Linked to Banquet -->
+    </div>
+    <div class="col-sm-9">
+        <h1>Banquet @Model.Year</h1>
+        @Html.RelationTable(Model.AwardsTable, renderAwardsTableColumns)
+    </div>
+</div>
+
+@helper renderAwardsTableColumns(FODT.Views.Awards.AwardViewModel item)
+{
+    <td>
+        <strong>@item.Name</strong>
+    </td>
+
+    @*<td>
+        @if (!((string)item.PersonLinkURL).IsNullOrWhiteSpace())
+        {
+            @: awarded to <a href="@item.PersonLinkURL">@item.PersonName</a>
+            if (!((string)item.ShowLinkURL).IsNullOrWhiteSpace())
             {
-                @:- <a href="@item.AwardShowLinkURL">@item.AwardShowLinkText</a>
+                @: for <a href="@item.ShowLinkURL">@item.ShowName</a>
             }
-            @if (item.AwardPersonLinkURL != "")
-            {
-                @:- <a href="@item.AwardPersonLinkURL">@item.AwardPersonLinkText</a>
-            }
-        </span>
-        <br />
-	}
-</center>
+        }
+        else if (!((string)item.ShowLinkURL).IsNullOrWhiteSpace())
+        {
+            @: awarded to <a href="@item.ShowLinkURL">@item.ShowName</a>
+        }
+    </td>*@
+
+    <td>
+        @if (item.ToPerson)
+        {
+            @: to <a href="@item.PersonLinkURL">@item.PersonName</a>
+        }
+    </td>
+
+    <td>
+        @if (item.ForShow && !item.ToPerson)
+        {
+            @: to <a href="@item.ShowLinkURL">@item.ShowName</a>
+        }
+        @if (item.ForShow && item.ToPerson)
+        {
+            @: for <a href="@item.ShowLinkURL">@item.ShowName</a>
+        }
+    </td>
+}
