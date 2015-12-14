@@ -24,7 +24,7 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
   * [x] Awards by Year (e.g. Banquet)
   * [x] Photos for Person
   * [x] Photos for Show
-  * [ ] Recent/Random Photos
+  * [ ] <del>Recent/Random Photos</del>
   * [ ] List Shows (sort by year/title)
   * [ ] Club Positions (e.g. EC) By Year
   * [ ] Toaster List
