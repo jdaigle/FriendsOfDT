@@ -37,3 +37,6 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
   * [ ] "Admin" = Can approve new users, change roles.
 * [ ] Complete admin tasks.
 * [ ] Edit Suggestion. In lieu of being able to edit, a contributor can suggest edits to a page. The archivist can review and implement the edits.
+* [ ] Show Types - Additional metadata
+  * [ ] "Banquet" should be linked to award year. One Banquet per calendar year.
+  * [ ] "Open House"?
