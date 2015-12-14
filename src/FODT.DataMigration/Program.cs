@@ -27,8 +27,8 @@ namespace FODT.DataMigration
         private static string azureStorageAccountName = "";
         private static string azureStorageAccountKey = "";
 
-        private static bool skipDatabaseImport = false;
-        private static bool skipBlobUpload = true;
+        private static bool doDatabaseImport =  true;
+        private static bool doBlobUpload = false;
 
         private static readonly Encoding blobEncoding = Encoding.GetEncoding(1252);
 
@@ -47,7 +47,7 @@ namespace FODT.DataMigration
             oldDatabaseConnection = new MySql.Data.MySqlClient.MySqlConnection(ConfigurationManager.ConnectionStrings["old_fodt"].ConnectionString);
             oldDatabaseConnection.Open();
 
-            if (!skipDatabaseImport)
+            if (doDatabaseImport)
             {
                 TruncateDatabase();
                 ImportPhotos();
@@ -61,7 +61,7 @@ namespace FODT.DataMigration
                 ImportCrew();
                 ImportEC();
             }
-            if (!skipBlobUpload)
+            if (doBlobUpload)
             {
                 ImportPhotoBlobs();
             }
