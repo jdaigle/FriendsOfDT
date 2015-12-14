@@ -27,7 +27,7 @@ namespace FODT.DataMigration
         private static string azureStorageAccountName = "";
         private static string azureStorageAccountKey = "";
 
-        private static bool doDatabaseImport =  true;
+        private static bool doDatabaseImport = true;
         private static bool doBlobUpload = false;
 
         private static readonly Encoding blobEncoding = Encoding.GetEncoding(1252);
@@ -60,6 +60,7 @@ namespace FODT.DataMigration
                 ImportCast();
                 ImportCrew();
                 ImportEC();
+                FixInsertedDateTimeColumns();
             }
             if (doBlobUpload)
             {
@@ -628,6 +629,49 @@ DELETE FROM AwardType;
                 session.Flush();
                 session.CreateSQLQuery("SET IDENTITY_INSERT [dbo].PersonClubPosition OFF;").ExecuteUpdate();
                 session.CreateSQLQuery("DBCC CHECKIDENT ('dbo.PersonClubPosition', RESEED, " + (maxId + 1) + ")").ExecuteUpdate();
+                session.Transaction.Commit();
+                session.Close();
+            }
+        }
+
+        private static void FixInsertedDateTimeColumns()
+        {
+            var cmd = @"
+; WITH minInsertedDateTime AS (
+SELECT PersonId, MIN(InsertedDateTime) AS InsertedDateTime
+FROM (
+      SELECT PersonId, InsertedDateTime FROM ShowCast WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT PersonId, InsertedDateTime FROM ShowCrew WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT PersonId, InsertedDateTime FROM PersonClubPosition WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT PersonId, InsertedDateTime FROM Award WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000' AND PersonId IS NOT NULL
+)_ GROUP BY PersonId)
+
+UPDATE t1
+SET t1.InsertedDateTime = t2.InsertedDateTime
+FROM Person t1
+    INNER JOIN minInsertedDateTime t2 ON t1.PersonId = t2.PersonId
+WHERE t1.InsertedDateTime > t2.InsertedDateTime
+
+; WITH minInsertedDateTime AS (
+SELECT ShowId, MIN(InsertedDateTime) AS InsertedDateTime
+FROM (
+      SELECT ShowId, InsertedDateTime FROM ShowCast WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT ShowId, InsertedDateTime FROM ShowCrew WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT ShowId, InsertedDateTime FROM Award WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000' AND ShowId IS NOT NULL
+)_ GROUP BY ShowId)
+
+UPDATE t1
+SET t1.InsertedDateTime = t2.InsertedDateTime
+FROM Show t1
+    INNER JOIN minInsertedDateTime t2 ON t1.ShowId = t2.ShowId
+WHERE t1.InsertedDateTime > t2.InsertedDateTime
+";
+
+            Log("Fixing InsertedDateTime Columns for Person/Show");
+            using (var session = sessionFactory.OpenSession())
+            {
+                session.Transaction.Begin();
+                session.CreateSQLQuery(cmd).ExecuteUpdate();
                 session.Transaction.Commit();
                 session.Close();
             }
