@@ -637,6 +637,7 @@ DELETE FROM AwardType;
         private static void FixInsertedDateTimeColumns()
         {
             var cmd = @"
+-- UPDATE PERSON
 ; WITH minInsertedDateTime AS (
 SELECT PersonId, MIN(InsertedDateTime) AS InsertedDateTime
 FROM (
@@ -650,8 +651,9 @@ UPDATE t1
 SET t1.InsertedDateTime = t2.InsertedDateTime
 FROM Person t1
     INNER JOIN minInsertedDateTime t2 ON t1.PersonId = t2.PersonId
-WHERE t1.InsertedDateTime > t2.InsertedDateTime
+WHERE t1.InsertedDateTime > t2.InsertedDateTime OR t1.InsertedDateTime = '0001-01-01 00:00:00.0000000'
 
+-- UPDATE SHOW
 ; WITH minInsertedDateTime AS (
 SELECT ShowId, MIN(InsertedDateTime) AS InsertedDateTime
 FROM (
@@ -664,7 +666,158 @@ UPDATE t1
 SET t1.InsertedDateTime = t2.InsertedDateTime
 FROM Show t1
     INNER JOIN minInsertedDateTime t2 ON t1.ShowId = t2.ShowId
-WHERE t1.InsertedDateTime > t2.InsertedDateTime
+WHERE t1.InsertedDateTime > t2.InsertedDateTime OR t1.InsertedDateTime = '0001-01-01 00:00:00.0000000'
+
+-- UPDATE ShowCast
+; WITH _min AS (
+SELECT ShowCastId, MIN(InsertedDateTime) AS InsertedDateTime
+FROM (
+      SELECT ShowCastId, InsertedDateTime FROM ShowCast
+UNION SELECT ShowCastId, Person.InsertedDateTime FROM ShowCast INNER JOIN Person ON Person.PersonId = ShowCast.PersonId
+UNION SELECT ShowCastId, Show.InsertedDateTime FROM ShowCast INNER JOIN Show ON Show.ShowId = ShowCast.ShowId
+) _ WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000' GROUP BY ShowCastId
+)
+UPDATE ShowCast
+SET ShowCast.InsertedDateTime = _min.InsertedDateTime
+FROM ShowCast INNER JOIN _min ON _min.ShowCastId = ShowCast.ShowCastId
+WHERE ShowCast.InsertedDateTime = '0001-01-01 00:00:00.0000000'
+
+; WITH _min AS (
+SELECT ShowCastId, MIN(LastModifiedDateTime) AS LastModifiedDateTime
+FROM (
+      SELECT ShowCastId, LastModifiedDateTime FROM ShowCast
+UNION SELECT ShowCastId, Person.LastModifiedDateTime FROM ShowCast INNER JOIN Person ON Person.PersonId = ShowCast.PersonId
+UNION SELECT ShowCastId, Show.LastModifiedDateTime FROM ShowCast INNER JOIN Show ON Show.ShowId = ShowCast.ShowId
+) _ WHERE LastModifiedDateTime > '0001-01-01 00:00:00.0000000' GROUP BY ShowCastId
+)
+UPDATE ShowCast
+SET ShowCast.LastModifiedDateTime = _min.LastModifiedDateTime
+FROM ShowCast INNER JOIN _min ON _min.ShowCastId = ShowCast.ShowCastId
+WHERE ShowCast.LastModifiedDateTime = '0001-01-01 00:00:00.0000000'
+
+-- UPDATE ShowCrew
+; WITH _min AS (
+SELECT ShowCrewId, MIN(InsertedDateTime) AS InsertedDateTime
+FROM (
+      SELECT ShowCrewId, InsertedDateTime FROM ShowCrew
+UNION SELECT ShowCrewId, Person.InsertedDateTime FROM ShowCrew INNER JOIN Person ON Person.PersonId = ShowCrew.PersonId
+UNION SELECT ShowCrewId, Show.InsertedDateTime FROM ShowCrew INNER JOIN Show ON Show.ShowId = ShowCrew.ShowId
+) _ WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000' GROUP BY ShowCrewId
+)
+UPDATE ShowCrew
+SET ShowCrew.InsertedDateTime = _min.InsertedDateTime
+FROM ShowCrew INNER JOIN _min ON _min.ShowCrewId = ShowCrew.ShowCrewId
+WHERE ShowCrew.InsertedDateTime = '0001-01-01 00:00:00.0000000'
+
+; WITH _min AS (
+SELECT ShowCrewId, MIN(LastModifiedDateTime) AS LastModifiedDateTime
+FROM (
+      SELECT ShowCrewId, LastModifiedDateTime FROM ShowCrew
+UNION SELECT ShowCrewId, Person.LastModifiedDateTime FROM ShowCrew INNER JOIN Person ON Person.PersonId = ShowCrew.PersonId
+UNION SELECT ShowCrewId, Show.LastModifiedDateTime FROM ShowCrew INNER JOIN Show ON Show.ShowId = ShowCrew.ShowId
+) _ WHERE LastModifiedDateTime > '0001-01-01 00:00:00.0000000' GROUP BY ShowCrewId
+)
+UPDATE ShowCrew
+SET ShowCrew.LastModifiedDateTime = _min.LastModifiedDateTime
+FROM ShowCrew INNER JOIN _min ON _min.ShowCrewId = ShowCrew.ShowCrewId
+WHERE ShowCrew.LastModifiedDateTime = '0001-01-01 00:00:00.0000000'
+
+-- UPDATE PersonClubPosition
+; WITH _min AS (
+SELECT PersonClubPositionId, MIN(InsertedDateTime) AS InsertedDateTime
+FROM (
+      SELECT PersonClubPositionId, InsertedDateTime FROM PersonClubPosition
+UNION SELECT PersonClubPositionId, Person.InsertedDateTime FROM PersonClubPosition INNER JOIN Person ON Person.PersonId = PersonClubPosition.PersonId
+) _ WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000' GROUP BY PersonClubPositionId
+)
+UPDATE PersonClubPosition
+SET PersonClubPosition.InsertedDateTime = _min.InsertedDateTime
+FROM PersonClubPosition INNER JOIN _min ON _min.PersonClubPositionId = PersonClubPosition.PersonClubPositionId
+WHERE PersonClubPosition.InsertedDateTime = '0001-01-01 00:00:00.0000000'
+
+; WITH _min AS (
+SELECT PersonClubPositionId, MIN(LastModifiedDateTime) AS LastModifiedDateTime
+FROM (
+      SELECT PersonClubPositionId, LastModifiedDateTime FROM PersonClubPosition
+UNION SELECT PersonClubPositionId, Person.LastModifiedDateTime FROM PersonClubPosition INNER JOIN Person ON Person.PersonId = PersonClubPosition.PersonId
+) _ WHERE LastModifiedDateTime > '0001-01-01 00:00:00.0000000' GROUP BY PersonClubPositionId
+)
+UPDATE PersonClubPosition
+SET PersonClubPosition.LastModifiedDateTime = _min.LastModifiedDateTime
+FROM PersonClubPosition INNER JOIN _min ON _min.PersonClubPositionId = PersonClubPosition.PersonClubPositionId
+WHERE PersonClubPosition.LastModifiedDateTime = '0001-01-01 00:00:00.0000000'
+
+-- UPDATE Award
+; WITH _min AS (
+SELECT AwardId, MIN(InsertedDateTime) AS InsertedDateTime
+FROM (
+      SELECT AwardId, InsertedDateTime FROM Award
+UNION SELECT AwardId, Person.InsertedDateTime FROM Award INNER JOIN Person ON Person.PersonId = Award.PersonId
+UNION SELECT AwardId, Show.InsertedDateTime FROM Award INNER JOIN Show ON Show.ShowId = Award.ShowId
+) _ WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000' GROUP BY AwardId
+)
+UPDATE Award
+SET Award.InsertedDateTime = _min.InsertedDateTime
+FROM Award INNER JOIN _min ON _min.AwardId = Award.AwardId
+WHERE Award.InsertedDateTime = '0001-01-01 00:00:00.0000000'
+
+; WITH _min AS (
+SELECT AwardId, MIN(LastModifiedDateTime) AS LastModifiedDateTime
+FROM (
+      SELECT AwardId, LastModifiedDateTime FROM Award
+UNION SELECT AwardId, Person.LastModifiedDateTime FROM Award INNER JOIN Person ON Person.PersonId = Award.PersonId
+UNION SELECT AwardId, Show.LastModifiedDateTime FROM Award INNER JOIN Show ON Show.ShowId = Award.ShowId
+) _ WHERE LastModifiedDateTime > '0001-01-01 00:00:00.0000000' GROUP BY AwardId
+)
+UPDATE Award
+SET Award.LastModifiedDateTime = _min.LastModifiedDateTime
+FROM Award INNER JOIN _min ON _min.AwardId = Award.AwardId
+WHERE Award.LastModifiedDateTime = '0001-01-01 00:00:00.0000000'
+
+-- UPDATE Photo
+; WITH _min AS (
+SELECT PhotoId, MIN(InsertedDateTime) AS InsertedDateTime
+FROM (
+      SELECT PhotoId, InsertedDateTime FROM Photo WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT PhotoId, InsertedDateTime FROM PersonPhoto WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT PhotoId, InsertedDateTime FROM ShowPhoto WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+)_ GROUP BY PhotoId)
+
+UPDATE t1
+SET t1.InsertedDateTime = t2.InsertedDateTime
+FROM Photo t1
+    INNER JOIN _min t2 ON t1.PhotoId = t2.PhotoId
+WHERE t1.InsertedDateTime > t2.InsertedDateTime OR t1.InsertedDateTime = '0001-01-01 00:00:00.0000000'
+
+-- UPDATE PersonPhoto
+; WITH _min AS (
+SELECT PhotoId, MIN(InsertedDateTime) AS InsertedDateTime
+FROM (
+      SELECT PhotoId, InsertedDateTime FROM Photo WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT PhotoId, InsertedDateTime FROM PersonPhoto WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT PhotoId, InsertedDateTime FROM ShowPhoto WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+)_ GROUP BY PhotoId)
+
+UPDATE t1
+SET t1.InsertedDateTime = t2.InsertedDateTime
+FROM PersonPhoto t1
+    INNER JOIN _min t2 ON t1.PhotoId = t2.PhotoId
+WHERE t1.InsertedDateTime = '0001-01-01 00:00:00.0000000'
+
+-- UPDATE ShowPhoto
+; WITH _min AS (
+SELECT PhotoId, MIN(InsertedDateTime) AS InsertedDateTime
+FROM (
+      SELECT PhotoId, InsertedDateTime FROM Photo WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT PhotoId, InsertedDateTime FROM PersonPhoto WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+UNION SELECT PhotoId, InsertedDateTime FROM ShowPhoto WHERE InsertedDateTime > '0001-01-01 00:00:00.0000000'
+)_ GROUP BY PhotoId)
+
+UPDATE t1
+SET t1.InsertedDateTime = t2.InsertedDateTime
+FROM ShowPhoto t1
+    INNER JOIN _min t2 ON t1.PhotoId = t2.PhotoId
+WHERE t1.InsertedDateTime = '0001-01-01 00:00:00.0000000'
 ";
 
             Log("Fixing InsertedDateTime Columns for Person/Show");
