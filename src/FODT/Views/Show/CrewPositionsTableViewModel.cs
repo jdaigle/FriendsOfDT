@@ -19,7 +19,9 @@ namespace FODT.Views.Show
 
             Items = new List<RelationViewModel>();
             Items.AddRange(crew
-                .OrderByDescending(x => x.Show.Year).ThenByDescending(x => x.Show.Quarter).ThenBy(x => x.Show.Title)
+                .OrderBy(x => x.Show, Models.IMDT.Show.ReverseChronologicalShowComparer)
+                .ThenBy(x => x.DisplayOrder)
+                .ThenBy(x => x.Position)
                 .Select(x => new CrewPositionViewModel
                 {
                     DeleteItemURL = getDeleteItemURL(x.ShowCrewId),

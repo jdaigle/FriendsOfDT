@@ -19,7 +19,7 @@ namespace FODT.Controllers
         {
             var shows = DatabaseSession.Query<Show>().ToList();
             var viewModel = new SortedShowsViewModel();
-            viewModel.Shows = shows.OrderBy(x => x.Year).ThenBy(x => x.Quarter).ThenBy(x => x.Title).Select(x => new SortedShowsViewModel.Show
+            viewModel.Shows = shows.OrderBy(x => x).Select(x => new SortedShowsViewModel.Show
             {
                 ShowLinkURL = this.GetURL<ShowController>(c => c.ShowDetails(x.ShowId)),
                 ShowId = x.ShowId,

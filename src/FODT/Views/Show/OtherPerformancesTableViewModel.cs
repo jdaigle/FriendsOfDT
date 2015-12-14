@@ -17,7 +17,7 @@ namespace FODT.Views.Show
             TableTitle = "Other Performances";
 
             Items = new List<RelationViewModel>();
-            Items.AddRange(otherPerformances.OrderBy(x => x.Year)
+            Items.AddRange(otherPerformances.OrderBy(x => x)
                 .Select(x => new OtherPerformancesViewModel
                 {
                     ShowQuarter = x.Quarter,

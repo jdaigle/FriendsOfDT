@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using FluentNHibernate.Mapping;
 using FODT.Database;
 
 namespace FODT.Models.IMDT
 {
-    public class Show
+    public class Show : IComparable<Show>
     {
         public virtual int ShowId { get; set; }
         public virtual string Title { get; set; }
@@ -20,6 +22,70 @@ namespace FODT.Models.IMDT
         public virtual Photo Photo { get; set; }
         public virtual DateTime InsertedDateTime { get; set; }
         public virtual DateTime LastModifiedDateTime { get; set; }
+
+        public virtual int CompareTo(Show other)
+        {
+            return ChronologicalShowComparison(this, other);
+        }
+
+        private readonly static Comparison<Show> ReverseChronologicalShowComparison = (x, y) =>
+        {
+            if (object.ReferenceEquals(x, y))
+            {
+                return 0;
+            }
+
+            if (x.Year < y.Year)
+            {
+                return 1;
+            }
+            if (x.Year > y.Year)
+            {
+                return -1;
+            }
+
+            if ((byte)x.Quarter < (byte)y.Quarter)
+            {
+                return 1;
+            }
+            if ((byte)x.Quarter < (byte)y.Quarter)
+            {
+                return -1;
+            }
+
+            return string.Compare(x.Title, y.Title, true);
+        };
+
+        private readonly static Comparison<Show> ChronologicalShowComparison = (x, y) =>
+        {
+            if (object.ReferenceEquals(x, y))
+            {
+                return 0;
+            }
+
+            if (x.Year < y.Year)
+            {
+                return -1;
+            }
+            if (x.Year > y.Year)
+            {
+                return 1;
+            }
+
+            if ((byte)x.Quarter < (byte)y.Quarter)
+            {
+                return -1;
+            }
+            if ((byte)x.Quarter < (byte)y.Quarter)
+            {
+                return 1;
+            }
+
+            return string.Compare(x.Title, y.Title, true);
+        };
+
+        public static readonly Comparer<Show> ChronologicalShowComparer = Comparer<Show>.Create(ChronologicalShowComparison);
+        public static readonly Comparer<Show> ReverseChronologicalShowComparer = Comparer<Show>.Create(ReverseChronologicalShowComparison);
     }
 
     public class ShowClassMap : ClassMap<Show>

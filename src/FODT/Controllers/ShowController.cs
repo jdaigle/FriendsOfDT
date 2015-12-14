@@ -15,24 +15,10 @@ namespace FODT.Controllers
     [RoutePrefix("archive/Show")]
     public class ShowController : BaseController
     {
-        public class ShowOrderDto
-        {
-            public int ShowId { get; set; }
-            public string Title { get; set; }
-            public Quarter Quarter { get; set; }
-            public short Year { get; set; }
-        }
-
         [HttpGet, Route("{showId}")]
         public ActionResult ShowDetails(int showId)
         {
-            var orderedShows = DatabaseSession.Query<Show>().Select(x => new ShowOrderDto()
-                {
-                    ShowId = x.ShowId,
-                    Quarter = x.Quarter,
-                    Title = x.Title,
-                    Year = x.Year,
-                }).ToList().OrderBy(x => x.Year).ThenBy(x => x.Quarter).ThenBy(x => x.Title).ToList();
+            var orderedShows = DatabaseSession.Query<Show>().ToList().OrderBy(x => x).ToList();
             var index = orderedShows.IndexOf(orderedShows.Single(x => x.ShowId == showId));
             var previousShowId = index > 0 ? orderedShows[index - 1].ShowId : (int?)null;
             var nextShowId = index < orderedShows.Count - 1 ? orderedShows[index + 1].ShowId : (int?)null;

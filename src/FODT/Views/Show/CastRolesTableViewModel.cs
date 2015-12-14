@@ -19,7 +19,8 @@ namespace FODT.Views.Show
 
             Items = new List<RelationViewModel>();
             Items.AddRange(cast
-                .OrderByDescending(x => x.Show.Year).ThenByDescending(x => x.Show.Quarter).ThenBy(x => x.Show.Title)
+                .OrderBy(x => x.Show, Models.IMDT.Show.ReverseChronologicalShowComparer)
+                .ThenBy(x => x.Role)
                 .Select(x => new CastRoleViewModel
                 {
                     DeleteItemURL = getDeleteItemURL(x.ShowCastId),
