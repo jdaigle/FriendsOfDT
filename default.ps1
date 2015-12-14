@@ -3,8 +3,8 @@ Framework "4.6.1"
 properties {
     $deployURL = "https://friendsofdt-prod.scm.azurewebsites.net:443/MsDeploy.axd"
     $deployUsername = "`$friendsofdt-prod"
-    $deployPassword = ""
-    $dbdeployPassword = ""
+    $deployPassword = "SECRET!"
+    $dbdeployPassword = "SECRET!"
 }
 
 $baseDir  = resolve-path .
