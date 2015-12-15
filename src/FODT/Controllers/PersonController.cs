@@ -31,7 +31,7 @@ namespace FODT.Controllers
             viewModel.EditLinkURL = this.GetURL(c => c.EditPerson(personId));
             viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
             viewModel.PhotoLinkURL = this.GetURL(c => c.GetPersonPhoto(personId, person.Photo.PhotoId));
-            viewModel.PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(person.Photo.PhotoId));
+            viewModel.PhotoThumbnailURL = person.Photo.GetThumbnailURL();
             viewModel.PhotoListLinkURL = this.GetURL(c => c.ListPersonPhotos(personId, null));
 
             viewModel.FullName = person.Fullname;
@@ -80,7 +80,7 @@ namespace FODT.Controllers
                 .Select(x => new PersonDetailsViewModel.NewPhotosViewModel
                 {
                     PhotoLinkURL = this.GetURL(c => c.GetPersonPhoto(personId, x.Photo.PhotoId)),
-                    PhotoTinyURL = this.GetURL<PhotosController>(c => c.GetPhotoTiny(x.Photo.PhotoId)),
+                    PhotoTinyURL = x.Photo.GetTinyURL(),
                 })
                 .Take(4)
                 .ToList();
@@ -105,8 +105,8 @@ namespace FODT.Controllers
                 .Select(x => new PersonPhotosViewModel.Photo
             {
                 PhotoLinkURL = this.GetURL(c => c.GetPersonPhoto(personId, x.Photo.PhotoId)),
-                PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(x.Photo.PhotoId)),
-            }).ToList();
+                PhotoThumbnailURL = x.Photo.GetThumbnailURL(),
+                }).ToList();
 
             if (photoId.HasValue)
             {
@@ -191,8 +191,8 @@ namespace FODT.Controllers
             viewModel.Photos = photos.OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId).Select(x => new EditPersonViewModel.Photo
             {
                 PhotoItemId = x.Photo.PhotoId,
-                PhotoTinyURL = this.GetURL<PhotosController>(c => c.GetPhotoTiny(x.Photo.PhotoId)),
-                PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(x.Photo.PhotoId)),
+                PhotoTinyURL = x.Photo.GetTinyURL(),
+                PhotoThumbnailURL = x.Photo.GetThumbnailURL(),
             }).ToList();
 
             return PartialView(viewModel);

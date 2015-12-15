@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using FluentNHibernate.Mapping;
@@ -20,6 +21,33 @@ namespace FODT.Models.IMDT
         public virtual int PhotoId { get; set; }
         public virtual Guid GUID { get; set; }
         public virtual DateTime InsertedDateTime { get; set; }
+
+        private static string azureStorageBaseURL;
+
+        public static string GetStorageRootPath()
+        {
+            if (azureStorageBaseURL.IsNullOrWhiteSpace())
+            {
+                var azureStorageAccountName = ConfigurationManager.AppSettings["azure-storage-account-name"];
+                azureStorageBaseURL = "https://" + azureStorageAccountName + ".blob.core.windows.net/" + ConfigurationManager.AppSettings["azure-storage-blob-container"] + "/";
+            }
+            return azureStorageBaseURL;
+        }
+
+        public virtual string GetURL()
+        {
+            return GetStorageRootPath() + GetOriginalFileName();
+        }
+
+        public virtual string GetThumbnailURL()
+        {
+            return GetStorageRootPath() + GetThumbnailFileName();
+        }
+
+        public virtual string GetTinyURL()
+        {
+            return GetStorageRootPath() + GetTinyFileName();
+        }
 
         public virtual string GetOriginalFileName()
         {

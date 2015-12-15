@@ -40,7 +40,7 @@ namespace FODT.Controllers
 
             viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
             viewModel.PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, show.Photo.PhotoId));
-            viewModel.PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(show.Photo.PhotoId));
+            viewModel.PhotoThumbnailURL = show.Photo.GetThumbnailURL();
             viewModel.PhotoListLinkURL = this.GetURL(c => c.ListShowPhotos(showId, null));
 
             viewModel.Title = show.DisplayTitle;
@@ -89,7 +89,7 @@ namespace FODT.Controllers
                 .Select(x => new ShowDetailsViewModel.NewPhotoViewModel
                 {
                     PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, x.Photo.PhotoId)),
-                    PhotoTinyURL = this.GetURL<PhotosController>(c => c.GetPhotoTiny(x.Photo.PhotoId)),
+                    PhotoTinyURL = x.Photo.GetTinyURL(),
                 })
                 .Take(4)
                 .ToList();
@@ -114,8 +114,8 @@ namespace FODT.Controllers
                 .Select(x => new ShowPhotosViewModel.Photo
             {
                 PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, x.Photo.PhotoId)),
-                PhotoThumbnailURL = this.GetURL<PhotosController>(c => c.GetPhotoThumbnail(x.Photo.PhotoId)),
-            }).ToList();
+                PhotoThumbnailURL = x.Photo.GetThumbnailURL(),
+                }).ToList();
 
             if (photoId.HasValue)
             {

@@ -18,13 +18,11 @@ namespace FODT.Controllers
     {
         private static readonly string azureStorageAccountName;
         private static readonly string azureStorageAccountKey;
-        private static readonly string azureStorageBaseURL;
 
         static PhotosController()
         {
             azureStorageAccountName = ConfigurationManager.AppSettings["azure-storage-account-name"];
             azureStorageAccountKey = ConfigurationManager.AppSettings["azure-storage-account-key"];
-            azureStorageBaseURL = "https://" + azureStorageAccountName + ".blob.core.windows.net/" + ConfigurationManager.AppSettings["azure-storage-blob-container"] + "/";
         }
 
 
@@ -80,7 +78,7 @@ namespace FODT.Controllers
             var original_buffer = new byte[param.UploadedFile.ContentLength];
             param.UploadedFile.InputStream.Read(original_buffer, 0, param.UploadedFile.ContentLength);
 
-            AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + photo.GetOriginalFileName()
+            AzureBlogStorageUtil.PutBlob(photo.GetURL()
                 , azureStorageAccountName, azureStorageAccountKey
                 , original_buffer, "image/jpeg");
 
@@ -88,13 +86,13 @@ namespace FODT.Controllers
             {
                 using (var thumbnail = ImageUtilities.Resize(fullSize, 240, 240))
                 {
-                    AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + photo.GetThumbnailFileName()
+                    AzureBlogStorageUtil.PutBlob(photo.GetThumbnailURL()
                         , azureStorageAccountName, azureStorageAccountKey
                         , ImageUtilities.GetBytes(thumbnail, System.Drawing.Imaging.ImageFormat.Jpeg), "image/jpeg");
                 }
                 using (var tiny = ImageUtilities.Resize(fullSize, 50, 50))
                 {
-                    AzureBlogStorageUtil.PutBlob(azureStorageBaseURL + photo.GetTinyFileName()
+                    AzureBlogStorageUtil.PutBlob(photo.GetTinyURL()
                         , azureStorageAccountName, azureStorageAccountKey
                         , ImageUtilities.GetBytes(tiny, System.Drawing.Imaging.ImageFormat.Jpeg), "image/jpeg");
                 }
@@ -172,7 +170,7 @@ namespace FODT.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            return new RedirectResult(azureStorageBaseURL + photo.GetOriginalFileName());
+            return new RedirectResult(photo.GetURL());
         }
 
         [HttpGet, Route("{id}/tiny")]
@@ -183,7 +181,7 @@ namespace FODT.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            return new RedirectResult(azureStorageBaseURL + photo.GetTinyFileName());
+            return new RedirectResult(photo.GetTinyURL());
         }
 
         [HttpGet, Route("{id}/thumbnail")]
@@ -194,7 +192,7 @@ namespace FODT.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            return new RedirectResult(azureStorageBaseURL + photo.GetThumbnailFileName());
+            return new RedirectResult(photo.GetThumbnailURL());
         }
 
         [HttpGet, Route("{id}/detail")]
@@ -245,35 +243,30 @@ namespace FODT.Controllers
         {
             var photos = DatabaseSession
                 .Query<Photo>()
-                .Select(x => new PhotoItemDto
-                {
-                    PhotoId = x.PhotoId,
-                    InsertedDateTime = x.InsertedDateTime,
-                })
                 .ToList();
 
             var recentlyUploaded = photos.OrderByDescending(x => x.InsertedDateTime).ThenByDescending(x => x.PhotoId).Take(10).ToList();
             var ran = new Random();
-            var randomSet = new HashSet<int>();
-            var randomList = new List<PhotoItemDto>(photos);
+            var randomSet = new HashSet<Photo>();
+            var randomList = new List<Photo>(photos);
             while (randomSet.Count < 10)
             {
                 var nextIndex = ran.Next(randomList.Count);
                 var item = randomList[nextIndex];
                 randomList.Remove(item);
-                randomSet.Add(item.PhotoId);
+                randomSet.Add(item);
             }
 
             var viewModel = new IndexViewModel();
             viewModel.RecentlyUploaded = recentlyUploaded.Select(x => new IndexViewModel.Photo
             {
                 PhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(x.PhotoId)),
-                PhotoThumbnailURL = this.GetURL(c => c.GetPhotoThumbnail(x.PhotoId)),
+                PhotoThumbnailURL = x.GetThumbnailURL(),
             }).ToList();
             viewModel.RandomPic = randomSet.Select(x => new IndexViewModel.Photo
             {
-                PhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(x)),
-                PhotoThumbnailURL = this.GetURL(c => c.GetPhotoThumbnail(x)),
+                PhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(x.PhotoId)),
+                PhotoThumbnailURL = x.GetThumbnailURL()
             }).ToList();
             return View(viewModel);
         }

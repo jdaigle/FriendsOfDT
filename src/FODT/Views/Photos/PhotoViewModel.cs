@@ -55,7 +55,7 @@ namespace FODT.Views.Photos
                 this.UploadDate = "Unknown Date";
             }
 
-            this.PhotoURL = url.Action<PhotosController>(c => c.GetPhotoOriginal(photo.PhotoId));
+            this.PhotoURL = photo.GetURL();
 
             this.RelatedShows = relatedshows.Select(x => new PhotoViewModel.RelatedShow
             {
