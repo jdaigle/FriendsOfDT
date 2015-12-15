@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using FODT.Models.IMDT;
 using FODT.Views.Home;
+using NHibernate.Linq;
 
 namespace FODT.Controllers
 {
@@ -32,12 +34,44 @@ UNION SELECT 'CastCount'   AS [Key], COUNT(*) AS [Value] FROM ShowCast
 UNION SELECT 'CrewCount'   AS [Key], COUNT(*) AS [Value] FROM ShowCrew
 UNION SELECT 'PhotoCount'  AS [Key], COUNT(*) AS [Value] FROM Photo
                 ");
+
+            var aMonthAgo = DateTime.UtcNow.AddMonths(-1).Date;
+            var newShows = DatabaseSession.Query<Show>().Where(x => x.InsertedDateTime >= aMonthAgo).ToList();
+            var newPersons = DatabaseSession.Query<Person>().Where(x => x.InsertedDateTime >= aMonthAgo).ToList();
+            var newPhotos = DatabaseSession.Query<Photo>().Where(x => x.InsertedDateTime >= aMonthAgo).ToList();
+
+
             var viewModel = new ArchiveWelcomeViewModel();
             viewModel.ShowCount = (int)stats.Single(x => x.Key == "ShowCount").Value;
             viewModel.PersonCount = (int)stats.Single(x => x.Key == "PersonCount").Value;
             viewModel.CastCount = (int)stats.Single(x => x.Key == "CastCount").Value;
             viewModel.CrewCount = (int)stats.Single(x => x.Key == "CrewCount").Value;
             viewModel.PhotoCount = (int)stats.Single(x => x.Key == "PhotoCount").Value;
+
+            viewModel.NewShows = newShows.OrderBy(x => x, ShowComparer.ReverseChronologicalShowComparer)
+                .Select(x => new ArchiveWelcomeViewModel.NewShowViewModel
+                {
+                    Name = x.DisplayTitle,
+                    Year = x.Year.ToString(),
+                    LinkUrl = Url.GetURL<ShowController>(c => c.ShowDetails(x.ShowId)),
+                    ImageUrl = Url.Action<PhotosController>(c => c.GetPhotoTiny(x.Photo.PhotoId)),
+                }).ToList();
+
+            viewModel.NewPeople = newPersons.OrderBy(x => x.SortableName)
+                .Select(x => new ArchiveWelcomeViewModel.NewPersonViewModel
+                {
+                    Name = x.Fullname,
+                    LinkUrl = Url.GetURL<PersonController>(c => c.PersonDetails(x.PersonId)),
+                    ImageUrl = Url.Action<PhotosController>(c => c.GetPhotoTiny(x.Photo.PhotoId)),
+                }).ToList();
+
+            viewModel.NewPhotos = newPhotos.OrderByDescending(x => x.InsertedDateTime)
+                .Select(x => new ArchiveWelcomeViewModel.NewPhotoViewModel
+                {
+                    LinkUrl = Url.GetURL<PhotosController>(c => c.GetPhotoDetail(x.PhotoId)),
+                    ImageUrl = Url.Action<PhotosController>(c => c.GetPhotoTiny(x.PhotoId)),
+                }).ToList();
+
             return View(viewModel);
         }
 

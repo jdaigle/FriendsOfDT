@@ -28,7 +28,7 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
   * [ ] List Shows (sort by year/title)
   * [ ] Club Positions (e.g. EC) By Year
   * [ ] Toaster List
-  * [ ] Latest Updates
+  * [X] Latest Updates
 * [ ] Build authentication module. Custom OWIN middleware for Facebook login (ideally lighterweight than MS').
   * [ ] basic user profile (name, email, contact pref.)
 * [ ] Basic user admin tasks (manage users, roles, etc.).

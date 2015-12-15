@@ -19,7 +19,7 @@ namespace FODT.Views.Show
 
             Items = new List<RelationViewModel>();
             Items.AddRange(cast
-                .OrderBy(x => x.Show, Models.IMDT.Show.ReverseChronologicalShowComparer)
+                .OrderBy(x => x.Show, ShowComparer.ReverseChronologicalShowComparer)
                 .ThenBy(x => x.Role)
                 .Select(x => new CastRoleViewModel
                 {

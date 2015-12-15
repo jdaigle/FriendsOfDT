@@ -20,3 +20,64 @@
     We have archived data from <strong>@Model.ShowCount shows</strong> and <strong>@Model.PersonCount former and current DramaTech members</strong>. Over <strong>@Model.PhotoCount photos</strong>
     have been uploaded.
 </p>
+
+@if (Model.NewPhotos.Any())
+{
+    <h4>New Photos</h4>
+    var rowCount = Math.Ceiling((double)Model.NewPhotos.Count / 4d);
+    <div>
+        @for (int i = 0; i < rowCount; i++)
+        {
+            <div class="row" style="">
+                @foreach (var item in Model.NewPhotos.Skip(i * 4).Take(4))
+                {
+                    <div class="col-xs-3">
+                        <a href="@item.LinkUrl">
+                            <img src="@item.ImageUrl" class="img-thumbnail img-responsive center-block" />
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+
+@if (Model.NewShows.Count >= 1)
+{
+    <h4>New Shows</h4>
+    <table class="table table-striped">
+        <tbody>
+            @foreach (var item in Model.NewShows)
+            {
+                <tr>
+                    <td>
+                        <a href="@item.LinkUrl">
+                            <img src="@item.ImageUrl">
+                            @item.Name (@item.Year)
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Model.NewPeople.Count >= 1)
+{
+    <h4>New People</h4>
+    <table class="table table-striped">
+        <tbody>
+            @foreach (var item in Model.NewPeople)
+            {
+                <tr>
+                    <td>
+                        <a href="@item.LinkUrl">
+                            <img src="@item.ImageUrl">
+                            @item.Name
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

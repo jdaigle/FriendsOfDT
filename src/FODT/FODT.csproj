@@ -177,6 +177,7 @@
     <Compile Include="Models\ImageUtilities.cs" />
     <Compile Include="Models\IMDT\AwardType.cs" />
     <Compile Include="Models\IMDT\PersonPhoto.cs" />
+    <Compile Include="Models\IMDT\ShowComparer.cs" />
     <Compile Include="Models\IMDT\ShowPhoto.cs" />
     <Compile Include="Models\IMDT\Photo.cs" />
     <Compile Include="Models\IMDT\PersonClubPosition.cs" />

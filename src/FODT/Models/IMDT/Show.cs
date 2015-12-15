@@ -25,67 +25,8 @@ namespace FODT.Models.IMDT
 
         public virtual int CompareTo(Show other)
         {
-            return ChronologicalShowComparison(this, other);
+            return ShowComparer.ChronologicalShowComparison(this, other);
         }
-
-        private readonly static Comparison<Show> ReverseChronologicalShowComparison = (x, y) =>
-        {
-            if (object.ReferenceEquals(x, y))
-            {
-                return 0;
-            }
-
-            if (x.Year < y.Year)
-            {
-                return 1;
-            }
-            if (x.Year > y.Year)
-            {
-                return -1;
-            }
-
-            if ((byte)x.Quarter < (byte)y.Quarter)
-            {
-                return 1;
-            }
-            if ((byte)x.Quarter < (byte)y.Quarter)
-            {
-                return -1;
-            }
-
-            return string.Compare(x.Title, y.Title, true);
-        };
-
-        private readonly static Comparison<Show> ChronologicalShowComparison = (x, y) =>
-        {
-            if (object.ReferenceEquals(x, y))
-            {
-                return 0;
-            }
-
-            if (x.Year < y.Year)
-            {
-                return -1;
-            }
-            if (x.Year > y.Year)
-            {
-                return 1;
-            }
-
-            if ((byte)x.Quarter < (byte)y.Quarter)
-            {
-                return -1;
-            }
-            if ((byte)x.Quarter < (byte)y.Quarter)
-            {
-                return 1;
-            }
-
-            return string.Compare(x.Title, y.Title, true);
-        };
-
-        public static readonly Comparer<Show> ChronologicalShowComparer = Comparer<Show>.Create(ChronologicalShowComparison);
-        public static readonly Comparer<Show> ReverseChronologicalShowComparer = Comparer<Show>.Create(ReverseChronologicalShowComparison);
     }
 
     public class ShowClassMap : ClassMap<Show>
