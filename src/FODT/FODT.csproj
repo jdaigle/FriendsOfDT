@@ -191,6 +191,7 @@
     <Compile Include="Models\ExtensionMethods.cs" />
     <Compile Include="NHibernateExtensions.cs" />
     <Compile Include="NoCacheAttribute.cs" />
+    <Compile Include="Security\AuthenticationProperties.cs" />
     <Compile Include="Security\AuthenticationTokenProtector.cs" />
     <Compile Include="Security\AuthenticationTokenSerializer.cs" />
     <Compile Include="Security\AuthorizationContextExtensions.cs" />

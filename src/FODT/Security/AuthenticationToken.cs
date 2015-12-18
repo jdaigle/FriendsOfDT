@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Microsoft.Owin.Security;
 
 namespace FODT.Security
 {
