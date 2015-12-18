@@ -25,7 +25,7 @@ namespace FODT.Database
             var persister = sessionImpl.Factory.GetEntityPersister(oldEntry.EntityName);
             var currentState = persister.GetPropertyValues(entity, sessionImpl.EntityMode);
 
-            return new HashSet<string>((persister.FindDirty(currentState, oldEntry.LoadedState, entity, sessionImpl) ?? new int[0])
+            return new HashSet<string>((persister.FindDirty(currentState, oldEntry.LoadedState, entity, sessionImpl) ?? Array.Empty<int>())
                 .Select(dirtyPropIndex => persister.PropertyNames.ElementAt(dirtyPropIndex)).Distinct());
         }
 
