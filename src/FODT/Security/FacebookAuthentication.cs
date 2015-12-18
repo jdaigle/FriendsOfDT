@@ -11,6 +11,8 @@ namespace FODT.Security
 {
     public static class FacebookAuthentication
     {
+        public const string AuthenticationType = "oauth/facebook";
+
         /// <summary>
         /// The URI where the client will be redirected to authenticate.
         /// </summary>

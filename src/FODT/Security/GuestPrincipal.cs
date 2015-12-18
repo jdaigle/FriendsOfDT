@@ -1,10 +1,14 @@
-﻿using System.Security.Principal;
+﻿using System;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace FODT.Security
 {
     public class GuestPrincipal : GenericPrincipal
     {
-        public class GuestIdentity : GenericIdentity
+        public static GuestPrincipal Default = new GuestPrincipal();
+
+        private class GuestIdentity : ClaimsIdentity
         {
             public GuestIdentity()
                 : base("Guest")
@@ -21,14 +25,6 @@ namespace FODT.Security
             }
         }
 
-        public GuestPrincipal(IIdentity identity, string[] roles)
-            : base(identity, roles)
-        {
-        }
-
-        public GuestPrincipal(IIdentity identity)
-            : this(identity, new string[0])
-        {
-        }
+        public GuestPrincipal() : base(new GuestIdentity(), Array.Empty<string>()) { }
     }
 }

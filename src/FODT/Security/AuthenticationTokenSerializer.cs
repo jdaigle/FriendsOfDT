@@ -54,16 +54,12 @@ namespace FODT.Security
             writer.Write(FormatVersion);
             var identity = token.Identity;
             writer.Write(identity.AuthenticationType);
-            WriteWithDefault(writer, identity.NameClaimType, DefaultValues.NameClaimType);
-            WriteWithDefault(writer, identity.RoleClaimType, DefaultValues.RoleClaimType);
             writer.Write(identity.Claims.Count());
             foreach (var claim in identity.Claims)
             {
                 WriteWithDefault(writer, claim.Type, identity.NameClaimType);
                 writer.Write(claim.Value);
                 WriteWithDefault(writer, claim.ValueType, DefaultValues.StringValueType);
-                WriteWithDefault(writer, claim.Issuer, DefaultValues.LocalAuthority);
-                WriteWithDefault(writer, claim.OriginalIssuer, claim.Issuer);
             }
             WriteProperties(writer, token.Properties);
         }
@@ -101,20 +97,16 @@ namespace FODT.Security
             }
 
             string authenticationType = reader.ReadString();
-            string nameClaimType = ReadWithDefault(reader, DefaultValues.NameClaimType);
-            string roleClaimType = ReadWithDefault(reader, DefaultValues.RoleClaimType);
             int count = reader.ReadInt32();
             var claims = new Claim[count];
             for (int index = 0; index != count; ++index)
             {
-                string type = ReadWithDefault(reader, nameClaimType);
+                string type = ReadWithDefault(reader, ClaimsIdentity.DefaultNameClaimType);
                 string value = reader.ReadString();
                 string valueType = ReadWithDefault(reader, DefaultValues.StringValueType);
-                string issuer = ReadWithDefault(reader, DefaultValues.LocalAuthority);
-                string originalIssuer = ReadWithDefault(reader, issuer);
-                claims[index] = new Claim(type, value, valueType, issuer, originalIssuer);
+                claims[index] = new Claim(type, value, valueType);
             }
-            var identity = new ClaimsIdentity(claims, authenticationType, nameClaimType, roleClaimType);
+            var identity = new ClaimsIdentity(claims, authenticationType, ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             var properties = ReadProperties(reader);
             return new AuthenticationToken(identity, properties);
         }
@@ -166,9 +158,6 @@ namespace FODT.Security
         private static class DefaultValues
         {
             public const string DefaultStringPlaceholder = "\0";
-            public const string NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
-            public const string RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
-            public const string LocalAuthority = "LOCAL AUTHORITY";
             public const string StringValueType = "http://www.w3.org/2001/XMLSchema#string";
         }
     }

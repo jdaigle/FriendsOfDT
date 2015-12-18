@@ -52,8 +52,17 @@ namespace FODT.Models.FODT
         public virtual int? FacebookId { get; protected set; }
         public virtual DateTime InsertedDateTime { get; protected set; }
         public virtual DateTime LastModifiedDateTime { get; protected set; }
+        public virtual DateTime? LastSeenDateTime { get; protected set; }
 
         public virtual IList<UserFacebookAccessToken> FacebookAccessTokens { get; protected set; }
+
+        public virtual void UpdateSeen()
+        {
+            if (!LastSeenDateTime.HasValue || LastSeenDateTime < DateTime.UtcNow.AddHours(-1))
+            {
+                LastSeenDateTime = DateTime.UtcNow;
+            }
+        }
     }
 
     public class UserAccountClassMap : ClassMap<UserAccount>
@@ -66,6 +75,7 @@ namespace FODT.Models.FODT
             Map(x => x.FacebookId).Nullable();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.LastModifiedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
+            Map(x => x.LastSeenDateTime).Nullable().CustomType<UtcDateTimeUserType>();
             HasMany(x => x.FacebookAccessTokens)
                 .AsBag()
                 .Cascade.SaveUpdate()

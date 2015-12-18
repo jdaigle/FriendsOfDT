@@ -101,7 +101,7 @@ namespace FODT.Security
         }
 
         /// <summary>
-        /// Gets or sets the time at which the authentication ticket was issued.
+        /// Gets or sets the time at which the authentication token was issued.
         /// </summary>
         public DateTimeOffset? IssuedUtc
         {
@@ -135,7 +135,7 @@ namespace FODT.Security
         }
 
         /// <summary>
-        /// Gets or sets the time at which the authentication ticket expires.
+        /// Gets or sets the time at which the authentication token expires.
         /// </summary>
         public DateTimeOffset? ExpiresUtc
         {

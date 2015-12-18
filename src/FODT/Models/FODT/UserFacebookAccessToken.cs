@@ -33,7 +33,7 @@ namespace FODT.Models.FODT
         {
             Id(x => x.UserFacebookAccessTokenId).GeneratedBy.Identity();
             Map(x => x.AccessToken).CustomType("AnsiString").Length(255);
-            References(x => x.User, "UserAccountId").Not.Nullable();
+            References(x => x.User, "UserAccountId").Not.Nullable().Fetch.Join();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.ExpiresDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
         }

@@ -30,7 +30,7 @@ namespace FODT.Controllers
         [HttpGet, Route("~/SignOut")]
         public ActionResult SignOut()
         {
-            //authenticationTokenContext.RevokeAuthenticationToken();
+            HttpContext.Get<IAuthenticationManager>().SignOut();
             return Redirect("~");
         }
 
@@ -56,13 +56,13 @@ namespace FODT.Controllers
                 redirectURL = HttpUtility.UrlDecode(state);
             }
 
-            var accessToken = FacebookAuthentication.ExchangeCodeForAccessToken(Request, FacebookAuthenticationOptions.FromWebConfig(), code);
+            var facebookAccessToken = FacebookAuthentication.ExchangeCodeForAccessToken(Request, FacebookAuthenticationOptions.FromWebConfig(), code);
 
             ActionResult result = null;
-            var user = DatabaseSession.Query<UserAccount>().Where(x => x.FacebookId == accessToken.FacebookID).SingleOrDefault();
+            var user = DatabaseSession.Query<UserAccount>().Where(x => x.FacebookId == facebookAccessToken.FacebookID).SingleOrDefault();
             if (user == null)
             {
-                user = new UserAccount(accessToken);
+                user = new UserAccount(facebookAccessToken);
                 //result = this.RedirectToAction(c => c.Welcome());
             }
             else
@@ -76,14 +76,12 @@ namespace FODT.Controllers
                     result = Redirect("~");
                 }
             }
-            var token = user.AddFacebookAccessToken(accessToken);
+            var tokenEntity = user.AddFacebookAccessToken(facebookAccessToken);
             DatabaseSession.Save(user);
             DatabaseSession.Flush();
+            var tokenID = tokenEntity.UserFacebookAccessTokenId;
 
-            var tokenID = token.UserFacebookAccessTokenId;
-
-            //authenticationTokenContext.IssueAuthenticationToken(user.UserAccountId, accessToken, profile.name, "oauth/facebook", expires);
-
+            HttpContext.Get<IAuthenticationManager>().SignIn(tokenID.ToString(), FacebookAuthentication.AuthenticationType);
             return result;
         }
     }
