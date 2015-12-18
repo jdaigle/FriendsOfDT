@@ -2,7 +2,7 @@
 using System.Web.Optimization;
 using System.Web.Routing;
 using FODT.Database;
-using FODT.Models;
+using FODT.Infrastructure;
 
 namespace FODT
 {
@@ -16,6 +16,8 @@ namespace FODT
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            ViewEngines.Engines.Insert(0, new ViewModelSpecifiedViewEngine());
         }
 
         protected void Application_EndRequest()

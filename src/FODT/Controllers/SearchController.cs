@@ -71,7 +71,7 @@ namespace FODT.Controllers
             }
 
             ViewBag.SearchTerm = searchTerm;
-            return View("SearchResults", viewModel);
+            return View(viewModel);
         }
     }
 }

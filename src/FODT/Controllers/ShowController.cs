@@ -127,7 +127,7 @@ namespace FODT.Controllers
                 viewModel.PhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
             }
 
-            return View("ShowPhotos", viewModel);
+            return View(viewModel);
         }
 
         [HttpGet, Route("{showId}/Photo/{photoId}")]

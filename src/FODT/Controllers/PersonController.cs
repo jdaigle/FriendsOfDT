@@ -118,7 +118,7 @@ namespace FODT.Controllers
                 viewModel.PhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
             }
 
-            return View("PersonPhotos", viewModel);
+            return View(viewModel);
         }
 
         [HttpGet, Route("{personId}/Photo/{photoId}")]
@@ -136,7 +136,7 @@ namespace FODT.Controllers
             }
             var viewModel = new EditPersonViewModel();
             viewModel.POSTUrl = Url.Action("SaveAddPerson");
-            return PartialView("EditPerson", viewModel);
+            return PartialView(viewModel);
         }
 
         [HttpPost, Route("Add")]

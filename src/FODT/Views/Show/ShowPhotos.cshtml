@@ -4,7 +4,7 @@
 <hr />
 @if (Model.PhotoViewModel != null)
 {
-    @Html.Partial("~/views/photos/Photo.cshtml", Model.PhotoViewModel)
+    @Html.PartialView(Model.PhotoViewModel)
     <hr />
 }
 <div class="text-center">

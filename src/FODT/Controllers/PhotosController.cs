@@ -229,7 +229,7 @@ namespace FODT.Controllers
             }
 
             viewModel.PhotoViewModel = new PhotoViewModel(DatabaseSession.Get<Photo>(id), DatabaseSession, Url);
-            return View("PhotoDetail", viewModel);
+            return View(viewModel);
         }
 
         public class PhotoItemDto

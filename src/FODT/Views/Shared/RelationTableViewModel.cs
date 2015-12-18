@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
 using System.Web.Mvc.Html;
+using FODT.Views.Extensions;
 
 namespace FODT.Views.Shared
 {
@@ -42,14 +43,14 @@ namespace FODT.Views.Shared
         public static MvcHtmlString RelationTable(this HtmlHelper htmlHelper, dynamic model, Func<dynamic, HelperResult> columnTemplate)
         {
             htmlHelper.ViewData["RelationTable_ColumnTemplate"] = columnTemplate;
-            return htmlHelper.Partial("RelationTable", (object)model);
+            return htmlHelper.PartialView((object)model);
         }
 
         public static MvcHtmlString RelationTable<T>(this HtmlHelper htmlHelper, RelationTableViewModel<T> model, Func<T, HelperResult> columnTemplate)
             where T : RelationViewModel
         {
             htmlHelper.ViewData["RelationTable_ColumnTemplate"] = columnTemplate;
-            return htmlHelper.Partial("RelationTable", model);
+            return htmlHelper.PartialView(model);
         }
     }
 }
