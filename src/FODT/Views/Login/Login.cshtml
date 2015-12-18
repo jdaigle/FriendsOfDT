@@ -1,0 +1,29 @@
+﻿@model FODT.Views.Login.LoginViewModel
+
+<div class="text-center center-block" style="max-width: 300px; margin-bottom: 20px;">
+    <a href="@Model.FacebookOAuthChallengeURL" class="btn btn-primary btn-lg btn-block">Login With Facebook</a>
+</div>
+
+<div class="center-block" style="max-width: 600px; margin-bottom: 20px;">
+    <h4>First time here?</h4>
+    <p>
+        Just login with your Facebook account and you're automatically registered!
+    </p>
+    <h5>Why register?</h5>
+    <ul>
+        <li>You can modify your own personal details (name, biographic, photo, etc.).</li>
+        <li>You can upload new photos for shows and people.</li>
+        <li>You can suggest edits or additions to existing pages.</li>
+    </ul>
+    <p>
+        After logging in the first time, we'll ask to confirm your name and email address. An administrator approve your
+        access in a few days.
+    </p>
+</div>
+
+<div class="alert alert-info">
+    Currently we only support log in with <a class="alert-link" href="https://facebook.com">Facebook</a>.
+    In the future we may support other 3rd party logins such as Google, or logging in
+    with a registered username and password. If these are of interest, please let use know by
+    opening an issue on the <a class="alert-link" href="https://github.com/jdaigle/FriendsOfDT">project's site</a>.
+</div>

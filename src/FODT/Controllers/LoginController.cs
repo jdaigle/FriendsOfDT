@@ -11,34 +11,44 @@ using FODT.Models.FODT;
 using FODT.Security;
 using Newtonsoft.Json;
 using NHibernate.Linq;
+using FODT.Views.Login;
 
 namespace FODT.Controllers
 {
-    [RoutePrefix("User"), NoCacheAttribute]
-    public class UserController : BaseController
+    [NoCache]
+    public class LoginController : BaseController
     {
-        [HttpGet, Route("SignIn")]
-        public ActionResult SignIn(string redirectUrl)
+        [HttpGet, Route("~/Login")]
+        public ActionResult Index()
         {
-            var url = FacebookAuthentication.GetAuthChallengeURL(Request, FacebookAuthenticationOptions.FromWebConfig());
-            return Redirect(url);
+            return View(new LoginViewModel()
+            {
+                FacebookOAuthChallengeURL = this.GetURL(c => c.FacebookOAuthChallenge("")),
+            });
         }
 
-        [HttpGet, Route("SignOut")]
+        [HttpGet, Route("~/SignOut")]
         public ActionResult SignOut()
         {
             //authenticationTokenContext.RevokeAuthenticationToken();
             return Redirect("~");
         }
 
-        private string GenerateFacbookOAuthResponseURL()
+        [HttpGet, Route("~/oauth/facebook/challenge")]
+        public ActionResult FacebookOAuthChallenge(string redirectUrl = "")
         {
-            return Settings.Facebook_Login_SiteURL + Url.Action();
+            var url = FacebookAuthentication.GetAuthChallengeURL(Request, FacebookAuthenticationOptions.FromWebConfig());
+            return Redirect(url);
         }
 
         [HttpGet, Route("~/oauth/facebook")]
         public ActionResult HandleFacebookOAuthCallback(string code, string state)
         {
+            if (code.IsNullOrWhiteSpace())
+            {
+                return this.RedirectToAction(c => c.Index());
+            }
+
             // TODO, decrypt redirectURL
             var redirectURL = string.Empty;
             if (!string.IsNullOrWhiteSpace(state))
@@ -53,7 +63,7 @@ namespace FODT.Controllers
             if (user == null)
             {
                 user = new UserAccount(accessToken);
-                result = this.RedirectToAction(c => c.Welcome());
+                //result = this.RedirectToAction(c => c.Welcome());
             }
             else
             {
@@ -75,12 +85,6 @@ namespace FODT.Controllers
             //authenticationTokenContext.IssueAuthenticationToken(user.UserAccountId, accessToken, profile.name, "oauth/facebook", expires);
 
             return result;
-        }
-
-        [HttpGet, Route("Welcome")]
-        public ActionResult Welcome()
-        {
-            return View();
         }
     }
 }
