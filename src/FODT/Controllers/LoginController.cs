@@ -58,23 +58,11 @@ namespace FODT.Controllers
 
             var facebookAccessToken = FacebookAuthentication.ExchangeCodeForAccessToken(Request, FacebookAuthenticationOptions.FromWebConfig(), code);
 
-            ActionResult result = null;
             var user = DatabaseSession.Query<UserAccount>().Where(x => x.FacebookId == facebookAccessToken.FacebookID).SingleOrDefault();
             if (user == null)
             {
                 user = new UserAccount(facebookAccessToken);
-                //result = this.RedirectToAction(c => c.Welcome());
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(redirectURL))
-                {
-                    result = Redirect(redirectURL);
-                }
-                else
-                {
-                    result = Redirect("~");
-                }
+                // TODO: redirect to a welcome page to confirm info redirectURL = this.GetURL<>
             }
             var tokenEntity = user.AddFacebookAccessToken(facebookAccessToken);
             DatabaseSession.Save(user);
@@ -82,7 +70,12 @@ namespace FODT.Controllers
             var tokenID = tokenEntity.UserFacebookAccessTokenId;
 
             HttpContext.Get<IAuthenticationManager>().SignIn(tokenID.ToString(), FacebookAuthentication.AuthenticationType);
-            return result;
+
+            if (redirectURL.IsNullOrWhiteSpace())
+            {
+                redirectURL = "~";
+            }
+            return Redirect(redirectURL);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace FODT.Security
                 return false;
             }
 
-            throw new NotImplementedException();
+            return false;
         }
 
         public static bool CanEditShow(this ControllerContext controllerContext, Show show)
@@ -40,7 +40,7 @@ namespace FODT.Security
                 return false;
             }
 
-            throw new NotImplementedException();
+            return false;
         }
     }
 }
