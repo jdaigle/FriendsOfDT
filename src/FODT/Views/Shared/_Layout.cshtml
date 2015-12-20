@@ -36,10 +36,22 @@
                     <li><a href="~/archive">Archives</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="~/login">Login or Register</a></li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li><a href="~/signout">Sign Out</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="~/login">Login or Register</a></li>
+                    }
                 </ul>
+                @if (Request.IsAuthenticated)
+                {
+                    <p class="navbar-text navbar-right">Hello @User.Identity.Name</p>
+                }
             </div>
         </div>
+
     </nav>
     <div class="container">
         <form method="get" action="~/archive/search" class="">
