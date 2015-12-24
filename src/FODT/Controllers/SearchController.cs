@@ -30,7 +30,8 @@ namespace FODT.Controllers
 
             if (searchType == "all" || searchType == "show")
             {
-                var query = DatabaseSession.Query<Show>();
+                var query = DatabaseSession.Query<Show>()
+                    .Fetch(x => x.Photo).AsQueryable();
                 foreach (var term in searchTerms)
                 {
                     query = query.Where(x => x.Title.Contains(term));
@@ -48,7 +49,8 @@ namespace FODT.Controllers
 
             if (searchType == "all" || searchType == "peep")
             {
-                var query = DatabaseSession.Query<Person>();
+                var query = DatabaseSession.Query<Person>()
+                    .Fetch(x => x.Photo).AsQueryable();
                 foreach (var term in searchTerms)
                 {
                     query = query.Where(x => x.LastName.Contains(term) ||
