@@ -49,6 +49,7 @@ namespace FODT.Database
 #if DEBUG
                     c.SetProperty(NHibernate.Cfg.Environment.GenerateStatistics, "true");
 #endif
+                    c.SetProperty(NHibernate.Cfg.Environment.ConnectionDriver, typeof(StackExchange.Profiling.NHibernate.Drivers.MiniProfilerSql2008ClientDriver).AssemblyQualifiedName);
                 })
                 .BuildConfiguration();
 
