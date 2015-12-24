@@ -36,8 +36,8 @@ UNION SELECT 'PhotoCount'  AS [Key], COUNT(*) AS [Value] FROM Photo
                 ");
 
             var aMonthAgo = DateTime.UtcNow.AddMonths(-1).Date;
-            var newShows = DatabaseSession.Query<Show>().Where(x => x.InsertedDateTime >= aMonthAgo).ToList();
-            var newPersons = DatabaseSession.Query<Person>().Where(x => x.InsertedDateTime >= aMonthAgo).ToList();
+            var newShows = DatabaseSession.Query<Show>().Fetch(x => x.Photo).Where(x => x.InsertedDateTime >= aMonthAgo).ToList();
+            var newPersons = DatabaseSession.Query<Person>().Fetch(x => x.Photo).Where(x => x.InsertedDateTime >= aMonthAgo).ToList();
             var newPhotos = DatabaseSession.Query<Photo>().Where(x => x.InsertedDateTime >= aMonthAgo).ToList();
 
 
