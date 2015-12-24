@@ -211,6 +211,7 @@
     <Compile Include="Security\GuestPrincipal.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="UrlExtensions.cs" />
+    <Compile Include="Views\Admin\AdminTabsViewModel.cs" />
     <Compile Include="Views\Awards\AwardsTableViewModel.cs" />
     <Compile Include="Views\Awards\ByYearViewModel.cs" />
     <Compile Include="Views\Extensions\DebugExtensions.cs" />
@@ -344,6 +345,7 @@
     <Content Include="Views\Home\ArchiveWelcome.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\UserAdmin\List.cshtml" />
+    <Content Include="Views\Admin\AdminTabs.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
