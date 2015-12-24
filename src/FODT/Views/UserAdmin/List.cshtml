@@ -1,0 +1,41 @@
+﻿@model FODT.Views.UserAdmin.ListViewModel
+
+<h1>User Accounts</h1>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Created</th>
+            <th>Last Seen (UTC)</th>
+            <th>Contributor</th>
+            <th>Archivist</th>
+            <th>Admin</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Users)
+        {
+            <tr>
+                <td style="text-align: right;">
+                    <div class="btn-group btn-group-xs">
+                        <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="@item.EditURL"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td>@item.Name</td>
+                <td>@item.Email</td>
+                <td>@item.CreatedDateTime</td>
+                <td>@item.LastSeenDateTime</td>
+                <td>@item.IsContributor</td>
+                <td>@item.IsArchivist</td>
+                <td>@item.IsAdmin</td>
+            </tr>
+        }
+    </tbody>
+</table>

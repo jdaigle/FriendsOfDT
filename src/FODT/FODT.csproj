@@ -151,7 +151,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="AzureBlogStorageUtil.cs" />
     <Compile Include="ControllerExtensions.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AwardsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -162,6 +161,7 @@
     <Compile Include="Controllers\ShowController.cs" />
     <Compile Include="Controllers\ShowsController.cs" />
     <Compile Include="Controllers\ToasterController.cs" />
+    <Compile Include="Controllers\UserAdminController.cs" />
     <Compile Include="Database\DatabaseBootstrapper.cs" />
     <Compile Include="Database\SessionExtensions.cs" />
     <Compile Include="Database\SqlMapper.cs" />
@@ -236,6 +236,8 @@
     <Compile Include="Views\Person\PersonDetailsViewModel.cs" />
     <Compile Include="Views\Show\ShowPhotosViewModel.cs" />
     <Compile Include="Views\Toaster\HuntViewModel.cs" />
+    <Compile Include="Views\UserAdmin\ListViewModel.cs" />
+    <Compile Include="Views\UserAdmin\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -341,6 +343,7 @@
     <Content Include="Views\Shared\RelationTable.cshtml" />
     <Content Include="Views\Home\ArchiveWelcome.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\UserAdmin\List.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

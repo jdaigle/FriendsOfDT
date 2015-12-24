@@ -54,6 +54,10 @@ namespace FODT.Models.FODT
         public virtual DateTime LastModifiedDateTime { get; protected set; }
         public virtual DateTime? LastSeenDateTime { get; protected set; }
 
+        public virtual bool IsContributor { get; protected set; }
+        public virtual bool IsArchivist { get; protected set; }
+        public virtual bool IsAdmin { get; protected set; }
+
         public virtual IList<UserFacebookAccessToken> FacebookAccessTokens { get; protected set; }
 
         public virtual void UpdateSeen()

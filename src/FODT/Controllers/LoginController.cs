@@ -64,6 +64,7 @@ namespace FODT.Controllers
                 user = new UserAccount(facebookAccessToken);
                 // TODO: redirect to a welcome page to confirm info redirectURL = this.GetURL<>
             }
+            user.UpdateSeen();
             var tokenEntity = user.AddFacebookAccessToken(facebookAccessToken);
             DatabaseSession.Save(user);
             DatabaseSession.Flush();
