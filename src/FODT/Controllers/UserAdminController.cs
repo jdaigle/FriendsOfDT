@@ -52,7 +52,7 @@ namespace FODT.Controllers
                 return new HttpNotFoundResult();
             }
 
-            if (this.User.IsInRole("Admin") && ((ClaimsPrincipal)this.User).GetUserAccountId() == userId)
+            if (this.User.IsInRole(RoleNames.Admin) && ((ClaimsPrincipal)this.User).GetUserAccountId() == userId)
             {
                 // do not allow admin to remove self from admin role
                 postModel.IsAdmin = true;

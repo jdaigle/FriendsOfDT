@@ -203,6 +203,7 @@
     <Compile Include="Security\FacebookAuthentication.cs" />
     <Compile Include="Security\FacebookAuthenticationOptions.cs" />
     <Compile Include="Security\IAuthenticationManager.cs" />
+    <Compile Include="Security\RoleNames.cs" />
     <Compile Include="Security\SimpleBase64UrlSafeTextEncoder.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="ObjectExtensions.cs" />

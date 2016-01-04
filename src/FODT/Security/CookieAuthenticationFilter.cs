@@ -85,15 +85,15 @@ namespace FODT.Security
             authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.NameClaimType, userAccount.Name));
             if (userAccount.IsContributor)
             {
-                authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.RoleClaimType, "Contributor"));
+                authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.RoleClaimType, RoleNames.Contributor));
             }
             if (userAccount.IsArchivist)
             {
-                authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.RoleClaimType, "Archivist"));
+                authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.RoleClaimType, RoleNames.Archivist));
             }
             if (userAccount.IsAdmin)
             {
-                authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.RoleClaimType, "Admin"));
+                authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.RoleClaimType, RoleNames.Admin));
             }
 
             SetPrincipal(filterContext.HttpContext, new ClaimsPrincipal(authenticationToken.Identity));
