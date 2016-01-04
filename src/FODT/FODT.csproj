@@ -150,6 +150,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="AzureBlogStorageUtil.cs" />
+    <Compile Include="CachedObjectReflectionExtensions.cs" />
     <Compile Include="ControllerExtensions.cs" />
     <Compile Include="Controllers\AwardsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Views\Awards\ByYearViewModel.cs" />
     <Compile Include="Views\Extensions\DebugExtensions.cs" />
     <Compile Include="Views\Extensions\PartialViewExtensions.cs" />
+    <Compile Include="Views\Extensions\ViewModelExtensions.cs" />
     <Compile Include="Views\Home\AdminViewModel.cs" />
     <Compile Include="Views\Home\ArchiveWelcomeViewModel.cs" />
     <Compile Include="Views\IUserEditableViewModel.cs" />

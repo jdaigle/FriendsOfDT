@@ -24,23 +24,24 @@
 
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" value="true" name="IsContributor" checked="checked" />
+                            <input type="checkbox" value="true" name="IsContributor" @Model.RenderChecked("IsContributor") />
                             <strong>Contributor:</strong> Can make edits to own biography, upload images, and suggest edits to other pages.
                         </label>
                     </div>
 
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" value="true" name="IsArchivist" checked="checked" />
+                            <input type="checkbox" value="true" name="IsArchivist" @Model.RenderChecked("IsArchivist") />
                             <strong>Archivist:</strong> Can edit any page.
                         </label>
                     </div>
 
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" value="true" name="IsAdmin" checked="checked" />
+                            <input type="checkbox" value="true" name="IsAdmin" @Model.RenderChecked("IsAdmin") />
                             <strong>Admin:</strong> Can approve new users and modify permissions.
                         </label>
+                        <span class="help-block">Note that you cannot unset the "Admin" permission on yourself!</span>
                     </div>
 
                 </div>
