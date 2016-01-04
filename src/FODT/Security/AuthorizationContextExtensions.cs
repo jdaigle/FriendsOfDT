@@ -23,7 +23,7 @@ namespace FODT.Security
                 return false;
             }
 
-            return false;
+            return controllerContext.HttpContext.User.IsInRole(RoleNames.Archivist);
         }
 
         public static bool CanEditShow(this ControllerContext controllerContext, Show show)
@@ -40,7 +40,7 @@ namespace FODT.Security
                 return false;
             }
 
-            return false;
+            return controllerContext.HttpContext.User.IsInRole(RoleNames.Archivist);
         }
     }
 }
