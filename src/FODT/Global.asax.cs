@@ -27,6 +27,7 @@ namespace FODT
             {
                 "/assets",
                 "/favicon.ico",
+                "/elmah.axd",
             };
             var copy = ViewEngines.Engines.ToList();
             ViewEngines.Engines.Clear();
