@@ -197,6 +197,7 @@
     <Compile Include="Security\AuthenticationTokenProtector.cs" />
     <Compile Include="Security\AuthenticationTokenSerializer.cs" />
     <Compile Include="Security\AuthorizationContextExtensions.cs" />
+    <Compile Include="Security\ClaimsIdentityExtensions.cs" />
     <Compile Include="Security\CookieAuthenticationFilter.cs" />
     <Compile Include="Security\FacebookAccessToken.cs" />
     <Compile Include="Security\FacebookAuthentication.cs" />
@@ -238,12 +239,13 @@
     <Compile Include="Views\Show\ShowPhotosViewModel.cs" />
     <Compile Include="Views\Toaster\HuntViewModel.cs" />
     <Compile Include="Views\UserAdmin\ListViewModel.cs" />
-    <Compile Include="Views\UserAdmin\UserViewModel.cs" />
+    <Compile Include="Views\UserAdmin\UserAccountViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Content Include="Assets\css\bootstrap-theme.css" />
+    <Content Include="Assets\css\fodt-admin.css" />
     <Content Include="Assets\css\fodt-components.css" />
     <Content Include="Assets\css\fodt-shared.css" />
     <Content Include="Assets\img\ajax-loader.gif" />
@@ -346,6 +348,7 @@
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\UserAdmin\List.cshtml" />
     <Content Include="Views\Admin\AdminTabs.cshtml" />
+    <Content Include="Views\UserAdmin\UserAccount.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

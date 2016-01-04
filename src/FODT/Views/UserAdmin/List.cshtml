@@ -2,7 +2,10 @@
 
 @Html.PartialView(new FODT.Views.Admin.AdminTabsViewModel(this.Url))
 
-<h1>User Accounts</h1>
+<p>
+    Manage user accounts and permissions.
+</p>
+
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -26,7 +29,7 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="@item.EditURL"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
+                            <li><a class="js-edit-modal-link" href="@item.EditURL"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
                         </ul>
                     </div>
                 </td>
@@ -41,3 +44,8 @@
         }
     </tbody>
 </table>
+
+@section endOfBody {
+    <script>
+    </script>
+}

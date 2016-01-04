@@ -13,6 +13,7 @@ namespace FODT
                         , "~/assets/css/bootstrap-theme.css"
                         , "~/assets/css/fodt-shared.css"
                         , "~/assets/css/fodt-components.css"
+                        , "~/assets/css/fodt-admin.css"
                         );
             bundles.Add(css);
 

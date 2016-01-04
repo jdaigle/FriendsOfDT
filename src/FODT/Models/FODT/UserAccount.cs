@@ -54,9 +54,9 @@ namespace FODT.Models.FODT
         public virtual DateTime LastModifiedDateTime { get; protected set; }
         public virtual DateTime? LastSeenDateTime { get; protected set; }
 
-        public virtual bool IsContributor { get; protected set; }
-        public virtual bool IsArchivist { get; protected set; }
-        public virtual bool IsAdmin { get; protected set; }
+        public virtual bool IsContributor { get; set; }
+        public virtual bool IsArchivist { get; set; }
+        public virtual bool IsAdmin { get; set; }
 
         public virtual IList<UserFacebookAccessToken> FacebookAccessTokens { get; protected set; }
 
@@ -80,6 +80,9 @@ namespace FODT.Models.FODT
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.LastModifiedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
             Map(x => x.LastSeenDateTime).Nullable().CustomType<UtcDateTimeUserType>();
+            Map(x => x.IsContributor).Not.Nullable();
+            Map(x => x.IsArchivist).Not.Nullable();
+            Map(x => x.IsAdmin).Not.Nullable();
             HasMany(x => x.FacebookAccessTokens)
                 .AsBag()
                 .Cascade.SaveUpdate()

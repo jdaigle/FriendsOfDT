@@ -5,9 +5,11 @@ using System.Web.Mvc;
 
 namespace FODT.Views.UserAdmin
 {
-    public class UserViewModel
+    public class UserAccountViewModel
     {
-        public UserViewModel(UserAccount user, UrlHelper url)
+        public UserAccountViewModel() { }
+
+        public UserAccountViewModel(UserAccount user, UrlHelper url)
         {
             Name = user.Name;
             Email = user.Email;
@@ -23,9 +25,9 @@ namespace FODT.Views.UserAdmin
         public string Email { get; set; }
         public string CreatedDateTime { get; set; }
         public string LastSeenDateTime { get; set; }
-        public bool IsContributor { get; internal set; }
-        public bool IsArchivist { get; internal set; }
-        public bool IsAdmin { get; internal set; }
-        public string EditURL { get; private set; }
+        public bool IsContributor { get; set; }
+        public bool IsArchivist { get; set; }
+        public bool IsAdmin { get; set; }
+        public string EditURL { get; set; }
     }
 }

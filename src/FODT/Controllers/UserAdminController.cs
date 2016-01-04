@@ -8,6 +8,8 @@ using NHibernate.Linq;
 using FODT.Views.UserAdmin;
 using System.Globalization;
 using Microsoft.Web.Mvc;
+using System.Security.Claims;
+using FODT.Security;
 
 namespace FODT.Controllers
 {
@@ -26,7 +28,7 @@ namespace FODT.Controllers
             var users = DatabaseSession.Query<UserAccount>().ToList();
 
             var listViewModel = new ListViewModel();
-            listViewModel.Users = users.Select(x => new UserViewModel(x, this.Url)).ToList();
+            listViewModel.Users = users.Select(x => new UserAccountViewModel(x, this.Url)).ToList();
             return View(listViewModel);
         }
 
@@ -36,18 +38,35 @@ namespace FODT.Controllers
         public ActionResult EditUser(int userId)
         {
             var user = DatabaseSession.Get<UserAccount>(userId);
-            var userViewModel = new UserViewModel(user, this.Url);
+            var userViewModel = new UserAccountViewModel(user, this.Url);
             return PartialView(userViewModel);
         }
 
         [HttpPost]
         [Route("User/{userId:int}/edit")]
-        public ActionResult POSTEditUser(int userId, UserViewModel postModel)
+        public ActionResult POSTEditUser(int userId, UserAccountViewModel postModel)
         {
+            var user = DatabaseSession.Get<UserAccount>(userId);
+            if (user == null)
+            {
+                return new HttpNotFoundResult();
+            }
+
+            if (this.User.IsInRole("Admin") && ((ClaimsPrincipal)this.User).GetUserAccountId() == userId)
+            {
+                // do not allow admin to remove self from admin role
+                postModel.IsAdmin = true;
+            }
+
+            user.IsContributor = postModel.IsContributor;
+            user.IsArchivist = postModel.IsArchivist;
+            user.IsAdmin = postModel.IsAdmin;
+
             if (Request.IsAjaxRequest())
             {
                 return Json("OK");
             }
+
             return this.RedirectToAction(c => c.List());
         }
     }
