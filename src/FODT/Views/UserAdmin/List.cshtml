@@ -9,7 +9,10 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th></th>
+            @if (Model.IsUserAdmin)
+            {
+                <th></th>
+            }
             <th>Name</th>
             <th>Email</th>
             <th>Created</th>
@@ -23,16 +26,19 @@
         @foreach (var item in Model.Users)
         {
             <tr>
-                <td style="text-align: right;">
-                    <div class="btn-group btn-group-xs">
-                        <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a class="js-edit-modal-link" href="@item.EditURL"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
-                        </ul>
-                    </div>
-                </td>
+                @if (Model.IsUserAdmin)
+                {
+                    <td style="text-align: right;">
+                        <div class="btn-group btn-group-xs">
+                            <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a class="js-edit-modal-link" href="@item.EditURL"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                }
                 <td>@item.Name</td>
                 <td>@item.Email</td>
                 <td>@item.CreatedDateTime</td>

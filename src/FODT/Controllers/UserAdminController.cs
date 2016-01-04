@@ -28,6 +28,7 @@ namespace FODT.Controllers
             var users = DatabaseSession.Query<UserAccount>().ToList();
 
             var listViewModel = new ListViewModel();
+            listViewModel.IsUserAdmin = this.User.IsInRole(RoleNames.Admin);
             listViewModel.Users = users.Select(x => new UserAccountViewModel(x, this.Url)).ToList();
             return View(listViewModel);
         }

@@ -7,6 +7,7 @@ namespace FODT.Views.UserAdmin
 {
     public class ListViewModel
     {
+        public bool IsUserAdmin { get; set; }
         public List<UserAccountViewModel> Users { get; set; }
     }
 }
