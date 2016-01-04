@@ -81,9 +81,20 @@ namespace FODT.Security
             }
 
             authenticationToken.Identity.RemoveClaim(tokenClaim);
-            authenticationToken.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userAccount.UserAccountId.ToString()));
+            authenticationToken.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userAccount.UserAccountId.ToString(), ClaimValueTypes.Integer32));
             authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.NameClaimType, userAccount.Name));
-            // TODO roles
+            if (userAccount.IsContributor)
+            {
+                authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.RoleClaimType, "Contributor"));
+            }
+            if (userAccount.IsArchivist)
+            {
+                authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.RoleClaimType, "Archivist"));
+            }
+            if (userAccount.IsAdmin)
+            {
+                authenticationToken.Identity.AddClaim(new Claim(authenticationToken.Identity.RoleClaimType, "Admin"));
+            }
 
             SetPrincipal(filterContext.HttpContext, new ClaimsPrincipal(authenticationToken.Identity));
         }
