@@ -114,15 +114,4 @@
 }
 
 @section endOfBody {
-    <script type="text/javascript">
-        $(function () {
-            $(document).on('click', '.js-edit-modal-link', function (e) {
-                e.preventDefault();
-                var url = $(this).attr('href');
-                $.get(url, function (html) {
-                    $(html).modal();
-                });
-            });
-        });
-    </script>
 }

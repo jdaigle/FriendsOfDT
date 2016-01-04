@@ -21,3 +21,14 @@ fodt.postLink = function (event, params) {
     fodt.doPost($(event.target || event.srcElement).closest("a").attr("href"), params);
     return false;
 }
+
+
+$(function () {
+    $(document).on('click', '.js-edit-modal-link', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $.get(url, function (html) {
+            $(html).modal();
+        });
+    });
+});
