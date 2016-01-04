@@ -29,12 +29,12 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
   * [ ] Club Positions (e.g. EC) By Year
   * [ ] Toaster List
   * [X] Latest Updates
-* [ ] Build authentication module. Custom OWIN middleware for Facebook login (ideally lighterweight than MS').
+* [ ] Build authentication module. Facebook login (ideally lighterweight than MS').
   * [ ] basic user profile (name, email, contact pref.)
 * [ ] Basic user admin tasks (manage users, roles, etc.).
   * [ ] "Contributor" = Can edit own personal info, upload photos, suggest edits
-  * [ ] "Archivist" = Can add/edit shows/people/etc. approve suggested edits. delete.
-  * [ ] "Admin" = Can approve new users, change roles.
+  * [X] "Archivist" = Can add/edit shows/people/etc. approve suggested edits. delete.
+  * [X] "Admin" = Can approve new users, change roles.
 * [ ] Complete admin tasks.
 * [ ] Edit Suggestion. In lieu of being able to edit, a contributor can suggest edits to a page. The archivist can review and implement the edits.
 * [ ] Show Types - Additional metadata
