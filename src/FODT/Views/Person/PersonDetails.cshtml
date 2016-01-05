@@ -36,10 +36,10 @@
             <hr />
         }
 
-        @Html.RelationTable(Model.AwardsTable, renderAwardsTableColumns)
-        @Html.RelationTable(Model.ClubPositionsTable, renderClubPositionsTableColumns)
-        @Html.RelationTable(Model.CastRolesTable, renderCastRolesTableColumns)
-        @Html.RelationTable(Model.CrewPositionsTable, renderCrewPositionsTableColumns)
+        @Html.EditableListTable(Model.AwardsTable, renderAwardsTableColumns)
+        @Html.EditableListTable(Model.ClubPositionsTable, renderClubPositionsTableColumns)
+        @Html.EditableListTable(Model.CastRolesTable, renderCastRolesTableColumns)
+        @Html.EditableListTable(Model.CrewPositionsTable, renderCrewPositionsTableColumns)
     </div>
 </div>
 

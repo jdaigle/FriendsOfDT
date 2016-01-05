@@ -8,14 +8,14 @@ using FODT.Views.Shared;
 
 namespace FODT.Views.Person
 {
-    public class ClubPositionsTableViewModel : RelationTableViewModel<ClubPositionViewModel>
+    public class ClubPositionsTableViewModel : EditableListTableViewModel<ClubPositionViewModel>
     {
         public ClubPositionsTableViewModel(UrlHelper url, Func<int, string> getDeleteItemURL, List<PersonClubPosition> clubPositions)
         {
             TableTitle = "EC and Club Responsibilities";
             AddItemURLText = "Add Position";
 
-            Items = new List<RelationViewModel>();
+            Items = new List<EditableListViewModel>();
             Items.AddRange(clubPositions.OrderBy(x => x.DisplayOrder).ThenByDescending(x => x.Year).Select(x => new ClubPositionViewModel
             {
                 DeleteItemURL = getDeleteItemURL(x.PersonClubPositionId),
@@ -25,7 +25,7 @@ namespace FODT.Views.Person
         }
     }
 
-    public class ClubPositionViewModel : RelationViewModel
+    public class ClubPositionViewModel : EditableListViewModel
     {
         public short Year { get; set; }
         public string Name { get; set; }

@@ -232,7 +232,7 @@
     <Compile Include="Views\Person\PersonPhotosViewModel.cs" />
     <Compile Include="Views\Search\SearchResultsViewModel.cs" />
     <Compile Include="Views\Photos\PhotoViewModel.cs" />
-    <Compile Include="Views\Shared\RelationTableViewModel.cs" />
+    <Compile Include="Views\Shared\EditableListTableViewModel.cs" />
     <Compile Include="Views\Shows\SortedShowsViewModel.cs" />
     <Compile Include="Views\Show\CastRolesTableViewModel.cs" />
     <Compile Include="Views\Show\CrewPositionsTableViewModel.cs" />
@@ -344,7 +344,7 @@
     <Content Include="Views\Person\AddCrew.cshtml" />
     <Content Include="Views\Person\AddCast.cshtml" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Views\Shared\RelationTable.cshtml" />
+    <Content Include="Views\Shared\EditableListTable.cshtml" />
     <Content Include="Views\Home\ArchiveWelcome.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\UserAdmin\List.cshtml" />

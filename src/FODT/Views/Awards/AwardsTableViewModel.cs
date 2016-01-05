@@ -12,14 +12,14 @@ using FODT.Views.Shared;
 
 namespace FODT.Views.Awards
 {
-    public class AwardsTableViewModel : RelationTableViewModel<AwardViewModel>
+    public class AwardsTableViewModel : EditableListTableViewModel<AwardViewModel>
     {
         public AwardsTableViewModel(UrlHelper urlHelper, Func<int, string> getDeleteItemURL, IEnumerable<Award> awards)
         {
             TableTitle = "Awards";
             AddItemURLText = "Add Award";
 
-            Items = new List<RelationViewModel>();
+            Items = new List<EditableListViewModel>();
 
             if (awards != null)
             {
@@ -43,12 +43,12 @@ namespace FODT.Views.Awards
             Items = Items.Cast<AwardViewModel>()
                 .OrderByDescending(x => x.Year)
                 .ThenBy(x => x.Name)
-                .AsEnumerable<RelationViewModel>()
+                .AsEnumerable<EditableListViewModel>()
                 .ToList();
         }
     }
 
-    public class AwardViewModel : RelationViewModel
+    public class AwardViewModel : EditableListViewModel
     {
         public string AwardYearLinkURL { get; set; }
         public string DeleteAwardURL { get; set; }

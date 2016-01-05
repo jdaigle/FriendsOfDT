@@ -10,14 +10,14 @@ using FODT.Controllers;
 
 namespace FODT.Views.Show
 {
-    public class CrewPositionsTableViewModel : RelationTableViewModel<CrewPositionViewModel>
+    public class CrewPositionsTableViewModel : EditableListTableViewModel<CrewPositionViewModel>
     {
         public CrewPositionsTableViewModel(UrlHelper url, Func<int, string> getDeleteItemURL, List<ShowCrew> crew)
         {
             TableTitle = "Crew Credits";
             AddItemURLText = "Add Crew Credit";
 
-            Items = new List<RelationViewModel>();
+            Items = new List<EditableListViewModel>();
             Items.AddRange(crew
                 .OrderBy(x => x.Show, ShowComparer.ReverseChronologicalShowComparer)
                 .ThenBy(x => x.DisplayOrder)
@@ -36,7 +36,7 @@ namespace FODT.Views.Show
         }
     }
 
-    public class CrewPositionViewModel : RelationViewModel
+    public class CrewPositionViewModel : EditableListViewModel
     {
         public Quarter ShowQuarter { get; set; }
         public short ShowYear { get; set; }

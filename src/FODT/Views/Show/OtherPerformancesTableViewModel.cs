@@ -10,13 +10,13 @@ using FODT.Models;
 
 namespace FODT.Views.Show
 {
-    public class OtherPerformancesTableViewModel : RelationTableViewModel<OtherPerformancesViewModel>
+    public class OtherPerformancesTableViewModel : EditableListTableViewModel<OtherPerformancesViewModel>
     {
         public OtherPerformancesTableViewModel(UrlHelper url, List<FODT.Models.IMDT.Show> otherPerformances)
         {
             TableTitle = "Other Performances";
 
-            Items = new List<RelationViewModel>();
+            Items = new List<EditableListViewModel>();
             Items.AddRange(otherPerformances.OrderBy(x => x)
                 .Select(x => new OtherPerformancesViewModel
                 {
@@ -28,7 +28,7 @@ namespace FODT.Views.Show
         }
     }
 
-    public class OtherPerformancesViewModel : RelationViewModel
+    public class OtherPerformancesViewModel : EditableListViewModel
     {
         public Quarter ShowQuarter { get; set; }
         public short ShowYear { get; set; }
