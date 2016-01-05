@@ -248,3 +248,36 @@ ul.media-banner {
         list-style: none;
         display: inline-block;
     }
+
+.dt-photo-grid-cell {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+}
+
+    .dt-photo-grid-cell a {
+        display: block;
+        overflow: hidden;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .075);
+    }
+@media (max-width: 768px) {
+    .dt-photo-grid-cell a {
+        width: 100%;
+        height: 160px;
+    }
+}
+@media (min-width: 768px) {
+    .dt-photo-grid-cell a {
+        height: 188px;
+    }
+}
+@media (min-width: 992px) {
+    .dt-photo-grid-cell a {
+        height: 112px;
+    }
+}
+@media (min-width: 1200px) {
+    .dt-photo-grid-cell a {
+        height: 147px;
+    }
+}

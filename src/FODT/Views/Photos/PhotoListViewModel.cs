@@ -7,7 +7,7 @@ namespace FODT.Views.Photos
 {
     public class PhotoListViewModel
     {
-        public bool ShowParentHeader { get; set; }
+        public bool ShowParentHeader { get; set; } = true;
         public string ParentName { get; set; }
         public string ParentLinkURL { get; set; }
 
