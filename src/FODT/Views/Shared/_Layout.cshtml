@@ -34,6 +34,10 @@
             <div id="top-navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="~/archive">Archives</a></li>
+                    @if (User.IsInRole(FODT.Security.RoleNames.Admin))
+                    {
+                        <li><a href="~/admin">Admin</a></li>
+                    }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (Request.IsAuthenticated)

@@ -14,6 +14,7 @@ namespace FODT
             routes.IgnoreRoute("routes.axd");
             routes.IgnoreRoute("robots.txt");
             routes.MapMvcAttributeRoutes();
+            routes.LowercaseUrls = true;
         }
     }
 }

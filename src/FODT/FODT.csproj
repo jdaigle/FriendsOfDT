@@ -220,7 +220,6 @@
     <Compile Include="Views\Extensions\DebugExtensions.cs" />
     <Compile Include="Views\Extensions\PartialViewExtensions.cs" />
     <Compile Include="Views\Extensions\ViewModelExtensions.cs" />
-    <Compile Include="Views\Home\AdminViewModel.cs" />
     <Compile Include="Views\Home\ArchiveWelcomeViewModel.cs" />
     <Compile Include="Views\IUserEditableViewModel.cs" />
     <Compile Include="Views\Login\LoginViewModel.cs" />
@@ -332,7 +331,6 @@
     <Content Include="Views\Shows\SortByTitle.cshtml" />
     <Content Include="Views\Photos\Upload.cshtml" />
     <Content Include="Views\Awards\ByYear.cshtml" />
-    <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="packages.config" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.ttf" />

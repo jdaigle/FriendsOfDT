@@ -81,16 +81,10 @@ UNION SELECT 'PhotoCount'  AS [Key], COUNT(*) AS [Value] FROM Photo
             return this.RedirectToAction(c => c.ArchiveWelcome(), permanent: true);
         }
 
-        [HttpGet, Route("Admin/EditPerson")]
-        public ActionResult Admin_EditPerson(int personId)
+        [HttpGet, Route("Admin")]
+        public ActionResult AdminHome()
         {
-            return this.RedirectToAction<PersonController>(x => x.EditPerson(personId));
-        }
-        [HttpGet, Route("Admin/ShowPerson")]
-        public ActionResult Admin_ShowPerson(int showId)
-        {
-            //return RedirectToAction(MVC.Person.Edit(personId));
-            throw new NotImplementedException();
+            return this.RedirectToAction<UserAdminController>(x => x.List());
         }
     }
 }
