@@ -225,6 +225,7 @@
     <Compile Include="Views\Login\LoginViewModel.cs" />
     <Compile Include="Views\Photos\PhotoDetailViewModel.cs" />
     <Compile Include="Views\Photos\IndexViewModel.cs" />
+    <Compile Include="Views\Photos\TagPhotoViewModel.cs" />
     <Compile Include="Views\Photos\UploadViewModel.cs" />
     <Compile Include="Views\Show\OtherPerformancesTableViewModel.cs" />
     <Compile Include="Views\Person\ClubPositionsTableViewModel.cs" />
@@ -350,6 +351,7 @@
     <Content Include="Views\UserAdmin\List.cshtml" />
     <Content Include="Views\Admin\AdminTabs.cshtml" />
     <Content Include="Views\UserAdmin\UserAccount.cshtml" />
+    <Content Include="Views\Photos\TagPhoto.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

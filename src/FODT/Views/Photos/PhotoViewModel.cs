@@ -20,12 +20,21 @@ namespace FODT.Views.Photos
         public List<RelatedShow> RelatedShows { get; set; }
         public List<RelatedPerson> RelatedPeople { get; set; }
 
+        public bool CanDeletePhoto { get; set; }
+        public string DeletePhotoURL { get; set; }
+
+        public bool CanAddTag { get; set; }
+        public string AddTagURL { get; set; }
+
         public class RelatedShow
         {
             public string ShowLinkURL { get; set; }
             public string ShowTitle { get; set; }
             public Quarter ShowQuarter { get; set; }
             public short ShowYear { get; set; }
+
+            public bool CanDelete { get; set; }
+            public string DeleteURL { get; set; }
         }
 
         public class RelatedPerson
@@ -33,6 +42,9 @@ namespace FODT.Views.Photos
             public string PersonLinkURL { get; set; }
             public string PersonFullname { get; set; }
             public string PersonLastName { get; set; }
+
+            public bool CanDelete { get; set; }
+            public string DeleteURL { get; set; }
         }
 
         public PhotoViewModel(Photo photo, ISession databaseSession, UrlHelper url)
@@ -56,6 +68,12 @@ namespace FODT.Views.Photos
             }
 
             this.PhotoURL = photo.GetURL();
+
+            this.CanDeletePhoto = true;
+            this.DeletePhotoURL = url.GetURL<PhotosController>(c => c.Delete(photo.PhotoId));
+
+            this.CanAddTag = true;
+            this.AddTagURL = url.GetURL<PhotosController>(c => c.Tag(photo.PhotoId));
 
             this.RelatedShows = relatedshows.Select(x => new PhotoViewModel.RelatedShow
             {

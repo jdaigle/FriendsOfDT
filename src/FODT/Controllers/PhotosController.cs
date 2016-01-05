@@ -10,6 +10,7 @@ using FODT.Views.Photos;
 using NHibernate.Linq;
 using FODT.Database;
 using System.Configuration;
+using Microsoft.Web.Mvc;
 
 namespace FODT.Controllers
 {
@@ -132,10 +133,30 @@ namespace FODT.Controllers
             public HttpPostedFileBase UploadedFile { get; set; }
         }
 
-        [HttpPost, Route("{id}/tag")]
-        public ActionResult Tag(int id, int? personId, int? showId)
+        [HttpGet]
+        [AjaxOnly]
+        [Route("{id}/tag")]
+        public ActionResult Tag(int id)
         {
-            if (personId.HasValue)
+            var model = new TagPhotoViewModel();
+            model.POSTUrl = this.GetURL(c => c.Tag(id));
+            model.Shows = DatabaseSession.Query<Show>()
+             .ToList()
+             .OrderBy(x => x, ShowComparer.ReverseChronologicalShowComparer)
+             .Select(x => new KeyValuePair<int, string>(x.ShowId, x.Year + " " + x.DisplayTitle))
+             .ToList();
+            model.People = DatabaseSession.Query<Person>()
+             .ToList()
+             .OrderBy(x => x.SortableName)
+             .Select(x => new KeyValuePair<int, string>(x.PersonId, x.Fullname))
+             .ToList();
+            return PartialView(model);
+        }
+
+        [HttpPost, Route("{id}/tag")]
+        public ActionResult Tag(int id, int? personId = null, int? showId = null, string redirectURL = "")
+        {
+            if (personId.HasValue && !DatabaseSession.Query<PersonPhoto>().Any(x => x.Photo.PhotoId == id && x.Person.PersonId == personId.Value))
             {
                 var personPhoto = new PersonPhoto();
                 personPhoto.Person = DatabaseSession.Load<Person>(personId.Value);
@@ -143,7 +164,7 @@ namespace FODT.Controllers
                 personPhoto.InsertedDateTime = DateTime.UtcNow;
                 DatabaseSession.Save(personPhoto);
             }
-            if (showId.HasValue)
+            if (showId.HasValue && !DatabaseSession.Query<ShowPhoto>().Any(x => x.Photo.PhotoId == id && x.Show.ShowId == showId.Value))
             {
                 var showPhoto = new ShowPhoto();
                 showPhoto.Show = DatabaseSession.Load<Show>(showId.Value);
@@ -153,13 +174,17 @@ namespace FODT.Controllers
             }
             DatabaseSession.CommitTransaction();
 
-            if (Request.UrlReferrer == null ||
-                string.IsNullOrWhiteSpace(Request.UrlReferrer.PathAndQuery))
+            if (!redirectURL.IsNullOrWhiteSpace())
             {
-                return this.RedirectToAction(x => x.GetPhotoDetail(id));
+                return Redirect(new Uri(redirectURL).PathAndQuery);
             }
 
-            return Redirect(Request.UrlReferrer.PathAndQuery);
+            if (Request.UrlReferrer?.PathAndQuery.IsNullOrWhiteSpace() == true)
+            {
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+
+            return this.RedirectToAction(x => x.GetPhotoDetail(id));
         }
 
         [HttpGet, Route("{id}")]
@@ -269,6 +294,24 @@ namespace FODT.Controllers
                 PhotoThumbnailURL = x.GetThumbnailURL()
             }).ToList();
             return View(viewModel);
+        }
+
+        [HttpPost, Route("{id}/delete")]
+        public ActionResult Delete(int id)
+        {
+            var photo = DatabaseSession.Get<Photo>(id);
+            if (photo == null)
+            {
+                return new HttpNotFoundResult();
+            }
+
+            // TODO: soft delete? or hard delete? delete blob?
+
+            if (Request.IsAjaxRequest())
+            {
+                return Json("OK");
+            }
+            return Redirect("~");
         }
     }
 }

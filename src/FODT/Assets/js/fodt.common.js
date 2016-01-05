@@ -26,7 +26,7 @@ fodt.postLink = function (event, params) {
 $(function () {
     $(document).on('click', '.js-edit-modal-link', function (e) {
         e.preventDefault();
-        var url = $(this).attr('href');
+        var url = $(this).attr('href') || $(this).data('url');
         $.get(url, function (html) {
             $(html).modal();
         });
