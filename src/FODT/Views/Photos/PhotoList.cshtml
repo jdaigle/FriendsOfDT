@@ -1,10 +1,13 @@
-﻿@model FODT.Views.Person.PersonPhotosViewModel
+﻿@model FODT.Views.Photos.PhotoListViewModel
 
-<h1>Photos of <a href="@Model.PersonLinkURL">@Model.PersonFullname</a></h1>
-<hr />
-@if (Model.PhotoViewModel != null)
+@if (Model.ShowParentHeader)
 {
-    @Html.PartialView(Model.PhotoViewModel)
+    <h1>Photos of <a href="@Model.ParentLinkURL">@Model.ParentName</a></h1>
+}
+<hr />
+@if (Model.CurrentPhotoViewModel != null)
+{
+    @Html.PartialView(Model.CurrentPhotoViewModel)
     <hr />
 }
 <div class="text-center">

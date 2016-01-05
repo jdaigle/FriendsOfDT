@@ -225,12 +225,12 @@
     <Compile Include="Views\Login\LoginViewModel.cs" />
     <Compile Include="Views\Photos\PhotoDetailViewModel.cs" />
     <Compile Include="Views\Photos\IndexViewModel.cs" />
+    <Compile Include="Views\Photos\PhotoListViewModel.cs" />
     <Compile Include="Views\Photos\TagPhotoViewModel.cs" />
     <Compile Include="Views\Photos\UploadViewModel.cs" />
     <Compile Include="Views\Show\OtherPerformancesTableViewModel.cs" />
     <Compile Include="Views\Person\ClubPositionsTableViewModel.cs" />
     <Compile Include="Views\Person\EditPersonViewModel.cs" />
-    <Compile Include="Views\Person\PersonPhotosViewModel.cs" />
     <Compile Include="Views\Search\SearchResultsViewModel.cs" />
     <Compile Include="Views\Photos\PhotoViewModel.cs" />
     <Compile Include="Views\Shared\EditableListTableViewModel.cs" />
@@ -239,7 +239,6 @@
     <Compile Include="Views\Show\CrewPositionsTableViewModel.cs" />
     <Compile Include="Views\Show\ShowDetailsViewModel.cs" />
     <Compile Include="Views\Person\PersonDetailsViewModel.cs" />
-    <Compile Include="Views\Show\ShowPhotosViewModel.cs" />
     <Compile Include="Views\Toaster\HuntViewModel.cs" />
     <Compile Include="Views\UserAdmin\ListViewModel.cs" />
     <Compile Include="Views\UserAdmin\UserAccountViewModel.cs" />
@@ -325,9 +324,7 @@
   <ItemGroup>
     <Content Include="Views\Photos\Index.cshtml" />
     <Content Include="Views\Photos\PhotoDetail.cshtml" />
-    <Content Include="Views\Show\ShowPhotos.cshtml" />
     <Content Include="Views\Photos\Photo.cshtml" />
-    <Content Include="Views\Person\PersonPhotos.cshtml" />
     <Content Include="Views\Shows\SortByYear.cshtml" />
     <Content Include="Views\Shows\SortByTitle.cshtml" />
     <Content Include="Views\Photos\Upload.cshtml" />
@@ -352,6 +349,7 @@
     <Content Include="Views\Admin\AdminTabs.cshtml" />
     <Content Include="Views\UserAdmin\UserAccount.cshtml" />
     <Content Include="Views\Photos\TagPhoto.cshtml" />
+    <Content Include="Views\Photos\PhotoList.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

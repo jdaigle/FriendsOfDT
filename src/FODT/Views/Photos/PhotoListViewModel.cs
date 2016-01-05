@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using FODT.Views.Photos;
 
-namespace FODT.Views.Show
+namespace FODT.Views.Photos
 {
-    public class ShowPhotosViewModel
+    public class PhotoListViewModel
     {
-        public string ShowTitle { get; set; }
-        public short ShowYear { get; set; }
-        public string ShowLinkURL { get; set; }
+        public bool ShowParentHeader { get; set; }
+        public string ParentName { get; set; }
+        public string ParentLinkURL { get; set; }
 
         public List<Photo> Photos { get; set; }
         public string PhotoUploadLinkURL { get; set; }
 
-        public PhotoViewModel PhotoViewModel { get; set; }
+        public PhotoViewModel CurrentPhotoViewModel { get; set; }
 
         public class Photo
         {

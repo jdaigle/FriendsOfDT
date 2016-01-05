@@ -105,13 +105,12 @@ namespace FODT.Controllers
                 .Where(x => x.Show == show).Fetch(x => x.Photo)
                 .ToList();
 
-            var viewModel = new ShowPhotosViewModel();
-            viewModel.ShowTitle = show.DisplayTitle;
-            viewModel.ShowYear = show.Year;
-            viewModel.ShowLinkURL = this.GetURL(c => c.ShowDetails(showId));
+            var viewModel = new PhotoListViewModel();
+            viewModel.ParentName = show.DisplayTitle + " (" + show.Year + ")";
+            viewModel.ParentLinkURL = this.GetURL(c => c.ShowDetails(showId));
             viewModel.Photos = photos
                 .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
-                .Select(x => new ShowPhotosViewModel.Photo
+                .Select(x => new PhotoListViewModel.Photo
             {
                 PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, x.Photo.PhotoId)),
                 PhotoThumbnailURL = x.Photo.GetThumbnailURL(),
@@ -124,7 +123,7 @@ namespace FODT.Controllers
                 {
                     return new HttpNotFoundResult();
                 }
-                viewModel.PhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
+                viewModel.CurrentPhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
             }
 
             return View(viewModel);

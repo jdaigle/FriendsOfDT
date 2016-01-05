@@ -96,13 +96,13 @@ namespace FODT.Controllers
                 .Where(x => x.Person == person).Fetch(x => x.Photo)
                 .ToList();
 
-            var viewModel = new PersonPhotosViewModel();
-            viewModel.PersonFullname = person.Fullname;
+            var viewModel = new PhotoListViewModel();
+            viewModel.ParentName = person.Fullname;
+            viewModel.ParentLinkURL = this.GetURL(c => c.PersonDetails(personId));
             viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
-            viewModel.PersonLinkURL = this.GetURL(c => c.PersonDetails(personId));
             viewModel.Photos = photos
                 .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
-                .Select(x => new PersonPhotosViewModel.Photo
+                .Select(x => new PhotoListViewModel.Photo
             {
                 PhotoLinkURL = this.GetURL(c => c.GetPersonPhoto(personId, x.Photo.PhotoId)),
                 PhotoThumbnailURL = x.Photo.GetThumbnailURL(),
@@ -115,7 +115,7 @@ namespace FODT.Controllers
                 {
                     return new HttpNotFoundResult();
                 }
-                viewModel.PhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
+                viewModel.CurrentPhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
             }
 
             return View(viewModel);
