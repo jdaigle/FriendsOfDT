@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -7,7 +6,7 @@ using ExpressionHelper = Microsoft.Web.Mvc.Internal.ExpressionHelper;
 
 namespace FODT
 {
-    public static class ControllerExtensions
+    public static class ControllerUrlExtensions
     {
         public static RedirectToRouteResult RedirectToAction<TController>(this TController controller, Expression<Action<TController>> action, bool permanent = false) where TController : Controller
         {
@@ -46,12 +45,22 @@ namespace FODT
 
         public static UrlHelper Url(this ControllerContext context)
         {
-            return new UrlHelper(context.RequestContext);
+            return context.Controller.Url();
         }
 
         public static UrlHelper Url(this ControllerBase controller)
         {
-            return new UrlHelper(controller.ControllerContext.RequestContext);
+            if (controller is Controller)
+            {
+                return ((Controller)controller).Url;
+            }
+            var urlHelper = controller.ControllerContext.HttpContext.Items["_cachedUrlHelper"] as UrlHelper;
+            if (urlHelper == null)
+            {
+                urlHelper = new UrlHelper(controller.ControllerContext.RequestContext);
+                controller.ControllerContext.HttpContext.Items["_cachedUrlHelper"] = urlHelper;
+            }
+            return urlHelper;
         }
     }
 }
