@@ -74,7 +74,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Secret.config" />
+    <None Include="App.Secret.config">
+      <DependentUpon>App.config</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

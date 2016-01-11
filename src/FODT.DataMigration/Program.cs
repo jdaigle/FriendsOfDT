@@ -40,11 +40,11 @@ namespace FODT.DataMigration
             azureStorageAccountKey = ConfigurationManager.AppSettings["azure-storage-account-key"];
             azureStorageBaseURL = "https://" + azureStorageAccountName + ".blob.core.windows.net/" + ConfigurationManager.AppSettings["azure-storage-blob-container"] + "/";
 
-            var connectionString = ConfigurationManager.ConnectionStrings["fodt"].ConnectionString;
+            var connectionString = ConfigurationManager.AppSettings["db_fodt"];
             var cfg = DatabaseBootstrapper.Bootstrap(connectionString);
             sessionFactory = cfg.BuildSessionFactory();
 
-            oldDatabaseConnection = new MySql.Data.MySqlClient.MySqlConnection(ConfigurationManager.ConnectionStrings["old_fodt"].ConnectionString);
+            oldDatabaseConnection = new MySql.Data.MySqlClient.MySqlConnection(ConfigurationManager.AppSettings["db_old_fodt"]);
             oldDatabaseConnection.Open();
 
             if (doDatabaseImport)
