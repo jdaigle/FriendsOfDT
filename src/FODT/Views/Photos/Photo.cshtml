@@ -10,7 +10,10 @@
         {
             <div class="pull-right">
                 <button class="btn btn-xs btn-primary js-edit-modal-link" data-url="@Model.AddTagURL">Tag Person/Show</button>
-                <button class="btn btn-xs btn-danger" data-url="@Model.AddTagURL">Delete</button>
+                @if (Model.CanDeletePhoto)
+                {
+                <button class="btn btn-xs btn-danger js-delete-button" data-url="@Model.DeletePhotoURL" data-delete-confirmation-text="Are you sure you want to delete this photo?">Delete</button>
+                }
             </div>
         }
         <div class="clearfix"></div>
@@ -23,7 +26,7 @@
                     <strong><a href="@item.ShowLinkURL">@item.ShowTitle (@item.ShowYear)</a></strong>
                     @if (item.CanDelete)
                     {
-                        <a class="delete-button small" href="@item.DeleteURL" title="Delete">❌</a>
+                        <a class="js-delete-button delete-button small" href="@item.DeleteURL" title="Delete" data-delete-confirmation-text="Are you sure you want to delete this tag?">❌</a>
                     }
                 </span>
                 )
@@ -37,7 +40,7 @@
                     <strong><a href="@item.PersonLinkURL">@item.PersonFullname</a></strong>
                     @if (item.CanDelete)
                     {
-                        <a class="delete-button small" href="@item.DeleteURL" title="Delete">❌</a>
+                        <a class="js-delete-button delete-button small" href="@item.DeleteURL" title="Delete" data-delete-confirmation-text="Are you sure you want to delete this tag?">❌</a>
                     }
                 </span>
                 )

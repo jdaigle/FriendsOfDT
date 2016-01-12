@@ -30,11 +30,10 @@ $(document)
     .bind('ajaxStop', function () {
         $('#ajax_spinner').fadeOut(500);
     })
-    .bind("ajaxSuccess", function (data, textStatus, jqXHR) {
-        // TODO check to see if data is a JSON object with a successs message or a redirect
-    })
-    .bind("ajaxError", function (jqXHR, textStatus, errorThrown) {
-        // TODO global ajax error handler
+    .bind("ajaxError", function (event, jqXHR, ajaxSettings, thrownError) {
+        // TODO global ajax error handler?
+        console.log("textStatus=" + textStatus.status);
+        console.log("textStatus=" + textStatus.statusText);
     });
 
 $(function () {
@@ -47,7 +46,7 @@ $(function () {
         var url = $(this).attr('href') || $(this).data('url');
         $.get(url, function (html) {
             $(html).modal();
-        });
+        }, "html");
     });
 
     // changes the parent <span> to be active on hover and unhover
@@ -56,14 +55,16 @@ $(function () {
     });
 
     // does a quick post to the href of the button and reloads the page if successful
-    $(document).on('click', '.delete-button', function (e) {
+    $(document).on('click', '.delete-button, .js-delete-button', function (e) {
         e.preventDefault();
-        if (!confirm("Are you sure you want to delete this tag?"))
+        var _confirmationText = $(this).data('delete-confirmation-text') || "Are you sure you want to delete this item?";
+        if (!confirm(_confirmationText))
             return;
-        var url = $(this).attr('href');
-        var _parentSpan = $(this).parent('span');
+        var url = $(this).attr('href') || $(this).data('url');
         $.post(url, function (data) {
+            if (data.message && data.message.length > 0)
+                alert(data.message);
             document.location.reload(true);
-        });
+        }, "json");
     });
 });

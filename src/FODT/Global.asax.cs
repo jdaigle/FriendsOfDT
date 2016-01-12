@@ -1,11 +1,4 @@
-﻿using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
-using FODT.Database;
-using FODT.Infrastructure;
-using StackExchange.Profiling;
-using StackExchange.Profiling.Mvc;
-using System.Linq;
+﻿using StackExchange.Profiling;
 
 namespace FODT
 {
@@ -13,28 +6,7 @@ namespace FODT
     {
         protected void Application_Start()
         {
-            DatabaseBootstrapper.Bootstrap();
-            MvcHandler.DisableMvcResponseHeader = true;
-            //AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            ViewEngines.Engines.Insert(0, new ViewModelSpecifiedViewEngine());
-
-
-            MiniProfiler.Settings.IgnoredPaths = new[]
-            {
-                "/assets",
-                "/favicon.ico",
-                "/elmah.axd",
-            };
-            var copy = ViewEngines.Engines.ToList();
-            ViewEngines.Engines.Clear();
-            foreach (var item in copy)
-            {
-                ViewEngines.Engines.Add(new ProfilingViewEngine(item));
-            }
+            Startup.ApplicationStart();
         }
 
         protected void Application_BeginRequest()

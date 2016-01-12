@@ -11,6 +11,7 @@ using NHibernate.Linq;
 using FODT.Database;
 using System.Configuration;
 using Microsoft.Web.Mvc;
+using System.Net;
 
 namespace FODT.Controllers
 {
@@ -138,6 +139,11 @@ namespace FODT.Controllers
         [Route("{id}/tag")]
         public ActionResult Tag(int id)
         {
+            if (id == Photo.NoPic)
+            {
+                return new HttpBadRequestResult("Cannot tag this photo.");
+            }
+
             var model = new TagPhotoViewModel();
             model.POSTUrl = this.GetURL(c => c.Tag(id));
             model.Shows = DatabaseSession.Query<Show>()
@@ -156,6 +162,11 @@ namespace FODT.Controllers
         [HttpPost, Route("{id}/tag")]
         public ActionResult Tag(int id, int? personId = null, int? showId = null, string redirectURL = "")
         {
+            if (id == Photo.NoPic)
+            {
+                return new HttpBadRequestResult("Cannot tag this photo.");
+            }
+
             if (personId.HasValue && !DatabaseSession.Query<PersonPhoto>().Any(x => x.Photo.PhotoId == id && x.Person.PersonId == personId.Value))
             {
                 var personPhoto = new PersonPhoto();
@@ -191,6 +202,11 @@ namespace FODT.Controllers
         [Route("{id}/tag/delete")]
         public ActionResult DeleteTag(int id, int? personId = null, int? showId = null)
         {
+            if (id == Photo.NoPic)
+            {
+                return new HttpBadRequestResult("Cannot tag this photo.");
+            }
+
             if (personId.HasValue)
             {
                 // only delete the tag if the photo is not the Person's default photo
@@ -207,17 +223,11 @@ namespace FODT.Controllers
                     , new { PhotoId = id, ShowId = showId.Value });
             }
 
-            if (Request.IsAjaxRequest())
+            return new ViewModelResult(new HttpApiResult
             {
-                return Json("OK");
-            }
-
-            if (Request.UrlReferrer?.PathAndQuery.IsNullOrWhiteSpace() == true)
-            {
-                return Redirect(Request.UrlReferrer.PathAndQuery);
-            }
-
-            return Redirect("~");
+                HttpStatusCode = HttpStatusCode.OK,
+                Message = "Tag Deleted",
+            });
         }
 
         [HttpGet, Route("{id}")]
@@ -332,19 +342,33 @@ namespace FODT.Controllers
         [HttpPost, Route("{id}/delete")]
         public ActionResult Delete(int id)
         {
+            if (id == Photo.NoPic)
+            {
+                return new HttpBadRequestResult("Cannot delete this photo.");
+            }
+
             var photo = DatabaseSession.Get<Photo>(id);
             if (photo == null)
             {
-                return new HttpNotFoundResult();
+                return new HttpNotFoundResult("Photo not found");
             }
 
-            // TODO: soft delete? or hard delete? delete blob?
+            // This is a hard delete.
+            DatabaseSession.Execute(@"
+UPDATE Person SET PhotoId = 1 WHERE PhotoId = @PhotoId;
+UPDATE Show SET PhotoId = 1 WHERE PhotoId = @PhotoId;
+DELETE FROM PersonPhoto WHERE PhotoId = @PhotoId;
+DELETE FROM ShowPhoto WHERE PhotoId = @PhotoId;
+DELETE FROM Photo WHERE PhotoId = @PhotoId;
+", new { PhotoId = id });
 
-            if (Request.IsAjaxRequest())
+            // TODO: delete blob
+
+            return new ViewModelResult(new HttpApiResult
             {
-                return Json("OK");
-            }
-            return Redirect("~");
+                HttpStatusCode = HttpStatusCode.OK,
+                Message = "Photo Deleted",
+            });
         }
     }
 }

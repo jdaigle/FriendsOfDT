@@ -9,7 +9,7 @@ using ExpressionHelper = Microsoft.Web.Mvc.Internal.ExpressionHelper;
 
 namespace FODT
 {
-    public class LegacyUrlFilter : FilterAttribute, IActionFilter
+    public class LegacyUrlFilter : IActionFilter
     {
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
