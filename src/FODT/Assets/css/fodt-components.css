@@ -237,6 +237,25 @@ fieldset[disabled] .twitter-typeahead .tt-input {
   margin: 0;
 }
 
+/* fancy little delete button */
+.delete-button-span-active {
+    color: #c9302c;
+    text-decoration: underline;
+}
+
+    .delete-button-span-active a {
+        color: #c9302c;
+    }
+
+.delete-button {
+    color: #d9534f;
+}
+
+    .delete-button:hover,
+    .delete-button:active {
+        color: #c9302c;
+    }
+
 /* media banner */
 ul.media-banner {
     margin-top: 15px;

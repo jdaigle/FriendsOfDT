@@ -187,6 +187,39 @@ namespace FODT.Controllers
             return this.RedirectToAction(x => x.GetPhotoDetail(id));
         }
 
+        [HttpPost]
+        [Route("{id}/tag/delete")]
+        public ActionResult DeleteTag(int id, int? personId = null, int? showId = null)
+        {
+            if (personId.HasValue)
+            {
+                // only delete the tag if the photo is not the Person's default photo
+                DatabaseSession.Execute(
+                    "DELETE FROM PersonPhoto WHERE PhotoId = @PhotoId AND PersonId = @PersonId AND NOT EXISTS (SELECT * FROM Person WHERE PhotoId = @PhotoId AND PersonId = @PersonId)"
+                    , new { PhotoId = id, PersonId = personId.Value });
+            }
+
+            if (showId.HasValue)
+            {
+                // only delete the tag if the photo is not the Show's default photo
+                DatabaseSession.Execute(
+                    "DELETE FROM ShowPhoto WHERE PhotoId = @PhotoId AND ShowId = @ShowId AND NOT EXISTS (SELECT * FROM Show WHERE PhotoId = @PhotoId AND ShowId = @ShowId)"
+                    , new { PhotoId = id, ShowId = showId.Value });
+            }
+
+            if (Request.IsAjaxRequest())
+            {
+                return Json("OK");
+            }
+
+            if (Request.UrlReferrer?.PathAndQuery.IsNullOrWhiteSpace() == true)
+            {
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+
+            return Redirect("~");
+        }
+
         [HttpGet, Route("{id}")]
         public ActionResult GetPhotoOriginal(int id)
         {

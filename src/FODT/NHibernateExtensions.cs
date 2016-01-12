@@ -22,5 +22,18 @@ namespace FODT
             }
             return conn.Query<T>(sql, param: (object)param, transaction: tran, buffered: buffered, commandTimeout: commandTimeout, commandType: commandType);
         }
+
+        public static int Execute(this ISession session, string sql, dynamic param = null, int? commandTimeout = null, CommandType? commandType = null)
+        {
+            IDbConnection conn;
+            IDbTransaction tran;
+            using (var command = session.Connection.CreateCommand())
+            {
+                session.Transaction.Enlist(command);
+                conn = command.Connection;
+                tran = command.Transaction;
+            }
+            return conn.Execute(sql, param: (object)param, transaction: tran, commandTimeout: commandTimeout, commandType: commandType);
+        }
     }
 }

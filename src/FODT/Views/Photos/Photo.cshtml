@@ -4,33 +4,43 @@
 </p>
 
 <div class="center-block" style="max-width: 400px;">
-
-    <div class="text-center">
+    <div>
         Uploaded on <strong>@Model.UploadDate</strong>.
+        @if (Model.CanAddTag)
+        {
+            <div class="pull-right">
+                <button class="btn btn-xs btn-primary js-edit-modal-link" data-url="@Model.AddTagURL">Tag Person/Show</button>
+                <button class="btn btn-xs btn-danger" data-url="@Model.AddTagURL">Delete</button>
+            </div>
+        }
+        <div class="clearfix"></div>
+    </div>
+    <div>
         @if (Model.RelatedShows.Any())
         {
-            <ul class="list-inline center-block" style="margin: 0;">
-                <li>From</li>
-                @foreach (var item in Model.RelatedShows)
-                {
-                    <li><strong><a href="@item.ShowLinkURL">@item.ShowTitle (@item.ShowYear)</a></strong></li>
-                }
-            </ul>
-        }
-        @if (Model.RelatedPeople.Any())
-        {
-            <ul class="list-inline center-block" style="margin: 0;">
-                <li>With</li>
-                @foreach (var item in Model.RelatedPeople)
-                {
-                    <li><strong><a href="@item.PersonLinkURL">@item.PersonFullname</a></strong></li>
-                }
-            </ul>
+            @:From @Model.Join(Model.RelatedShows,
+                @<span>
+                    <strong><a href="@item.ShowLinkURL">@item.ShowTitle (@item.ShowYear)</a></strong>
+                    @if (item.CanDelete)
+                    {
+                        <a class="delete-button small" href="@item.DeleteURL" title="Delete">❌</a>
+                    }
+                </span>
+                )
         }
     </div>
-
-    @if (Model.CanAddTag)
-    {
-        <button class="btn btn-xs btn-primary js-edit-modal-link" data-url="@Model.AddTagURL">Tag Person or Show</button>
-    }
+    <div>
+        @if (Model.RelatedPeople.Any())
+        {
+            @:With @Model.Join(Model.RelatedPeople,
+                @<span>
+                    <strong><a href="@item.PersonLinkURL">@item.PersonFullname</a></strong>
+                    @if (item.CanDelete)
+                    {
+                        <a class="delete-button small" href="@item.DeleteURL" title="Delete">❌</a>
+                    }
+                </span>
+                )
+        }
+    </div>
 </div>

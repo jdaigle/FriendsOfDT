@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 using FODT.Controllers;
 using FODT.Models;
 using FODT.Models.IMDT;
@@ -47,6 +49,20 @@ namespace FODT.Views.Photos
             public string DeleteURL { get; set; }
         }
 
+        public MvcHtmlString Join<T>(IEnumerable<T> collection, Func<T, HelperResult> template)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < collection.Count(); i++)
+            {
+                sb.Append(template.Invoke(collection.ElementAt(i)));
+                if (i != collection.Count() - 1)
+                {
+                    sb.Append(", ");
+                }
+            }
+            return MvcHtmlString.Create(sb.ToString());
+        }
+
         public PhotoViewModel(Photo photo, ISession databaseSession, UrlHelper url)
         {
             var relatedPeople = databaseSession.Query<PersonPhoto>().Where(x => x.Photo == photo).Fetch(x => x.Person).ToList();
@@ -81,6 +97,9 @@ namespace FODT.Views.Photos
                 ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
                 ShowTitle = x.Show.DisplayTitle,
+
+                CanDelete = true && x.Photo != x.Show.Photo,
+                DeleteURL = url.GetURL<PhotosController>(c => c.DeleteTag(x.Photo.PhotoId, null, x.Show.ShowId)),
             }).ToList();
 
             this.RelatedPeople = relatedPeople.Select(x => new PhotoViewModel.RelatedPerson
@@ -88,6 +107,9 @@ namespace FODT.Views.Photos
                 PersonLinkURL = url.Action<PersonController>(c => c.ListPersonPhotos(x.Person.PersonId, x.Photo.PhotoId)),
                 PersonLastName = x.Person.LastName,
                 PersonFullname = x.Person.Fullname,
+
+                CanDelete = true && x.Photo != x.Person.Photo,
+                DeleteURL = url.GetURL<PhotosController>(c => c.DeleteTag(x.Photo.PhotoId, x.Person.PersonId, null)),
             }).ToList();
         }
     }
