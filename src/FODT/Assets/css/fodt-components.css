@@ -256,6 +256,27 @@ fieldset[disabled] .twitter-typeahead .tt-input {
         color: #c9302c;
     }
 
+/* top "loading..." spinner */
+.ajax_spinner {
+    display: none;
+    background-color: #fffa03;
+    border-right: 1px solid #ffe200;
+    border-left: 1px solid #ffe200;
+    border-bottom: 1px solid #ffe200;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    font-weight: bold;
+    z-index: 1001;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 175px;
+    margin-left: -175px;
+    height: 30px;
+    text-align: center;
+    padding-top: 4px;
+}
+
 /* media banner */
 ul.media-banner {
     margin-top: 15px;

@@ -22,6 +22,20 @@ fodt.postLink = function (event, params) {
     return false;
 }
 
+// global ajax event handlers
+$(document)
+    .bind('ajaxStart', function () {
+        $('#ajax_spinner').fadeIn(100);
+    })
+    .bind('ajaxStop', function () {
+        $('#ajax_spinner').fadeOut(500);
+    })
+    .bind("ajaxSuccess", function (data, textStatus, jqXHR) {
+        // TODO check to see if data is a JSON object with a successs message or a redirect
+    })
+    .bind("ajaxError", function (jqXHR, textStatus, errorThrown) {
+        // TODO global ajax error handler
+    });
 
 $(function () {
 
