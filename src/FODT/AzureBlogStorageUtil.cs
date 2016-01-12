@@ -112,6 +112,20 @@ namespace FODT
             using (request.GetResponse()) { }
         }
 
+        public static void DeleteBlob(string url, string accountName, string accountKey)
+        {
+            var request = (HttpWebRequest)HttpWebRequest.Create(url);
+            request.Method = "DELETE";
+            request.Timeout = 5000;
+
+            request.Headers.Add("x-ms-blob-type", "BlockBlob");
+            request.Headers.Add("x-ms-version", "2015-02-21");
+
+            SignRequest(request, accountName, accountKey);
+
+            using (request.GetResponse()) { }
+        }
+
         public static void SignRequest(HttpWebRequest request, string accountName, string accountKey)
         {
             if (!request.Headers.AllKeys.Contains("x-ms-date", StringComparer.Ordinal))
