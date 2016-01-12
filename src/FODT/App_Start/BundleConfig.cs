@@ -19,7 +19,7 @@ namespace FODT
 
 
             bundles.Add(new ScriptBundle("~/Assets/js/site").Include(
-                        "~/assets/js/lib/jquery-2.1.3.min.js"
+                        "~/assets/js/lib/jquery-2.2.0.min.js"
                         , "~/assets/js/lib/bootstrap.js"
                         , "~/assets/js/lib/typeahead.jquery.js"
                         , "~/assets/js/lib/jsrender.js"
