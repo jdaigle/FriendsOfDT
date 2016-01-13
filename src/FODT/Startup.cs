@@ -23,6 +23,7 @@ namespace FODT
             RegisterRoutes(RouteTable.Routes);
             RegisterBundles(BundleTable.Bundles);
 
+            ViewEngines.Engines.Clear();
             ViewEngines.Engines.Insert(0, new ViewModelSpecifiedViewEngine());
 
             SetupMiniProfiler();
