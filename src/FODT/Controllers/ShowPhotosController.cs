@@ -49,7 +49,7 @@ namespace FODT.Controllers
                 {
                     return Redirect(this.GetURL(c => c.ListShowPhotos(showId, null)));
                 }
-                viewModel.CurrentPhotoViewModel = new PhotoViewModel(photo.Photo, this.GetURL(c => c.ListShowPhotos(showId, photoId.Value)), DatabaseSession, Url);
+                viewModel.CurrentPhotoViewModel = new PhotoViewModel(photo.Photo, this.GetURL(c => c.ListShowPhotos(showId, photoId.Value)), this);
             }
 
             return View(viewModel);

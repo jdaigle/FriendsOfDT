@@ -280,7 +280,7 @@ namespace FODT.Controllers
                 viewModel.NextPhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(nextId.Value));
             }
 
-            viewModel.PhotoViewModel = new PhotoViewModel(DatabaseSession.Get<Photo>(id), "", DatabaseSession, Url);
+            viewModel.PhotoViewModel = new PhotoViewModel(DatabaseSession.Get<Photo>(id), "", this);
             return View(viewModel);
         }
 

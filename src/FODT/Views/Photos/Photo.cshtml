@@ -6,11 +6,11 @@
 <div class="center-block" style="max-width: 400px;">
     <div>
         Uploaded on <strong>@Model.UploadDate</strong>.
-        @if (Model.CanAddTag)
+        @if (Model.ShowAddTagControl)
         {
             <div class="pull-right">
                 <button class="btn btn-xs btn-primary js-edit-modal-link" data-url="@Model.AddTagPartialURL">Tag Person/Show</button>
-                @if (Model.CanDeletePhoto)
+                @if (Model.ShowDeletePhotoControl)
                 {
                 <button class="btn btn-xs btn-danger js-delete-button" data-url="@Model.DeletePhotoURL" data-delete-confirmation-text="Are you sure you want to delete this photo?">Delete</button>
                 }
@@ -24,7 +24,7 @@
             @:From @Model.Join(Model.RelatedShows,
                 @<span>
                     <strong><a href="@item.ShowLinkURL">@item.ShowTitle (@item.ShowYear)</a></strong>
-                    @if (item.CanDelete)
+                    @if (item.ShowDeleteControl)
                     {
                         <a class="js-delete-button delete-button small" href="@item.DeleteURL" title="Delete" data-delete-confirmation-text="Are you sure you want to delete this tag?">❌</a>
                     }
@@ -38,7 +38,7 @@
             @:With @Model.Join(Model.RelatedPeople,
                 @<span>
                     <strong><a href="@item.PersonLinkURL">@item.PersonFullname</a></strong>
-                    @if (item.CanDelete)
+                    @if (item.ShowDeleteControl)
                     {
                         <a class="js-delete-button delete-button small" href="@item.DeleteURL" title="Delete" data-delete-confirmation-text="Are you sure you want to delete this tag?">❌</a>
                     }

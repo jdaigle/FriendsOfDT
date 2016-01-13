@@ -9,13 +9,13 @@
     <div class="col-sm-6">
         @if (Model.ShowParentHeader)
         {
-            <h1>Photos of <a href="@Model.ParentLinkURL">@Model.ParentName</a></h1>
+            <h4><a href="@Model.ParentLinkURL">@Model.ParentName</a> &raquo; @Model.Photos.Count Photos</h4>
             <hr />
         }
         @if (Model.Photos.Count == 0)
         {
-            <div class="text-center">
-                <h4>No photos found!</h4>
+            <div>
+                <h4>No photos!</h4>
             </div>
         }
         @if (Model.Photos.Any())

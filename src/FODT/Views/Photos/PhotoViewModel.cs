@@ -9,6 +9,7 @@ using System.Web.WebPages;
 using FODT.Controllers;
 using FODT.Models;
 using FODT.Models.IMDT;
+using FODT.Security;
 using NHibernate;
 using NHibernate.Linq;
 
@@ -22,10 +23,10 @@ namespace FODT.Views.Photos
         public List<RelatedShow> RelatedShows { get; set; }
         public List<RelatedPerson> RelatedPeople { get; set; }
 
-        public bool CanDeletePhoto { get; set; }
+        public bool ShowDeletePhotoControl { get; set; }
         public string DeletePhotoURL { get; set; }
 
-        public bool CanAddTag { get; set; }
+        public bool ShowAddTagControl { get; set; }
         public string AddTagPartialURL { get; set; }
 
         public class RelatedShow
@@ -35,7 +36,7 @@ namespace FODT.Views.Photos
             public Quarter ShowQuarter { get; set; }
             public short ShowYear { get; set; }
 
-            public bool CanDelete { get; set; }
+            public bool ShowDeleteControl { get; set; }
             public string DeleteURL { get; set; }
         }
 
@@ -45,7 +46,7 @@ namespace FODT.Views.Photos
             public string PersonFullname { get; set; }
             public string PersonLastName { get; set; }
 
-            public bool CanDelete { get; set; }
+            public bool ShowDeleteControl { get; set; }
             public string DeleteURL { get; set; }
         }
 
@@ -63,10 +64,12 @@ namespace FODT.Views.Photos
             return MvcHtmlString.Create(sb.ToString());
         }
 
-        public PhotoViewModel(Photo photo, string basePhotoURL, ISession databaseSession, UrlHelper url)
+        public PhotoViewModel(Photo photo, string basePhotoURL, BaseController controller)
         {
-            var relatedPeople = databaseSession.Query<PersonPhoto>().Where(x => x.Photo == photo).Fetch(x => x.Person).ToList();
-            var relatedshows = databaseSession.Query<ShowPhoto>().Where(x => x.Photo == photo).Fetch(x => x.Show).ToList();
+            var canEditPhoto = controller.ControllerContext.CanEditPhoto(photo);
+
+            var relatedPeople = controller.DatabaseSession.Query<PersonPhoto>().Where(x => x.Photo == photo).Fetch(x => x.Person).ToList();
+            var relatedshows = controller.DatabaseSession.Query<ShowPhoto>().Where(x => x.Photo == photo).Fetch(x => x.Show).ToList();
 
             var uploadDateTime = photo.InsertedDateTime;
             if (uploadDateTime == DateTime.MinValue)
@@ -77,38 +80,38 @@ namespace FODT.Views.Photos
 
             if (uploadDateTime > DateTime.MinValue)
             {
-                this.UploadDate = uploadDateTime.ToString("MMMM dd, yyyy", CultureInfo.InvariantCulture);
+                UploadDate = uploadDateTime.ToString("MMMM dd, yyyy", CultureInfo.InvariantCulture);
             } else
             {
-                this.UploadDate = "Unknown Date";
+                UploadDate = "Unknown Date";
             }
 
-            this.PhotoURL = photo.GetURL();
+            PhotoURL = photo.GetURL();
 
-            this.CanDeletePhoto = true;
-            this.DeletePhotoURL = basePhotoURL + "/delete";
+            ShowDeletePhotoControl = canEditPhoto;
+            DeletePhotoURL = basePhotoURL + "/delete";
 
-            this.CanAddTag = true;
-            this.AddTagPartialURL = basePhotoURL + "/tag";
+            ShowAddTagControl = canEditPhoto;
+            AddTagPartialURL = basePhotoURL + "/tag";
 
             this.RelatedShows = relatedshows.Select(x => new PhotoViewModel.RelatedShow
             {
-                ShowLinkURL = url.Action<ShowPhotosController>(c => c.ListShowPhotos(x.Show.ShowId, x.Photo.PhotoId)),
+                ShowLinkURL = controller.Url.Action<ShowPhotosController>(c => c.ListShowPhotos(x.Show.ShowId, x.Photo.PhotoId)),
                 ShowQuarter = x.Show.Quarter,
                 ShowYear = x.Show.Year,
                 ShowTitle = x.Show.DisplayTitle,
 
-                CanDelete = true && x.Photo != x.Show.Photo,
+                ShowDeleteControl = canEditPhoto && x.Photo != x.Show.Photo,
                 DeleteURL = basePhotoURL + $"/tag/delete?showId={x.Show.ShowId}",
             }).ToList();
 
             this.RelatedPeople = relatedPeople.Select(x => new PhotoViewModel.RelatedPerson
             {
-                PersonLinkURL = url.Action<PersonPhotosController>(c => c.ListPersonPhotos(x.Person.PersonId, x.Photo.PhotoId)),
+                PersonLinkURL = controller.Url.Action<PersonPhotosController>(c => c.ListPersonPhotos(x.Person.PersonId, x.Photo.PhotoId)),
                 PersonLastName = x.Person.LastName,
                 PersonFullname = x.Person.Fullname,
 
-                CanDelete = true && x.Photo != x.Person.Photo,
+                ShowDeleteControl = canEditPhoto && x.Photo != x.Person.Photo,
                 DeleteURL = basePhotoURL + $"/tag/delete?personId={x.Person.PersonId}",
             }).ToList();
         }
