@@ -232,7 +232,7 @@
     <Compile Include="Views\IUserEditableViewModel.cs" />
     <Compile Include="Views\Login\LoginViewModel.cs" />
     <Compile Include="Views\Photos\PhotoDetailViewModel.cs" />
-    <Compile Include="Views\Photos\IndexViewModel.cs" />
+    <Compile Include="Views\Photos\ListPhotosViewModel.cs" />
     <Compile Include="Views\Photos\PhotoListViewModel.cs" />
     <Compile Include="Views\Photos\TagPhotoViewModel.cs" />
     <Compile Include="Views\Photos\UploadViewModel.cs" />
@@ -328,7 +328,7 @@
     <Content Include="Views\Toaster\Hunt.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Photos\Index.cshtml" />
+    <Content Include="Views\Photos\ListPhotos.cshtml" />
     <Content Include="Views\Photos\PhotoDetail.cshtml" />
     <Content Include="Views\Photos\Photo.cshtml" />
     <Content Include="Views\Shows\SortByYear.cshtml" />

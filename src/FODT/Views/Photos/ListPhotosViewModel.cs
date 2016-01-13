@@ -5,7 +5,7 @@ using System.Web;
 
 namespace FODT.Views.Photos
 {
-    public class IndexViewModel
+    public class ListPhotosViewModel
     {
         public List<Photo> RecentlyUploaded { get; set; }
         public List<Photo> RandomPic { get; set; }

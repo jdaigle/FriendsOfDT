@@ -13,7 +13,7 @@ namespace FODT.Controllers
     public class HomeController : BaseController
     {
         [HttpGet, Route("")]
-        public ActionResult Index()
+        public ActionResult DefaultAction()
         {
             return this.RedirectToAction(c => c.Welcome());
         }

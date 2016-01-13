@@ -291,7 +291,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("")]
-        public ActionResult Index()
+        public ActionResult List()
         {
             var photos = DatabaseSession
                 .Query<Photo>()
@@ -309,18 +309,18 @@ namespace FODT.Controllers
                 randomSet.Add(item);
             }
 
-            var viewModel = new IndexViewModel();
-            viewModel.RecentlyUploaded = recentlyUploaded.Select(x => new IndexViewModel.Photo
+            var viewModel = new ListPhotosViewModel();
+            viewModel.RecentlyUploaded = recentlyUploaded.Select(x => new ListPhotosViewModel.Photo
             {
                 PhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(x.PhotoId)),
                 PhotoThumbnailURL = x.GetThumbnailURL(),
             }).ToList();
-            viewModel.RandomPic = randomSet.Select(x => new IndexViewModel.Photo
+            viewModel.RandomPic = randomSet.Select(x => new ListPhotosViewModel.Photo
             {
                 PhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(x.PhotoId)),
                 PhotoThumbnailURL = x.GetThumbnailURL()
             }).ToList();
-            return View(viewModel);
+            return new ViewModelResult(viewModel);
         }
 
         public static ActionResult Delete(BaseController controller, int id)

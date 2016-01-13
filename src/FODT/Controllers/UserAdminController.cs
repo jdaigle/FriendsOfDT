@@ -17,12 +17,6 @@ namespace FODT.Controllers
     public class UserAdminController : BaseController
     {
         [Route("Users")]
-        public ActionResult Index()
-        {
-            return this.RedirectToAction(c => c.List());
-        }
-
-        [Route("Users/List")]
         public ActionResult List()
         {
             var users = DatabaseSession.Query<UserAccount>().ToList();

@@ -19,7 +19,7 @@ namespace FODT.Controllers
     public class LoginController : BaseController
     {
         [HttpGet, Route("~/Login")]
-        public ActionResult Index()
+        public ActionResult Login()
         {
             return View(new LoginViewModel()
             {
@@ -46,7 +46,7 @@ namespace FODT.Controllers
         {
             if (code.IsNullOrWhiteSpace())
             {
-                return this.RedirectToAction(c => c.Index());
+                return this.RedirectToAction(c => c.Login());
             }
 
             // TODO, decrypt redirectURL
