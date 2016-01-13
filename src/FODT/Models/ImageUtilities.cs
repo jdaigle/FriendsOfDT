@@ -1,16 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Web;
 
 namespace FODT.Models
 {
-    public class ImageUtilities
+    public static class ImageUtilities
     {
+        static ImageUtilities()
+        {
+            jpegEncoder = ImageCodecInfo.GetImageDecoders().First(x => x.FormatID == ImageFormat.Jpeg.Guid);
+            jpegEncoderHighQualityParameters = new EncoderParameters(1);
+            jpegEncoderHighQualityParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
+        }
+
+        private static readonly ImageCodecInfo jpegEncoder;
+        private static readonly EncoderParameters jpegEncoderHighQualityParameters;
+
         public static Bitmap LoadBitmap(byte[] image)
         {
             using (var s = new MemoryStream(image))
@@ -26,7 +34,7 @@ namespace FODT.Models
         {
             using (var s = new MemoryStream())
             {
-                source.Save(s, format);
+                source.Save(s, jpegEncoder, jpegEncoderHighQualityParameters);
                 return s.ToArray();
             }
         }
