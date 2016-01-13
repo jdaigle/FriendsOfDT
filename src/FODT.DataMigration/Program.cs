@@ -28,6 +28,7 @@ namespace FODT.DataMigration
         private static string azureStorageAccountKey = "";
 
         private static bool doDatabaseImport = true;
+        private static bool doFixLargePhotoFlag = false;
         private static bool doBlobUpload = false;
 
         private static readonly Encoding blobEncoding = Encoding.GetEncoding(1252);
@@ -35,6 +36,7 @@ namespace FODT.DataMigration
         public static void Main(string[] args)
         {
             log4net.Config.XmlConfigurator.Configure();
+            Log("Starting Up...");
 
             azureStorageAccountName = ConfigurationManager.AppSettings["azure-storage-account-name"];
             azureStorageAccountKey = ConfigurationManager.AppSettings["azure-storage-account-key"];
@@ -44,6 +46,7 @@ namespace FODT.DataMigration
             var cfg = DatabaseBootstrapper.Bootstrap(connectionString);
             sessionFactory = cfg.BuildSessionFactory();
 
+            Log("Opening Connection to Old FODT DB");
             oldDatabaseConnection = new MySql.Data.MySqlClient.MySqlConnection(ConfigurationManager.AppSettings["db_old_fodt"]);
             oldDatabaseConnection.Open();
 
@@ -61,6 +64,10 @@ namespace FODT.DataMigration
                 ImportCrew();
                 ImportEC();
                 FixInsertedDateTimeColumns();
+            }
+            if (doFixLargePhotoFlag)
+            {
+                FixLargePhotoFlag();
             }
             if (doBlobUpload)
             {
@@ -267,6 +274,48 @@ DELETE FROM AwardType;
             }
         }
 
+        private static void FixLargePhotoFlag()
+        {
+            var rootPhotoPath = @"http://imdt.friendsofdt.org/";
+
+            var media_items = oldDatabaseConnection.Query("SELECT * FROM media_items").ToList();
+            Log("Checking " + media_items.Count + " Media Blobs For Large Images");
+
+            var count = 0;
+            foreach (var _row in media_items)
+            {
+                if (_row.guid == null)
+                {
+                    throw new InvalidOperationException("Media Item is Missing GUID. Row needs to be updated before Importing");
+                }
+                var photoID = (int)_row.ID;
+
+                byte[] original = null;
+                original = AzureBlogStorageUtil.DownloadPublicBlob(rootPhotoPath + _row.item.ToString().Replace("./", ""));
+
+                if (original == null)
+                {
+                    Log("Missing File!" + _row.item.ToString());
+                    continue;
+                }
+
+                using (var fullSize = ImageUtilities.LoadBitmap(original))
+                {
+                    if (fullSize.Width > 600 || fullSize.Height > 800)
+                    {
+                        // original image is too large for general display
+                        using (var session = sessionFactory.OpenSession())
+                        {
+                            session.Execute("UPDATE dbo.Photo SET LargeFileIsSameAsOriginal = 0 WHERE PhotoId = @PhotoId", new { PhotoId = photoID });
+                        }
+                        count++;
+                    }
+                }
+
+            }
+            Log("Fixed " + count + " Large Photos");
+        }
+
         private static void ImportPhotoBlobs()
         {
             var rootPhotoPath = @"http://imdt.friendsofdt.org/";
@@ -302,6 +351,14 @@ DELETE FROM AwardType;
                 PutBlob(entity.GetOriginalFileName(), original);
                 PutBlob(entity.GetThumbnailFileName(), thumbnail);
                 PutBlob(entity.GetTinyFileName(), tiny);
+
+                if (fullSize.Width > 600 || fullSize.Height > 800)
+                {
+                    entity.LargeFileIsSameAsOriginal = false;
+                    // original image is too large for general display
+                    var large = ImageUtilities.GetBytes(ImageUtilities.Resize(fullSize, 600, 800), ImageFormat.Jpeg);
+                    PutBlob(entity.GetLargeFileName(), large);
+                }
 
                 count++;
                 if (count % 100 == 0)
