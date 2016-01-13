@@ -29,9 +29,9 @@ namespace FODT.Controllers
             var viewModel = new PersonDetailsViewModel();
 
             viewModel.EditLinkURL = this.GetURL(c => c.EditPerson(personId));
-            viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
+            viewModel.PhotoUploadLinkURL = this.GetURL<PersonPhotosController>(c => c.Upload(personId));
             viewModel.PhotoLinkURL = this.GetURL<PersonPhotosController>(c => c.ListPersonPhotos(personId, person.Photo.PhotoId));
-            viewModel.PhotoThumbnailURL = person.Photo.GetThumbnailURL();
+            viewModel.PhotoThumbnailURL = person.Photo.GetThumbnailFileURL();
             viewModel.PhotoListLinkURL = this.GetURL<PersonPhotosController>(c => c.ListPersonPhotos(personId, null));
 
             viewModel.FullName = person.Fullname;
@@ -80,7 +80,7 @@ namespace FODT.Controllers
                 .Select(x => new PersonDetailsViewModel.NewPhotosViewModel
                 {
                     PhotoLinkURL = this.GetURL<PersonPhotosController>(c => c.ListPersonPhotos(personId, x.Photo.PhotoId)),
-                    PhotoTinyURL = x.Photo.GetTinyURL(),
+                    PhotoTinyURL = x.Photo.GetTinyFileURL(),
                 })
                 .Take(4)
                 .ToList();
@@ -152,8 +152,8 @@ namespace FODT.Controllers
             viewModel.Photos = photos.OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId).Select(x => new EditPersonViewModel.Photo
             {
                 PhotoItemId = x.Photo.PhotoId,
-                PhotoTinyURL = x.Photo.GetTinyURL(),
-                PhotoThumbnailURL = x.Photo.GetThumbnailURL(),
+                PhotoTinyURL = x.Photo.GetTinyFileURL(),
+                PhotoThumbnailURL = x.Photo.GetThumbnailFileURL(),
             }).ToList();
 
             return PartialView(viewModel);

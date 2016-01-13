@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Configuration;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -8,11 +9,6 @@ using FODT.Models;
 using FODT.Models.IMDT;
 using FODT.Views.Photos;
 using NHibernate.Linq;
-using FODT.Database;
-using System.Configuration;
-using Microsoft.Web.Mvc;
-using System.Net;
-using NHibernate;
 
 namespace FODT.Controllers
 {
@@ -28,111 +24,72 @@ namespace FODT.Controllers
             azureStorageAccountKey = ConfigurationManager.AppSettings["azure-storage-account-key"];
         }
 
-
-        [HttpGet, Route("Upload")]
-        public ActionResult Upload()
+        public static Photo Upload(BaseController controller, UploadPOSTParameters param)
         {
-            var people = DatabaseSession.Query<Person>().ToList();
-            var shows = DatabaseSession.Query<Show>().ToList();
-
-            var viewModel = new UploadViewModel();
-            viewModel.People = people.Select(x => new UploadViewModel.Person
-            {
-                PersonId = x.PersonId,
-                PersonLastName = x.LastName,
-                PersonFirstName = x.FirstName,
-                PersonFullname = x.Fullname,
-            }).ToList();
-            viewModel.Shows = shows.Select(x => new UploadViewModel.Show
-            {
-                ShowId = x.ShowId,
-                ShowQuarter = x.Quarter,
-                ShowYear = x.Year,
-                ShowTitle = x.DisplayTitle,
-            }).ToList();
-
-            return View(viewModel);
-        }
-
-        [HttpPost, Route("Upload")]
-        public ActionResult Upload(UploadPOSTParameters param)
-        {
-            if (!param.PersonId.HasValue && !param.ShowId.HasValue)
-            {
-                throw new InvalidOperationException("PersonId or ShowId must have a value");
-            }
-
-            if (param.UploadedFile == null || param.UploadedFile.ContentLength == 0)
-            {
-                throw new InvalidOperationException("Missing File");
-            }
-
-            if (param.UploadedFile.ContentLength > 1024d * 1024d * 1.5d)
-            {
-                throw new InvalidOperationException("File too big: " + param.UploadedFile.ContentLength);
-            }
-
             var photo = new Photo();
-            DatabaseSession.Save(photo);
-            DatabaseSession.Flush(); // to get the ID
+            controller.DatabaseSession.Save(photo);
+            controller.DatabaseSession.Flush(); // to get the ID
 
             var unique_id = photo.PhotoId.ToString();
 
-            var original_buffer = new byte[param.UploadedFile.ContentLength];
-            param.UploadedFile.InputStream.Read(original_buffer, 0, param.UploadedFile.ContentLength);
+            var original_buffer = new byte[param.Photo.ContentLength];
+            param.Photo.InputStream.Read(original_buffer, 0, param.Photo.ContentLength);
 
-            AzureBlogStorageUtil.PutBlob(photo.GetURL()
+            using (var originalBitmap = ImageUtilities.LoadBitmap(original_buffer))
+            {
+                AzureBlogStorageUtil.PutBlob(photo.GetOriginalFileURL()
                 , azureStorageAccountName, azureStorageAccountKey
-                , original_buffer, "image/jpeg");
+                , ImageUtilities.GetBytes(originalBitmap, ImageFormat.Jpeg), "image/jpeg");
 
-            using (var fullSize = ImageUtilities.LoadBitmap(original_buffer))
-            {
-                using (var thumbnail = ImageUtilities.Resize(fullSize, 240, 240))
+                if (originalBitmap.Width > 600 || originalBitmap.Height > 800)
                 {
-                    AzureBlogStorageUtil.PutBlob(photo.GetThumbnailURL()
-                        , azureStorageAccountName, azureStorageAccountKey
-                        , ImageUtilities.GetBytes(thumbnail, System.Drawing.Imaging.ImageFormat.Jpeg), "image/jpeg");
+                    // original image is too large for general display
+                    photo.LargeFileIsSameAsOriginal = false;
+                    using (var largeBitmap = ImageUtilities.Resize(originalBitmap, 600, 800))
+                    {
+                        AzureBlogStorageUtil.PutBlob(photo.GetLargeFileURL()
+                            , azureStorageAccountName, azureStorageAccountKey
+                            , ImageUtilities.GetBytes(largeBitmap, ImageFormat.Jpeg), "image/jpeg");
+                    }
                 }
-                using (var tiny = ImageUtilities.Resize(fullSize, 50, 50))
+
+                using (var thumbnailBitmap = ImageUtilities.Resize(originalBitmap, 240, 240))
                 {
-                    AzureBlogStorageUtil.PutBlob(photo.GetTinyURL()
+                    AzureBlogStorageUtil.PutBlob(photo.GetThumbnailFileURL()
                         , azureStorageAccountName, azureStorageAccountKey
-                        , ImageUtilities.GetBytes(tiny, System.Drawing.Imaging.ImageFormat.Jpeg), "image/jpeg");
+                        , ImageUtilities.GetBytes(thumbnailBitmap, ImageFormat.Jpeg), "image/jpeg");
+                }
+                using (var tinyBitmap = ImageUtilities.Resize(originalBitmap, 50, 50))
+                {
+                    AzureBlogStorageUtil.PutBlob(photo.GetTinyFileURL()
+                        , azureStorageAccountName, azureStorageAccountKey
+                        , ImageUtilities.GetBytes(tinyBitmap, ImageFormat.Jpeg), "image/jpeg");
                 }
             }
 
-            PersonPhoto personPhoto = null;
-            if (param.PersonId.HasValue)
-            {
-                personPhoto = new PersonPhoto();
-                personPhoto.Person = DatabaseSession.Load<Person>(param.PersonId.Value);
-                personPhoto.Photo = photo;
-                personPhoto.InsertedDateTime = DateTime.UtcNow;
-                DatabaseSession.Save(personPhoto);
-            }
-
-            ShowPhoto showPhoto = null;
-            if (param.ShowId.HasValue)
-            {
-                showPhoto = new ShowPhoto();
-                showPhoto.Show = DatabaseSession.Load<Show>(param.ShowId.Value);
-                showPhoto.Photo = photo;
-                showPhoto.InsertedDateTime = DateTime.UtcNow;
-                DatabaseSession.Save(showPhoto);
-            }
-
-            DatabaseSession.CommitTransaction();
-
-            return showPhoto != null
-                ? this.RedirectToAction<ShowPhotosController>(x => x.ListShowPhotos(showPhoto.Show.ShowId, showPhoto.Photo.PhotoId))
-                : this.RedirectToAction<PersonPhotosController>(x => x.ListPersonPhotos(personPhoto.Person.PersonId, personPhoto.Photo.PhotoId));
+            return photo;
         }
 
         public class UploadPOSTParameters
         {
             public int? PersonId { get; set; }
             public int? ShowId { get; set; }
-            public HttpPostedFileBase UploadedFile { get; set; }
+            public HttpPostedFileBase Photo { get; set; }
+
+            public ActionResult Validate()
+            {
+                if (Photo == null || Photo.ContentLength == 0)
+                {
+                    return new HttpBadRequestResult("Missing File");
+                }
+
+                if (Photo.ContentLength > 1024d * 1024d * 10d)
+                {
+                    return new HttpBadRequestResult("File too big: " + Photo.ContentLength);
+                }
+
+                return null;
+            }
         }
 
         public static ActionResult TagPartial(BaseController controller, int id, string postURL)
@@ -214,7 +171,18 @@ namespace FODT.Controllers
             return null;
         }
 
-        [HttpGet, Route("{id}")]
+        [HttpGet, Route("{id}"), Route("{id}/large")]
+        public ActionResult GetPhotoLarge(int id)
+        {
+            var photo = DatabaseSession.Get<Photo>(id);
+            if (photo == null)
+            {
+                return new HttpNotFoundResult();
+            }
+            return new RedirectResult(photo.GetLargeFileURL());
+        }
+
+        [HttpGet, Route("{id}/original")]
         public ActionResult GetPhotoOriginal(int id)
         {
             var photo = DatabaseSession.Get<Photo>(id);
@@ -222,7 +190,7 @@ namespace FODT.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            return new RedirectResult(photo.GetURL());
+            return new RedirectResult(photo.GetOriginalFileURL());
         }
 
         [HttpGet, Route("{id}/tiny")]
@@ -233,7 +201,7 @@ namespace FODT.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            return new RedirectResult(photo.GetTinyURL());
+            return new RedirectResult(photo.GetTinyFileURL());
         }
 
         [HttpGet, Route("{id}/thumbnail")]
@@ -244,7 +212,7 @@ namespace FODT.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            return new RedirectResult(photo.GetThumbnailURL());
+            return new RedirectResult(photo.GetThumbnailFileURL());
         }
 
         [HttpGet, Route("{id}/detail")]
@@ -266,7 +234,7 @@ namespace FODT.Controllers
 
             var viewModel = new PhotoDetailViewModel();
 
-            viewModel.PhotoUploadLinkURL = this.GetURL(c => c.Upload());
+            viewModel.PhotoUploadLinkURL = "";
             viewModel.PreviousPhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(id));
             viewModel.NextPhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(id));
             if (previousId.HasValue)
@@ -313,12 +281,12 @@ namespace FODT.Controllers
             viewModel.RecentlyUploaded = recentlyUploaded.Select(x => new ListPhotosViewModel.Photo
             {
                 PhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(x.PhotoId)),
-                PhotoThumbnailURL = x.GetThumbnailURL(),
+                PhotoThumbnailURL = x.GetThumbnailFileURL(),
             }).ToList();
             viewModel.RandomPic = randomSet.Select(x => new ListPhotosViewModel.Photo
             {
                 PhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(x.PhotoId)),
-                PhotoThumbnailURL = x.GetThumbnailURL()
+                PhotoThumbnailURL = x.GetThumbnailFileURL()
             }).ToList();
             return new ViewModelResult(viewModel);
         }

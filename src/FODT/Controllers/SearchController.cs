@@ -42,7 +42,7 @@ namespace FODT.Controllers
                     Name = x.Title,
                     Year = x.Year.ToString(),
                     SortField = x.Title,
-                    ImageUrl = x.Photo.GetTinyURL(),
+                    ImageUrl = x.Photo.GetTinyFileURL(),
                     LinkUrl = Url.Action<ShowController>(c => c.ShowDetails(x.ShowId)),
                 }));
             }
@@ -62,7 +62,7 @@ namespace FODT.Controllers
                 {
                     Name = x.Fullname,
                     SortField = x.LastName,
-                    ImageUrl = x.Photo.GetTinyURL(),
+                    ImageUrl = x.Photo.GetTinyFileURL(),
                     LinkUrl = Url.Action<PersonController>(c => c.PersonDetails(x.PersonId)),
                 }));
             }

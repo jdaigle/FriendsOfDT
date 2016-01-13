@@ -40,27 +40,27 @@ namespace FODT
             return GetUrlImpl(urlHelper, action, arg1);
         }
 
-        public static string Action<T1, T2>(this UrlHelper urlHelper, Func<T1, T2, ActionResult> action, T1 arg1, T2 arg2)
+        public static string GetUrl<T1, T2>(this UrlHelper urlHelper, Func<T1, T2, ActionResult> action, T1 arg1, T2 arg2)
         {
             return GetUrlImpl(urlHelper, action, arg1, arg2);
         }
 
-        public static string Action<T1, T2, T3>(this UrlHelper urlHelper, Func<T1, T2, T3, ActionResult> action, T1 arg1, T2 arg2, T3 arg3)
+        public static string GetUrl<T1, T2, T3>(this UrlHelper urlHelper, Func<T1, T2, T3, ActionResult> action, T1 arg1, T2 arg2, T3 arg3)
         {
             return GetUrlImpl(urlHelper, action, arg1, arg2, arg3);
         }
 
-        public static string Action<T1, T2, T3, T4>(this UrlHelper urlHelper, Func<T1, T2, T3, T4, ActionResult> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        public static string GetUrl<T1, T2, T3, T4>(this UrlHelper urlHelper, Func<T1, T2, T3, T4, ActionResult> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
             return GetUrlImpl(urlHelper, action, arg1, arg2, arg3, arg4);
         }
 
-        public static string Action<T1, T2, T3, T4, T5>(this UrlHelper urlHelper, Func<T1, T2, T3, T4, T5, ActionResult> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        public static string GetUrl<T1, T2, T3, T4, T5>(this UrlHelper urlHelper, Func<T1, T2, T3, T4, T5, ActionResult> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
             return GetUrlImpl(urlHelper, action, arg1, arg2, arg3, arg4, arg5);
         }
 
-        public static string Action<T1, T2, T3, T4, T5, T6>(this UrlHelper urlHelper, Func<T1, T2, T3, T4, T5, T6, ActionResult> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+        public static string GetUrl<T1, T2, T3, T4, T5, T6>(this UrlHelper urlHelper, Func<T1, T2, T3, T4, T5, T6, ActionResult> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
             return GetUrlImpl(urlHelper, action, arg1, arg2, arg3, arg4, arg5, arg6);
         }

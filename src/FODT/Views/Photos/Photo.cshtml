@@ -1,6 +1,7 @@
 ﻿@model FODT.Views.Photos.PhotoViewModel
-<p>
-    <a href="@Model.PhotoURL" target="_blank"><img src="@Model.PhotoURL" class="img-responsive center-block img-thumbnail" /></a>
+<p class="text-center">
+    <a href="@Model.OriginalPhotoURL" target="_blank"><img src="@Model.PhotoURL" class="img-responsive center-block img-thumbnail" /></a>
+    <small><em>Click Photo To Download Original</em></small>
 </p>
 
 <div class="center-block" style="max-width: 400px;">

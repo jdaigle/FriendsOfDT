@@ -14,6 +14,7 @@ namespace FODT.Models.IMDT
         {
             GUID = Guid.NewGuid();
             InsertedDateTime = DateTime.UtcNow;
+            LargeFileIsSameAsOriginal = true;
         }
 
         public const int NoPic = 1;
@@ -21,6 +22,7 @@ namespace FODT.Models.IMDT
         public virtual int PhotoId { get; set; }
         public virtual Guid GUID { get; set; }
         public virtual DateTime InsertedDateTime { get; set; }
+        public virtual bool LargeFileIsSameAsOriginal { get; set; }
 
         private static string azureStorageBaseURL;
 
@@ -34,17 +36,22 @@ namespace FODT.Models.IMDT
             return azureStorageBaseURL;
         }
 
-        public virtual string GetURL()
+        public virtual string GetOriginalFileURL()
         {
             return GetStorageRootPath() + GetOriginalFileName();
         }
 
-        public virtual string GetThumbnailURL()
+        public virtual string GetLargeFileURL()
+        {
+            return GetStorageRootPath() + GetLargeFileName();
+        }
+
+        public virtual string GetThumbnailFileURL()
         {
             return GetStorageRootPath() + GetThumbnailFileName();
         }
 
-        public virtual string GetTinyURL()
+        public virtual string GetTinyFileURL()
         {
             return GetStorageRootPath() + GetTinyFileName();
         }
@@ -52,6 +59,18 @@ namespace FODT.Models.IMDT
         public virtual string GetOriginalFileName()
         {
             return GUID.ToString() + "-original.jpg";
+        }
+
+        public virtual string GetLargeFileName()
+        {
+            if (LargeFileIsSameAsOriginal)
+            {
+                return GUID.ToString() + "-original.jpg";
+            }
+            else
+            {
+                return GUID.ToString() + "-large.jpg";
+            }
         }
 
         public virtual string GetThumbnailFileName()
@@ -77,6 +96,7 @@ namespace FODT.Models.IMDT
             Id(x => x.PhotoId).GeneratedBy.Identity();
             Map(x => x.GUID).Not.Nullable();
             Map(x => x.InsertedDateTime).Not.Nullable().CustomType<UtcDateTimeUserType>();
+            Map(x => x.LargeFileIsSameAsOriginal).Not.Nullable();
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using FODT.Models.IMDT;
+using FODT.Security;
 using FODT.Views.Photos;
 using Microsoft.Web.Mvc;
 using NHibernate.Linq;
@@ -34,13 +36,14 @@ namespace FODT.Controllers
             var viewModel = new PhotoListViewModel();
             viewModel.ParentName = person.Fullname;
             viewModel.ParentLinkURL = this.GetURL<PersonController>(c => c.PersonDetails(personId));
-            viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
+            viewModel.ShowPhotoUploadControl = User.IsInRole(RoleNames.Contributor) || User.IsInRole(RoleNames.Archivist);
+            viewModel.PhotoUploadLinkURL = Url.GetUrl(Upload, personId);
             viewModel.Photos = photos
                 .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
                 .Select(x => new PhotoListViewModel.Photo
                 {
                     PhotoLinkURL = this.GetURL(c => c.ListPersonPhotos(personId, x.Photo.PhotoId)),
-                    PhotoThumbnailURL = x.Photo.GetThumbnailURL(),
+                    PhotoThumbnailURL = x.Photo.GetThumbnailFileURL(),
                 }).ToList();
 
             if (photoId.HasValue)
@@ -53,7 +56,44 @@ namespace FODT.Controllers
                 viewModel.CurrentPhotoViewModel = new PhotoViewModel(photo.Photo, this.GetURL(c => c.ListPersonPhotos(personId, photoId.Value)), this);
             }
 
-            return View(viewModel);
+            return new ViewModelResult(viewModel);
+        }
+
+        [HttpGet]
+        [Route("{personId}/Photos/Upload")]
+        public ActionResult Upload(int personId)
+        {
+            var person = DatabaseSession.Get<Person>(personId);
+
+            var viewModel = new UploadViewModel();
+            viewModel.ParentName = person.Fullname;
+            viewModel.ParentLinkURL = this.GetURL<PersonController>(c => c.PersonDetails(personId));
+            viewModel.PhotoCount = DatabaseSession.Query<PersonPhoto>().Where(x => x.Person == person).Count();
+            viewModel.PhotoListLinkURL = Url.GetUrl(ListPersonPhotos, personId, (int?)null);
+            viewModel.UploadFormURL = Url.GetUrl(Upload, personId, (PhotosController.UploadPOSTParameters)null);
+
+            return new ViewModelResult(viewModel);
+        }
+
+        [HttpPost]
+        [Route("{personId}/Photos/Upload")]
+        public ActionResult Upload(int personId, PhotosController.UploadPOSTParameters param)
+        {
+            var validationResult = param.Validate();
+            if (validationResult != null)
+            {
+                return validationResult;
+            }
+
+            var photo = PhotosController.Upload(this, param);
+
+            var personPhoto = new PersonPhoto();
+            personPhoto.Person = DatabaseSession.Load<Person>(personId);
+            personPhoto.Photo = photo;
+            personPhoto.InsertedDateTime = DateTime.UtcNow;
+            DatabaseSession.Save(personPhoto);
+
+            return Redirect(Url.GetUrl(ListPersonPhotos, personId, (int?)photo.PhotoId));
         }
 
         [HttpPost]

@@ -10,6 +10,12 @@
         @if (Model.ShowParentHeader)
         {
             <h4><a href="@Model.ParentLinkURL">@Model.ParentName</a> &raquo; @Model.Photos.Count Photos</h4>
+            if (Model.ShowPhotoUploadControl)
+            {
+                <div>
+                    <a href="@Model.PhotoUploadLinkURL" class="btn btn-primary btn-sm">Upload a Photo</a>
+                </div>
+            }
             <hr />
         }
         @if (Model.Photos.Count == 0)

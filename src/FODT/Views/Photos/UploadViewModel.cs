@@ -8,23 +8,13 @@ namespace FODT.Views.Photos
 {
     public class UploadViewModel
     {
-        public List<Show> Shows { get; set; }
-        public List<Person> People { get; set; }
+        public bool ShowParentHeader { get; set; } = true;
+        public string ParentName { get; set; }
+        public string ParentLinkURL { get; set; }
 
-        public class Show
-        {
-            public int ShowId { get; set; }
-            public string ShowTitle { get; set; }
-            public Quarter ShowQuarter { get; set; }
-            public short ShowYear { get; set; }
-        }
+        public string PhotoListLinkURL { get; set; }
+        public int PhotoCount { get; set; }
 
-        public class Person
-        {
-            public int PersonId { get; set; }
-            public string PersonFullname { get; set; }
-            public string PersonLastName { get; set; }
-            public string PersonFirstName { get; set; }
-        }
+        public string UploadFormURL { get; set; }
     }
 }

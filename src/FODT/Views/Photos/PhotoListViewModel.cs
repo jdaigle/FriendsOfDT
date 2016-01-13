@@ -12,6 +12,8 @@ namespace FODT.Views.Photos
         public string ParentLinkURL { get; set; }
 
         public List<Photo> Photos { get; set; }
+
+        public bool ShowPhotoUploadControl { get; set; }
         public string PhotoUploadLinkURL { get; set; }
 
         public PhotoViewModel CurrentPhotoViewModel { get; set; }

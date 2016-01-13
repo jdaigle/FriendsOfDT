@@ -18,6 +18,7 @@ namespace FODT.Views.Photos
     public class PhotoViewModel
     {
         public string PhotoURL { get; set; }
+        public string OriginalPhotoURL { get; set; }
         public string UploadDate { get; set; }
 
         public List<RelatedShow> RelatedShows { get; set; }
@@ -86,7 +87,8 @@ namespace FODT.Views.Photos
                 UploadDate = "Unknown Date";
             }
 
-            PhotoURL = photo.GetURL();
+            PhotoURL = photo.GetLargeFileURL();
+            OriginalPhotoURL = photo.GetOriginalFileURL();
 
             ShowDeletePhotoControl = canEditPhoto;
             DeletePhotoURL = basePhotoURL + "/delete";

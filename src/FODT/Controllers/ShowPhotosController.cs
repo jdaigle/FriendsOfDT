@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using FODT.Models.IMDT;
+using FODT.Security;
 using FODT.Views.Photos;
 using Microsoft.Web.Mvc;
 using NHibernate.Linq;
@@ -32,14 +34,16 @@ namespace FODT.Controllers
             }
 
             var viewModel = new PhotoListViewModel();
-            viewModel.ParentName = show.DisplayTitle + " (" + show.Year + ")";
+            viewModel.ParentName = show.DisplayTitleWithYear;
             viewModel.ParentLinkURL = this.GetURL<ShowController>(c => c.ShowDetails(showId));
+            viewModel.ShowPhotoUploadControl = User.IsInRole(RoleNames.Contributor) || User.IsInRole(RoleNames.Archivist);
+            viewModel.PhotoUploadLinkURL = Url.GetUrl(Upload, showId);
             viewModel.Photos = photos
                 .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
                 .Select(x => new PhotoListViewModel.Photo
                 {
                     PhotoLinkURL = this.GetURL(c => c.ListShowPhotos(showId, x.Photo.PhotoId)),
-                    PhotoThumbnailURL = x.Photo.GetThumbnailURL(),
+                    PhotoThumbnailURL = x.Photo.GetThumbnailFileURL(),
                 }).ToList();
 
             if (photoId.HasValue)
@@ -53,6 +57,43 @@ namespace FODT.Controllers
             }
 
             return View(viewModel);
+        }
+
+        [HttpGet]
+        [Route("{showId}/Photos/Upload")]
+        public ActionResult Upload(int showId)
+        {
+            var show = DatabaseSession.Get<Show>(showId);
+
+            var viewModel = new UploadViewModel();
+            viewModel.ParentName = show.DisplayTitleWithYear;
+            viewModel.ParentLinkURL = this.GetURL<ShowController>(c => c.ShowDetails(showId));
+            viewModel.PhotoCount = DatabaseSession.Query<ShowPhoto>().Where(x => x.Show == show).Count();
+            viewModel.PhotoListLinkURL = Url.GetUrl(ListShowPhotos, showId, (int?)null);
+            viewModel.UploadFormURL = Url.GetUrl(Upload, showId, (PhotosController.UploadPOSTParameters)null);
+
+            return new ViewModelResult(viewModel);
+        }
+
+        [HttpPost]
+        [Route("{showId}/Photos/Upload")]
+        public ActionResult Upload(int showId, PhotosController.UploadPOSTParameters param)
+        {
+            var validationResult = param.Validate();
+            if (validationResult != null)
+            {
+                return validationResult;
+            }
+
+            var photo = PhotosController.Upload(this, param);
+
+            var showPhoto = new ShowPhoto();
+            showPhoto.Show = DatabaseSession.Load<Show>(showId);
+            showPhoto.Photo = photo;
+            showPhoto.InsertedDateTime = DateTime.UtcNow;
+            DatabaseSession.Save(showPhoto);
+
+            return Redirect(Url.GetUrl(ListShowPhotos, showId, (int?)photo.PhotoId));
         }
 
         [HttpPost]

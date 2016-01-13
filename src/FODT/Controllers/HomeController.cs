@@ -54,7 +54,7 @@ UNION SELECT 'PhotoCount'  AS [Key], COUNT(*) AS [Value] FROM Photo
                     Name = x.DisplayTitle,
                     Year = x.Year.ToString(),
                     LinkUrl = Url.For<ShowController>(c => Url.GetUrl(c.ShowDetails, x.ShowId)),
-                    ImageUrl = x.Photo.GetTinyURL(),
+                    ImageUrl = x.Photo.GetTinyFileURL(),
                 }).ToList();
 
             viewModel.NewPeople = newPersons.OrderBy(x => x.SortableName)
@@ -62,14 +62,14 @@ UNION SELECT 'PhotoCount'  AS [Key], COUNT(*) AS [Value] FROM Photo
                 {
                     Name = x.Fullname,
                     LinkUrl = Url.For<PersonController>(c => Url.GetUrl(c.PersonDetails, x.PersonId)),
-                    ImageUrl = x.Photo.GetTinyURL(),
+                    ImageUrl = x.Photo.GetTinyFileURL(),
                 }).ToList();
 
             viewModel.NewPhotos = newPhotos.OrderByDescending(x => x.InsertedDateTime)
                 .Select(x => new ArchiveWelcomeViewModel.NewPhotoViewModel
                 {
                     LinkUrl = Url.GetURL<PhotosController>(c => c.GetPhotoDetail(x.PhotoId)),
-                    ImageUrl = x.GetTinyURL(),
+                    ImageUrl = x.GetTinyFileURL(),
                 }).ToList();
 
             return View(viewModel);

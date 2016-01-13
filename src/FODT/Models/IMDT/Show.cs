@@ -12,6 +12,7 @@ namespace FODT.Models.IMDT
         public virtual string Title { get; set; }
 
         public virtual string DisplayTitle { get { return ExtensionMethods.RearrangeShowTitle(this.Title); } }
+        public virtual string DisplayTitleWithYear { get { return DisplayTitle + " (" + Year + ")"; } }
 
         public virtual string Author { get; set; }
         public virtual Quarter Quarter { get; set; }
