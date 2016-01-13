@@ -28,15 +28,41 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
   * [ ] List Shows (sort by year/title)
   * [ ] Club Positions (e.g. EC) By Year
   * [ ] Toaster List
-  * [X] Latest Updates
+  * [x] Latest Updates
 * [ ] Build authentication module. Facebook login (ideally lighterweight than MS').
   * [ ] basic user profile (name, email, contact pref.)
 * [ ] Basic user admin tasks (manage users, roles, etc.).
   * [ ] "Contributor" = Can edit own personal info, upload photos, suggest edits
-  * [X] "Archivist" = Can add/edit shows/people/etc. approve suggested edits. delete.
-  * [X] "Admin" = Can approve new users, change roles.
-* [ ] Complete admin tasks.
+  * [x] "Archivist" = Can add/edit shows/people/etc. approve suggested edits. delete.
+  * [x] "Admin" = Can approve new users, change roles.
+* [ ] Complete feature-parity admin tasks.
+  * [x] Tagging Photos
+  * [x] Deleting Photo Tags
+  * [x] Deleting Photos
+  * [ ] Uploading Photos
+  * [ ] Person: add/remove awards
+  * [ ] Person: add/remove EC
+  * [ ] Person: add/remove cast
+  * [ ] Person: add/remove crew
+  * [ ] Person: edit name
+  * [ ] Person: edit bio
+  * [ ] Person: Primary Photo
+  * [ ] Person: Add
+  * [ ] Person: Remove
+  * [ ] Show: add/remove awards
+  * [ ] Show: add/remove cast
+  * [ ] Show: add/remove crew
+  * [ ] Show: edit name
+  * [ ] Show: edit author
+  * [ ] Show: edit year/quarter
+  * [ ] Show: edit desc/toaster/etc
+  * [ ] Show: Primary Photo
+  * [ ] Show: Add
+  * [ ] Show: Remove
+  * [ ] Award Types: add/remove/rename
 * [ ] Edit Suggestion. In lieu of being able to edit, a contributor can suggest edits to a page. The archivist can review and implement the edits.
 * [ ] Show Types - Additional metadata
   * [ ] "Banquet" should be linked to award year. One Banquet per calendar year.
   * [ ] "Open House"?
+  * [ ] Promote certain crew positions (directory, designers, crew chiefs) for searching
+  * [ ] crew position cleanup (spelling, dups, etc)
