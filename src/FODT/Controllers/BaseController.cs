@@ -14,7 +14,7 @@ namespace FODT.Controllers
     {
         private ISession databaseSession;
         private bool databaseSessionClosed;
-        protected ISession DatabaseSession
+        public ISession DatabaseSession
         {
             get
             {
@@ -37,10 +37,22 @@ namespace FODT.Controllers
             base.OnActionExecuting(filterContext);
         }
 
+        public void RollbackTransactionFast()
+        {
+            if (databaseSession != null && databaseSession.Transaction.IsActive)
+            {
+                databaseSession.RollbackTransaction();
+            }
+        }
+
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
+            var rollbackTransaction = filterContext.Exception != null;
+            rollbackTransaction |= filterContext.Result is HttpBadRequestResult;
+            rollbackTransaction |= filterContext.Result is HttpNotFoundResult;
+
             var isHTTPGET = filterContext.HttpContext.Request.HttpMethod.Equals("GET", StringComparison.InvariantCultureIgnoreCase);
-            if (databaseSession != null && filterContext.Exception == null)
+            if (databaseSession != null)
             {
                 try
                 {
@@ -53,13 +65,13 @@ namespace FODT.Controllers
                         }
                         if (databaseSession.Transaction.IsActive)
                         {
-                            if (filterContext.Exception != null)
+                            if (!rollbackTransaction)
                             {
-                                databaseSession.RollbackTransaction();
+                                databaseSession.CommitTransaction();
                             }
                             else
                             {
-                                databaseSession.CommitTransaction();
+                                databaseSession.RollbackTransaction();
                             }
                         }
                         databaseSession.Close();

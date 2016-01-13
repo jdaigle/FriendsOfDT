@@ -30,9 +30,9 @@ namespace FODT.Controllers
 
             viewModel.EditLinkURL = this.GetURL(c => c.EditPerson(personId));
             viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
-            viewModel.PhotoLinkURL = this.GetURL(c => c.GetPersonPhoto(personId, person.Photo.PhotoId));
+            viewModel.PhotoLinkURL = this.GetURL<PersonPhotosController>(c => c.ListPersonPhotos(personId, person.Photo.PhotoId));
             viewModel.PhotoThumbnailURL = person.Photo.GetThumbnailURL();
-            viewModel.PhotoListLinkURL = this.GetURL(c => c.ListPersonPhotos(personId, null));
+            viewModel.PhotoListLinkURL = this.GetURL<PersonPhotosController>(c => c.ListPersonPhotos(personId, null));
 
             viewModel.FullName = person.Fullname;
             viewModel.Biography = person.Biography;
@@ -79,52 +79,13 @@ namespace FODT.Controllers
                 .Where(x => x.Photo.PhotoId != person.Photo.PhotoId)
                 .Select(x => new PersonDetailsViewModel.NewPhotosViewModel
                 {
-                    PhotoLinkURL = this.GetURL(c => c.GetPersonPhoto(personId, x.Photo.PhotoId)),
+                    PhotoLinkURL = this.GetURL<PersonPhotosController>(c => c.ListPersonPhotos(personId, x.Photo.PhotoId)),
                     PhotoTinyURL = x.Photo.GetTinyURL(),
                 })
                 .Take(4)
                 .ToList();
 
             return View(viewModel);
-        }
-
-        [HttpGet, Route("{personId}/Photos")]
-        public ActionResult ListPersonPhotos(int personId, int? photoId = null)
-        {
-            var person = DatabaseSession.Get<Person>(personId);
-            var photos = DatabaseSession.Query<PersonPhoto>()
-                .Where(x => x.Person == person).Fetch(x => x.Photo)
-                .ToList();
-
-            var viewModel = new PhotoListViewModel();
-            viewModel.ParentName = person.Fullname;
-            viewModel.ParentLinkURL = this.GetURL(c => c.PersonDetails(personId));
-            viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
-            viewModel.Photos = photos
-                .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
-                .Select(x => new PhotoListViewModel.Photo
-            {
-                PhotoLinkURL = this.GetURL(c => c.GetPersonPhoto(personId, x.Photo.PhotoId)),
-                PhotoThumbnailURL = x.Photo.GetThumbnailURL(),
-                }).ToList();
-
-            if (photoId.HasValue)
-            {
-                var photo = photos.SingleOrDefault(x => x.Photo.PhotoId == photoId.Value);
-                if (photo == null)
-                {
-                    return new HttpNotFoundResult();
-                }
-                viewModel.CurrentPhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
-            }
-
-            return View(viewModel);
-        }
-
-        [HttpGet, Route("{personId}/Photo/{photoId}")]
-        public ActionResult GetPersonPhoto(int personId, int photoId)
-        {
-            return ListPersonPhotos(personId, photoId);
         }
 
         [HttpGet, Route("Add")]

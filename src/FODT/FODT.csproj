@@ -149,6 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureBlogStorageUtil.cs" />
+    <Compile Include="Controllers\PersonPhotosController.cs" />
+    <Compile Include="Controllers\ShowPhotosController.cs" />
     <Compile Include="HttpApiResult.cs" />
     <Compile Include="HttpBadRequestResult.cs" />
     <Compile Include="CachedObjectReflectionExtensions.cs" />

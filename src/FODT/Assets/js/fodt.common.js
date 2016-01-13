@@ -60,11 +60,14 @@ $(function () {
         var _confirmationText = $(this).data('delete-confirmation-text') || "Are you sure you want to delete this item?";
         if (!confirm(_confirmationText))
             return;
-        var url = $(this).attr('href') || $(this).data('url');
-        $.post(url, function (data) {
-            if (data.message && data.message.length > 0)
-                alert(data.message);
-            document.location.reload(true);
+        var postURL = $(this).attr('href') || $(this).data('url');
+        $.post(postURL, function (responseData) {
+            if (responseData.message && responseData.message.length > 0)
+                alert(responseData.message);
+            if (responseData.redirectToURL && responseData.redirectToURL.length > 0)
+                setTimeout(function () { document.location = responseData.redirectToURL; }, 100);
+            else
+                setTimeout(function () { document.location.reload(true); }, 100);
         }, "json");
     });
 });

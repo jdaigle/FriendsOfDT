@@ -39,9 +39,9 @@ namespace FODT.Controllers
             var viewModel = new ShowDetailsViewModel();
 
             viewModel.PhotoUploadLinkURL = this.GetURL<PhotosController>(c => c.Upload());
-            viewModel.PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, show.Photo.PhotoId));
+            viewModel.PhotoLinkURL = this.GetURL<ShowPhotosController>(c => c.ListShowPhotos(showId, show.Photo.PhotoId));
             viewModel.PhotoThumbnailURL = show.Photo.GetThumbnailURL();
-            viewModel.PhotoListLinkURL = this.GetURL(c => c.ListShowPhotos(showId, null));
+            viewModel.PhotoListLinkURL = this.GetURL<ShowPhotosController>(c => c.ListShowPhotos(showId, null));
 
             viewModel.Title = show.DisplayTitle;
             viewModel.Author = show.Author;
@@ -88,51 +88,13 @@ namespace FODT.Controllers
                 .Where(x => x.Photo.PhotoId != show.Photo.PhotoId)
                 .Select(x => new ShowDetailsViewModel.NewPhotoViewModel
                 {
-                    PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, x.Photo.PhotoId)),
+                    PhotoLinkURL = this.GetURL<ShowPhotosController>(c => c.ListShowPhotos(showId, x.Photo.PhotoId)),
                     PhotoTinyURL = x.Photo.GetTinyURL(),
                 })
                 .Take(4)
                 .ToList();
 
             return View(viewModel);
-        }
-
-        [HttpGet, Route("{showId}/Photos")]
-        public ActionResult ListShowPhotos(int showId, int? photoId = null)
-        {
-            var show = DatabaseSession.Get<Show>(showId);
-            var photos = DatabaseSession.Query<ShowPhoto>()
-                .Where(x => x.Show == show).Fetch(x => x.Photo)
-                .ToList();
-
-            var viewModel = new PhotoListViewModel();
-            viewModel.ParentName = show.DisplayTitle + " (" + show.Year + ")";
-            viewModel.ParentLinkURL = this.GetURL(c => c.ShowDetails(showId));
-            viewModel.Photos = photos
-                .OrderBy(x => x.Photo.InsertedDateTime).ThenBy(x => x.Photo.PhotoId)
-                .Select(x => new PhotoListViewModel.Photo
-            {
-                PhotoLinkURL = this.GetURL(c => c.GetShowPhoto(showId, x.Photo.PhotoId)),
-                PhotoThumbnailURL = x.Photo.GetThumbnailURL(),
-                }).ToList();
-
-            if (photoId.HasValue)
-            {
-                var photo = photos.SingleOrDefault(x => x.Photo.PhotoId == photoId.Value);
-                if (photo == null)
-                {
-                    return new HttpNotFoundResult();
-                }
-                viewModel.CurrentPhotoViewModel = new PhotoViewModel(photo.Photo, DatabaseSession, Url);
-            }
-
-            return View(viewModel);
-        }
-
-        [HttpGet, Route("{showId}/Photo/{photoId}")]
-        public ActionResult GetShowPhoto(int showId, int photoId)
-        {
-            return ListShowPhotos(showId, photoId);
         }
 
         [HttpGet, Route("{showId}/AddAward")]

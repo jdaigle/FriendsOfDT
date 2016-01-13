@@ -13,5 +13,6 @@ namespace FODT
         public HttpStatusCode HttpStatusCode { get; set; }
 
         public string Message { get; set; }
+        public string RedirectToURL { get; set; }
     }
 }

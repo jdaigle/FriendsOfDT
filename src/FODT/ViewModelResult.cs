@@ -40,7 +40,7 @@ namespace FODT
         {
             if (ViewModel is HttpApiResult)
             {
-                return new RedirectResult("~");
+                return new RedirectResult(((HttpApiResult)ViewModel).RedirectToURL);
             }
             context.Controller.ViewData.Model = ViewModel;
             return new ViewResult()

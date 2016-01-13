@@ -12,6 +12,7 @@ using FODT.Database;
 using System.Configuration;
 using Microsoft.Web.Mvc;
 using System.Net;
+using NHibernate;
 
 namespace FODT.Controllers
 {
@@ -123,8 +124,8 @@ namespace FODT.Controllers
             DatabaseSession.CommitTransaction();
 
             return showPhoto != null
-                ? this.RedirectToAction<ShowController>(x => x.GetShowPhoto(showPhoto.Show.ShowId, showPhoto.Photo.PhotoId))
-                : this.RedirectToAction<PersonController>(x => x.GetPersonPhoto(personPhoto.Person.PersonId, personPhoto.Photo.PhotoId));
+                ? this.RedirectToAction<ShowPhotosController>(x => x.ListShowPhotos(showPhoto.Show.ShowId, showPhoto.Photo.PhotoId))
+                : this.RedirectToAction<PersonPhotosController>(x => x.ListPersonPhotos(personPhoto.Person.PersonId, personPhoto.Photo.PhotoId));
         }
 
         public class UploadPOSTParameters
@@ -134,83 +135,70 @@ namespace FODT.Controllers
             public HttpPostedFileBase UploadedFile { get; set; }
         }
 
-        [HttpGet]
-        [AjaxOnly]
-        [Route("{id}/tag")]
-        public ActionResult Tag(int id)
+        public static ActionResult TagPartial(BaseController controller, int id, string postURL)
         {
             if (id == Photo.NoPic)
             {
+                controller.RollbackTransactionFast();
                 return new HttpBadRequestResult("Cannot tag this photo.");
             }
 
             var model = new TagPhotoViewModel();
-            model.POSTUrl = this.GetURL(c => c.Tag(id));
-            model.Shows = DatabaseSession.Query<Show>()
+            model.POSTUrl = postURL;
+            model.Shows = controller.DatabaseSession.Query<Show>()
              .ToList()
              .OrderBy(x => x, ShowComparer.ReverseChronologicalShowComparer)
              .Select(x => new KeyValuePair<int, string>(x.ShowId, x.Year + " " + x.DisplayTitle))
              .ToList();
-            model.People = DatabaseSession.Query<Person>()
+            model.People = controller.DatabaseSession.Query<Person>()
              .ToList()
              .OrderBy(x => x.SortableName)
              .Select(x => new KeyValuePair<int, string>(x.PersonId, x.Fullname))
              .ToList();
-            return PartialView(model);
+
+            return new ViewModelResult(model);
         }
 
-        [HttpPost, Route("{id}/tag")]
-        public ActionResult Tag(int id, int? personId = null, int? showId = null, string redirectURL = "")
+        public static ActionResult Tag(BaseController controller, int id, int? personId = null, int? showId = null)
         {
             if (id == Photo.NoPic)
             {
+                controller.RollbackTransactionFast();
                 return new HttpBadRequestResult("Cannot tag this photo.");
             }
 
-            if (personId.HasValue && !DatabaseSession.Query<PersonPhoto>().Any(x => x.Photo.PhotoId == id && x.Person.PersonId == personId.Value))
+            if (personId.HasValue && !controller.DatabaseSession.Query<PersonPhoto>().Any(x => x.Photo.PhotoId == id && x.Person.PersonId == personId.Value))
             {
                 var personPhoto = new PersonPhoto();
-                personPhoto.Person = DatabaseSession.Load<Person>(personId.Value);
-                personPhoto.Photo = DatabaseSession.Load<Photo>(id);
+                personPhoto.Person = controller.DatabaseSession.Load<Person>(personId.Value);
+                personPhoto.Photo = controller.DatabaseSession.Load<Photo>(id);
                 personPhoto.InsertedDateTime = DateTime.UtcNow;
-                DatabaseSession.Save(personPhoto);
+                controller.DatabaseSession.Save(personPhoto);
             }
-            if (showId.HasValue && !DatabaseSession.Query<ShowPhoto>().Any(x => x.Photo.PhotoId == id && x.Show.ShowId == showId.Value))
+            if (showId.HasValue && !controller.DatabaseSession.Query<ShowPhoto>().Any(x => x.Photo.PhotoId == id && x.Show.ShowId == showId.Value))
             {
                 var showPhoto = new ShowPhoto();
-                showPhoto.Show = DatabaseSession.Load<Show>(showId.Value);
-                showPhoto.Photo = DatabaseSession.Load<Photo>(id);
+                showPhoto.Show = controller.DatabaseSession.Load<Show>(showId.Value);
+                showPhoto.Photo = controller.DatabaseSession.Load<Photo>(id);
                 showPhoto.InsertedDateTime = DateTime.UtcNow;
-                DatabaseSession.Save(showPhoto);
-            }
-            DatabaseSession.CommitTransaction();
-
-            if (!redirectURL.IsNullOrWhiteSpace())
-            {
-                return Redirect(new Uri(redirectURL).PathAndQuery);
+                controller.DatabaseSession.Save(showPhoto);
             }
 
-            if (Request.UrlReferrer?.PathAndQuery.IsNullOrWhiteSpace() == true)
-            {
-                return Redirect(Request.UrlReferrer.PathAndQuery);
-            }
-
-            return this.RedirectToAction(x => x.GetPhotoDetail(id));
+            return null;
         }
 
-        [HttpPost]
-        [Route("{id}/tag/delete")]
-        public ActionResult DeleteTag(int id, int? personId = null, int? showId = null)
+        public static ActionResult DeleteTag(BaseController controller, int id, int? personId = null, int? showId = null)
         {
             if (id == Photo.NoPic)
             {
+                controller.RollbackTransactionFast();
                 return new HttpBadRequestResult("Cannot tag this photo.");
             }
 
             if (personId.HasValue)
             {
                 // only delete the tag if the photo is not the Person's default photo
-                DatabaseSession.Execute(
+                controller.DatabaseSession.Execute(
                     "DELETE FROM PersonPhoto WHERE PhotoId = @PhotoId AND PersonId = @PersonId AND NOT EXISTS (SELECT * FROM Person WHERE PhotoId = @PhotoId AND PersonId = @PersonId)"
                     , new { PhotoId = id, PersonId = personId.Value });
             }
@@ -218,16 +206,12 @@ namespace FODT.Controllers
             if (showId.HasValue)
             {
                 // only delete the tag if the photo is not the Show's default photo
-                DatabaseSession.Execute(
+                controller.DatabaseSession.Execute(
                     "DELETE FROM ShowPhoto WHERE PhotoId = @PhotoId AND ShowId = @ShowId AND NOT EXISTS (SELECT * FROM Show WHERE PhotoId = @PhotoId AND ShowId = @ShowId)"
                     , new { PhotoId = id, ShowId = showId.Value });
             }
 
-            return new ViewModelResult(new HttpApiResult
-            {
-                HttpStatusCode = HttpStatusCode.OK,
-                Message = "Tag Deleted",
-            });
+            return null;
         }
 
         [HttpGet, Route("{id}")]
@@ -296,7 +280,7 @@ namespace FODT.Controllers
                 viewModel.NextPhotoLinkURL = this.GetURL(c => c.GetPhotoDetail(nextId.Value));
             }
 
-            viewModel.PhotoViewModel = new PhotoViewModel(DatabaseSession.Get<Photo>(id), DatabaseSession, Url);
+            viewModel.PhotoViewModel = new PhotoViewModel(DatabaseSession.Get<Photo>(id), "", DatabaseSession, Url);
             return View(viewModel);
         }
 
@@ -339,22 +323,22 @@ namespace FODT.Controllers
             return View(viewModel);
         }
 
-        [HttpPost, Route("{id}/delete")]
-        public ActionResult Delete(int id)
+        public static ActionResult Delete(BaseController controller, int id)
         {
             if (id == Photo.NoPic)
             {
+                controller.RollbackTransactionFast();
                 return new HttpBadRequestResult("Cannot delete this photo.");
             }
 
-            var photo = DatabaseSession.Get<Photo>(id);
+            var photo = controller.DatabaseSession.Get<Photo>(id);
             if (photo == null)
             {
                 return new HttpNotFoundResult("Photo not found");
             }
 
             // This is a hard delete.
-            DatabaseSession.Execute(@"
+            controller.DatabaseSession.Execute(@"
 UPDATE Person SET PhotoId = 1 WHERE PhotoId = @PhotoId;
 UPDATE Show SET PhotoId = 1 WHERE PhotoId = @PhotoId;
 DELETE FROM PersonPhoto WHERE PhotoId = @PhotoId;
@@ -364,11 +348,7 @@ DELETE FROM Photo WHERE PhotoId = @PhotoId;
 
             // TODO: delete blob
 
-            return new ViewModelResult(new HttpApiResult
-            {
-                HttpStatusCode = HttpStatusCode.OK,
-                Message = "Photo Deleted",
-            });
+            return null;
         }
     }
 }

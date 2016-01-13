@@ -63,6 +63,11 @@ namespace FODT.Models.IMDT
         {
             return GUID.ToString() + "-tiny.jpg";
         }
+
+        public virtual bool IsDefaultNoPic()
+        {
+            return this.PhotoId == NoPic;
+        }
     }
 
     public class PhotoClassMap : ClassMap<Photo>
