@@ -15,7 +15,7 @@ namespace FODT.Controllers
         [HttpGet, Route("")]
         public ActionResult DefaultAction()
         {
-            return this.RedirectToAction(c => c.Welcome());
+            return Redirect(Url.GetUrl(Welcome));
         }
 
         [HttpGet, Route("Welcome")]
@@ -53,7 +53,7 @@ UNION SELECT 'PhotoCount'  AS [Key], COUNT(*) AS [Value] FROM Photo
                 {
                     Name = x.DisplayTitle,
                     Year = x.Year.ToString(),
-                    LinkUrl = Url.GetURL<ShowController>(c => c.ShowDetails(x.ShowId)),
+                    LinkUrl = Url.For<ShowController>(c => Url.GetUrl(c.ShowDetails, x.ShowId)),
                     ImageUrl = x.Photo.GetTinyURL(),
                 }).ToList();
 
@@ -61,7 +61,7 @@ UNION SELECT 'PhotoCount'  AS [Key], COUNT(*) AS [Value] FROM Photo
                 .Select(x => new ArchiveWelcomeViewModel.NewPersonViewModel
                 {
                     Name = x.Fullname,
-                    LinkUrl = Url.GetURL<PersonController>(c => c.PersonDetails(x.PersonId)),
+                    LinkUrl = Url.For<PersonController>(c => Url.GetUrl(c.PersonDetails, x.PersonId)),
                     ImageUrl = x.Photo.GetTinyURL(),
                 }).ToList();
 
