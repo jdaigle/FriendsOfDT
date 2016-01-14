@@ -71,7 +71,7 @@ namespace FODT.Infrastructure
                     var viewModelName = viewModelType.Name;
                     var namespacePart = viewModelType.Namespace.Substring("FODT.".Length);
                     var virtualPath = "~/" + namespacePart.Replace(".", "/") + "/" + viewModelName.Replace("ViewModel", "") + ".cshtml";
-                    if (VirtualPathProvider.FileExists(virtualPath))
+                    if (Exists(virtualPath) || VirtualPathProvider.FileExists(virtualPath))
                     {
                         cache.Insert(cacheKey, virtualPath, null /* dependencies */, Cache.NoAbsoluteExpiration, _defaultCacheTimeSpan);
                         return virtualPath;

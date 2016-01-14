@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.WebPages;
 using FODT.Database;
 using FODT.Infrastructure;
 using FODT.Security;
@@ -24,7 +25,9 @@ namespace FODT
             RegisterBundles(BundleTable.Bundles);
 
             ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Insert(0, new ViewModelSpecifiedViewEngine());
+            var engine = new ViewModelSpecifiedViewEngine();
+            ViewEngines.Engines.Insert(0, engine);
+            VirtualPathFactoryManager.RegisterVirtualPathFactory(engine);
 
             SetupMiniProfiler();
         }
