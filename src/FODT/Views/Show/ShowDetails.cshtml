@@ -45,6 +45,12 @@
             }
         </ul>
         <a href="@Model.PhotoListLinkURL">@Model.PhotoCount Photos &raquo;</a>
+        @if (Model.ShowPhotoUploadControl)
+        {
+            <div>
+                <a href="@Model.PhotoUploadLinkURL" class="btn btn-primary btn-xs">Upload a Photo</a>
+            </div>
+        }
     </div>
     <div class="col-sm-9">
         <h1>@Model.Title</h1>

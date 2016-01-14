@@ -38,6 +38,7 @@ namespace FODT.Controllers
 
             var viewModel = new ShowDetailsViewModel();
 
+            viewModel.ShowPhotoUploadControl = User.IsInRole(RoleNames.Contributor) || User.IsInRole(RoleNames.Archivist);
             viewModel.PhotoUploadLinkURL = this.GetURL<ShowPhotosController>(c => c.Upload(showId));
             viewModel.PhotoLinkURL = this.GetURL<ShowPhotosController>(c => c.ListShowPhotos(showId, show.Photo.PhotoId));
             viewModel.PhotoThumbnailURL = show.Photo.GetThumbnailFileURL();

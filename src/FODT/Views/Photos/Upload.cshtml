@@ -7,27 +7,13 @@
         <hr />
     }
     <form enctype="multipart/form-data" method="POST" action="@Model.UploadFormURL">
-        <table align="center" width="40%">
-            <tbody>
-                <tr valign="middle">
-                    <td colspan="2" align="center">
-                        <center><font size="+2">Upload picture to the Media Center</font></center>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center">
-                        N.B.: We are currently only accepting pictures less than 1.5Mb in size, JPEG format with ".jpg" extension.  Anything else will be rejected.
-                        All uploaded pictures must be associated with at least one show or person already in the database.
-                    </td>
-                </tr>
-                <tr>
-                </tr>
-            </tbody>
-        </table>
-
+        <h3>Upload a Photo</h3>
+        <p>
+            You may upload a photo (usually a JPEG) and "tag it" with multiple people or shows. We will automatically resize it for display on the website, but keep the original available as a JPEG for download.
+        </p>
         <div class="form-group">
             <input type="file" name="Photo" />
-            <p class="help-block">Example block-level help text here.</p>
+            <p class="help-block">Max file size is 10 MB.</p>
         </div>
         <button type="submit" class="btn btn-primary">Upload</button>
     </form>

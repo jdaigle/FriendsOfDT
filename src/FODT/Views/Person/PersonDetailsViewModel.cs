@@ -15,7 +15,9 @@ namespace FODT.Views.Person
         public string PhotoLinkURL { get; set; }
         public string PhotoThumbnailURL { get; set; }
         public string PhotoListLinkURL { get; set; }
-        public string PhotoUploadLinkURL { get; set; } // 
+
+        public bool ShowPhotoUploadControl { get; set; }
+        public string PhotoUploadLinkURL { get; set; }
 
         public string EditLinkURL { get; set; }
 
