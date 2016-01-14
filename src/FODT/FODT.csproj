@@ -240,6 +240,8 @@
     <Compile Include="Views\Home\ArchiveWelcomeViewModel.cs" />
     <Compile Include="Views\IUserEditableViewModel.cs" />
     <Compile Include="Views\Login\LoginViewModel.cs" />
+    <Compile Include="Views\Person\AddAwardViewModel.cs" />
+    <Compile Include="Views\Person\AddClubPositionViewModel.cs" />
     <Compile Include="Views\Photos\PhotoDetailViewModel.cs" />
     <Compile Include="Views\Photos\ListPhotosViewModel.cs" />
     <Compile Include="Views\Photos\PhotoListViewModel.cs" />

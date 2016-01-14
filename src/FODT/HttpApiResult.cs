@@ -10,7 +10,7 @@ namespace FODT
     public class HttpApiResult
     {
         [JsonIgnore]
-        public HttpStatusCode HttpStatusCode { get; set; }
+        public HttpStatusCode HttpStatusCode { get; set; } = HttpStatusCode.OK;
 
         public string Message { get; set; }
         public string RedirectToURL { get; set; }

@@ -1,4 +1,5 @@
-﻿<div class="modal fade" tabindex="-1">
+﻿@model FODT.Views.Person.AddClubPositionViewModel
+<div class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <form method="POST" action="@Model.POSTUrl">
             <div class="modal-content">
@@ -14,12 +15,12 @@
                     </div>
                     <div class="form-group">
                         <label for="edit-Year">Year</label>
-                        <input class="form-control" type="number" name="Year" id="edit-Year" value="@DateTime.Now.Year" />
+                        <input class="form-control" type="number" name="Year" id="edit-Year" value="@Model.CurrentYear" />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Award</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </form>

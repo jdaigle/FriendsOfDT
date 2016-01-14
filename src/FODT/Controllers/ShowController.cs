@@ -119,7 +119,6 @@ namespace FODT.Controllers
             }
             var award = new Award(DatabaseSession.Load<Show>(showId), person, DatabaseSession.Load<AwardType>(awardId), year);
             DatabaseSession.Save(award);
-            DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.ShowDetails(showId));
         }
 
@@ -128,7 +127,6 @@ namespace FODT.Controllers
         {
             var award = DatabaseSession.Get<Award>(awardId);
             DatabaseSession.Delete(award);
-            DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.ShowDetails(showId));
         }
 
@@ -148,7 +146,6 @@ namespace FODT.Controllers
         {
             var entity = new ShowCast(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), role);
             DatabaseSession.Save(entity);
-            DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.ShowDetails(showId));
         }
 
@@ -157,7 +154,6 @@ namespace FODT.Controllers
         {
             var entity = DatabaseSession.Get<ShowCast>(showCastId);
             DatabaseSession.Delete(entity);
-            DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.ShowDetails(showId));
         }
 
@@ -177,7 +173,6 @@ namespace FODT.Controllers
         {
             var entity = new ShowCrew(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), position);
             DatabaseSession.Save(entity);
-            DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.ShowDetails(showId));
         }
 
@@ -186,7 +181,6 @@ namespace FODT.Controllers
         {
             var entity = DatabaseSession.Get<ShowCrew>(showCrewId);
             DatabaseSession.Delete(entity);
-            DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.ShowDetails(showId));
         }
     }

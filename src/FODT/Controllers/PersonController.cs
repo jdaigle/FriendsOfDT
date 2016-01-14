@@ -10,6 +10,8 @@ using FODT.Security;
 using NHibernate.Linq;
 using FODT.Views.Awards;
 using FODT.Views.Show;
+using Microsoft.Web.Mvc;
+using System.Net;
 
 namespace FODT.Controllers
 {
@@ -123,7 +125,7 @@ namespace FODT.Controllers
             person.InsertedDateTime = DateTime.UtcNow;
             person.LastModifiedDateTime = DateTime.UtcNow;
             DatabaseSession.Save(person);
-            DatabaseSession.CommitTransaction();
+            DatabaseSession.Flush();
 
             return this.RedirectToAction(x => x.PersonDetails(person.PersonId));
         }
@@ -182,7 +184,6 @@ namespace FODT.Controllers
                 // TODO: build in auditing
                 person.LastModifiedDateTime = DateTime.UtcNow;
             }
-            DatabaseSession.CommitTransaction();
 
             return this.RedirectToAction(x => x.PersonDetails(personId));
         }
@@ -197,7 +198,6 @@ namespace FODT.Controllers
                 // TODO: build in auditing
                 person.LastModifiedDateTime = DateTime.UtcNow;
             }
-            DatabaseSession.CommitTransaction();
 
             return this.RedirectToAction(x => x.PersonDetails(personId));
         }
@@ -216,63 +216,49 @@ namespace FODT.Controllers
             public string Biography { get; set; }
         }
 
-        [HttpGet, Route("{personId}/AddAward")]
+        [HttpGet, AjaxOnly, Route("{personId}/Awards/Add")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddAward(int personId)
         {
-            if (!Request.IsAjaxRequest())
-            {
-                return this.RedirectToAction(x => x.PersonDetails(personId));
-            }
-
             var person = DatabaseSession.Get<Person>(personId);
-            var awards = DatabaseSession.Query<AwardType>()
-                .ToList()
-                .OrderBy(x => x.Name)
-                .Select(x => new
-                {
-                    Id = x.AwardTypeId,
-                    Name = x.Name,
-                }.ToExpando())
-                .ToList();
-            var shows = DatabaseSession.Query<Show>()
-                .ToList()
-                .OrderBy(x => x.Title)
-                .Select(x => new
-                {
-                    ShowId = x.ShowId,
-                    Quarter = x.Quarter,
-                    Title = x.DisplayTitle,
-                    Year = x.Year,
-                }.ToExpando())
-                .ToList();
-            var viewModel = new
+            var awardTypes = DatabaseSession.Query<AwardType>().ToList();
+            var shows = DatabaseSession.Query<Show>().ToList();
+            var viewModel = new AddAwardViewModel(awardTypes, shows)
             {
                 POSTUrl = this.GetURL(x => x.AddAward(personId)),
-                Shows = shows,
-                Awards = awards,
-            }.ToExpando();
-            return PartialView(viewModel);
+            };
+            return new ViewModelResult(viewModel);
         }
 
-        [HttpPost, Route("{personId}/AddAward")]
-        public ActionResult AddAward(int personId, int awardId, short year, int? showId)
+        [HttpPost, Route("{personId}/Awards/Add")]
+        [Authorize(Roles = RoleNames.Archivist)]
+        public ActionResult AddAward(int personId, int awardTypeId, short year, int? showId)
         {
-            var award = new Award(showId.HasValue ? DatabaseSession.Load<Show>(showId.Value) : null, DatabaseSession.Load<Person>(personId), DatabaseSession.Load<AwardType>(awardId), year);
+            Show show = showId.HasValue ? DatabaseSession.Load<Show>(showId.Value) : null;
+            var award = new Award(show, DatabaseSession.Load<Person>(personId), DatabaseSession.Load<AwardType>(awardTypeId), year);
             DatabaseSession.Save(award);
-            DatabaseSession.CommitTransaction();
-            return this.RedirectToAction(x => x.PersonDetails(personId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                Message = "Award Added",
+                RedirectToURL = this.GetURL(c => c.PersonDetails(personId)),
+            });
         }
 
-        [HttpPost, Route("{personId}/DeleteAward")]
+        [HttpPost, Route("{personId}/Awards/{awardId}/Delete")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult DeleteAward(int personId, int awardId)
         {
             var award = DatabaseSession.Get<Award>(awardId);
             DatabaseSession.Delete(award);
-            DatabaseSession.CommitTransaction();
-            return this.RedirectToAction(x => x.PersonDetails(personId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                Message = "Award Deleted",
+                RedirectToURL = this.GetURL(c => c.PersonDetails(personId)),
+            });
         }
 
-        [HttpGet, Route("{personId}/AddClubPosition")]
+        [HttpGet, AjaxOnly, Route("{personId}/ClubPositions/Add")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddClubPosition(int personId)
         {
             if (!Request.IsAjaxRequest())
@@ -281,33 +267,39 @@ namespace FODT.Controllers
             }
             var person = DatabaseSession.Get<Person>(personId);
             var positions = DatabaseSession.Query<PersonClubPosition>().Select(x => x.Position).Distinct().ToList();
-            var viewModel = new
+            var viewModel = new AddClubPositionViewModel(positions)
             {
                 POSTUrl = this.GetURL(x => x.AddClubPosition(personId)),
-                Positions = string.Join(", ", positions.OrderBy(x => x).Select(x => "\"" + x.Replace("\"", "&quot;") + "\"")),
-            }.ToExpando();
-            return PartialView(viewModel);
+            };
+            return new ViewModelResult(viewModel);
         }
 
-        [HttpPost, Route("{personId}/AddClubPosition")]
+        [HttpPost, Route("{personId}/ClubPositions/Add")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddClubPosition(int personId, string position, short year)
         {
             var entity = new PersonClubPosition(DatabaseSession.Load<Person>(personId), position, year);
             DatabaseSession.Save(entity);
-            DatabaseSession.CommitTransaction();
-            return this.RedirectToAction(x => x.PersonDetails(personId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                RedirectToURL = this.GetURL(c => c.PersonDetails(personId)),
+            });
         }
 
-        [HttpPost, Route("{personId}/DeleteClubPosition")]
+        [HttpPost, Route("{personId}/ClubPositions/{personClubPositionId}/Delete")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult DeleteClubPosition(int personId, int personClubPositionId)
         {
             var entity = DatabaseSession.Get<PersonClubPosition>(personClubPositionId);
             DatabaseSession.Delete(entity);
-            DatabaseSession.CommitTransaction();
-            return this.RedirectToAction(x => x.PersonDetails(personId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                RedirectToURL = this.GetURL(c => c.PersonDetails(personId)),
+            });
         }
 
         [HttpGet, Route("{personId}/AddCast")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddCast(int personId)
         {
             if (!Request.IsAjaxRequest())
@@ -336,24 +328,25 @@ namespace FODT.Controllers
         }
 
         [HttpPost, Route("{personId}/AddCast")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddCast(int personId, int showId, string role)
         {
             var entity = new ShowCast(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), role);
             DatabaseSession.Save(entity);
-            DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpPost, Route("{personId}/DeleteCast")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult DeleteCast(int personId, int showCastId)
         {
             var entity = DatabaseSession.Get<ShowCast>(showCastId);
             DatabaseSession.Delete(entity);
-            DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpGet, Route("{personId}/AddCrew")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddCrew(int personId)
         {
             if (!Request.IsAjaxRequest())
@@ -384,20 +377,20 @@ namespace FODT.Controllers
         }
 
         [HttpPost, Route("{personId}/AddCrew")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddCrew(int personId, int showId, string position)
         {
             var entity = new ShowCrew(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), position);
             DatabaseSession.Save(entity);
-            DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.PersonDetails(personId));
         }
 
         [HttpPost, Route("{personId}/DeleteCrew")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult DeleteCrew(int personId, int showCrewId)
         {
             var entity = DatabaseSession.Get<ShowCrew>(showCrewId);
             DatabaseSession.Delete(entity);
-            DatabaseSession.CommitTransaction();
             return this.RedirectToAction(x => x.PersonDetails(personId));
         }
     }
