@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using Newtonsoft.Json.Linq;
@@ -52,10 +53,26 @@ namespace FODT.Security
             var accessToken = parsedAccessTokenResponse["access_token"];
             var expires = int.Parse(parsedAccessTokenResponse["expires"]);
 
-            var getUserInfoURL = $"{UserInformationEndpoint}?access_token={Uri.EscapeDataString(accessToken)}";
+            var appsecret_proof = GenerateAppSecretProof(accessToken, client_secret);
+            var getUserInfoURL = $"{UserInformationEndpoint}?access_token={Uri.EscapeDataString(accessToken)}&appsecret_proof={Uri.EscapeDataString(appsecret_proof)}";
             var getUserInfoResponse = ExecuteHttpGET(getUserInfoURL);
             var userInfo = JObject.Parse(getUserInfoResponse);
             return new FacebookAccessToken(accessToken, expires, userInfo);
+        }
+
+        private static string GenerateAppSecretProof(string accessToken, string appSecret)
+        {
+            var key = Encoding.UTF8.GetBytes(appSecret);
+            using (HashAlgorithm hashAlgorithm = new HMACSHA256(key))
+            {
+                byte[] hashedBuffer = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(accessToken));
+                var sbHash = new StringBuilder();
+                for (int i = 0; i < hashedBuffer.Length; i++)
+                {
+                    sbHash.Append(hashedBuffer[i].ToString("x2"));
+                }
+                return sbHash.ToString();
+            }
         }
 
         private static string ExecuteHttpGET(string url)
