@@ -1,11 +1,28 @@
 ﻿using System;
+using System.Reflection;
 using System.Web.Caching;
 using System.Web.Mvc;
+using RazorGenerator.Mvc;
 
 namespace FODT.Infrastructure
 {
-    public class ViewModelSpecifiedViewEngine : RazorViewEngine
+    public class ViewModelSpecifiedViewEngine : PrecompiledMvcEngine
     {
+        private readonly RazorViewEngine razorViewEngine;
+
+        public ViewModelSpecifiedViewEngine()
+            : base(typeof(MvcApplication).Assembly)
+        {
+            razorViewEngine = new RazorViewEngine();
+#if DEBUG
+            UsePhysicalViewsIfNewer = true;
+            PreemptPhysicalFiles = false;
+#else
+            UsePhysicalViewsIfNewer = false;
+            PreemptPhysicalFiles = true;
+#endif
+        }
+
         public override ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
         {
             var viewModel = controllerContext.Controller.ViewData.Model;
@@ -14,7 +31,12 @@ namespace FODT.Infrastructure
                 viewModel = ((ViewContext)controllerContext).ViewData.Model;
             }
             partialViewName = TryFindViewFromViewModel(controllerContext.HttpContext.Cache, viewModel) ?? partialViewName;
-            return base.FindPartialView(controllerContext, partialViewName, useCache);
+            var result = base.FindPartialView(controllerContext, partialViewName, useCache);
+            if (result.View == null && !PreemptPhysicalFiles)
+            {
+                result = razorViewEngine.FindPartialView(controllerContext, partialViewName, useCache);
+            }
+            return result;
         }
 
         public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
@@ -25,7 +47,12 @@ namespace FODT.Infrastructure
                 viewModel = ((ViewContext)controllerContext).ViewData.Model;
             }
             viewName = TryFindViewFromViewModel(controllerContext.HttpContext.Cache, viewModel) ?? viewName;
-            return base.FindView(controllerContext, viewName, masterName, useCache);
+            var result = base.FindView(controllerContext, viewName, masterName, useCache);
+            if (result.View == null && !PreemptPhysicalFiles)
+            {
+                result = razorViewEngine.FindView(controllerContext, viewName, masterName, useCache);
+            }
+            return result;
         }
 
         protected string TryFindViewFromViewModel(Cache cache, object viewModel)
