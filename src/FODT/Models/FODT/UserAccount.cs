@@ -49,7 +49,7 @@ namespace FODT.Models.FODT
         public virtual int UserAccountId { get; protected set; }
         public virtual string Email { get; protected set; }
         public virtual string Name { get; protected set; }
-        public virtual int? FacebookId { get; protected set; }
+        public virtual long? FacebookId { get; protected set; }
         public virtual DateTime InsertedDateTime { get; protected set; }
         public virtual DateTime LastModifiedDateTime { get; protected set; }
         public virtual DateTime? LastSeenDateTime { get; protected set; }

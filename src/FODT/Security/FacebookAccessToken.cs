@@ -12,7 +12,7 @@ namespace FODT.Security
         {
             AccessToken = accessToken;
             Expires = expires;
-            FacebookID = int.Parse(TryGetValue(userInfo, "id"));
+            FacebookID = long.Parse(TryGetValue(userInfo, "id"));
             Name = TryGetValue(userInfo, "name");
             FirstName = TryGetValue(userInfo, "first_name");
             LastName = TryGetValue(userInfo, "last_name");
@@ -27,7 +27,7 @@ namespace FODT.Security
 
         public string AccessToken { get; }
         public int Expires { get; }
-        public int FacebookID { get; }
+        public long FacebookID { get; }
         public string Name { get; }
         public string FirstName { get; }
         public string LastName { get; }

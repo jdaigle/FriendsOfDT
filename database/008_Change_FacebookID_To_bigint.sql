@@ -1,0 +1,2 @@
+IF EXISTS (SELECT * FROM sys.columns WHERE name = 'FacebookID' AND object_id = OBJECT_ID('dbo.UserAccount') AND system_type_id = 56)
+ALTER TABLE dbo.UserAccount ALTER COLUMN FacebookID BIGINT NOT NULL;
