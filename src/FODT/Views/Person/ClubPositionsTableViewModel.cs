@@ -16,7 +16,7 @@ namespace FODT.Views.Person
             AddItemURLText = "Add Position";
 
             Items = new List<EditableListViewModel>();
-            Items.AddRange(clubPositions.OrderBy(x => x.DisplayOrder).ThenByDescending(x => x.Year).Select(x => new ClubPositionViewModel
+            Items.AddRange(clubPositions.OrderByDescending(x => x.Year).ThenBy(x => x.DisplayOrder).Select(x => new ClubPositionViewModel
             {
                 DeleteItemURL = getDeleteItemURL(x.PersonClubPositionId),
                 Year = x.Year,
