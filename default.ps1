@@ -45,7 +45,7 @@ task Init -depends Clean {
  
 task Compile -depends Init {
     foreach ($slnFile in $coreSlns) {
-        exec { msbuild $slnFile /v:minimal /nologo /p:Configuration=Release /m /p:AllowedReferenceRelatedFileExtensions=none /p:OutDir="$buildDir\" }
+        exec { msbuild $slnFile /v:n /nologo /p:Configuration=Release /m /p:AllowedReferenceRelatedFileExtensions=none /p:OutDir="$buildDir\" }
     }
 }
 
@@ -54,7 +54,7 @@ task Package -depends Init {
             Create-Directory $deployDir;
     }
     foreach ($proj in $packageProjects) {
-        exec { msbuild $proj /v:minimal /nologo /p:Configuration=Release /m /p:AllowedReferenceRelatedFileExtensions=none /target:package /p:MvcBuildViews=false }
+        exec { msbuild $proj /v:m /nologo /p:Configuration=Release /m /p:AllowedReferenceRelatedFileExtensions=none /target:package /p:MvcBuildViews=false }
     }
 }
 
