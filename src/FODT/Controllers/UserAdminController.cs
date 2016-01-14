@@ -1,19 +1,16 @@
-﻿using FODT.Models.FODT;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using NHibernate.Linq;
-using FODT.Views.UserAdmin;
-using System.Globalization;
-using Microsoft.Web.Mvc;
+﻿using System.Linq;
 using System.Security.Claims;
+using System.Web.Mvc;
+using FODT.Models.FODT;
 using FODT.Security;
+using FODT.Views.UserAdmin;
+using Microsoft.Web.Mvc;
+using NHibernate.Linq;
 
 namespace FODT.Controllers
 {
     [RoutePrefix("Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     public class UserAdminController : BaseController
     {
         [Route("Users")]
