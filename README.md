@@ -42,8 +42,8 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
   * [x] Uploading Photos
   * [x] Person: add/remove awards
   * [x] Person: add/remove EC
-  * [ ] Person: add/remove cast
-  * [ ] Person: add/remove crew
+  * [x] Person: add/remove cast
+  * [x] Person: add/remove crew
   * [ ] Person: edit name
   * [ ] Person: edit bio
   * [ ] Person: Primary Photo

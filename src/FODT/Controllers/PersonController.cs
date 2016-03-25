@@ -308,23 +308,12 @@ namespace FODT.Controllers
             }
 
             var person = DatabaseSession.Get<Person>(personId);
-            var shows = DatabaseSession.Query<Show>()
-                .ToList()
-                .OrderBy(x => x.Title)
-                .Select(x => new
-                {
-                    ShowId = x.ShowId,
-                    Quarter = x.Quarter,
-                    Title = x.DisplayTitle,
-                    Year = x.Year,
-                }.ToExpando())
-                .ToList();
-            var viewModel = new
+            var shows = DatabaseSession.Query<Show>().ToList();
+            var viewModel = new AddCastViewModel(shows)
             {
                 POSTUrl = this.GetURL(x => x.AddCast(personId)),
-                Shows = shows,
-            }.ToExpando();
-            return PartialView(viewModel);
+            };
+            return new ViewModelResult(viewModel);
         }
 
         [HttpPost, Route("{personId}/AddCast")]
@@ -333,7 +322,10 @@ namespace FODT.Controllers
         {
             var entity = new ShowCast(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), role);
             DatabaseSession.Save(entity);
-            return this.RedirectToAction(x => x.PersonDetails(personId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                RedirectToURL = this.GetURL(c => c.PersonDetails(personId)),
+            });
         }
 
         [HttpPost, Route("{personId}/DeleteCast")]
@@ -342,7 +334,10 @@ namespace FODT.Controllers
         {
             var entity = DatabaseSession.Get<ShowCast>(showCastId);
             DatabaseSession.Delete(entity);
-            return this.RedirectToAction(x => x.PersonDetails(personId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                RedirectToURL = this.GetURL(c => c.PersonDetails(personId)),
+            });
         }
 
         [HttpGet, Route("{personId}/AddCrew")]
@@ -355,25 +350,13 @@ namespace FODT.Controllers
             }
 
             var person = DatabaseSession.Get<Person>(personId);
-            var shows = DatabaseSession.Query<Show>()
-                .ToList()
-                .OrderBy(x => x.Title)
-                .Select(x => new
-                {
-                    ShowId = x.ShowId,
-                    Quarter = x.Quarter,
-                    Title = x.DisplayTitle,
-                    Year = x.Year,
-                }.ToExpando())
-                .ToList();
-            var positions = DatabaseSession.Query<ShowCrew>().Select(x => x.Position).Distinct().ToList();
-            var viewModel = new
+            var shows = DatabaseSession.Query<Show>().ToList();
+            var crewPositions = DatabaseSession.Query<ShowCrew>().Select(x => x.Position).Distinct().ToList();
+            var viewModel = new AddCrewViewModel(shows, crewPositions)
             {
                 POSTUrl = this.GetURL(x => x.AddCrew(personId)),
-                Shows = shows,
-                Positions = string.Join(", ", positions.OrderBy(x => x).Select(x => "\"" + x.Replace("\\", "\\\\").Replace("\"", "&quot;") + "\"")),
-            }.ToExpando();
-            return PartialView(viewModel);
+            };
+            return new ViewModelResult(viewModel);
         }
 
         [HttpPost, Route("{personId}/AddCrew")]
@@ -382,7 +365,10 @@ namespace FODT.Controllers
         {
             var entity = new ShowCrew(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), position);
             DatabaseSession.Save(entity);
-            return this.RedirectToAction(x => x.PersonDetails(personId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                RedirectToURL = this.GetURL(c => c.PersonDetails(personId)),
+            });
         }
 
         [HttpPost, Route("{personId}/DeleteCrew")]
@@ -391,7 +377,10 @@ namespace FODT.Controllers
         {
             var entity = DatabaseSession.Get<ShowCrew>(showCrewId);
             DatabaseSession.Delete(entity);
-            return this.RedirectToAction(x => x.PersonDetails(personId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                RedirectToURL = this.GetURL(c => c.PersonDetails(personId)),
+            });
         }
     }
 }

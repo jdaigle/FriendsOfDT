@@ -1,4 +1,5 @@
-﻿<div class="modal fade" tabindex="-1">
+﻿@model FODT.Views.Person.AddCrewViewModel
+<div class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <form method="POST" action="@Model.POSTUrl">
             <div class="modal-content">
@@ -16,9 +17,9 @@
                         <label for="edit-ShowId">Show</label>
                         <select class="form-control" name="ShowId" id="edit-ShowId">
                             <option value="">Select One</option>
-                            @foreach (var show in Model.Shows)
+                            @foreach (var show in Model.ShowOptions)
                             {
-                                <option value="@show.ShowId">@show.Title (@show.Year)</option>
+                                <option value="@show.Key">@show.Value</option>
                             }
                         </select>
                     </div>
@@ -55,7 +56,7 @@
             };
 
             var _values = [
-                @Html.Raw(Model.Positions)
+                @Html.Raw(Model.CrewPositionsJSONArray)
             ];
 
             $('#edit-Position.typeahead').typeahead({

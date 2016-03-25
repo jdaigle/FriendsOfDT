@@ -31,9 +31,9 @@ $(document)
         $('#ajax_spinner').fadeOut(500);
     })
     .bind("ajaxError", function (event, jqXHR, ajaxSettings, thrownError) {
+        $('#ajax_spinner').hide();
+        alert("Sorry. Server Error. Please Try Again.");
         // TODO global ajax error handler?
-        console.log("textStatus=" + textStatus.status);
-        console.log("textStatus=" + textStatus.statusText);
     });
 
 $(function () {

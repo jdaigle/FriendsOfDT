@@ -241,6 +241,8 @@
     <Compile Include="Views\IUserEditableViewModel.cs" />
     <Compile Include="Views\Login\LoginViewModel.cs" />
     <Compile Include="Views\Person\AddAwardViewModel.cs" />
+    <Compile Include="Views\Person\AddCrewViewModel.cs" />
+    <Compile Include="Views\Person\AddCastViewModel.cs" />
     <Compile Include="Views\Person\AddClubPositionViewModel.cs" />
     <Compile Include="Views\Photos\PhotoDetailViewModel.cs" />
     <Compile Include="Views\Photos\ListPhotosViewModel.cs" />

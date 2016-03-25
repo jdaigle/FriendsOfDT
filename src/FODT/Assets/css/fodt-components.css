@@ -267,7 +267,7 @@ fieldset[disabled] .twitter-typeahead .tt-input {
     border-bottom-right-radius: 10px;
     font-weight: bold;
     z-index: 1001;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 50%;
     width: 175px;
