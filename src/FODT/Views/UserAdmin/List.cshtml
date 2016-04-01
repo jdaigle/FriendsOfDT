@@ -1,6 +1,7 @@
 ﻿@model FODT.Views.UserAdmin.ListViewModel
 
-@Html.PartialView(new FODT.Views.Admin.AdminTabsViewModel(this.Url))
+@{ Html.RenderAction<FODT.Controllers.AdminController>(c => c.GetAdminTabs()); }
+
 
 <p>
     Manage user accounts and permissions.

@@ -163,6 +163,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureBlogStorageUtil.cs" />
+    <Compile Include="ChildActionExtensions.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\PersonPhotosController.cs" />
     <Compile Include="Controllers\ShowPhotosController.cs" />
     <Compile Include="DelegateUrlHelperExtensions.cs" />
@@ -355,10 +357,6 @@
     <Content Include="Assets\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Admin\_AdminLayout.cshtml" />
-    <Content Include="Views\Admin\UsersList.cshtml" />
-    <Content Include="Views\Admin\PeopleList.cshtml" />
     <Content Include="Views\Person\AddAward.cshtml" />
     <Content Include="Views\Person\AddClubPosition.cshtml" />
     <Content Include="Views\Person\AddCrew.cshtml" />
