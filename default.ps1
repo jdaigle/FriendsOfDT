@@ -1,9 +1,9 @@
-Framework "4.6.1"
+﻿Framework "4.6.1"
 
 properties {
     $deployURL = "https://friendsofdt-prod.scm.azurewebsites.net:443/MsDeploy.axd"
-    $deployUsername = "`$friendsofdt-prod"
-    $deployPassword = "SECRET!"
+    $deploy_username = $null
+    $deploy_password = $null
     $dbdeployPassword = "SECRET!"
 
     $baseDir  = resolve-path .
@@ -53,7 +53,12 @@ task package -depends init {
 }
 
 task deploy-website {
-    exec { & "$artifactsDir\FODT.deploy.cmd" /Y /M:$deployURL /U:$deployUsername /P:$deployPassword /A:basic }
+    if ($deploy_username.Length -eq 0 -or $deploy_password.Length -eq 0) {
+        $cred = Get-Credential -Message "Enter Deployment Credentials"
+        $deploy_username = $cred.GetNetworkCredential().UserName
+        $deploy_password = $cred.GetNetworkCredential().Password
+    }
+    exec { & "$artifactsDir\FODT.deploy.cmd" /Y /M:$deployURL /U:$deploy_username /P:$deploy_password /A:basic }
     write-host -foregroundcolor Magenta "Be sure to check the output of the above command since msdeploy.exe already returns exit code 0!"
 }
 
