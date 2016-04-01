@@ -4,7 +4,7 @@ properties {
     $deployURL = "https://friendsofdt-prod.scm.azurewebsites.net:443/MsDeploy.axd"
     $deploy_username = $null
     $deploy_password = $null
-    $dbdeployPassword = "SECRET!"
+    $dbdeployPassword = $null
 
     $baseDir  = resolve-path .
     $buildDir = "$baseDir\build"
@@ -66,9 +66,13 @@ task redeploy-website -depends Package, deploy-website {
 }
 
 task deploy-database {
-    exec { & $toolsDir\SqlMigrate.exe -m database -s friendsofdt-prod.database.windows.net -d fodt -u fodtadmin -p $dbdeployPassword -a -f }
+    if ($deploy_username.Length -eq 0) {
+        $cred = Get-Credential -Message "Enter Deployment Credentials"
+        $dbdeployPassword = $cred.GetNetworkCredential().Password
+    }
+    exec { & $toolsDir\horton.exe -m database\fodt -s friendsofdt-prod.database.windows.net -u fodtadmin -p $dbdeployPassword -U UPDATE }
 }
 
 task dbup {
-    exec { & $toolsDir\SqlMigrate.exe -m database -s . -d fodt -i -f }
+    exec { & $toolsDir\horton.exe -m database\fodt -s localhost -U UPDATE }
 }
