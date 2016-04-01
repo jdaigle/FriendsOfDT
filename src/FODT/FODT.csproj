@@ -39,7 +39,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PublishDatabases>false</PublishDatabases>
     <DeployIisAppPath>friendsofdt.org</DeployIisAppPath>
-    <DesktopBuildPackageLocation>..\..\deploy\FODT.zip</DesktopBuildPackageLocation>
+    <DesktopBuildPackageLocation>obj\FODT.zip</DesktopBuildPackageLocation>
     <Prefer32Bit>false</Prefer32Bit>
     <PrecompileRazorFiles>false</PrecompileRazorFiles>
   </PropertyGroup>

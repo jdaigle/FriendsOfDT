@@ -5,65 +5,55 @@ properties {
     $deployUsername = "`$friendsofdt-prod"
     $deployPassword = "SECRET!"
     $dbdeployPassword = "SECRET!"
+
+    $baseDir  = resolve-path .
+    $buildDir = "$baseDir\build"
+    $artifactsDir = "$baseDir\artifacts"
+    $toolsDir = "$baseDir\tools"
+    $global:msbuildconfig = "debug"
+    $slnFiles = "$baseDir\src\friendsofdt.sln"
+    $packageProjects = "$baseDir\src\FODT\FODT.csproj"
 }
 
-$baseDir  = resolve-path .
-$buildDir = "$baseDir\build"
-$deployDir = "$baseDir\deploy"
-$toolsDir = "$baseDir\tools"
-$coreSlns = "$baseDir\src\friendsofdt.sln"
-$packageProjects = "$baseDir\src\FODT\FODT.csproj"
+task default -depends local
+task local -depends init, compile, package
+task ci -depends clean, release, compile, package
 
-include $toolsDir\psake\buildutils.ps1
+task release {
+    $global:msbuildconfig = "release"
+}
 
-task default -depends Build
+task clean {
+    remove-item "$buildDir" -recurse -force  -ErrorAction SilentlyContinue | out-null
+    remove-item "$artifactsDir" -recurse -force  -ErrorAction SilentlyContinue | out-null
 
-task Clean {
-    if (Test-Path $buildDir) {
-        Delete-Directory $buildDir
-    }
-    if (Test-Path $deployDir) {
-        Delete-Directory $deployDir
-    }
-    foreach ($slnFile in $coreSlns) {
-        exec { msbuild $slnFile /v:minimal /nologo /p:Configuration=Debug /m /target:Clean }
-        exec { msbuild $slnFile /v:minimal /nologo /p:Configuration=Release /m /target:Clean }
+    foreach ($slnFile in $slnFiles) {
+        exec { msbuild $slnFile /v:m /nologo /p:Configuration=Debug /m /target:Clean }
+        exec { msbuild $slnFile /v:m /nologo /p:Configuration=Release /m /target:Clean }
     }
 }
 
-task Init -depends Clean {
-    echo "Creating build directory at the follwing path $buildDir"
-    if (Test-Path $buildDir) {
-        Delete-Directory $buildDir;
-    }
-    Create-Directory($buildDir);
-
+task init {
+    New-Item $buildDir -ItemType Directory -Force | Out-Null
+    New-Item $artifactsDir -ItemType Directory -Force | Out-Null
     $currentDirectory = Resolve-Path .
-
     echo "Current Directory: $currentDirectory"
 }
  
-task Compile -depends Init {
-    foreach ($slnFile in $coreSlns) {
-        exec { msbuild $slnFile /v:n /nologo /p:Configuration=Release /m /p:AllowedReferenceRelatedFileExtensions=none /p:OutDir="$buildDir\" }
+task compile -depends init {
+    foreach ($slnFile in $slnFiles) {
+        exec { msbuild $slnFile /v:n /nologo /p:Configuration=$msbuildconfig /m /p:AllowedReferenceRelatedFileExtensions=none /p:OutDir="$buildDir\" }
     }
 }
 
-task Package -depends Init {
-    if (!(Test-Path $deployDir)) {
-            Create-Directory $deployDir;
-    }
+task package -depends init {
     foreach ($proj in $packageProjects) {
-        exec { msbuild $proj /v:m /nologo /p:Configuration=Release /m /p:AllowedReferenceRelatedFileExtensions=none /target:package /p:MvcBuildViews=false }
+        exec { msbuild $proj /v:n /nologo /p:Configuration=$msbuildconfig /m /target:package /p:GenerateBuildInfoConfigFile=false /p:MvcBuildViews=false /p:DesktopBuildPackageLocation="$artifactsDir\fodt.zip" /p:_PackageTempDir="c:\temp\package\" }
     }
-}
-
-task Build -depends Compile, Package {
-
 }
 
 task deploy-website {
-    exec { & "$deployDir\FODT.deploy.cmd" /Y /M:$deployURL /U:$deployUsername /P:$deployPassword /A:basic }
+    exec { & "$artifactsDir\FODT.deploy.cmd" /Y /M:$deployURL /U:$deployUsername /P:$deployPassword /A:basic }
     write-host -foregroundcolor Magenta "Be sure to check the output of the above command since msdeploy.exe already returns exit code 0!"
 }
 
