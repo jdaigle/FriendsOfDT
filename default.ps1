@@ -62,7 +62,7 @@ task deploy-website {
     write-host -foregroundcolor Magenta "Be sure to check the output of the above command since msdeploy.exe already returns exit code 0!"
 }
 
-task redeploy-website -depends Package, deploy-website {
+task redeploy-website -depends release, package, deploy-website {
 }
 
 task deploy-database {
