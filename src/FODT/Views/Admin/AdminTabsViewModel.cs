@@ -12,8 +12,10 @@ namespace FODT.Views.Admin
         public AdminTabsViewModel(UrlHelper url)
         {
             UserAdminListURL = url.GetURL<UserAdminController>(c => c.List());
+            AwardsAdminURL = url.GetURL<AwardsAdminController>(c => c.Admin());
         }
 
         public string UserAdminListURL { get; set; }
+        public string AwardsAdminURL { get; set; }
     }
 }

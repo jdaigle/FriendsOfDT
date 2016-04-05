@@ -1,0 +1,42 @@
+﻿@model FODT.Views.AwardsAdmin.AwardTypesViewModel
+
+@{ Html.RenderAction<FODT.Controllers.AdminController>(c => c.GetAdminTabs()); }
+
+<p>
+    Manage award types.
+</p>
+
+<form method="POST" action="@Model.AddUrl" class="form-inline well well-sm">
+    <div class="form-group">
+        <label>Name</label>
+        <input class="form-control" type="text" name="Name" placeholder="Award Name" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add New Award Type</button>
+</form>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AwardTypes)
+        {
+            <tr>
+                <td style="text-align: right;">
+                    <div class="btn-group btn-group-xs">
+                        <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a class="js-edit-modal-link" href="@item.EditURL"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td>@item.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>

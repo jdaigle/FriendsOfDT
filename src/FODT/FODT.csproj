@@ -165,6 +165,7 @@
     <Compile Include="AzureBlogStorageUtil.cs" />
     <Compile Include="ChildActionExtensions.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AwardsAdminController.cs" />
     <Compile Include="Controllers\PersonPhotosController.cs" />
     <Compile Include="Controllers\ShowPhotosController.cs" />
     <Compile Include="DelegateUrlHelperExtensions.cs" />
@@ -240,6 +241,8 @@
     <Compile Include="UrlExtensions.cs" />
     <Compile Include="ViewModelResult.cs" />
     <Compile Include="Views\Admin\AdminTabsViewModel.cs" />
+    <Compile Include="Views\AwardsAdmin\AwardTypesViewModel.cs" />
+    <Compile Include="Views\AwardsAdmin\AwardTypeViewModel.cs" />
     <Compile Include="Views\Awards\AwardsTableViewModel.cs" />
     <Compile Include="Views\Awards\ByYearViewModel.cs" />
     <Compile Include="Views\Extensions\DebugExtensions.cs" />
@@ -370,6 +373,8 @@
     <Content Include="Views\UserAdmin\UserAccount.cshtml" />
     <Content Include="Views\Photos\TagPhoto.cshtml" />
     <Content Include="Views\Photos\PhotoList.cshtml" />
+    <Content Include="Views\AwardsAdmin\AwardTypes.cshtml" />
+    <Content Include="Views\AwardsAdmin\AwardType.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -377,6 +382,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
