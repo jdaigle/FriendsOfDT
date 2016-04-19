@@ -49,7 +49,7 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
   * [ ] Person: Primary Photo
   * [ ] Person: Add
   * [ ] Person: Remove
-  * [ ] Show: add/remove awards
+  * [x] Show: add/remove awards
   * [ ] Show: add/remove cast
   * [ ] Show: add/remove crew
   * [ ] Show: edit name

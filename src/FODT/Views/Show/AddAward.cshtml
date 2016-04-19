@@ -1,0 +1,44 @@
+﻿@model FODT.Views.Show.AddAwardViewModel
+<div class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="@Model.POSTUrl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Award</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit-AwardId">Award</label>
+                        <select class="form-control" name="AwardTypeId" id="edit-AwardId">
+                            <option value="">Select One</option>
+                            @foreach (var awardType in Model.AwardTypeOptions)
+                            {
+                                <option value="@awardType.Key">@awardType.Value</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-PersonId">Person</label>
+                        <select class="form-control" name="PersonId" id="edit-PersonId">
+                            <option value=""></option>
+                            @foreach (var person in Model.PeopleOptions)
+                            {
+                                <option value="@person.Key">@person.Value</option>
+                            }
+                        </select>
+                        <span class="help-block">Leave blank for awards that are given to a person.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-Year">Year</label>
+                        <input class="form-control" type="number" name="Year" id="edit-Year" value="@Model.ShowYear" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Add Award</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

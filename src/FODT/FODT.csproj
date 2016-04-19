@@ -260,6 +260,7 @@
     <Compile Include="Views\Photos\PhotoListViewModel.cs" />
     <Compile Include="Views\Photos\TagPhotoViewModel.cs" />
     <Compile Include="Views\Photos\UploadViewModel.cs" />
+    <Compile Include="Views\Show\AddAwardViewModel.cs" />
     <Compile Include="Views\Show\OtherPerformancesTableViewModel.cs" />
     <Compile Include="Views\Person\ClubPositionsTableViewModel.cs" />
     <Compile Include="Views\Person\EditPersonViewModel.cs" />
@@ -375,6 +376,7 @@
     <Content Include="Views\Photos\PhotoList.cshtml" />
     <Content Include="Views\AwardsAdmin\AwardTypes.cshtml" />
     <Content Include="Views\AwardsAdmin\AwardType.cshtml" />
+    <Content Include="Views\Show\AddAward.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

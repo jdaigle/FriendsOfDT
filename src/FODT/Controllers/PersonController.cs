@@ -9,7 +9,6 @@ using FODT.Views.Photos;
 using FODT.Security;
 using NHibernate.Linq;
 using FODT.Views.Awards;
-using FODT.Views.Show;
 using Microsoft.Web.Mvc;
 using System.Net;
 
@@ -58,7 +57,7 @@ namespace FODT.Controllers
                 AddItemURL = this.GetURL(c => c.AddClubPosition(personId)),
             };
 
-            viewModel.CastRolesTable = new CastRolesTableViewModel(
+            viewModel.CastRolesTable = new Views.Show.CastRolesTableViewModel(
                 this.Url
                 , id => this.GetURL(c => c.DeleteCast(personId, id))
                 , cast)
@@ -67,7 +66,7 @@ namespace FODT.Controllers
                 AddItemURL = this.GetURL(c => c.AddCast(personId)),
             };
 
-            viewModel.CrewPositionsTable = new CrewPositionsTableViewModel(
+            viewModel.CrewPositionsTable = new Views.Show.CrewPositionsTableViewModel(
                 this.Url
                 , id => this.GetURL(c => c.DeleteCrew(personId, id))
                 , crew)

@@ -101,25 +101,32 @@ namespace FODT.Controllers
         [HttpGet, Route("{showId}/AddAward")]
         public ActionResult AddAward(int showId)
         {
-            if (!Request.IsAjaxRequest())
+            var show = DatabaseSession.Get<Show>(showId);
+            var awardTypes = DatabaseSession.Query<AwardType>().ToList();
+            var people = DatabaseSession.Query<Person>().ToList();
+            var viewModel = new AddAwardViewModel(awardTypes, people, show.Year)
             {
-                return this.RedirectToAction(x => x.ShowDetails(showId));
-            }
-
-            throw new NotImplementedException();
+                POSTUrl = this.GetURL(c => c.AddAward(showId)),
+            };
+            return new ViewModelResult(viewModel);
         }
 
         [HttpPost, Route("{showId}/AddAward")]
-        public ActionResult AddAward(int showId, int awardId, short year, int? personId)
+        public ActionResult AddAward(int showId, int awardTypeId, short year, int? personId)
         {
             Person person = null;
             if (personId.HasValue)
             {
                 person = DatabaseSession.Load<Person>(personId.Value);
             }
-            var award = new Award(DatabaseSession.Load<Show>(showId), person, DatabaseSession.Load<AwardType>(awardId), year);
+            var award = new Award(DatabaseSession.Load<Show>(showId), person, DatabaseSession.Load<AwardType>(awardTypeId), year);
             DatabaseSession.Save(award);
-            return this.RedirectToAction(x => x.ShowDetails(showId));
+
+            return new ViewModelResult(new HttpApiResult
+            {
+                Message = "Award Added",
+                RedirectToURL = this.GetURL(c => c.ShowDetails(showId)),
+            });
         }
 
         [HttpPost, Route("{showId}/DeleteAward")]
@@ -127,7 +134,11 @@ namespace FODT.Controllers
         {
             var award = DatabaseSession.Get<Award>(awardId);
             DatabaseSession.Delete(award);
-            return this.RedirectToAction(x => x.ShowDetails(showId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                Message = "Award Deleted",
+                RedirectToURL = this.GetURL(c => c.ShowDetails(showId)),
+            });
         }
 
         [HttpGet, Route("{showId}/AddCast")]
