@@ -99,6 +99,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("{showId}/AddAward")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddAward(int showId)
         {
             var show = DatabaseSession.Get<Show>(showId);
@@ -112,6 +113,7 @@ namespace FODT.Controllers
         }
 
         [HttpPost, Route("{showId}/AddAward")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddAward(int showId, int awardTypeId, short year, int? personId)
         {
             Person person = null;
@@ -130,6 +132,7 @@ namespace FODT.Controllers
         }
 
         [HttpPost, Route("{showId}/DeleteAward")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult DeleteAward(int showId, int awardId)
         {
             var award = DatabaseSession.Get<Award>(awardId);
@@ -142,6 +145,7 @@ namespace FODT.Controllers
         }
 
         [HttpGet, Route("{showId}/AddCast")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddCast(int showId)
         {
             if (!Request.IsAjaxRequest())
@@ -149,26 +153,40 @@ namespace FODT.Controllers
                 return this.RedirectToAction(x => x.ShowDetails(showId));
             }
 
-            throw new NotImplementedException();
+            var people = DatabaseSession.Query<Person>().ToList();
+            var viewModel = new AddCastViewModel(people)
+            {
+                POSTUrl = this.GetURL(x => x.AddCast(showId)),
+            };
+            return new ViewModelResult(viewModel);
         }
 
         [HttpPost, Route("{showId}/AddCast")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddCast(int showId, int personId, string role)
         {
             var entity = new ShowCast(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), role);
             DatabaseSession.Save(entity);
-            return this.RedirectToAction(x => x.ShowDetails(showId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                RedirectToURL = this.GetURL(c => c.ShowDetails(showId)),
+            });
         }
 
         [HttpPost, Route("{showId}/DeleteCast")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult DeleteCast(int showId, int showCastId)
         {
             var entity = DatabaseSession.Get<ShowCast>(showCastId);
             DatabaseSession.Delete(entity);
-            return this.RedirectToAction(x => x.ShowDetails(showId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                RedirectToURL = this.GetURL(c => c.ShowDetails(showId)),
+            });
         }
 
         [HttpGet, Route("{showId}/AddCrew")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddCrew(int showId)
         {
             if (!Request.IsAjaxRequest())
@@ -176,23 +194,37 @@ namespace FODT.Controllers
                 return this.RedirectToAction(x => x.ShowDetails(showId));
             }
 
-            throw new NotImplementedException();
+            var people = DatabaseSession.Query<Person>().ToList();
+            var crewPositions = DatabaseSession.Query<ShowCrew>().Select(x => x.Position).Distinct().ToList();
+            var viewModel = new AddCrewViewModel(people, crewPositions)
+            {
+                POSTUrl = this.GetURL(x => x.AddCrew(showId)),
+            };
+            return new ViewModelResult(viewModel);
         }
 
         [HttpPost, Route("{showId}/AddCrew")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult AddCrew(int showId, int personId, string position)
         {
             var entity = new ShowCrew(DatabaseSession.Load<Person>(personId), DatabaseSession.Load<Show>(showId), position);
             DatabaseSession.Save(entity);
-            return this.RedirectToAction(x => x.ShowDetails(showId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                RedirectToURL = this.GetURL(c => c.ShowDetails(showId)),
+            });
         }
 
         [HttpPost, Route("{showId}/DeleteCrew")]
+        [Authorize(Roles = RoleNames.Archivist)]
         public ActionResult DeleteCrew(int showId, int showCrewId)
         {
             var entity = DatabaseSession.Get<ShowCrew>(showCrewId);
             DatabaseSession.Delete(entity);
-            return this.RedirectToAction(x => x.ShowDetails(showId));
+            return new ViewModelResult(new HttpApiResult
+            {
+                RedirectToURL = this.GetURL(c => c.ShowDetails(showId)),
+            });
         }
     }
 }

@@ -50,8 +50,8 @@ The server-side component of the site is primarily ASP.NET MVC 5, and the site i
   * [ ] Person: Add
   * [ ] Person: Remove
   * [x] Show: add/remove awards
-  * [ ] Show: add/remove cast
-  * [ ] Show: add/remove crew
+  * [x] Show: add/remove cast
+  * [x] Show: add/remove crew
   * [ ] Show: edit name
   * [ ] Show: edit author
   * [ ] Show: edit year/quarter
