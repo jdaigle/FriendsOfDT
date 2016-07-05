@@ -20,8 +20,8 @@ function update_picture() {
     $mailpath = "./media/$media_id.jpg";
     $thumbname = "./media/$media_id-thumb.jpg";
     $indname = "./media/$media_id-index.jpg";
-    exec(sprintf("C:\\\ImageMagick\\convert %s -resize 240x240 +profile \"\*\" %s", $newname, $thumbname));
-    exec(sprintf("C:\\\ImageMagick\\convert %s -resize 50x50 +profile \"\*\" %s", $newname, $indname));
+    exec(sprintf("convert %s -resize 240x240 +profile \"\*\" %s", $newname, $thumbname));
+    exec(sprintf("convert %s -resize 50x50 +profile \"\*\" %s", $newname, $indname));
     $update = mysql_query("update media_items set item='$newname', thumb='$thumbname', tiny='$indname' where ID=$media_id");
     if(!$update){ die("There is little problem: ".mysql_error()); }
     if ($show_id > 0) {
